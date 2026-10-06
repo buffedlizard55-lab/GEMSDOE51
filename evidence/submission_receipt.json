@@ -1,0 +1,35 @@
+{
+ "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-strainbudget-s1-v1.tif",
+ "count": 1,
+ "dtype": "float32",
+ "shape": [
+  3730,
+  3292
+ ],
+ "crs": "EPSG:32611",
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0
+ ],
+ "nodata": null,
+ "min": 0.0,
+ "max": 1.0,
+ "n_nan": 0,
+ "n_below0": 0,
+ "n_above1": 0,
+ "n_positive": 95927,
+ "bytes": 390791,
+ "sha256": "bdc045934e4a2e33a90093ef07e4968f9fffb016ce3ff3e780bbe7fa5c32977a",
+ "all_finite": true,
+ "in_0_1": true,
+ "name": "gemsdoe51-strainbudget-s1-v1",
+ "note": "GEMSDOE51 | S1 strain-gate + S2 blocked-CV 44-ch detector, sparse off-catalogue dots, stage-A deficit reported as falsified; UNSCORED",
+ "zip": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-strainbudget-s1-v1.zip",
+ "zip_bytes": 301373,
+ "zip_sha256": "b2651feda92c4df1f50cb3099ad771d2a2087c590d855c639eafd7c4db491644",
+ "checks_path": "/home/user/GEMSDOE51/docs/downloads/checks-gemsdoe51-strainbudget-s1-v1.json"
+}

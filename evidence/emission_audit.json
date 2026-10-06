@@ -1,0 +1,15 @@
+{
+ "rule": "thin_dots_belief_priority",
+ "promoted": true,
+ "density": 0.04,
+ "min_separation_px": 3.0,
+ "catalogue_buffer_px": 2.0,
+ "candidate_px": 2398166,
+ "target_px": 95927,
+ "emitted_inside_candidate_fraction": 1.0,
+ "n_emitted": 95927,
+ "total_mass": 95927.0,
+ "redundancy_fraction": 0.0,
+ "mean_self_kernel": 0.0,
+ "approved_px": 2537841
+}

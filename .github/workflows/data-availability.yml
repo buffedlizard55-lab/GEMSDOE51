@@ -1,0 +1,56 @@
+name: External data availability
+
+# Proves, from GitHub's network (not from a restricted sandbox), that the free official sources named
+# for the untested hypotheses are actually obtainable, and records their byte sizes and sha256s.
+# The build environment used for this repository could not reach these hosts directly
+# (client-side egress block); this workflow removes that uncertainty.
+#
+# Run: Actions -> "External data availability" -> Run workflow, then read the job summary.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe official sources
+        run: |
+          mkdir -p probe
+          set -u
+          probe () {
+            name="$1"; url="$2"
+            code=$(curl -sS -L --max-time 180 -o "probe/$name" -w '%{http_code}' "$url" || echo "000")
+            if [ -f "probe/$name" ]; then
+              bytes=$(stat -c%s "probe/$name")
+              sha=$(sha256sum "probe/$name" | cut -d' ' -f1)
+              kind=$(file -b "probe/$name" | cut -c1-60)
+            else
+              bytes=0; sha="-"; kind="-"
+            fi
+            printf '| %-28s | %s | %s | %s | %s |\n' "$name" "$code" "$bytes" "$kind" "$sha"
+            printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$code" "$bytes" "$kind" "$sha" >> probe/results.tsv
+          }
+          {
+            echo "| file | http | bytes | type | sha256 |"
+            echo "|---|---|---|---|---|"
+          } > probe/table.md
+          probe paleo_geothermal_regional.zip "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip"
+          probe 2m_temperature_probe.zip     "https://gdr.openei.org/files/1391/2m_temperature_probe_INGENIOUS_regional.zip"
+          probe great_basin_q_volcanics.zip  "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip"
+          probe ingenious_page.html          "https://gdr.openei.org/submissions/1391"
+          probe heat_flow_item.html          "https://www.sciencebase.gov/catalog/item/6297d2fad34ec53d276c5b28"
+          probe mt_conductance_item.html     "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b"
+          probe siler_sciencbase_item.html   "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d"
+          probe geodawn_item.html            "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7"
+          probe qfaults_page.html            "https://www.usgs.gov/programs/earthquake-hazards/faults"
+          probe kreemer_2000.pdf             "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+          probe rules_nlr.pdf                "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
+          cat probe/table.md >> "$GITHUB_STEP_SUMMARY"
+          cat probe/results.tsv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: external-data-availability
+          path: probe/

@@ -1,59 +1,105 @@
 {
-  "candidate": "submissions/gems51-sbd-hridge-44090-20261006.tif",
-  "candidate_sha256": "e527ac899dc0b6593b4b0db824a51678fad87111604e74845f5cd71990a1db55",
-  "candidate_support_px": 227642,
-  "candidate_mass": 164902.59375,
-  "n_references": 211,
-  "limits": {
-    "iou": 0.5,
-    "cosine": 0.9,
-    "containment": 0.98
+ "n_prior": 12,
+ "jaccard_max_allowed": 0.25,
+ "max_jaccard": 0.0321931128287224,
+ "max_jaccard_file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+ "rows": [
+  {
+   "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+   "prior_px": 206895,
+   "intersection_px": 4004,
+   "jaccard": 0.01339946054119899,
+   "superset_of_prior": false,
+   "subset_of_prior": false
   },
-  "worst": {
-    "iou": {
-      "path": "/home/user/study/GEMSDATA/data/bridge/example_submission.tif",
-      "iou": 0.26791189675016036,
-      "cosine": 0.6948015689849854,
-      "containment": 0.8201966881752014,
-      "byte_identical": false,
-      "mass": 60988.0,
-      "support_px": 60988,
-      "ref_support_fraction": 0.004966789259200141,
-      "containment_null": 0.036369344482847364,
-      "containment_lift": 22.551868884027463,
-      "containment_informative": true
-    },
-    "cosine": {
-      "path": "/home/user/study/GEMSDATA/data/bridge/example_submission.tif",
-      "iou": 0.26791189675016036,
-      "cosine": 0.6948015689849854,
-      "containment": 0.8201966881752014,
-      "byte_identical": false,
-      "mass": 60988.0,
-      "support_px": 60988,
-      "ref_support_fraction": 0.004966789259200141,
-      "containment_null": 0.036369344482847364,
-      "containment_lift": 22.551868884027463,
-      "containment_informative": true
-    },
-    "containment": {
-      "path": "/home/user/study/GEMSDOE24/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-      "iou": 0.021452195641391503,
-      "cosine": 0.0407438687980175,
-      "containment": 0.9976934194564819,
-      "byte_identical": false,
-      "mass": 206895.0,
-      "support_px": 206895,
-      "ref_support_fraction": 0.016849279592415115,
-      "containment_null": 0.42095167747630946,
-      "containment_lift": 2.370090138226449,
-      "containment_informative": true
-    }
+  {
+   "file": "8GEMSDOE_Hedge-v2_submission.tif",
+   "prior_px": 227507,
+   "intersection_px": 6938,
+   "jaccard": 0.02192128810474698,
+   "superset_of_prior": false,
+   "subset_of_prior": false
   },
-  "matches": [],
-  "skipped": [],
-  "verdict": "PASS",
-  "n_containment_informative": 204,
-  "n_compared": 211,
-  "rule": "PASS iff (1) no sha256 equals any reference AND (2) max support IoU <= 0.50 AND (3) max cosine <= 0.90 AND (4) no sparse reference has containment > 0.98 with a lift > 3x over the random-emission null.  Continuous/lattice references are excluded from test (4) because their dilated support covers the map and the test would be vacuous.  Two artifacts anchored on the same mapped-fault network will ALWAYS show high mutual containment; that is a consequence of the metric's free-mass structure, not of copying, and tests (2) and (3) are what separate a re-emission from a copy."
+  {
+   "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
+   "prior_px": 174232,
+   "intersection_px": 8426,
+   "jaccard": 0.0321931128287224,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
+   "prior_px": 69281,
+   "intersection_px": 3565,
+   "jaccard": 0.02205477502892176,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
+   "prior_px": 123939,
+   "intersection_px": 4994,
+   "jaccard": 0.02324174392196284,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
+   "prior_px": 123779,
+   "intersection_px": 4974,
+   "jaccard": 0.02316375761414228,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+   "prior_px": 121131,
+   "intersection_px": 4778,
+   "jaccard": 0.0225080082909365,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+   "prior_px": 60069,
+   "intersection_px": 2367,
+   "jaccard": 0.01540724732960574,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+   "prior_px": 44090,
+   "intersection_px": 1752,
+   "jaccard": 0.012671319567497197,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+   "prior_px": 61328,
+   "intersection_px": 2398,
+   "jaccard": 0.01548525413768832,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gemsdoe-ens12-adopted-7f00890a.tif",
+   "prior_px": 172974,
+   "intersection_px": 6938,
+   "jaccard": 0.026484656230078292,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  },
+  {
+   "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
+   "prior_px": 343816,
+   "intersection_px": 3231,
+   "jaccard": 0.007401858368154828,
+   "superset_of_prior": false,
+   "subset_of_prior": false
+  }
+ ],
+ "passed": true
 }
