@@ -1,0 +1,927 @@
+{
+  "budget": 44090,
+  "suppress_px": 3,
+  "folds": [
+    {
+      "fold": "b00",
+      "arms": {
+        "A0_core_shell_only": {
+          "n_novel": 0,
+          "mass": 67347.796875,
+          "P": {
+            "dti_masked": 0.0004932449317274494,
+            "dti_unmasked": 0.0004541842889682927,
+            "tp": 15.531123537570238,
+            "fp": 36466.71647413762,
+            "fn": 30223.46887646243,
+            "n_truth": 30239,
+            "n_pred": 60815,
+            "sum_pred": 67238.0,
+            "mean_credit_per_pred_px": 0.0002553831051150249
+          },
+          "O": {
+            "dti_masked": 0.0,
+            "dti_unmasked": 0.0,
+            "tp": 0.0,
+            "fp": 0.0,
+            "fn": 30239.0,
+            "n_truth": 30239,
+            "n_pred": 0,
+            "sum_pred": 0.0,
+            "mean_credit_per_pred_px": 0.0
+          },
+          "diag": {
+            "credit_density_novel": 0.0,
+            "frac_novel_within_3px": 0.0,
+            "auc_field_vs_block_truth": 0.5872512605775649
+          }
+        },
+        "A1_hessianridge_gated": {
+          "n_novel": 44092,
+          "mass": 90775.6875,
+          "P": {
+            "dti_masked": 0.025782517610477104,
+            "dti_unmasked": 0.022078002828066844,
+            "tp": 933.7129928395152,
+            "fp": 59185.11587831557,
+            "fn": 29305.287007160485,
+            "n_truth": 30239,
+            "n_pred": 104712,
+            "sum_pred": 90665.875,
+            "mean_credit_per_pred_px": 0.00891696264840243
+          },
+          "O": {
+            "dti_masked": 0.03288867138812042,
+            "dti_unmasked": 0.03288867138812042,
+            "tp": 883.5479304064065,
+            "fp": 12484.505476363373,
+            "fn": 29355.452069593593,
+            "n_truth": 30239,
+            "n_pred": 25355,
+            "sum_pred": 13166.5810546875,
+            "mean_credit_per_pred_px": 0.0348470885587224
+          },
+          "diag": {
+            "credit_density_novel": 0.031071430072188377,
+            "frac_novel_within_3px": 0.06683752154585866,
+            "auc_field_vs_block_truth": 0.5872512605775649
+          }
+        },
+        "A2_steered_gated": {
+          "n_novel": 44090,
+          "mass": 91461.734375,
+          "P": {
+            "dti_masked": 0.012015991194099938,
+            "dti_unmasked": 0.010313722081955272,
+            "tp": 436.51565107144415,
+            "fp": 60246.95296163,
+            "fn": 29802.484348928556,
+            "n_truth": 30239,
+            "n_pred": 104621,
+            "sum_pred": 91351.921875,
+            "mean_credit_per_pred_px": 0.0041723521192824015
+          },
+          "O": {
+            "dti_masked": 0.014999826733123105,
+            "dti_unmasked": 0.014999826733123105,
+            "tp": 380.48071234859526,
+            "fp": 5491.8884137111645,
+            "fn": 29858.519287651405,
+            "n_truth": 30239,
+            "n_pred": 11296,
+            "sum_pred": 5794.50390625,
+            "mean_credit_per_pred_px": 0.03368278260876374
+          },
+          "diag": {
+            "credit_density_novel": 0.01463395357131958,
+            "frac_novel_within_3px": 0.031662508505330006,
+            "auc_field_vs_block_truth": 0.47514565562977207
+          }
+        },
+        "A3_random_gated": {
+          "n_novel": 44090,
+          "mass": 97861.171875,
+          "P": {
+            "dti_masked": 0.04909784268122319,
+            "dti_unmasked": 0.042267056544438256,
+            "tp": 1856.359346492216,
+            "fp": 66234.57684376587,
+            "fn": 28382.640653507784,
+            "n_truth": 30239,
+            "n_pred": 104798,
+            "sum_pred": 97751.359375,
+            "mean_credit_per_pred_px": 0.017713690590395008
+          },
+          "O": {
+            "dti_masked": 0.06431125182511685,
+            "dti_unmasked": 0.06431125182511685,
+            "tp": 1784.9231636952609,
+            "fp": 16031.306658748152,
+            "fn": 28454.07683630474,
+            "n_truth": 30239,
+            "n_pred": 23900,
+            "sum_pred": 16753.6328125,
+            "mean_credit_per_pred_px": 0.07468297756047117
+          },
+          "diag": {
+            "credit_density_novel": 0.023673631250858307,
+            "frac_novel_within_3px": 0.04948968019959175,
+            "auc_field_vs_block_truth": 0.5872512605775649
+          }
+        },
+        "A4_hessianridge_ungated": {
+          "n_novel": 44092,
+          "mass": 90650.6484375,
+          "P": {
+            "dti_masked": 0.023024336927865232,
+            "dti_unmasked": 0.01971774657846269,
+            "tp": 833.1398681420833,
+            "fp": 59136.78011600136,
+            "fn": 29405.860131857917,
+            "n_truth": 30239,
+            "n_pred": 104196,
+            "sum_pred": 90540.8515625,
+            "mean_credit_per_pred_px": 0.007995891091232709
+          },
+          "O": {
+            "dti_masked": 0.02943869453075394,
+            "dti_unmasked": 0.02943869453075394,
+            "tp": 782.0466305632144,
+            "fp": 11088.26293001937,
+            "fn": 29456.953369436786,
+            "n_truth": 30239,
+            "n_pred": 22524,
+            "sum_pred": 11693.646484375,
+            "mean_credit_per_pred_px": 0.034720592726123885
+          },
+          "diag": {
+            "credit_density_novel": 0.027746140956878662,
+            "frac_novel_within_3px": 0.0592397713870997,
+            "auc_field_vs_block_truth": 0.5926359441971681
+          }
+        }
+      },
+      "n_truth_block": 30239,
+      "approved_tiles": 11389,
+      "approved_area_px": 11662336
+    },
+    {
+      "fold": "b01",
+      "arms": {
+        "A0_core_shell_only": {
+          "n_novel": 0,
+          "mass": 104350.0,
+          "P": {
+            "dti_masked": 0.0005641539542725249,
+            "dti_unmasked": 0.00043453117989437695,
+            "tp": 12.55122435465455,
+            "fp": 56818.803383935796,
+            "fn": 13589.448775645345,
+            "n_truth": 13602,
+            "n_pred": 94728,
+            "sum_pred": 104222.8046875,
+            "mean_credit_per_pred_px": 0.00013249751240028873
+          },
+          "O": {
+            "dti_masked": 0.0,
+            "dti_unmasked": 0.0,
+            "tp": 0.0,
+            "fp": 0.0,
+            "fn": 13602.0,
+            "n_truth": 13602,
+            "n_pred": 0,
+            "sum_pred": 0.0,
+            "mean_credit_per_pred_px": 0.0
+          },
+          "diag": {
+            "credit_density_novel": 0.0,
+            "frac_novel_within_3px": 0.0,
+            "auc_field_vs_block_truth": 0.38239579191380335
+          }
+        },
+        "A1_hessianridge_gated": {
+          "n_novel": 44091,
+          "mass": 127811.1953125,
+          "P": {
+            "dti_masked": 0.006709652723934853,
+            "dti_unmasked": 0.004998118824790034,
+            "tp": 180.82339458167553,
+            "fp": 80159.87524966148,
+            "fn": 13421.176605418324,
+            "n_truth": 13602,
+            "n_pred": 138322,
+            "sum_pred": 127683.9921875,
+            "mean_credit_per_pred_px": 0.001307264170426075
+          },
+          "O": {
+            "dti_masked": 0.012095891844054844,
+            "dti_unmasked": 0.012095891844054844,
+            "tp": 136.95545870997012,
+            "fp": 2067.4301654531596,
+            "fn": 13465.04454129003,
+            "n_truth": 13602,
+            "n_pred": 3705,
+            "sum_pred": 2163.398193359375,
+            "mean_credit_per_pred_px": 0.03696503608906076
+          },
+          "diag": {
+            "credit_density_novel": 0.004832101985812187,
+            "frac_novel_within_3px": 0.010432968179447054,
+            "auc_field_vs_block_truth": 0.38239579191380335
+          }
+        },
+        "A2_steered_gated": {
+          "n_novel": 44092,
+          "mass": 127917.65625,
+          "P": {
+            "dti_masked": 0.004018717708781526,
+            "dti_unmasked": 0.0030040909717173113,
+            "tp": 108.36631407774985,
+            "fp": 80310.61324777434,
+            "fn": 13493.63368592225,
+            "n_truth": 13602,
+            "n_pred": 138337,
+            "sum_pred": 127790.4609375,
+            "mean_credit_per_pred_px": 0.0007833501816415699
+          },
+          "O": {
+            "dti_masked": 0.004558460238900379,
+            "dti_unmasked": 0.004558460238900379,
+            "tp": 50.26064886711538,
+            "fp": 670.7151813396608,
+            "fn": 13551.739351132885,
+            "n_truth": 13602,
+            "n_pred": 1144,
+            "sum_pred": 709.24609375,
+            "mean_credit_per_pred_px": 0.04393413362510085
+          },
+          "diag": {
+            "credit_density_novel": 0.003097153501585126,
+            "frac_novel_within_3px": 0.0065998367050712145,
+            "auc_field_vs_block_truth": 0.31250974622056976
+          }
+        },
+        "A3_random_gated": {
+          "n_novel": 44090,
+          "mass": 134797.15625,
+          "P": {
+            "dti_masked": 0.028701300351321762,
+            "dti_unmasked": 0.021559538714030227,
+            "tp": 816.0191968027502,
+            "fp": 86933.16302339244,
+            "fn": 12785.98080319725,
+            "n_truth": 13602,
+            "n_pred": 138600,
+            "sum_pred": 134669.9375,
+            "mean_credit_per_pred_px": 0.005887584392516235
+          },
+          "O": {
+            "dti_masked": 0.05792262576401617,
+            "dti_unmasked": 0.05792262576401617,
+            "tp": 742.2390514593571,
+            "fp": 8921.360057111537,
+            "fn": 12859.760948540643,
+            "n_truth": 13602,
+            "n_pred": 14220,
+            "sum_pred": 9232.05859375,
+            "mean_credit_per_pred_px": 0.05219683906183946
+          },
+          "diag": {
+            "credit_density_novel": 0.011363547295331955,
+            "frac_novel_within_3px": 0.025175776820140622,
+            "auc_field_vs_block_truth": 0.38239579191380335
+          }
+        },
+        "A4_hessianridge_ungated": {
+          "n_novel": 44093,
+          "mass": 127358.0546875,
+          "P": {
+            "dti_masked": 0.005796864369688434,
+            "dti_unmasked": 0.004319042978841446,
+            "tp": 155.69057117030025,
+            "fp": 79724.91896040694,
+            "fn": 13446.3094288297,
+            "n_truth": 13602,
+            "n_pred": 137526,
+            "sum_pred": 127230.8515625,
+            "mean_credit_per_pred_px": 0.0011320809968318735
+          },
+          "O": {
+            "dti_masked": 0.010353911402590356,
+            "dti_unmasked": 0.010353911402590356,
+            "tp": 116.4523074105382,
+            "fp": 1711.448735922992,
+            "fn": 13485.547692589462,
+            "n_truth": 13602,
+            "n_pred": 3008,
+            "sum_pred": 1793.10107421875,
+            "mean_credit_per_pred_px": 0.038714197942333176
+          },
+          "diag": {
+            "credit_density_novel": 0.0041140844114124775,
+            "frac_novel_within_3px": 0.008958338058195178,
+            "auc_field_vs_block_truth": 0.3677265095667554
+          }
+        }
+      },
+      "n_truth_block": 13602,
+      "approved_tiles": 11123,
+      "approved_area_px": 11389952
+    },
+    {
+      "fold": "b10",
+      "arms": {
+        "A0_core_shell_only": {
+          "n_novel": 0,
+          "mass": 111765.6015625,
+          "P": {
+            "dti_masked": 0.000781402317894751,
+            "dti_unmasked": 0.000600973998341784,
+            "tp": 16.17526935786009,
+            "fp": 61229.36924462087,
+            "fn": 10547.82473064214,
+            "n_truth": 10564,
+            "n_pred": 102087,
+            "sum_pred": 111676.203125,
+            "mean_credit_per_pred_px": 0.00015844592708043226
+          },
+          "O": {
+            "dti_masked": 0.0,
+            "dti_unmasked": 0.0,
+            "tp": 0.0,
+            "fp": 0.0,
+            "fn": 10564.0,
+            "n_truth": 10564,
+            "n_pred": 0,
+            "sum_pred": 0.0,
+            "mean_credit_per_pred_px": 0.0
+          },
+          "diag": {
+            "credit_density_novel": 0.0,
+            "frac_novel_within_3px": 0.0,
+            "auc_field_vs_block_truth": 0.7253220485544734
+          }
+        },
+        "A1_hessianridge_gated": {
+          "n_novel": 44091,
+          "mass": 135424.859375,
+          "P": {
+            "dti_masked": 0.029432577700210023,
+            "dti_unmasked": 0.021151376409948686,
+            "tp": 749.6661463361233,
+            "fp": 84347.45833515137,
+            "fn": 9814.333853663877,
+            "n_truth": 10564,
+            "n_pred": 145926,
+            "sum_pred": 135335.46875,
+            "mean_credit_per_pred_px": 0.00513730347118487
+          },
+          "O": {
+            "dti_masked": 0.0690068274546527,
+            "dti_unmasked": 0.0690068274546527,
+            "tp": 682.7281080167741,
+            "fp": 6529.428391318226,
+            "fn": 9881.271891983226,
+            "n_truth": 10564,
+            "n_pred": 12596,
+            "sum_pred": 7029.11962890625,
+            "mean_credit_per_pred_px": 0.05420197745449143
+          },
+          "diag": {
+            "credit_density_novel": 0.021159909665584564,
+            "frac_novel_within_3px": 0.04434011476264997,
+            "auc_field_vs_block_truth": 0.7253220485544734
+          }
+        },
+        "A2_steered_gated": {
+          "n_novel": 44093,
+          "mass": 135377.46875,
+          "P": {
+            "dti_masked": 0.010680331200651066,
+            "dti_unmasked": 0.0077140534995357125,
+            "tp": 271.6645068060607,
+            "fp": 84652.1493497306,
+            "fn": 10292.33549319394,
+            "n_truth": 10564,
+            "n_pred": 145933,
+            "sum_pred": 135288.078125,
+            "mean_credit_per_pred_px": 0.0018615700822025222
+          },
+          "O": {
+            "dti_masked": 0.022873948388071975,
+            "dti_unmasked": 0.022873948388071975,
+            "tp": 201.25513346120715,
+            "fp": 1534.9603871149798,
+            "fn": 10362.744866538793,
+            "n_truth": 10564,
+            "n_pred": 2941,
+            "sum_pred": 1681.397705078125,
+            "mean_credit_per_pred_px": 0.0684308512278841
+          },
+          "diag": {
+            "credit_density_novel": 0.007454615086317062,
+            "frac_novel_within_3px": 0.01605697049418275,
+            "auc_field_vs_block_truth": 0.46438906048066175
+          }
+        },
+        "A3_random_gated": {
+          "n_novel": 44090,
+          "mass": 142073.6875,
+          "P": {
+            "dti_masked": 0.02789864244377519,
+            "dti_unmasked": 0.02034361795612863,
+            "tp": 749.1447507888079,
+            "fp": 91256.7198355952,
+            "fn": 9814.855249211192,
+            "n_truth": 10564,
+            "n_pred": 146008,
+            "sum_pred": 141984.28125,
+            "mean_credit_per_pred_px": 0.005130847287743191
+          },
+          "O": {
+            "dti_masked": 0.06894636527360047,
+            "dti_unmasked": 0.06894636527360047,
+            "tp": 651.587986599654,
+            "fp": 4345.6634362314735,
+            "fn": 9912.412013400346,
+            "n_truth": 10564,
+            "n_pred": 6236,
+            "sum_pred": 4594.2890625,
+            "mean_credit_per_pred_px": 0.1044881312699894
+          },
+          "diag": {
+            "credit_density_novel": 0.00844741053879261,
+            "frac_novel_within_3px": 0.01696529825357224,
+            "auc_field_vs_block_truth": 0.7253220485544734
+          }
+        },
+        "A4_hessianridge_ungated": {
+          "n_novel": 44090,
+          "mass": 134991.3125,
+          "P": {
+            "dti_masked": 0.026265936966120628,
+            "dti_unmasked": 0.018863732506179284,
+            "tp": 666.611845344305,
+            "fp": 83974.03117209577,
+            "fn": 9897.388154655695,
+            "n_truth": 10564,
+            "n_pred": 145259,
+            "sum_pred": 134901.921875,
+            "mean_credit_per_pred_px": 0.0045891259429316255
+          },
+          "O": {
+            "dti_masked": 0.06291534965394462,
+            "dti_unmasked": 0.06291534965394462,
+            "tp": 608.5304398350418,
+            "fp": 5496.516838442063,
+            "fn": 9955.469560164958,
+            "n_truth": 10564,
+            "n_pred": 10657,
+            "sum_pred": 5941.5517578125,
+            "mean_credit_per_pred_px": 0.05710147694801931
+          },
+          "diag": {
+            "credit_density_novel": 0.018945634365081787,
+            "frac_novel_within_3px": 0.03973690179178952,
+            "auc_field_vs_block_truth": 0.7270937250328472
+          }
+        }
+      },
+      "n_truth_block": 10564,
+      "approved_tiles": 10857,
+      "approved_area_px": 11117568
+    },
+    {
+      "fold": "b11",
+      "arms": {
+        "A0_core_shell_only": {
+          "n_novel": 0,
+          "mass": 112325.3984375,
+          "P": {
+            "dti_masked": 0.0006379166788530016,
+            "dti_unmasked": 0.0004887902858638625,
+            "tp": 13.152539011090994,
+            "fp": 61564.63525800941,
+            "fn": 10364.847460988909,
+            "n_truth": 10378,
+            "n_pred": 102639,
+            "sum_pred": 112193.40625,
+            "mean_credit_per_pred_px": 0.0001281436784369586
+          },
+          "O": {
+            "dti_masked": 0.0,
+            "dti_unmasked": 0.0,
+            "tp": 0.0,
+            "fp": 0.0,
+            "fn": 10378.0,
+            "n_truth": 10378,
+            "n_pred": 0,
+            "sum_pred": 0.0,
+            "mean_credit_per_pred_px": 0.0
+          },
+          "diag": {
+            "credit_density_novel": 0.0,
+            "frac_novel_within_3px": 0.0,
+            "auc_field_vs_block_truth": 0.6255644061544612
+          }
+        },
+        "A1_hessianridge_gated": {
+          "n_novel": 44093,
+          "mass": 135774.8125,
+          "P": {
+            "dti_masked": 0.01577498377433335,
+            "dti_unmasked": 0.01132411202718906,
+            "tp": 399.5256339740008,
+            "fp": 84721.13519401067,
+            "fn": 9978.474366026,
+            "n_truth": 10378,
+            "n_pred": 146291,
+            "sum_pred": 135642.8125,
+            "mean_credit_per_pred_px": 0.0027310335835697397
+          },
+          "O": {
+            "dti_masked": 0.03493342920800667,
+            "dti_unmasked": 0.03493342920800667,
+            "tp": 329.6120098065585,
+            "fp": 5335.549991729602,
+            "fn": 10048.387990193442,
+            "n_truth": 10378,
+            "n_pred": 10403,
+            "sum_pred": 5582.81787109375,
+            "mean_credit_per_pred_px": 0.03168432277290767
+          },
+          "diag": {
+            "credit_density_novel": 0.012552941218018532,
+            "frac_novel_within_3px": 0.024992629215521738,
+            "auc_field_vs_block_truth": 0.6255644061544612
+          }
+        },
+        "A2_steered_gated": {
+          "n_novel": 44090,
+          "mass": 136094.375,
+          "P": {
+            "dti_masked": 0.005939372409741572,
+            "dti_unmasked": 0.004298880571109943,
+            "tp": 150.72700941748917,
+            "fp": 85225.26638335033,
+            "fn": 10227.27299058251,
+            "n_truth": 10378,
+            "n_pred": 146269,
+            "sum_pred": 135962.375,
+            "mean_credit_per_pred_px": 0.0010304781561198146
+          },
+          "O": {
+            "dti_masked": 0.012023810673453376,
+            "dti_unmasked": 0.012023810673453376,
+            "tp": 104.10090461745858,
+            "fp": 1673.3800442526417,
+            "fn": 10273.899095382541,
+            "n_truth": 10378,
+            "n_pred": 3032,
+            "sum_pred": 1754.28662109375,
+            "mean_credit_per_pred_px": 0.034334071443752834
+          },
+          "diag": {
+            "credit_density_novel": 0.004167516250163317,
+            "frac_novel_within_3px": 0.008958947607167159,
+            "auc_field_vs_block_truth": 0.4258294075265975
+          }
+        },
+        "A3_random_gated": {
+          "n_novel": 44090,
+          "mass": 142748.4375,
+          "P": {
+            "dti_masked": 0.02651940236631595,
+            "dti_unmasked": 0.019299167194991845,
+            "tp": 710.4562693536282,
+            "fp": 91727.82276358826,
+            "fn": 9667.543730646372,
+            "n_truth": 10378,
+            "n_pred": 146479,
+            "sum_pred": 142616.4375,
+            "mean_credit_per_pred_px": 0.00485022610308391
+          },
+          "O": {
+            "dti_masked": 0.06812693261321966,
+            "dti_unmasked": 0.06812693261321966,
+            "tp": 654.5355693027377,
+            "fp": 5871.409498028528,
+            "fn": 9723.464430697262,
+            "n_truth": 10378,
+            "n_pred": 8547,
+            "sum_pred": 6114.00390625,
+            "mean_credit_per_pred_px": 0.0765807381891585
+          },
+          "diag": {
+            "credit_density_novel": 0.008119554258883,
+            "frac_novel_within_3px": 0.016602404173281925,
+            "auc_field_vs_block_truth": 0.6255644061544612
+          }
+        },
+        "A4_hessianridge_ungated": {
+          "n_novel": 44093,
+          "mass": 135411.578125,
+          "P": {
+            "dti_masked": 0.012942874839179826,
+            "dti_unmasked": 0.009292664574361025,
+            "tp": 326.8063481692225,
+            "fp": 84410.71403606617,
+            "fn": 10051.193651830778,
+            "n_truth": 10378,
+            "n_pred": 145590,
+            "sum_pred": 135279.578125,
+            "mean_credit_per_pred_px": 0.002244703263749038
+          },
+          "O": {
+            "dti_masked": 0.027935703110310534,
+            "dti_unmasked": 0.027935703110310534,
+            "tp": 257.4409283436835,
+            "fp": 4307.961763889494,
+            "fn": 10120.559071656317,
+            "n_truth": 10378,
+            "n_pred": 8354,
+            "sum_pred": 4501.5107421875,
+            "mean_credit_per_pred_px": 0.030816486514685597
+          },
+          "diag": {
+            "credit_density_novel": 0.010206728242337704,
+            "frac_novel_within_3px": 0.020570158528564624,
+            "auc_field_vs_block_truth": 0.6302269122105194
+          }
+        }
+      },
+      "n_truth_block": 10378,
+      "approved_tiles": 10945,
+      "approved_area_px": 11207680
+    }
+  ],
+  "config": {
+    "n_crop": null,
+    "folds": 4,
+    "novel_budget": 44090,
+    "shell_radius_px": 1,
+    "shell_decay": 0.6
+  },
+  "aggregate": {
+    "A0_core_shell_only": {
+      "P": {
+        "mean": 0.0006191794706869318,
+        "per_fold": [
+          0.0004932449317274494,
+          0.0005641539542725249,
+          0.000781402317894751,
+          0.0006379166788530016
+        ]
+      },
+      "O": {
+        "mean": 0.0,
+        "per_fold": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "A1_hessianridge_gated": {
+      "P": {
+        "mean": 0.019424932952238832,
+        "per_fold": [
+          0.025782517610477104,
+          0.006709652723934853,
+          0.029432577700210023,
+          0.01577498377433335
+        ]
+      },
+      "O": {
+        "mean": 0.03723120497370866,
+        "per_fold": [
+          0.03288867138812042,
+          0.012095891844054844,
+          0.0690068274546527,
+          0.03493342920800667
+        ]
+      }
+    },
+    "A2_steered_gated": {
+      "P": {
+        "mean": 0.008163603128318526,
+        "per_fold": [
+          0.012015991194099938,
+          0.004018717708781526,
+          0.010680331200651066,
+          0.005939372409741572
+        ]
+      },
+      "O": {
+        "mean": 0.01361401150838721,
+        "per_fold": [
+          0.014999826733123105,
+          0.004558460238900379,
+          0.022873948388071975,
+          0.012023810673453376
+        ]
+      }
+    },
+    "A3_random_gated": {
+      "P": {
+        "mean": 0.03305429696065902,
+        "per_fold": [
+          0.04909784268122319,
+          0.028701300351321762,
+          0.02789864244377519,
+          0.02651940236631595
+        ]
+      },
+      "O": {
+        "mean": 0.06482679386898829,
+        "per_fold": [
+          0.06431125182511685,
+          0.05792262576401617,
+          0.06894636527360047,
+          0.06812693261321966
+        ]
+      }
+    },
+    "A4_hessianridge_ungated": {
+      "P": {
+        "mean": 0.017007503275713532,
+        "per_fold": [
+          0.023024336927865232,
+          0.005796864369688434,
+          0.026265936966120628,
+          0.012942874839179826
+        ]
+      },
+      "O": {
+        "mean": 0.03266091467439986,
+        "per_fold": [
+          0.02943869453075394,
+          0.010353911402590356,
+          0.06291534965394462,
+          0.027935703110310534
+        ]
+      }
+    },
+    "diagnostics": {
+      "A0_core_shell_only": {
+        "credit_density_novel": 0.0,
+        "frac_novel_within_3px": 0.0,
+        "auc_field_vs_block_truth": 0.5801333768000757
+      },
+      "A1_hessianridge_gated": {
+        "credit_density_novel": 0.017404095735400915,
+        "frac_novel_within_3px": 0.036650808425869354,
+        "auc_field_vs_block_truth": 0.5801333768000757
+      },
+      "A2_steered_gated": {
+        "credit_density_novel": 0.007338309602346271,
+        "frac_novel_within_3px": 0.01581956582793778,
+        "auc_field_vs_block_truth": 0.41946846746440025
+      },
+      "A3_random_gated": {
+        "credit_density_novel": 0.012901035835966468,
+        "frac_novel_within_3px": 0.027058289861646635,
+        "auc_field_vs_block_truth": 0.5801333768000757
+      },
+      "A4_hessianridge_ungated": {
+        "credit_density_novel": 0.015253146993927658,
+        "frac_novel_within_3px": 0.032126292441412255,
+        "auc_field_vs_block_truth": 0.5794207727518226
+      }
+    }
+  },
+  "contrasts": {
+    "A1_hessianridge_gated - A2_steered_gated [P]": {
+      "mean": 0.011261329823920307,
+      "per_fold": [
+        0.013766526416377167,
+        0.0026909350151533267,
+        0.018752246499558957,
+        0.009835611364591778
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A3_random_gated [P]": {
+      "mean": -0.013629364008420191,
+      "per_fold": [
+        -0.023315325070746087,
+        -0.02199164762738691,
+        0.0015339352564348319,
+        -0.0107444185919826
+      ],
+      "folds_positive": 1,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A0_core_shell_only [P]": {
+      "mean": 0.0188057534815519,
+      "per_fold": [
+        0.025289272678749655,
+        0.006145498769662328,
+        0.02865117538231527,
+        0.015137067095480348
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A4_hessianridge_ungated [P]": {
+      "mean": 0.0024174296765253024,
+      "per_fold": [
+        0.0027581806826118722,
+        0.000912788354246419,
+        0.0031666407340893953,
+        0.002832108935153524
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A2_steered_gated [O]": {
+      "mean": 0.02361719346532145,
+      "per_fold": [
+        0.017888844654997314,
+        0.007537431605154465,
+        0.04613287906658072,
+        0.022909618534553294
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A3_random_gated [O]": {
+      "mean": -0.02759558889527963,
+      "per_fold": [
+        -0.03142258043699643,
+        -0.045826733919961324,
+        6.0462181052226005e-05,
+        -0.03319350340521299
+      ],
+      "folds_positive": 1,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A0_core_shell_only [O]": {
+      "mean": 0.03723120497370866,
+      "per_fold": [
+        0.03288867138812042,
+        0.012095891844054844,
+        0.0690068274546527,
+        0.03493342920800667
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1_hessianridge_gated - A4_hessianridge_ungated [O]": {
+      "mean": 0.004570290299308796,
+      "per_fold": [
+        0.0034499768573664803,
+        0.0017419804414644888,
+        0.006091477800708081,
+        0.006997726097696135
+      ],
+      "folds_positive": 4,
+      "n_folds": 4
+    },
+    "A1-A2_steered_gated credit_density_novel": {
+      "mean": 0.010065786133054644,
+      "per_fold": [
+        0.016437476500868797,
+        0.0017349484842270613,
+        0.013705294579267502,
+        0.008385424967855215
+      ],
+      "folds_positive": 4
+    },
+    "A1-A2_steered_gated auc_field_vs_block_truth": {
+      "mean": 0.16066490933567545,
+      "per_fold": [
+        0.11210560494779287,
+        0.06988604569323359,
+        0.2609329880738116,
+        0.1997349986278637
+      ],
+      "folds_positive": 4
+    },
+    "A1-A3_random_gated credit_density_novel": {
+      "mean": 0.004503059899434447,
+      "per_fold": [
+        0.0073977988213300705,
+        -0.006531445309519768,
+        0.012712499126791954,
+        0.004433386959135532
+      ],
+      "folds_positive": 3
+    },
+    "A1-A3_random_gated auc_field_vs_block_truth": {
+      "mean": 0.0,
+      "per_fold": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "folds_positive": 0
+    }
+  },
+  "promotion_rule": "DECLARED BEFORE THIS RUN (2026-10-06): PROMOTE the unsteered Hessian-ridge field iff mean(A1 - A3_random)[P] > 0 AND mean(A1 - A0_core_shell_only)[P] >= 0 AND folds_positive(A1 - A3_random)[P] >= 3.  A2 (steered) and A4 (ungated) are ablations, not candidates.",
+  "promotion_pass": false,
+  "elapsed_s": 671.1
+}

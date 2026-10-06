@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hypotheses — GEMSDOE51</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="on" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<h1 style="font-size:1.3rem">Candidate hypotheses, ranked by expected DTI improvement × cost</h1>
+<p class="small dim">Each entry names the specific layers, the physical signature, why it should
+catch a fault the catalogue <i>lacks</i> rather than one already in it, and how it differs from
+everything already implemented — here or in the group's record. Obtainability of the external
+source was <b>checked from this environment</b>, not assumed.</p>
+
+<table>
+<tr><th>#</th><th>hypothesis</th><th>layers / signature</th><th>why it targets a MISSING fault</th>
+<th>what is new about it</th><th>cost</th><th>source &amp; obtainability</th></tr>
+
+<tr><td><b>H52-1</b></td><td><b>Masked-core completion with along-strike tip extrapolation</b></td>
+<td>catalogue geometry + the ridge field's orientation; continue past trace endpoints</td>
+<td>the organisers state new geometry of an existing system counts as a new fault; map tips are
+where mapping stopped, not where faults stop</td>
+<td>no prior GEMSDOE artifact extrapolates tips under an explicit orientation-continuity
+constraint, and none exploits the masked-core credit</td><td>low — reuses the already-computed field</td>
+<td>internal</td></tr>
+
+<tr><td><b>H52-2</b></td><td><b>Radiometric–magnetic concordance as a product, not a mean</b></td>
+<td>bands 1, 2, 3, 6, 9, 14, 17; elementwise AND of two normalised fields</td>
+<td>a fault that has been hydrothermally altered along its length appears in <i>both</i> K/Th
+radiometrics and RTP magnetics; requiring concordance suppresses single-channel noise that
+dominates a mean-rank fusion</td>
+<td>this repository fuses by mean rank; concordance is a product. Nothing in the family uses it</td>
+<td>low</td><td>internal</td></tr>
+
+<tr><td><b>H52-3</b></td><td><b>Post-2023 rupture and deformed-terrain detection</b></td>
+<td>data NOT in the 19 bands: InSAR / optical change, or relocated seismicity</td>
+<td>a fault that moved in 2020 is a fault; if it is absent from the Quaternary catalogue it is a
+hidden-truth candidate <i>by construction</i>, and no catalogue can contain it</td>
+<td>nothing in this project's record has ever used ground-deformation change</td>
+<td>high</td>
+<td>USGS ComCat, ARIA/COMET — <b>HTTP 000 from this sandbox</b> for
+<code>earthquake.usgs.gov</code>, <code>sciencebase.gov</code>, <code>www.usgs.gov</code>.
+<b>Not proposable as viable until an unrestricted machine confirms obtainability.</b> A ready-to-run
+fetcher must be shipped instead of a claim.</td></tr>
+
+<tr><td><b>H52-4</b></td><td><b>Deep-seated / blind structure from a long-wavelength
+gravity–magnetic joint anomaly</b></td><td>bands 5, 11, 13, 18 with ≥ 10 px (1 km) smoothing</td>
+<td>the brief's own caveat — a deficit may be off-fault or aseismic; a blind structure produces a
+broad joint anomaly with no surface scarp, so it is invisible to every short-wavelength
+detector</td><td>the strongest families in the family record are all short-wavelength /
+topographic; a 1 km joint anomaly is a different physical object</td><td>medium</td>
+<td>internal</td></tr>
+
+<tr><td><b>H52-5</b></td><td><b>Cross-catalogue disagreement, gated by the metric's credit
+bar</b></td><td>external fault vectors vs the given catalogue</td>
+<td>A state-geological-survey line absent from the Quaternary compilation is a candidate the
+competition's own training labels <i>cannot</i> represent</td>
+<td>the group unioned such sources; the new part is gating each addition with the metric's own
+<code>k &gt; 0.2·DTI</code> acceptance test instead of adding it wholesale</td>
+<td>medium</td>
+<td><code>mrdata.usgs.gov/geology/state/</code> — <b>HTTP 000 from this sandbox</b>. Blocked
+pending an unrestricted machine.</td></tr>
+</table>
+
+<h2>Ranking, and the honest ordering rule</h2>
+<pre>expected P(Win) per unit cost:   H52-1  >  H52-2  >  H52-4  >  H52-5  >  H52-3</pre>
+<p><b>H52-3 has the largest physical upside and the largest cost, and it is data-blocked here.</b>
+It is named so the next session can act on it, and it is explicitly <i>not</i> claimed. Per the
+standing rule, no slot is spent on a hypothesis that has not beaten the current holdout best —
+so the first action on H52-1 and H52-2 is a blocked-holdout run, not a submission.</p>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

@@ -1,0 +1,149 @@
+{
+  "data_root": "data",
+  "files": {
+    "training_features.tif": {
+      "present": true,
+      "path": "data/training_features.tif",
+      "bytes": 418912844,
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "expected_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "sha256_match": true
+    },
+    "labels.tif": {
+      "present": true,
+      "path": "data/labels.tif",
+      "bytes": 425830,
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "sha256_match": true
+    },
+    "existing_faults.tif": {
+      "present": true,
+      "path": "data/existing_faults.tif",
+      "bytes": 425830,
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "sha256_match": true
+    },
+    "sample_submission.tif": {
+      "present": true,
+      "path": "data/sample_submission.tif",
+      "bytes": 1599597,
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "expected_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "sha256_match": true
+    }
+  },
+  "grid": {
+    "source": "data/training_features.tif",
+    "count": 19,
+    "height": 3730,
+    "width": 3292,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "res": [
+      100.0,
+      100.0
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "nodata": -3.4028234663852886e+38,
+    "bands": {
+      "1": {
+        "description": "Magnetic anomaly - deviation from expected Earth's magnetic field",
+        "category": "magnetic_data"
+      },
+      "2": {
+        "description": "Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects",
+        "category": "magnetic_data"
+      },
+      "3": {
+        "description": "Total magnetic intensity horizontal gradient - rate of change in horizontal direction",
+        "category": "magnetic_data"
+      },
+      "4": {
+        "description": "Geodetic second invariant - measure of strain rate tensor magnitude",
+        "category": "geodetic_strain"
+      },
+      "5": {
+        "description": "Isostatic gravity anomaly slope - gradient of gravity after isostatic correction",
+        "category": "gravity_data"
+      },
+      "6": {
+        "description": "Tilt angle or total curvature - magnetic field derivative for edge detection",
+        "category": "magnetic_data"
+      },
+      "7": {
+        "description": "Geodetic shear rate - rate of angular deformation from GPS/InSAR",
+        "category": "geodetic_strain"
+      },
+      "8": {
+        "description": "Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)",
+        "category": "geodetic_strain"
+      },
+      "9": {
+        "description": "Total magnetic intensity vertical gradient - rate of change in vertical direction",
+        "category": "magnetic_data"
+      },
+      "10": {
+        "description": "Distance to earthquake (n=100km radius, a=15\u00b0 azimuth parameters)",
+        "category": "seismic"
+      },
+      "11": {
+        "description": "Isostatic gravity anomaly vertical gradient - vertical rate of change",
+        "category": "gravity_data"
+      },
+      "12": {
+        "description": "Detrended elevation - topography with regional trends removed",
+        "category": "topographic"
+      },
+      "13": {
+        "description": "Isostatic gravity anomaly - gravity after compensating for topographic mass",
+        "category": "gravity_data"
+      },
+      "14": {
+        "description": "Total magnetic intensity - total strength of magnetic field",
+        "category": "magnetic_data"
+      },
+      "15": {
+        "description": "Depth to basement surface - thickness of sedimentary cover",
+        "category": "subsurface"
+      },
+      "16": {
+        "description": "Earthquake intensity or density (n=100km radius, a=15\u00b0 parameters)",
+        "category": "seismic"
+      },
+      "17": {
+        "description": "Conductivity surface - electrical conductivity of subsurface",
+        "category": "subsurface"
+      },
+      "18": {
+        "description": "Isostatic gravity anomaly horizontal gradient - horizontal rate of change",
+        "category": "gravity_data"
+      },
+      "19": {
+        "description": "Detrended elevation slope - gradient of elevation after detrending",
+        "category": "topographic"
+      }
+    }
+  },
+  "irregularities": [],
+  "format_facts": {
+    "sample_submission_nodata": NaN,
+    "footprint_valid_px": 5167373,
+    "sample_submission_nonzero_px": 60988,
+    "catalogue_px": 60988,
+    "sample_submission_is_the_catalogue": true,
+    "catalogue_unique_values": [
+      -1,
+      0,
+      1
+    ]
+  }
+}
