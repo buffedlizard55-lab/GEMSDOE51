@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+data/training_features.tif
+data/*.zip
+submissions/*.zip
+/tmp/

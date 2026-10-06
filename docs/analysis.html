@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why 0.2778 was highest — GEMSDOE51</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="on" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<h1 style="font-size:1.3rem">Why <code>h33-h33-2-b2</code> scored 0.2778 — and what it takes to pass 0.3774</h1>
+<p><b>Short answer.</b> Because the metric is a <i>budget</i>, not a segmentation score. Its own
+first-order condition says a unit of prediction mass is worth adding only when its realised
+kernel weight exceeds <code>0.2·DTI</code>. The 0.2778 file is the member of its family whose
+emitted mass has been thinned back to (approximately) the point where the marginal dot's
+credit equals that bar. Getting past 0.3774 requires the top of the ranking to be roughly 45 %
+better at the same mass — a <i>detector</i> problem, not an emission or architecture problem.</p>
+
+<h2>Derivation, from the published equations only</h2>
+<pre>TP_w = SUM_g max_x p(x)k(d(x,g))        FP_w = SUM_x p(x)[1 - max_g k]
+FN_w = SUM_g [1 - max_x p(x)k(d)]       k(d) = max(1 - d/300m, 0)
+DTI  = TP_w / (TP_w + 0.2*FP_w + 0.8*FN_w + eps)</pre>
+<p>Put <code>T = TP_w</code>, <code>S = SUM_x p(x)</code>,
+<code>M = SUM_x p(x)·max_g k</code>, <code>K = |truth|</code>. Then exactly:</p>
+<pre>FP_w = S - M          FN_w = K - T
+DTI  = T / ( 0.2*(T + S - M) + 0.8*K )          (star)</pre>
+<p>This identity is verified in <code>tests/test_metric.py</code> against a brute-force O(N²)
+transcription of the published equations (worst disagreement 4.23e−07 over 12 random trials) and
+against the <b>official worked example</b>: published <code>TP_w = 3.00, FP_w = 1.89,
+FN_w = 2.00, DTI = 0.60</code>; measured <code>3.0049 / 1.8857 / 1.9951 / 0.603624</code>. The
+schematics the example comes from are reproduced in this repository at
+<a href="assets/official-metric-schematic-1.png">schematic 1</a> and
+<a href="assets/official-metric-schematic-2.png">schematic 2</a>.</p>
+<p>Differentiating (star) at fixed <code>T, M, K</code> gives the metric's own marginal rule:</p>
+<pre>adding a unit of mass raises DTI  &lt;=&gt;  k &gt; 0.2 * DTI</pre>
+<p>At 0.2778 the bar is <b>0.0556</b>; at 0.3774 it is <b>0.0755</b>.</p>
+
+<h2>The three consequences that explain the whole leaderboard</h2>
+<ol>
+<li><b>Thinning wins, and it is bounded.</b> A file that is a wide rasterisation of a good field
+spends <code>0.2·n</code> of denominator on mass whose realised <code>k</code> is below the bar.
+Deleting that tail raises <code>T/S</code>. It is a one-off gain: once the marginal dot sits at
+the bar there is nothing left to delete.</li>
+<li><b>The remaining gap is a detector gap.</b> Holding emitted mass and the hidden truth fixed,
+going from 0.2600 to 0.3774 needs the mean realised credit of the top-ranked pixels to rise by
+about <b>+45 %</b>. No public catalogue supplies that: measured elsewhere in this project's
+record, the newest official compilation lies within 300 m of the given catalogue for 59,064 of
+its 59,065 pixels. Architecture cannot supply it either.</li>
+<li><b>Coverage, not sharpness, is what the metric actually pays for.</b>
+<code>T</code> is a sum <i>over the truth</i>: each truth pixel contributes at most 1 no matter
+how many dots sit on it. This repository measured the consequence directly — a detector whose
+dots have a <b>2.3× higher</b> per-dot credit density than random still <b>lost</b> to random,
+because concentrating dots leaves parts of the map uncovered. Field-<i>weighted</i> sampling,
+which keeps uniform coverage while biasing the draw toward the detector's ground, beat both.
+See <a href="holdout.html">Holdout results</a>.</li>
+</ol>
+
+<h2>Why the masked core is worth more than any architecture change</h2>
+<p>Under the organisers' masking statement (forum 11516), the 60,988 catalogue pixels cost
+<b>zero</b> in the FP term while still delivering <code>k</code>-weighted credit to any hidden
+fault within 300 m. That is up to 60,988 units of <i>zero-risk</i> mass in a competition where a
+winning file's total credit is on the order of 5×10³. The marginal return on zero-risk mass
+dwarfs the marginal return on a better ranking of risky mass — and it is the reason this
+repository puts 1.0 on the mapped trace.</p>
+<p class="small dim"><b>Flagged.</b> That statement is a staff forum post, not the rules PDF. It
+is corroborated structurally (the sample submission <i>is</i> the catalogue rasterised — measured
+here, <code>np.array_equal(sample&gt;0, catalogue) == True</code>), because under an unmasked
+metric that "total fault absence" template would score ≈ 1.0. But it remains the
+highest-variance decision in this repository.</p>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

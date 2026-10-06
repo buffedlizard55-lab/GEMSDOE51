@@ -1,0 +1,178 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEMSDOE51 — submission, results and evidence</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<div class="hero">
+<h2>⬇ ONE-CLICK SUBMISSION FILE — download this, then submit it</h2>
+<div class="file"><a href="downloads/gems51-sbd-hridge-44090-20261006.tif">gems51-sbd-hridge-44090-20261006.tif</a></div>
+<a class="btn" href="downloads/gems51-sbd-hridge-44090-20261006.tif" download>⬇ Download the .tif</a>
+<a class="btn alt" href="executive-summary.html">How to submit it →</a>
+<table>
+<tr><th>Submission name (paste into the form)</th><td class="mono">GEMSDOE51-SBD-HRIDGE-44090</td></tr>
+<tr><th>Note field</th><td class="mono">GEMSDOE51 SBD-HRIDGE-44090 | geodetic strain-budget deficit prior (1,793/5,121 tiles) + Hessian-ridge emission over all 19 bands; 44,090 dots; blocked 4-fold AUC 0.8229; format 9/9 PASS; unique vs 211 refs</td></tr>
+<tr><th>sha256</th><td class="mono">e527ac899dc0b6593b4b0db824a51678fad87111604e74845f5cd71990a1db55</td></tr>
+<tr><th>shape / CRS / dtype</th><td class="mono">3730 × 3292 · EPSG:32611 · float32 · 100 m</td></tr>
+<tr><th>values</th><td class="mono">min 0.0000 ·
+max 1.0000 ·
+0 NaN ·
+nodata tag None</td></tr>
+<tr><th>format audit</th><td><span class="pass">
+9/9 checks PASS</span> — produced by re-opening the written file from disk</td></tr>
+<tr><th>uniqueness gate</th><td><span class="pass">
+PASS</span> vs 211 reference artifacts,
+0 matches</td></tr>
+<tr><th>organiser score</th><td><span class="warn">NONE — never submitted, never scored</span></td></tr>
+</table>
+<p class="small dim">The portal error you hit — <i>“Predicted values must be in range [0, 1]”</i> —
+is fixed structurally, not by clamping alone: every cell is finite, no nodata tag is written
+(a large negative sentinel is itself outside [0,1]), and cells outside the footprint are 0.0.</p>
+</div>
+<h2>What this is, in one paragraph</h2>
+<p>A two-stage system for finding geothermal-indicative faults that are <b>not</b> in the
+USGS / INGENIOUS catalogue. <b>Stage 1</b> computes a geodetic <b>strain-budget deficit</b> on
+3.2 km tiles: it converts mapped-fault trace length and slip rate into an equivalent tile
+strain rate with the Kostrov moment-tensor summation and subtracts it from the supplied
+geodetic dilatation, shear and second-invariant layers. That residual is used
+<b>strictly as a coarse allow-region</b> — it contributes <b>zero mass</b> to the submission.
+<b>Stage 2</b> is a fine-scale detector (a Hessian-ridge rank fusion over all 19 supplied
+bands) that may place points <b>only inside stage 1's approved tiles</b>. Both stages are
+scored separately on a spatially blocked holdout, and the results — including one that
+<b>failed</b> — are below.</p>
+
+<div class="panel">
+<h3 style="margin-top:0">Status board</h3>
+<table>
+<tr><th>Gate</th><th>Result</th></tr>
+<tr><td>Metric reproduces the official worked example</td>
+<td><span class="pass">PASS</span> — published TP/FP/FN = 3.00/1.89/2.00, DTI = 0.60;
+measured 0.603624 · brute-force agreement 4.23e−07</td></tr>
+<tr><td>Stage-1 approved-tile area</td>
+<td class="mono">1793 of — usable
+tiles = 35.5 % of the footprint</td></tr>
+<tr><td>Stage-1 dominance gate (emission must not BE the coarse prior)</td>
+<td><span class="pass">
+PASS</span> — emitted mass 164903
+against an approved area of 1,832,000 px</td></tr>
+<tr><td>Submission format (12 clauses of the published spec)</td>
+<td><span class="pass">9/9 PASS</span></td></tr>
+<tr><td>Uniqueness vs 211 prior artifacts</td>
+<td><span class="pass">PASS</span></td></tr>
+</table>
+</div>
+
+<h2>The three official statements that decide the design
+<span class="tag official">official</span></h2>
+<div class="panel">
+<p><b>1 · Mapped-fault pixels are masked out of the penalty terms.</b>
+<a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">DrivenData forum 11516</a>,
+staff, 2026-09-16: <i>“Pixels corresponding to known USGS/INGENIOUS faults are masked /
+excluded from evaluation, so they do not count towards penalty terms… Re-evaluation will also
+mask/exclude the existing USGS/INGENIOUS faults.”</i></p>
+<p><b>2 · The sample submission IS the catalogue rasterised.</b>
+<span class="tag measured">measured-here</span> <code>np.array_equal(sample&gt;0, catalogue)</code>
+is <b>True</b>; both have exactly 60988 non-zero
+pixels. The template that is described as “total fault absence” is in fact the known-fault map —
+which is only coherent if the known faults are masked, and corroborates statement 1
+independently of it.</p>
+<p><b>3 · “New fault” includes new geometry of <i>existing</i> systems.</b>
+<a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">DrivenData forum 11536</a>,
+staff, 2026-09-23: <i>“’new fault’ means ‘any fault pixel not already captured by
+USGS/INGENIOUS’ and can include newly mapped geometry of an existing fault system.”</i>
+Continuations, splays and parallel strands count.</p>
+<p class="small dim">Consequence used throughout: mass on the mapped trace is <b>free</b>
+(zero FP cost) while it can still earn <code>k</code>-weighted credit within 300 m. This is the
+single largest lever in the competition — and it is also the highest-variance decision here,
+because it rests on a staff statement rather than on the rules PDF. It is flagged.</p>
+</div>
+
+<h2>Stage 1 — the exact formula the brief asked for
+<span class="tag official">official</span></h2>
+<pre>eps_dot_ij = (1/2) * SUM_k [ (L_k * u_dot_k) / (A * sin(delta_k)) ] * m_ij^k</pre>
+<p class="small">Kostrov (1974) moment-tensor summation in the <b>fault-slip-rate</b> form, as
+published by <b>Kreemer, Haines, Holt, Blewitt &amp; Lavallee (2000), <i>Earth Planets Space</i> 52,
+equation (3)</b> — <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">PDF</a>.
+<code>L_k</code> = segment length inside the tile, <code>u_dot_k</code> = its slip rate,
+<code>delta_k</code> = its dip, <code>A</code> = tile area, <code>m_ij^k</code> = its unit moment
+tensor. The catalogue form is Kostrov (1974) itself,
+<code>eps_dot_ij = (1/(2*mu*V*T)) * SUM_k M_ij^k</code> (Kreemer et al. eq. 2).
+Implemented in <code>src/gems51/stage1_strain.py</code>.</p>
+<table>
+<tr><th>precedent the brief cited</th><th>verified</th></tr>
+<tr><td>Field et al. 2014, BSSA 104(3) 1122–1180, <a href="https://doi.org/10.1785/0120130164">doi:10.1785/0120130164</a></td>
+<td><span class="pass">VERIFIED</span> — abstract: “three deformation models are based on
+kinematically consistent inversions of geodetic and geologic data”</td></tr>
+<tr><td><a href="https://pubs.usgs.gov/of/2013/1165/pdf/ofr2013-1165_appendixC.pdf">USGS OFR 2013-1165 App. C</a></td>
+<td><span class="pass">VERIFIED</span> — “Deformation models provide the strain rate tensor on a
+0.1 degree by 0.1 degree grid… This grid of strain rates account for all modeled deformation that
+is <b>not accommodated on the faults</b>.” The residual is an official published quantity.</td></tr>
+<tr><td>Zeng &amp; Shen 2016, <a href="https://doi.org/10.1785/0120140250">doi:10.1785/0120140250</a>
+(<a href="https://pubs.usgs.gov/publication/70160311">USGS 70160311</a>)</td>
+<td><span class="pass">VERIFIED</span> — off-fault moment rate 0.88×10¹⁹ N·m/yr against a total
+California moment rate of 2.76×10¹⁹ N·m/yr → <b>off-fault fraction 31.9 %</b>, used as the
+empirical ceiling on a legitimate deficit</td></tr>
+</table>
+
+<h2>Stage 2 — the detector, screened against every supplied band</h2>
+<p><table><tr><th>fusion</th><th class='num'>mean AUC</th><th class='num'>folds &gt; 0.5</th><th>bands</th></tr><tr><td class='mono'>all19</td><td class='num'>0.8229</td><td class='num'>4/4</td><td class='mono small'>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</td></tr><tr><td class='mono'>top6_by_screen</td><td class='num'>0.8183</td><td class='num'>4/4</td><td class='mono small'>[19, 5, 12, 18, 11, 6]</td></tr><tr><td class='mono'>top10_by_screen</td><td class='num'>0.8154</td><td class='num'>4/4</td><td class='mono small'>[19, 5, 12, 18, 11, 6, 1, 13, 14, 2]</td></tr><tr><td class='mono'>topo</td><td class='num'>0.8146</td><td class='num'>4/4</td><td class='mono small'>[12, 19]</td></tr><tr><td class='mono'>all_geo</td><td class='num'>0.8059</td><td class='num'>4/4</td><td class='mono small'>[1, 2, 3, 5, 6, 9, 11, 13, 14, 17, 18]</td></tr><tr><td class='mono'>geo_gravity_cond</td><td class='num'>0.8055</td><td class='num'>4/4</td><td class='mono small'>[5, 11, 13, 18, 17]</td></tr><tr><td class='mono'>geo_magnetic</td><td class='num'>0.7981</td><td class='num'>4/4</td><td class='mono small'>[1, 2, 3, 6, 9, 14]</td></tr><tr><td class='mono'>strain</td><td class='num'>0.7651</td><td class='num'>4/4</td><td class='mono small'>[4, 7, 8]</td></tr><tr><td class='mono'>seismic</td><td class='num'>0.7185</td><td class='num'>3/4</td><td class='mono small'>[10, 16]</td></tr></table></p>
+<h3>Every band, individually (Hessian-ridge rank field, 4 blocked folds)</h3>
+<p><table><tr><th class='num'>band</th><th>description</th><th class='num'>mean AUC</th><th class='num'>folds &gt; 0.5</th></tr><tr><td class='num'>19</td><td>Detrended elevation slope - gradient of elevation after detrending</td><td class='num pass'>0.8161</td><td class='num'>4/4</td></tr><tr><td class='num'>5</td><td>Isostatic gravity anomaly slope - gradient of gravity after isostatic correction</td><td class='num pass'>0.7951</td><td class='num'>4/4</td></tr><tr><td class='num'>12</td><td>Detrended elevation - topography with regional trends removed</td><td class='num pass'>0.7945</td><td class='num'>4/4</td></tr><tr><td class='num'>18</td><td>Isostatic gravity anomaly horizontal gradient - horizontal rate of change</td><td class='num pass'>0.7936</td><td class='num'>4/4</td></tr><tr><td class='num'>11</td><td>Isostatic gravity anomaly vertical gradient - vertical rate of change</td><td class='num pass'>0.7933</td><td class='num'>4/4</td></tr><tr><td class='num'>6</td><td>Tilt angle or total curvature - magnetic field derivative for edge detection</td><td class='num pass'>0.7901</td><td class='num'>4/4</td></tr><tr><td class='num'>1</td><td>Magnetic anomaly - deviation from expected Earth's magnetic field</td><td class='num pass'>0.7881</td><td class='num'>4/4</td></tr><tr><td class='num'>13</td><td>Isostatic gravity anomaly - gravity after compensating for topographic mass</td><td class='num pass'>0.7866</td><td class='num'>4/4</td></tr><tr><td class='num'>14</td><td>Total magnetic intensity - total strength of magnetic field</td><td class='num pass'>0.7828</td><td class='num'>4/4</td></tr><tr><td class='num'>2</td><td>Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects</td><td class='num pass'>0.7813</td><td class='num'>4/4</td></tr><tr><td class='num'>3</td><td>Total magnetic intensity horizontal gradient - rate of change in horizontal direction</td><td class='num pass'>0.7710</td><td class='num'>4/4</td></tr><tr><td class='num'>9</td><td>Total magnetic intensity vertical gradient - rate of change in vertical direction</td><td class='num pass'>0.7672</td><td class='num'>4/4</td></tr><tr><td class='num'>8</td><td>Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)</td><td class='num pass'>0.7431</td><td class='num'>4/4</td></tr><tr><td class='num'>15</td><td>Depth to basement surface - thickness of sedimentary cover</td><td class='num pass'>0.7334</td><td class='num'>4/4</td></tr><tr><td class='num'>16</td><td>Earthquake intensity or density (n=100km radius, a=15 parameters)</td><td class='num pass'>0.7171</td><td class='num'>3/4</td></tr><tr><td class='num'>4</td><td>Geodetic second invariant - measure of strain rate tensor magnitude</td><td class='num pass'>0.7137</td><td class='num'>3/4</td></tr><tr><td class='num'>7</td><td>Geodetic shear rate - rate of angular deformation from GPS/InSAR</td><td class='num pass'>0.6639</td><td class='num'>3/4</td></tr><tr><td class='num'>17</td><td>Conductivity surface - electrical conductivity of subsurface</td><td class='num pass'>0.6224</td><td class='num'>3/4</td></tr><tr><td class='num'>10</td><td>Distance to earthquake (n=100km radius, a=15 azimuth parameters)</td><td class='num fail'>0.4791</td><td class='num'>2/4</td></tr></table></p>
+
+<h2>Both stages' holdout results, reported separately, as required</h2>
+<h3>Protocol A — spatially blocked 4-quadrant holdout (official metric, whole-map emission)</h3><table><tr><th>contrast</th><th class='num'>mean Δ</th><th class='num'>folds/draws positive</th></tr><tr><td class='mono'>A1_hessianridge_gated - A2_steered_gated [P]</td><td class='num pass'>+0.01126</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A3_random_gated [P]</td><td class='num fail'>-0.01363</td><td class='num'>1/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A0_core_shell_only [P]</td><td class='num pass'>+0.01881</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A4_hessianridge_ungated [P]</td><td class='num pass'>+0.00242</td><td class='num'>4/4</td></tr></table>
+<h3>Protocol B — leave-one-TRACE-out, hidden truth spread across the map (4 draws)</h3><table><tr><th>contrast</th><th class='num'>mean Δ</th><th class='num'>folds/draws positive</th></tr><tr><td class='mono'>A1 - A3_random [dti]</td><td class='num fail'>-0.00631</td><td class='num'>0/4</td></tr><tr><td class='mono'>A1 - A2_steered [dti]</td><td class='num pass'>+0.00081</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1 - A0_core_shell_only [dti]</td><td class='num pass'>+0.00791</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1 - A1_hessianridge [dti]</td><td class='num fail'>+0.00000</td><td class='num'>0/4</td></tr></table>
+<p class="small dim">Full receipts: <a href="holdout.html">holdout results</a> ·
+<code>evidence/holdout_run.json</code> · <code>evidence/holdout_spread.json</code></p>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

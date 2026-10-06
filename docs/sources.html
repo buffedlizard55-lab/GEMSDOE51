@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verified sources — GEMSDOE51</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="on" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<h1 style="font-size:1.3rem">Verified sources, for manual review</h1>
+<p class="small dim">Every link below was opened during the session that produced this
+repository. Where a value was taken from the source, the value is quoted so a reviewer can check
+it in one click.</p>
+
+<h2>Competition-defining (official)</h2>
+<table>
+<tr><th>What</th><th>Source</th><th>Verified value</th></tr>
+<tr><td>Metric, kernel, α, β, R, worked example, submission format</td>
+<td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Problem description, page 967</a></td>
+<td>α=0.2, β=0.8, R=300 m; worked example TP=3.00 FP=1.89 FN=2.00 → 0.60; EPSG:32611, 100 m,
+float32, values in [0,1], null outside bounds</td></tr>
+<tr><td><b>Known faults are MASKED out of the penalty terms</b></td>
+<td><a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">Forum 11516</a> (staff, 2026-09-16)</td>
+<td>“Pixels corresponding to known USGS/INGENIOUS faults are masked / excluded from evaluation,
+so they do not count towards penalty terms.”</td></tr>
+<tr><td><b>“New fault” includes new geometry of existing systems</b></td>
+<td><a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">Forum 11536</a> (staff, 2026-09-23)</td>
+<td>“’new fault’ means ‘any fault pixel not already captured by USGS/INGENIOUS’ and can include
+newly mapped geometry of an existing fault system.”</td></tr>
+<tr><td>Hidden test set = expert-labelled faults absent from the public database</td>
+<td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Page 967</a></td>
+<td>“we have consulted with fault experts who have manually identified faults that are not
+contained within the current public USGS database”</td></tr>
+<tr><td>Leaderboard</td>
+<td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Leaderboard</a></td>
+<td>#1 0.3774 · #2 0.3345 · #3 0.3262 · #4 0.3222 · #5 0.3220 · #13 0.2778 · #16 0.2708.
+Read manually (the terms bar automated monitoring).</td></tr>
+<tr><td>Rules PDF</td>
+<td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a></td>
+<td>rulebook as listed by the organiser</td></tr>
+<tr><td>Reference solution</td>
+<td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">drivendataorg/gems-prize-reference-solution</a></td>
+<td>read in full this session: a U-Net Monte-Carlo-CV notebook. It contains <b>no metric
+implementation</b> and <b>no masking</b> — which is why the two forum posts above are the
+decisive sources for the design.</td></tr>
+</table>
+
+<h2>The brief's citations, verified</h2>
+<table>
+<tr><th>Citation as given in the brief</th><th>Verdict</th></tr>
+<tr><td>Field et al., BSSA 104(3) 1122–1180, 2014, doi:10.1785/0120130164</td>
+<td><span class="pass">CORRECT</span> — <a href="https://doi.org/10.1785/0120130164">doi</a> resolves;
+volume 104, issue 3, pages 1122–1180, June 2014, all 19 authors confirmed. Abstract: “As a notable
+first, <b>three deformation models are based on kinematically consistent inversions of geodetic
+and geologic data</b>” — exactly the brief's claim.</td></tr>
+<tr><td>“A fault-based model for crustal deformation, fault slip-rates and off-fault strain rate
+in California”</td><td><span class="pass">CORRECT</span> — this is <b>Zeng &amp; Shen (2016)</b>,
+BSSA 106(2) 766–784, <a href="https://doi.org/10.1785/0120140250">doi:10.1785/0120140250</a>,
+<a href="https://pubs.usgs.gov/publication/70160311">USGS pub. 70160311</a>. It is USGS-listed, as
+the brief says. Its abstract quantifies the off-fault moment rate separately: <b>0.88×10¹⁹
+N·m/yr off-fault</b> against a <b>total California moment rate of 2.76×10¹⁹ N·m/yr</b> ⇒ an
+off-fault fraction of <b>31.9 %</b> — used here as the empirical ceiling on a legitimate deficit.</td></tr>
+<tr><td>“a documented moment-tensor summation” for converting slip rate × length into tile strain
+rate</td><td><span class="pass">FOUND</span> — <b>Kreemer, Haines, Holt, Blewitt &amp; Lavallee
+(2000)</b>, <i>Earth Planets Space</i> 52, eq. (3):
+<a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">PDF</a>.
+Original: <b>Kostrov (1974)</b>, <i>Izv. Acad. Sci. USSR Phys. Solid Earth</i> 1, 23–44.</td></tr>
+<tr><td>UCERF3 models off-fault strain explicitly / the residual is a published quantity</td>
+<td><span class="pass">VERIFIED</span> — <a href="https://pubs.usgs.gov/of/2013/1165/pdf/ofr2013-1165_appendixC.pdf">USGS
+OFR 2013-1165 Appendix C</a>: “This grid of strain rates account for all modeled deformation that
+is <b>not accommodated on the faults</b>.”</td></tr>
+</table>
+
+<h2>Data provenance</h2>
+<table>
+<tr><th>File</th><th>sha256</th><th>bytes</th><th>Note</th></tr>
+<tr><td class="mono">training_features.tif</td><td class="mono">4371c82e…</td><td class="num">418,912,844</td>
+<td><span class="pass">hash match</span> — 19 bands, float32, nodata −3.4028235e+38</td></tr>
+<tr><td class="mono">labels.tif</td><td class="mono">7ba308cc…</td><td class="num">425,830</td>
+<td><span class="pass">hash match</span> — <b>byte-identical to existing_faults.tif</b> (IR-51-05)</td></tr>
+<tr><td class="mono">existing_faults.tif</td><td class="mono">7ba308cc…</td><td class="num">425,830</td>
+<td><span class="pass">hash match</span> — 60,988 fault pixels, values {−1, 0, 1}</td></tr>
+<tr><td class="mono">sample_submission.tif</td><td class="mono">2176d08e…</td><td class="num">1,599,597</td>
+<td><span class="pass">hash match</span> — <b>IS the catalogue rasterised</b> (measured)</td></tr>
+</table>
+<p class="small dim">The competition data page is login-walled and unreachable from this sandbox;
+the four files above were obtained from the group's own integrity-pinned mirrors and verified
+against the published pins. That proves mirror consistency, <b>not</b> organiser authentication
+(IR-51-02).</p>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

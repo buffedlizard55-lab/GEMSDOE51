@@ -1,0 +1,59 @@
+{
+  "candidate": "submissions/gems51-sbd-hridge-44090-20261006.tif",
+  "candidate_sha256": "e527ac899dc0b6593b4b0db824a51678fad87111604e74845f5cd71990a1db55",
+  "candidate_support_px": 227642,
+  "candidate_mass": 164902.59375,
+  "n_references": 211,
+  "limits": {
+    "iou": 0.5,
+    "cosine": 0.9,
+    "containment": 0.98
+  },
+  "worst": {
+    "iou": {
+      "path": "/home/user/study/GEMSDATA/data/bridge/example_submission.tif",
+      "iou": 0.26791189675016036,
+      "cosine": 0.6948015689849854,
+      "containment": 0.8201966881752014,
+      "byte_identical": false,
+      "mass": 60988.0,
+      "support_px": 60988,
+      "ref_support_fraction": 0.004966789259200141,
+      "containment_null": 0.036369344482847364,
+      "containment_lift": 22.551868884027463,
+      "containment_informative": true
+    },
+    "cosine": {
+      "path": "/home/user/study/GEMSDATA/data/bridge/example_submission.tif",
+      "iou": 0.26791189675016036,
+      "cosine": 0.6948015689849854,
+      "containment": 0.8201966881752014,
+      "byte_identical": false,
+      "mass": 60988.0,
+      "support_px": 60988,
+      "ref_support_fraction": 0.004966789259200141,
+      "containment_null": 0.036369344482847364,
+      "containment_lift": 22.551868884027463,
+      "containment_informative": true
+    },
+    "containment": {
+      "path": "/home/user/study/GEMSDOE24/inputs/calibration/13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
+      "iou": 0.021452195641391503,
+      "cosine": 0.0407438687980175,
+      "containment": 0.9976934194564819,
+      "byte_identical": false,
+      "mass": 206895.0,
+      "support_px": 206895,
+      "ref_support_fraction": 0.016849279592415115,
+      "containment_null": 0.42095167747630946,
+      "containment_lift": 2.370090138226449,
+      "containment_informative": true
+    }
+  },
+  "matches": [],
+  "skipped": [],
+  "verdict": "PASS",
+  "n_containment_informative": 204,
+  "n_compared": 211,
+  "rule": "PASS iff (1) no sha256 equals any reference AND (2) max support IoU <= 0.50 AND (3) max cosine <= 0.90 AND (4) no sparse reference has containment > 0.98 with a lift > 3x over the random-emission null.  Continuous/lattice references are excluded from test (4) because their dilated support covers the map and the test would be vacuous.  Two artifacts anchored on the same mapped-fault network will ALWAYS show high mutual containment; that is a consequence of the metric's free-mass structure, not of copying, and tests (2) and (3) are what separate a re-emission from a copy."
+}

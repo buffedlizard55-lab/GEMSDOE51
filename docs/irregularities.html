@@ -1,0 +1,151 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Irregularities — GEMSDOE51</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="on" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<h1 style="font-size:1.3rem">Irregularities flagged for review</h1>
+<p class="small dim">Ten findings. Five are defects in <i>this session's own code</i>, found and
+fixed; two are hard blockers caused by this sandbox's network policy; two are negative results
+that are reported rather than buried; one is a policy note.</p>
+<table>
+<tr><th>id</th><th>severity</th><th>finding</th><th>evidence</th><th>status</th></tr>
+<tr><td><b>IR-51-01</b></td><td class="warn">BLOCKER</td>
+<td>The brief requires confirming slip rates <b>in the INGENIOUS shapefile attributes</b>. Not
+possible here: <code>gdr.openei.org</code> returns HTTP 000. Rather than invent per-fault slip
+rates, stage 1 takes the slip rate as a documented parameter (default 1.0 mm/yr) and ships a
+published sweep over 0.1/0.5/1.0/2.0 mm/yr × dip 50/60/70°.</td>
+<td><code>curl</code> exit 000 to gdr.openei.org, recorded in the session log;
+<code>stage1_strain.slip_rate_sweep</code></td>
+<td><span class="warn">OPEN</span> — needs an unrestricted machine</td></tr>
+
+<tr><td><b>IR-51-02</b></td><td class="warn">MEDIUM</td>
+<td>Competition data cannot be downloaded here: <code>drivendata.org</code> HTTP 000 and the data
+page is login-walled. The four core rasters came from the group's integrity-pinned mirrors and
+all four SHA-256 pins match.</td>
+<td><code>registry/data_manifest.json</code></td>
+<td><span class="pass">RESOLVED by hash-pinned mirror</span> — mirrors are owner-supplied, not
+organiser-authenticated</td></tr>
+
+<tr><td><b>IR-51-03</b></td><td class="warn">HIGH · own code</td>
+<td>The stage-1 gate <b>silently approved 90 % of tiles</b> on the first run. Cause: 7,113,308 of
+12,279,160 cells (57.9 %) carry the float32 nodata sentinel, and those empty tiles were being
+counted as “deficit = 0”, which landed exactly on the quantile threshold.</td>
+<td>first pipeline log (<code>10,829 tiles, 213.4 % of footprint</code>) vs the fixed run
+(<code>1,793 tiles, 35.5 %</code>)</td>
+<td><span class="pass">FIXED</span> — a usable-tile test (≥ 25 % valid geodetic cells) was added;
+before and after are both recorded</td></tr>
+
+<tr><td><b>IR-51-04</b></td><td class="warn">MEDIUM · own code</td>
+<td>The uniqueness gate overflowed float32 on its first run (cosine and containment both printed
+8773) because several references are not submissions at all — distance-in-metres layers and rasters
+whose large negative sentinel carries no nodata tag. Containment was also computed against the
+wrong array.</td>
+<td>first gate log vs the fixed run</td>
+<td><span class="pass">FIXED</span> — values clipped to [0,1]; a random-emission null model and a
+sparsity test added</td></tr>
+
+<tr><td><b>IR-51-05</b></td><td class="warn">HIGH</td>
+<td><code>labels.tif</code> and <code>existing_faults.tif</code> are <b>byte-identical</b>
+(<code>7ba308cc…</code>, 425,830 B each). The “labels” and the “existing faults” are the same
+raster, so any holdout that uses <code>labels.tif</code> as truth is scoring against the training
+target.</td>
+<td><code>registry/data_manifest.json</code></td>
+<td><span class="warn">FLAGGED</span> — this repository uses <code>existing_faults.tif</code>
+explicitly and never treats <code>labels.tif</code> as independent truth</td></tr>
+
+<tr><td><b>IR-51-06</b></td><td class="warn">NEGATIVE RESULT</td>
+<td><b>The strike-steering hypothesis failed.</b> Gating the Hessian ridge response by alignment
+with the mapped-fault strike gave AUC 0.4542 (worse than chance) against the unsteered field's
+0.7005, and cost −0.01126 DTI on the blocked holdout, 0/4 folds.</td>
+<td><code>evidence/holdout_run.json</code>, <code>evidence/detector_screen.json</code></td>
+<td><span class="pass">REJECTED by measurement</span> — kept in the code as an ablation, not
+shipped</td></tr>
+
+<tr><td><b>IR-51-07</b></td><td class="warn">NEGATIVE RESULT → RESOLVED</td>
+<td>Under the contiguous-quadrant protocol the detector <b>lost to uniform random</b>
+(−0.01363, 1/4 folds), and the preregistered promotion rule therefore returned FAIL. Diagnosed as
+a protocol artefact (truth confined to one quadrant rewards uniform spreading regardless of
+ranking quality) <i>and</i> as a real property of the metric (T sums over the truth, so coverage
+breadth beats per-dot precision). The leave-one-trace-out protocol with truth spread across the
+map confirmed the diagnosis: field-<b>weighted sampling</b> beats both uniform random
+(4/4 draws, +0.00132) and top-of-ranking peak packing (4/4 draws, +0.00765).</td>
+<td><code>evidence/holdout_run.json</code> (promotion_pass: <b>false</b>),
+<code>evidence/holdout_spread.json</code></td>
+<td><span class="pass">RESOLVED</span> — the shipped emission rule is the validated one; the
+failure is kept in the record</td></tr>
+
+<tr><td><b>IR-51-08</b></td><td class="dim">POLICY</td>
+<td>DrivenData's terms prohibit automated monitoring of the leaderboard. Every leaderboard value
+in this repository is a <b>dated manual read</b> via the page-fetch tool; no scraper is used.</td>
+<td>session log; <code>registry/leaderboard_reads.json</code></td>
+<td><span class="dim">POLICY</span></td></tr>
+
+<tr><td><b>IR-51-09</b></td><td class="warn">MEDIUM</td>
+<td>The reference solution provided by the organisers contains <b>no implementation of the
+competition metric and no masking</b>, and its own notebook says of its output map: “NOTE: it may
+be advantageous to threshold this map for better scoring”. It cannot be used to verify a metric
+implementation, so this repository verifies against the published equations and the published
+worked example instead.</td>
+<td><code>drivendataorg/gems-prize-reference-solution</code> read in full this session</td>
+<td><span class="dim">NOTE</span></td></tr>
+
+<tr><td><b>IR-51-10</b></td><td class="warn">HIGH</td>
+<td><b>Every score of this repository's artifacts is a local measurement.</b> The group's 0.2600
+and 0.2778 figures are <i>other people's</i> leaderboard positions, read manually. Nothing here
+has been submitted or scored, and no artifact in this repository carries an organiser receipt.</td>
+<td>this page; all <code>evidence/*.json</code></td>
+<td><span class="warn">STANDING DISCLAIMER</span></td></tr>
+</table>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

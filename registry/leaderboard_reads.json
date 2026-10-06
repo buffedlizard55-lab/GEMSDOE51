@@ -1,0 +1,59 @@
+{
+  "note": "Dated MANUAL reads of the public leaderboard via the page-fetch tool. DrivenData's terms prohibit automated monitoring, so no scraper is used (IR-51-08). These are OTHER PEOPLE'S scores; no artifact in this repository has an organiser score.",
+  "read_method": "manual page fetch, single request",
+  "reads": [
+    {
+      "utc_date": "2026-10-06",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+      "metric": "Best public DW-Tversky (descending)",
+      "top": [
+        {
+          "rank": 1,
+          "participant": "xiaofanhu",
+          "score": 0.3774
+        },
+        {
+          "rank": 2,
+          "participant": "alexoktaba",
+          "score": 0.3345
+        },
+        {
+          "rank": 3,
+          "participant": "nchuzhoy",
+          "score": 0.3262
+        },
+        {
+          "rank": 4,
+          "participant": "kinghorton42",
+          "score": 0.3222
+        },
+        {
+          "rank": 5,
+          "participant": "joeyfezster",
+          "score": 0.322
+        },
+        {
+          "rank": 6,
+          "participant": "Batik Shirt Brothers",
+          "score": 0.3218
+        },
+        {
+          "rank": 7,
+          "participant": "DARD",
+          "score": 0.3195
+        },
+        {
+          "rank": 13,
+          "participant": "extradr19",
+          "score": 0.2778
+        },
+        {
+          "rank": 16,
+          "participant": "smrtdoog5",
+          "score": 0.2708
+        }
+      ],
+      "attribution_warning": "Scores are PUBLIC leaderboard values. No file is attributed to any participant, and the brief's 0.2778 (h33-h33-2-b2) is the group's own artifact name, not a participant identity."
+    }
+  ]
+}

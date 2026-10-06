@@ -1,0 +1,152 @@
+{
+  "tag": "sbd-hridge-v1",
+  "started_utc": "2026-10-06T21:02:58Z",
+  "parameters": {
+    "budget": 44090,
+    "shell_radius": 1,
+    "shell_decay": 0.6,
+    "tile": 32,
+    "approve_quantile": 0.35,
+    "down": 2,
+    "sigma_px": 2.0,
+    "slip_rate_mm_yr": 1.0,
+    "dip_deg": 60.0,
+    "emission_seed": 51051,
+    "bands": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "stage1": {
+    "meta": {
+      "tile_px": 32,
+      "n_usable_tiles": 5121,
+      "n_tiles_total": 12051,
+      "min_valid_fraction": 0.25,
+      "approved_raster_px_approx": 1836032,
+      "approved_fraction_of_usable_tiles": 0.3501269283343097,
+      "tile_size_m": 3200.0,
+      "n_tiles": [
+        117,
+        103
+      ],
+      "slip_rate_mm_yr": 1.0,
+      "dip_deg": 60.0,
+      "approve_quantile": 0.35,
+      "deficit_threshold": 1.226040005683899,
+      "off_fault_fraction_citation": {
+        "off_fault_fraction": 0.3188405797101449,
+        "source": "Zeng & Shen (2016) BSSA 106(2) 766-784 doi:10.1785/0120140250; USGS pub 70160311 (off-fault moment rate 0.88e19 N.m/yr vs total 2.76e19 N.m/yr)"
+      },
+      "formula": "eps_dot_ij = (1/2) * SUM_k (L_k*u_dot_k)/(A*sin(delta_k)) * m_ij^k",
+      "formula_source": "Kreemer et al. (2000) Earth Planets Space 52, eq. (3); Kostrov (1974) Izv. Acad. Sci. USSR Phys. Solid Earth 1, 23-44"
+    },
+    "n_tiles": 12051,
+    "n_approved_tiles": 1793,
+    "approved_tile_area_px": 1836032,
+    "approved_tile_area_fraction_of_footprint": 0.355312457606602,
+    "deficit_min": -11.104033470153809,
+    "deficit_max": 5.991256237030029,
+    "deficit_median": 0.0,
+    "off_fault_reference": {
+      "off_fault_fraction": 0.3188405797101449,
+      "source": "Zeng & Shen (2016) BSSA 106(2) 766-784 doi:10.1785/0120140250; USGS pub 70160311 (off-fault moment rate 0.88e19 N.m/yr vs total 2.76e19 N.m/yr)"
+    }
+  },
+  "stage2": {
+    "detector": "unsteered Hessian-ridge rank fusion over all 19 supplied bands",
+    "emission_rule": "field-weighted sampling without replacement (coverage-breadth rule)",
+    "selection_evidence": "evidence/detector_screen.json (mean AUC 0.8229, 4/4 folds) and evidence/holdout_spread.json (arm bake-off)",
+    "field_min": 0.0,
+    "field_max": 0.9839770793914795,
+    "field_mean_on_footprint": 0.4495401680469513
+  },
+  "composition": {
+    "core_px": 60988,
+    "shell_px": 122858,
+    "shell_radius_px": 1,
+    "shell_max_weight": 0.6000000238418579,
+    "eligible_px": 1813987,
+    "novel_px_requested": 44090,
+    "novel_px_selected": 44090,
+    "mass_total": 164902.59375,
+    "mass_on_core": 60988.0,
+    "mass_on_shell": 73754.4609375,
+    "mass_on_novel": 30376.181640625,
+    "novel_mass_fraction": 0.18420681357383728,
+    "novel_px_fraction_of_footprint": 0.00853238192791579,
+    "fraction_of_field_within_approved_tiles": 0.35195891606818397
+  },
+  "stage1_dominance_gate": {
+    "stage1_direct_mass": 0.0,
+    "approved_tile_px": 1832000,
+    "emitted_mass": 164902.59375,
+    "emitted_mass_over_approved_area": 0.0900123342871666,
+    "solid_fill_of_approved_tiles_would_be_mass": 1832000.0,
+    "not_a_solid_fill": true,
+    "novel_mass_share_of_total": 0.18420681357383728,
+    "verdict": "PASS: stage 1 is a 0-mass allow-region; the emission is a sparse point set, not the tile footprint"
+  },
+  "submission_format_audit": {
+    "path": "submissions/gems51-sbd-hridge-44090-20261006.tif",
+    "count": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "res": [
+      100.0,
+      100.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "nodata": null,
+    "n_cells": 12279160,
+    "n_nan": 0,
+    "n_inf": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nonzero": 227642,
+    "unique_nonzero_sample": 42127,
+    "checks": {
+      "single_band": true,
+      "float32": true,
+      "crs_epsg32611": true,
+      "res_100m": true,
+      "shape_3730x3292": true,
+      "transform_matches": true,
+      "all_finite": true,
+      "values_in_0_1": true,
+      "no_out_of_range_nodata_tag": true
+    },
+    "all_pass": true,
+    "sha256": "f8aa465e536fd7a01713e7dc06700e6012f6ccfe8abedf1937cbfb0c18927f0b",
+    "bytes": 49139380
+  },
+  "elapsed_s": 63.6
+}

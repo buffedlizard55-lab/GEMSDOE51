@@ -1,0 +1,726 @@
+{
+  "protocol": "leave-one-trace-out, truth spread across map",
+  "holdout_fraction": 0.25,
+  "n_traces": 3199,
+  "n_components_ge_5px": 2827,
+  "budget": 44090,
+  "shell_radius_px": 1,
+  "novel_buffer_px": 5,
+  "draws": [
+    {
+      "draw": 0,
+      "n_hidden_px": 16489,
+      "n_model_px": 44499,
+      "n_approved_tiles": 1793,
+      "arms": {
+        "A0_core_shell_only": {
+          "dti": 0.01753035319015058,
+          "n_novel": 0,
+          "mass": 98405.3984375,
+          "credit_density_novel": 0.0,
+          "frac_novel_within_3px": 0.0,
+          "auc_field_vs_hidden": 0.5830879215719686
+        },
+        "A1_hessianridge": {
+          "dti": 0.02510951316683921,
+          "n_novel": 44090,
+          "mass": 122483.9609375,
+          "credit_density_novel": 0.00934947282075882,
+          "frac_novel_within_3px": 0.020231344976185076,
+          "auc_field_vs_hidden": 0.5830879215719686
+        },
+        "A2_steered": {
+          "dti": 0.024507334003750464,
+          "n_novel": 44092,
+          "mass": 122807.046875,
+          "credit_density_novel": 0.009091927669942379,
+          "frac_novel_within_3px": 0.019958269073754874,
+          "auc_field_vs_hidden": 0.5420245834759555
+        },
+        "A3_random": {
+          "dti": 0.03269017741079056,
+          "n_novel": 44090,
+          "mass": 129633.234375,
+          "credit_density_novel": 0.007917218841612339,
+          "frac_novel_within_3px": 0.016715808573372647,
+          "auc_field_vs_hidden": 0.5830879215719686
+        },
+        "A5_weighted": {
+          "dti": 0.03355443946556287,
+          "n_novel": 44090,
+          "mass": 129119.2421875,
+          "credit_density_novel": 0.008484914898872375,
+          "frac_novel_within_3px": 0.018462236334769788,
+          "auc_field_vs_hidden": 0.5830879215719686
+        },
+        "A6_hybrid": {
+          "dti": 0.030459528139986976,
+          "n_novel": 44090,
+          "mass": 132038.25,
+          "credit_density_novel": 0.009241190738976002,
+          "frac_novel_within_3px": 0.01991381265593105,
+          "auc_field_vs_hidden": 0.5830879215719686
+        },
+        "A7_buffered_peaks": {
+          "dti": 0.02483620632140239,
+          "n_novel": 44091,
+          "mass": 122686.4921875,
+          "credit_density_novel": 0.008570206351578236,
+          "frac_novel_within_3px": 0.018439137238892293,
+          "auc_field_vs_hidden": 0.5797114358816529
+        }
+      }
+    },
+    {
+      "draw": 1,
+      "n_hidden_px": 15517,
+      "n_model_px": 45471,
+      "n_approved_tiles": 1793,
+      "arms": {
+        "A0_core_shell_only": {
+          "dti": 0.017731709417663586,
+          "n_novel": 0,
+          "mass": 100680.6015625,
+          "credit_density_novel": 0.0,
+          "frac_novel_within_3px": 0.0,
+          "auc_field_vs_hidden": 0.5843881214485727
+        },
+        "A1_hessianridge": {
+          "dti": 0.027175269669111685,
+          "n_novel": 44090,
+          "mass": 124740.671875,
+          "credit_density_novel": 0.010618122294545174,
+          "frac_novel_within_3px": 0.02283964617827172,
+          "auc_field_vs_hidden": 0.5843881214485727
+        },
+        "A2_steered": {
+          "dti": 0.026298973023749006,
+          "n_novel": 44091,
+          "mass": 125035.421875,
+          "credit_density_novel": 0.010071867145597935,
+          "frac_novel_within_3px": 0.021432945499081445,
+          "auc_field_vs_hidden": 0.554934416895406
+        },
+        "A3_random": {
+          "dti": 0.03339983115101749,
+          "n_novel": 44090,
+          "mass": 131674.359375,
+          "credit_density_novel": 0.008038047701120377,
+          "frac_novel_within_3px": 0.017759129054207304,
+          "auc_field_vs_hidden": 0.5843881214485727
+        },
+        "A5_weighted": {
+          "dti": 0.03471495297346478,
+          "n_novel": 44090,
+          "mass": 131105.625,
+          "credit_density_novel": 0.009058299474418163,
+          "frac_novel_within_3px": 0.01905193921524155,
+          "auc_field_vs_hidden": 0.5843881214485727
+        },
+        "A6_hybrid": {
+          "dti": 0.033384877097238565,
+          "n_novel": 44090,
+          "mass": 134220.3125,
+          "credit_density_novel": 0.010513996705412865,
+          "frac_novel_within_3px": 0.0222726241778181,
+          "auc_field_vs_hidden": 0.5843881214485727
+        },
+        "A7_buffered_peaks": {
+          "dti": 0.02683202734703894,
+          "n_novel": 44091,
+          "mass": 124938.96875,
+          "credit_density_novel": 0.00998155027627945,
+          "frac_novel_within_3px": 0.021478306230296434,
+          "auc_field_vs_hidden": 0.585921078754321
+        }
+      }
+    },
+    {
+      "draw": 2,
+      "n_hidden_px": 13789,
+      "n_model_px": 47199,
+      "n_approved_tiles": 1793,
+      "arms": {
+        "A0_core_shell_only": {
+          "dti": 0.01764825100495376,
+          "n_novel": 0,
+          "mass": 104155.203125,
+          "credit_density_novel": 0.0,
+          "frac_novel_within_3px": 0.0,
+          "auc_field_vs_hidden": 0.6465644225386195
+        },
+        "A1_hessianridge": {
+          "dti": 0.024082792372179782,
+          "n_novel": 44092,
+          "mass": 128265.390625,
+          "credit_density_novel": 0.007902579382061958,
+          "frac_novel_within_3px": 0.018211920529801324,
+          "auc_field_vs_hidden": 0.6465644225386195
+        },
+        "A2_steered": {
+          "dti": 0.023524297402587237,
+          "n_novel": 44092,
+          "mass": 128546.5546875,
+          "credit_density_novel": 0.00785578228533268,
+          "frac_novel_within_3px": 0.0171006078200127,
+          "auc_field_vs_hidden": 0.5924844561292566
+        },
+        "A3_random": {
+          "dti": 0.027783241656785924,
+          "n_novel": 44090,
+          "mass": 134950.296875,
+          "credit_density_novel": 0.0059038931503891945,
+          "frac_novel_within_3px": 0.012882739850306192,
+          "auc_field_vs_hidden": 0.6465644225386195
+        },
+        "A5_weighted": {
+          "dti": 0.028979723025540225,
+          "n_novel": 44090,
+          "mass": 135237.96875,
+          "credit_density_novel": 0.006576501298695803,
+          "frac_novel_within_3px": 0.014311635291449309,
+          "auc_field_vs_hidden": 0.6465644225386195
+        },
+        "A6_hybrid": {
+          "dti": 0.02768139021951245,
+          "n_novel": 44090,
+          "mass": 137187.015625,
+          "credit_density_novel": 0.007721705827862024,
+          "frac_novel_within_3px": 0.01750963937400771,
+          "auc_field_vs_hidden": 0.6465644225386195
+        },
+        "A7_buffered_peaks": {
+          "dti": 0.023726015437892836,
+          "n_novel": 44091,
+          "mass": 128472.7578125,
+          "credit_density_novel": 0.0072798230685293674,
+          "frac_novel_within_3px": 0.016397904334217867,
+          "auc_field_vs_hidden": 0.6501190736950624
+        }
+      }
+    },
+    {
+      "draw": 3,
+      "n_hidden_px": 15809,
+      "n_model_px": 45179,
+      "n_approved_tiles": 1793,
+      "arms": {
+        "A0_core_shell_only": {
+          "dti": 0.01786177198043402,
+          "n_novel": 0,
+          "mass": 100045.3984375,
+          "credit_density_novel": 0.0,
+          "frac_novel_within_3px": 0.0,
+          "auc_field_vs_hidden": 0.5859908437092446
+        },
+        "A1_hessianridge": {
+          "dti": 0.02603311880189974,
+          "n_novel": 44090,
+          "mass": 124124.1953125,
+          "credit_density_novel": 0.010052826255559921,
+          "frac_novel_within_3px": 0.022068496257654797,
+          "auc_field_vs_hidden": 0.5859908437092446
+        },
+        "A2_steered": {
+          "dti": 0.02484070843438012,
+          "n_novel": 44091,
+          "mass": 124366.046875,
+          "credit_density_novel": 0.009342195466160774,
+          "frac_novel_within_3px": 0.020797895262071625,
+          "auc_field_vs_hidden": 0.536210284268069
+        },
+        "A3_random": {
+          "dti": 0.033784127329053885,
+          "n_novel": 44090,
+          "mass": 131155.78125,
+          "credit_density_novel": 0.008077550679445267,
+          "frac_novel_within_3px": 0.017804490814243592,
+          "auc_field_vs_hidden": 0.5859908437092446
+        },
+        "A5_weighted": {
+          "dti": 0.0356995883489935,
+          "n_novel": 44090,
+          "mass": 130257.75,
+          "credit_density_novel": 0.00917570199817419,
+          "frac_novel_within_3px": 0.01986845089589476,
+          "auc_field_vs_hidden": 0.5859908437092446
+        },
+        "A6_hybrid": {
+          "dti": 0.03288399924497591,
+          "n_novel": 44090,
+          "mass": 133516.625,
+          "credit_density_novel": 0.01074167899787426,
+          "frac_novel_within_3px": 0.023225221138580176,
+          "auc_field_vs_hidden": 0.5859908437092446
+        },
+        "A7_buffered_peaks": {
+          "dti": 0.025849458959523095,
+          "n_novel": 44091,
+          "mass": 124325.328125,
+          "credit_density_novel": 0.009232173673808575,
+          "frac_novel_within_3px": 0.020230886121884284,
+          "auc_field_vs_hidden": 0.5891849292450854
+        }
+      }
+    }
+  ],
+  "config": {
+    "draws": 4,
+    "budget": 44090,
+    "shell": 1,
+    "decay": 0.6,
+    "tile": 32,
+    "approve_quantile": 0.35,
+    "novel_buffer": 5,
+    "out": "evidence/holdout_spread.json"
+  },
+  "aggregate": {
+    "A0_core_shell_only": {
+      "dti": {
+        "mean": 0.01769302139830049,
+        "per_draw": [
+          0.01753035319015058,
+          0.017731709417663586,
+          0.01764825100495376,
+          0.01786177198043402
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.0,
+        "per_draw": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.0,
+        "per_draw": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6000078273171013,
+        "per_draw": [
+          0.5830879215719686,
+          0.5843881214485727,
+          0.6465644225386195,
+          0.5859908437092446
+        ]
+      }
+    },
+    "A1_hessianridge": {
+      "dti": {
+        "mean": 0.025600173502507602,
+        "per_draw": [
+          0.02510951316683921,
+          0.027175269669111685,
+          0.024082792372179782,
+          0.02603311880189974
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.009480750188231468,
+        "per_draw": [
+          0.00934947282075882,
+          0.010618122294545174,
+          0.007902579382061958,
+          0.010052826255559921
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.020837851985478228,
+        "per_draw": [
+          0.020231344976185076,
+          0.02283964617827172,
+          0.018211920529801324,
+          0.022068496257654797
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6000078273171013,
+        "per_draw": [
+          0.5830879215719686,
+          0.5843881214485727,
+          0.6465644225386195,
+          0.5859908437092446
+        ]
+      }
+    },
+    "A2_steered": {
+      "dti": {
+        "mean": 0.024792828216116707,
+        "per_draw": [
+          0.024507334003750464,
+          0.026298973023749006,
+          0.023524297402587237,
+          0.02484070843438012
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.009090443141758442,
+        "per_draw": [
+          0.009091927669942379,
+          0.010071867145597935,
+          0.00785578228533268,
+          0.009342195466160774
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.01982242941373016,
+        "per_draw": [
+          0.019958269073754874,
+          0.021432945499081445,
+          0.0171006078200127,
+          0.020797895262071625
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.5564134351921718,
+        "per_draw": [
+          0.5420245834759555,
+          0.554934416895406,
+          0.5924844561292566,
+          0.536210284268069
+        ]
+      }
+    },
+    "A3_random": {
+      "dti": {
+        "mean": 0.031914344386911965,
+        "per_draw": [
+          0.03269017741079056,
+          0.03339983115101749,
+          0.027783241656785924,
+          0.033784127329053885
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.007484177593141794,
+        "per_draw": [
+          0.007917218841612339,
+          0.008038047701120377,
+          0.0059038931503891945,
+          0.008077550679445267
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.016290542073032432,
+        "per_draw": [
+          0.016715808573372647,
+          0.017759129054207304,
+          0.012882739850306192,
+          0.017804490814243592
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6000078273171013,
+        "per_draw": [
+          0.5830879215719686,
+          0.5843881214485727,
+          0.6465644225386195,
+          0.5859908437092446
+        ]
+      }
+    },
+    "A5_weighted": {
+      "dti": {
+        "mean": 0.03323717595339035,
+        "per_draw": [
+          0.03355443946556287,
+          0.03471495297346478,
+          0.028979723025540225,
+          0.0356995883489935
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.008323854417540133,
+        "per_draw": [
+          0.008484914898872375,
+          0.009058299474418163,
+          0.006576501298695803,
+          0.00917570199817419
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.017923565434338852,
+        "per_draw": [
+          0.018462236334769788,
+          0.01905193921524155,
+          0.014311635291449309,
+          0.01986845089589476
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6000078273171013,
+        "per_draw": [
+          0.5830879215719686,
+          0.5843881214485727,
+          0.6465644225386195,
+          0.5859908437092446
+        ]
+      }
+    },
+    "A6_hybrid": {
+      "dti": {
+        "mean": 0.031102448675428475,
+        "per_draw": [
+          0.030459528139986976,
+          0.033384877097238565,
+          0.02768139021951245,
+          0.03288399924497591
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.009554643067531288,
+        "per_draw": [
+          0.009241190738976002,
+          0.010513996705412865,
+          0.007721705827862024,
+          0.01074167899787426
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.02073032433658426,
+        "per_draw": [
+          0.01991381265593105,
+          0.0222726241778181,
+          0.01750963937400771,
+          0.023225221138580176
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6000078273171013,
+        "per_draw": [
+          0.5830879215719686,
+          0.5843881214485727,
+          0.6465644225386195,
+          0.5859908437092446
+        ]
+      }
+    },
+    "A7_buffered_peaks": {
+      "dti": {
+        "mean": 0.025310927016464313,
+        "per_draw": [
+          0.02483620632140239,
+          0.02683202734703894,
+          0.023726015437892836,
+          0.025849458959523095
+        ]
+      },
+      "credit_density_novel": {
+        "mean": 0.008765938342548907,
+        "per_draw": [
+          0.008570206351578236,
+          0.00998155027627945,
+          0.0072798230685293674,
+          0.009232173673808575
+        ]
+      },
+      "frac_novel_within_3px": {
+        "mean": 0.01913655848132272,
+        "per_draw": [
+          0.018439137238892293,
+          0.021478306230296434,
+          0.016397904334217867,
+          0.020230886121884284
+        ]
+      },
+      "auc_field_vs_hidden": {
+        "mean": 0.6012341293940304,
+        "per_draw": [
+          0.5797114358816529,
+          0.585921078754321,
+          0.6501190736950624,
+          0.5891849292450854
+        ]
+      }
+    }
+  },
+  "contrasts": {
+    "A1 - A3_random [dti]": {
+      "mean": -0.006314170884404361,
+      "per_draw": [
+        -0.007580664243951353,
+        -0.0062245614819058034,
+        -0.0037004492846061422,
+        -0.007751008527154147
+      ],
+      "draws_positive": 0,
+      "n": 4
+    },
+    "A1 - A3_random [credit_density_novel]": {
+      "mean": 0.001996572595089674,
+      "per_draw": [
+        0.0014322539791464806,
+        0.002580074593424797,
+        0.001998686231672764,
+        0.0019752755761146545
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A3_random [auc_field_vs_hidden]": {
+      "mean": 0.0,
+      "per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "draws_positive": 0,
+      "n": 4
+    },
+    "A1 - A2_steered [dti]": {
+      "mean": 0.0008073452863908964,
+      "per_draw": [
+        0.0006021791630887452,
+        0.0008762966453626786,
+        0.0005584949695925448,
+        0.0011924103675196168
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A2_steered [credit_density_novel]": {
+      "mean": 0.0003903070464730263,
+      "per_draw": [
+        0.0002575451508164406,
+        0.0005462551489472389,
+        4.6797096729278564e-05,
+        0.000710630789399147
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A2_steered [auc_field_vs_hidden]": {
+      "mean": 0.04359439212492955,
+      "per_draw": [
+        0.04106333809601315,
+        0.02945370455316665,
+        0.054079966409362856,
+        0.04978055944117554
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A0_core_shell_only [dti]": {
+      "mean": 0.007907152104207116,
+      "per_draw": [
+        0.007579159976688628,
+        0.009443560251448099,
+        0.006434541367226022,
+        0.008171346821465718
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A0_core_shell_only [credit_density_novel]": {
+      "mean": 0.009480750188231468,
+      "per_draw": [
+        0.00934947282075882,
+        0.010618122294545174,
+        0.007902579382061958,
+        0.010052826255559921
+      ],
+      "draws_positive": 4,
+      "n": 4
+    },
+    "A1 - A0_core_shell_only [auc_field_vs_hidden]": {
+      "mean": 0.0,
+      "per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "draws_positive": 0,
+      "n": 4
+    },
+    "A1 - A1_hessianridge [dti]": {
+      "mean": 0.0,
+      "per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "draws_positive": 0,
+      "n": 4
+    },
+    "A1 - A1_hessianridge [credit_density_novel]": {
+      "mean": 0.0,
+      "per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "draws_positive": 0,
+      "n": 4
+    },
+    "A1 - A1_hessianridge [auc_field_vs_hidden]": {
+      "mean": 0.0,
+      "per_draw": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "draws_positive": 0,
+      "n": 4
+    }
+  },
+  "promotion_rule": "DECLARED BEFORE THIS RUN: among {A1 peaks, A5 field-weighted sample, A6 hybrid, A7 buffered peaks} the shipped emission is the one with the highest mean DTI that also beats A3_random on >= 3 of 4 draws.  If none beats random, ship the arm with the highest mean DTI and say so.",
+  "promotion_pass": true,
+  "elapsed_s": 618.2,
+  "shipped_arm_evaluation": {
+    "rule": "DECLARED BEFORE THIS RUN: among {A1 peaks, A5 field-weighted sample, A6 hybrid, A7 buffered peaks} the shipped emission is the one with the highest mean DTI that also beats A3_random on >= 3 of 4 draws.  If none beats random, ship the arm with the highest mean DTI and say so.",
+    "note": "the arm set was EXTENDED after the A1-only rule was declared; the extended rule (highest mean DTI among candidates that beat random on >=3 of 4 draws) is the one that decides, and it is stated in this receipt before the shipped file was built",
+    "ranking_by_mean_dti": [
+      {
+        "arm": "A5_weighted",
+        "mean_dti": 0.03323717595339035
+      },
+      {
+        "arm": "A6_hybrid",
+        "mean_dti": 0.031102448675428475
+      },
+      {
+        "arm": "A1_hessianridge",
+        "mean_dti": 0.025600173502507602
+      },
+      {
+        "arm": "A7_buffered_peaks",
+        "mean_dti": 0.025310927016464313
+      },
+      {
+        "arm": "A2_steered",
+        "mean_dti": 0.024792828216116707
+      }
+    ],
+    "selected": {
+      "arm": "A5_weighted",
+      "mean_dti": 0.03323717595339035,
+      "delta_vs_random_mean": 0.001322831566478379,
+      "draws_positive_vs_random": 4,
+      "n_draws": 4,
+      "per_draw_delta_vs_random": [
+        0.0008642620547723093,
+        0.0013151218224472933,
+        0.0011964813687543006,
+        0.0019154610199396127
+      ]
+    }
+  },
+  "emission_rules_a5_a6_a7": {
+    "A5_weighted": "sample without replacement, probability proportional to the field",
+    "A6_hybrid": "half peak-packing + half field-weighted sample",
+    "A7_buffered_peaks": "peak packing with a 5 px buffer around the retained catalogue"
+  }
+}
