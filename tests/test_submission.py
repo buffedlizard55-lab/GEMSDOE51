@@ -119,9 +119,17 @@ def test_build_emission_respects_the_off_catalogue_rule_and_the_rule_switch():
         submission.build_emission(belief, approved, rule="nonsense")
 
 
-def test_stage_dominance_gate_flags_a_densified_tile_mask():
-    """A mask that fills its approved tiles must fail; a sparse selective one must pass."""
+def test_stage_dominance_gate_flags_a_densified_tile_mask(monkeypatch):
+    """A mask that fills its approved tiles must fail; a sparse selective one must pass.
+
+    `grid.tiles()` tiles the whole competition footprint, so this test would need the 557 MB
+    organiser raster just to count tiles.  The footprint is therefore stubbed to an all-true grid:
+    the gate's arithmetic (fill fraction, tile concentration) is what is under test here, and it
+    never reads any raster value.  Nothing about the shipped file changes.
+    """
     from gems51 import grid, submission
+
+    monkeypatch.setattr(grid, "footprint", lambda *a, **k: np.ones(grid.SHAPE, bool))
 
     approved = np.zeros(grid.SHAPE, bool)
     approved[0:300, 0:300] = True

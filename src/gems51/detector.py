@@ -16,7 +16,7 @@ Protocol (documented, preregistered in registry/preregistration.json):
 
 Nothing in this module ever reads the organizer's hidden labels: they do not exist in the
 download.  The only truth available is the visible catalogue, which is a *proxy*: it cannot
-reward a genuinely unmapped fault (see registry/irregularities.json IR-51-PROXY-01).
+reward a genuinely unmapped fault (see registry/irregularities.json IR-51-06).
 """
 
 from __future__ import annotations
@@ -101,7 +101,7 @@ def run_folds(verbose: bool = True, n_blocks: int = 2, save_belief: bool = True)
     # Shrink every block by BUFFER_PX so that a 600 m band along every fold boundary is removed
     # from BOTH training and scoring.  (The naive alternative -- removing pixels near the truth --
     # deletes the positives themselves and yields AUC = nan with 0 training positives; that error
-    # was made and fixed in this repository, see registry/irregularities.json IR-51-FOLD-01.)
+    # was made and fixed in this repository, see registry/irregularities.json IR-51-15.)
     from scipy.ndimage import distance_transform_edt as _edt
     shrunk = {}
     for bb in range(n_blocks * n_blocks):

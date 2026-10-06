@@ -15,14 +15,17 @@ Masks:
 
 `labels.tif` and `existing_faults.tif` are byte-identical in the organizer download
 (sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093); the repository
-records that as a finding, not as a leak (see registry/irregularities.json IR-51-DATA-02).
+records that as a finding, not as a leak (see registry/irregularities.json IR-51-07).
 """
 
 from __future__ import annotations
 
 from functools import lru_cache
 
+import hashlib
+import json
 import numpy as np
+from dataclasses import dataclass
 import rasterio
 from scipy.ndimage import distance_transform_edt
 
@@ -167,3 +170,87 @@ def verify_float32(path) -> dict:
     rec["all_finite"] = rec["n_nan"] == 0
     rec["in_0_1"] = rec["n_below0"] == 0 and rec["n_above1"] == 0
     return rec
+
+
+# ---------------------------------------------------------------------------------------------
+# COMPATIBILITY SHIMS for the pipeline merged from PR #1 (branch arena/b8cd7fc0-gemsdoe51).
+# That pipeline imports grid.{data_root,path,GridInfo,grid_info,LINEAMENT_BANDS,STRAIN_BANDS,
+# read_catalogue,valid_footprint,write_submission,sha256_of,dumps}.  The current pipeline uses
+# footprint()/catalogue()/read_band() instead.  Both are kept so neither is broken by the merge;
+# nothing here is used by scripts/run_all.py or the shipped submission.
+# ---------------------------------------------------------------------------------------------
+
+LINEAMENT_BANDS = (1, 2, 3, 5, 6, 9, 11, 13, 14, 17, 18)
+STRAIN_BANDS = (4, 7, 8)
+
+
+def data_root() -> Path:
+    """Legacy data directory (PR #1 pipeline).  The current pipeline uses paths.DATA_DIR."""
+    import os
+    return Path(os.environ.get("GEMS_DATA_DIR", ROOT / "data"))
+
+
+def path(name: str) -> Path:
+    return data_root() / name
+
+
+@dataclass(frozen=True)
+class GridInfo:
+    height: int
+    width: int
+    transform: tuple
+    crs: str
+
+
+def grid_info(tif: Path | None = None) -> GridInfo:
+    with rasterio.open(tif or (data_root() / "training_features.tif")) as src:
+        t = src.transform
+        return GridInfo(src.height, src.width,
+                        (t.a, t.b, t.c, t.d, t.e, t.f), str(src.crs))
+
+
+def read_catalogue(tif: Path) -> np.ndarray:
+    """Catalogue / labels raster -> bool (values > 0 are fault pixels)."""
+    with rasterio.open(tif) as src:
+        return src.read(1) > 0
+
+
+def valid_footprint(example_submission: Path) -> np.ndarray:
+    """Competition footprint = finite pixels of the sample submission."""
+    with rasterio.open(example_submission) as src:
+        return np.isfinite(src.read(1).astype(np.float32))
+
+
+def write_submission(out_path: Path, values: np.ndarray, *, nodata=None,
+                     compress: str | None = None) -> dict:
+    """Legacy writer (PR #1 contract): clamp to [0,1], no sentinel, zeros outside the footprint.
+
+    Duplicated deliberately rather than aliased to submission.write_submission(), whose contract is
+    'name + note -> tif + zip + checks'.  Kept byte-verifiable: values are re-read from disk.
+    """
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    v = np.clip(np.nan_to_num(np.asarray(values, dtype=np.float32), nan=0.0, posinf=1.0,
+                              neginf=0.0), 0.0, 1.0)
+    with rasterio.open(out_path, "w", driver="GTiff", height=v.shape[0], width=v.shape[1],
+                       count=1, dtype="float32", crs="EPSG:32611", transform=TRANSFORM,
+                       nodata=nodata, compress=(compress or "deflate")) as ds:
+        ds.write(v, 1)
+    with rasterio.open(out_path) as ds:
+        back = ds.read(1)
+    return dict(path=str(out_path), bytes=out_path.stat().st_size, min=float(back.min()),
+                max=float(back.max()), nan=int(np.isnan(back).sum()),
+                below0=int((back < 0).sum()), above1=int((back > 1).sum()),
+                sha256=sha256_of(out_path))
+
+
+def sha256_of(path_: Path) -> str:
+    h = hashlib.sha256()
+    with open(path_, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def dumps(obj) -> str:
+    return json.dumps(obj, indent=2, sort_keys=False, default=str)

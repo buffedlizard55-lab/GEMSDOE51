@@ -2,7 +2,7 @@
 
 Data is NEVER committed.  `scripts/fetch_data.py` restores every byte from a hash-pinned
 public mirror and fails closed on any digest mismatch (see registry/data_manifest.json and
-registry/irregularities.json IR-51-DATA-01: the mirrors are owner-supplied copies of the
+registry/irregularities.json IR-51-14: the mirrors are owner-supplied copies of the
 organizer's files, so the pins prove consistency, not organizer authentication).
 """
 

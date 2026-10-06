@@ -40,7 +40,7 @@
   },
   {
    "id": "C51-006",
-   "claim": "Per-sense dips measured from the Siler (2022) USGS release (83,234 rows with Dip in the region): normal 61.9 deg, right-lateral 85.8, left-lateral 81.6, unspecified 64.3 (medians).",
+   "claim": "Per-sense dips measured from the Siler (2022) USGS release (83,234 rows with Dip in the region): normal 61.9 deg, right-lateral 85.8, left-lateral 81.6, unspecified 62.8 (per-sense medians).",
    "class": "MEASURED",
    "evidence": "work/sb_slip_tendency_in_footprint.csv",
    "source": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d"
@@ -68,7 +68,7 @@
   },
   {
    "id": "C51-010",
-   "claim": "The adopted gate is top-half tiles by geodetic strain magnitude: 58 tiles, 2,537,841 px (49% of the footprint).",
+   "claim": "The adopted gate is top-half tiles by geodetic strain magnitude: 58 tiles, 2,537,841 px (49.1% of the footprint).",
    "class": "MEASURED",
    "evidence": "evidence/emission_audit.json, evidence/stage_dominance.json",
    "source": ""

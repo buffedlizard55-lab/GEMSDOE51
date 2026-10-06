@@ -32,7 +32,7 @@ from .paths import GEODAWN_EXT, GEODAWN_RAD, LIDAR_SCARP, SGMC_FAULTS, WORK_DIR
 
 #: 12 bands.  The first six names are read from the file's own band descriptions; bands 7-12
 #: carry no description in the mirrored file, so they are carried as unlabelled placeholders and
-#: flagged in registry/irregularities.json IR-51-EXT-01 rather than guessed at.
+#: flagged in registry/irregularities.json IR-51-10 rather than guessed at.
 LIDAR_BAND_NAMES = ("ex_max", "ex_mean", "step_max", "lapneg_max", "lappos_max", "downface_max",
                     "band07_unlabelled", "band08_unlabelled", "band09_unlabelled",
                     "band10_unlabelled", "band11_unlabelled", "band12_unlabelled")

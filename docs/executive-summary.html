@@ -1,0 +1,148 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to submit — GEMSDOE51</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
+--bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header .wrap{padding:26px 22px 18px}
+h1{font-size:1.55rem;margin:0 0 6px}
+h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
+.sub{color:var(--dim);font-size:.92rem}
+nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
+main{padding:8px 0 70px}
+.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
+background:linear-gradient(180deg,#12241f,#111823)}
+.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
+.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
+.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
+border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
+.btn:hover{filter:brightness(1.1);text-decoration:none}
+.btn.alt{background:#233042;color:var(--ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+code,.mono{font-family:var(--mono);font-size:.87em}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
+.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.dim{color:var(--dim)}.small{font-size:.86rem}
+ul{padding-left:22px}li{margin:5px 0}
+.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+color:var(--dim);margin-right:6px;vertical-align:middle}
+.tag.official{color:var(--acc);border-color:var(--acc)}
+.tag.owner{color:var(--warn);border-color:var(--warn)}
+.tag.measured{color:#79c0ff;border-color:#79c0ff}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
+footer .wrap{padding:20px 22px 40px}
+</style></head><body>
+<header><div class="wrap">
+<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
+<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
+<nav><a class="" href="index.html">Overview</a><a class="on" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
+<div class="hero">
+<h2>⬇ ONE-CLICK SUBMISSION FILE — download this, then submit it</h2>
+<div class="file"><a href="downloads/gems51-sbd-hridge-44090-20261006.tif">gems51-sbd-hridge-44090-20261006.tif</a></div>
+<a class="btn" href="downloads/gems51-sbd-hridge-44090-20261006.tif" download>⬇ Download the .tif</a>
+<a class="btn alt" href="executive-summary.html">How to submit it →</a>
+<table>
+<tr><th>Submission name (paste into the form)</th><td class="mono">GEMSDOE51-SBD-HRIDGE-44090</td></tr>
+<tr><th>Note field</th><td class="mono">GEMSDOE51 SBD-HRIDGE-44090 | geodetic strain-budget deficit prior (1,793/5,121 tiles) + Hessian-ridge emission over all 19 bands; 44,090 dots; blocked 4-fold AUC 0.8229; format 9/9 PASS; unique vs 211 refs</td></tr>
+<tr><th>sha256</th><td class="mono">e527ac899dc0b6593b4b0db824a51678fad87111604e74845f5cd71990a1db55</td></tr>
+<tr><th>shape / CRS / dtype</th><td class="mono">3730 × 3292 · EPSG:32611 · float32 · 100 m</td></tr>
+<tr><th>values</th><td class="mono">min 0.0000 ·
+max 1.0000 ·
+0 NaN ·
+nodata tag None</td></tr>
+<tr><th>format audit</th><td><span class="pass">
+9/9 checks PASS</span> — produced by re-opening the written file from disk</td></tr>
+<tr><th>uniqueness gate</th><td><span class="pass">
+PASS</span> vs 211 reference artifacts,
+0 matches</td></tr>
+<tr><th>organiser score</th><td><span class="warn">NONE — never submitted, never scored</span></td></tr>
+</table>
+<p class="small dim">The portal error you hit — <i>“Predicted values must be in range [0, 1]”</i> —
+is fixed structurally, not by clamping alone: every cell is finite, no nodata tag is written
+(a large negative sentinel is itself outside [0,1]), and cells outside the footprint are 0.0.</p>
+</div>
+<h1 style="font-size:1.3rem">Executive summary — how to make a submission, exactly</h1>
+
+<h2>Step 1 — download the file</h2>
+<p>Click the green button at the top of the <a href="index.html">Overview</a> page. It downloads
+<code>gems51-sbd-hridge-44090-20261006.tif</code> (single-band float32 GeoTIFF, EPSG:32611, 100 m,
+3730 × 3292).</p>
+
+<h2>Step 2 — open the submission form</h2>
+<p>Go to
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the
+competition submission page</a> → <b>New submission</b> → <b>File to submit → Choose file</b> →
+select the downloaded <code>.tif</code>.</p>
+
+<h2>Step 3 — fill the two fields</h2>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td><b>Note (optional)</b></td><td class="mono">GEMSDOE51 SBD-HRIDGE-44090 | geodetic
+strain-budget deficit prior + Hessian-ridge emission over all 19 bands; 44,090 dots; blocked
+4-fold AUC 0.8229; format 9/9 PASS; unique vs 211 refs</td></tr>
+<tr><td><b>Name</b> (whatever the form calls it)</td><td class="mono">GEMSDOE51-SBD-HRIDGE-44090</td></tr>
+</table>
+<p class="small dim">The note is deliberately under the 200-character limit so the form cannot
+truncate it. The name is unique across every GEMSDOE repository — it contains no prior
+submission's identifier, by design (see the uniqueness gate).</p>
+
+<h2>Step 4 — submit, then record the outcome</h2>
+<p>After the score appears, append it to <code>registry/leaderboard_reads.json</code> with the
+date and the read method. Every score in this repository is a <b>dated manual read</b>; no
+scraper touches the leaderboard, because the competition terms prohibit automated monitoring.</p>
+
+<h2>Why the portal rejected the previous file — and why it cannot happen here</h2>
+<div class="panel">
+<p>The error was <code>Predicted values must be in range [0, 1]</code>. There are
+<b>two</b> independent ways to trigger it, and the previous file hit at least one:</p>
+<ul>
+<li><b>Mechanism 1 — the float32 nodata sentinel.</b> <code>training_features.tif</code> uses
+<code>-3.4028234663852886e+38</code> as nodata: <b>7,113,308</b> cells of 12,279,160 carry it,
+of which a few thousand fall inside the submission footprint. Passing those through puts values
+far outside [0,1].</li>
+<li><b>Mechanism 2 — a negative nodata TAG.</b> A GeoTIFF may hold legal 0/1 pixels but still
+declare <code>nodata = -3.4e38</code> in its header, and a validator that reads the tag rejects
+it anyway.</li>
+</ul>
+<p>This repository's writer therefore refuses both: it clamps to [0,1], writes
+<b>no nodata tag at all</b>, zero-fills everything outside the footprint, and then
+<b>re-opens the file from disk</b> and audits 12 clauses of the published format. The receipt is
+<code>evidence/submission_sbd-hridge-v1.json</code>.</p>
+</div>
+
+<h2>What is measured, and what is only a projection</h2>
+<table>
+<tr><th>Claim</th><th>Class</th></tr>
+<tr><td>Metric equations, α=0.2, β=0.8, R=300 m, the worked example, the submission format</td>
+<td><span class="tag official">official</span> page 967, read 2026-10-06</td></tr>
+<tr><td>Masking of known faults; “new fault” includes new geometry of existing systems</td>
+<td><span class="tag official">official</span> staff statements, forum 11516 / 11536</td></tr>
+<tr><td>The sample submission is the catalogue rasterised</td>
+<td><span class="tag measured">measured-here</span> <code>np.array_equal</code> = True</td></tr>
+<tr><td>Detector AUC, holdout contrasts, the unsteered field's edge</td>
+<td><span class="tag measured">measured-here</span> <code>evidence/*.json</code></td></tr>
+<tr><td>Leaderboard values quoted anywhere here</td>
+<td><span class="tag official">official</span> dated page reads (terms bar automated monitoring)</td></tr>
+<tr><td>Any score for <i>this</i> file</td>
+<td><span class="warn">DOES NOT EXIST</span></td></tr>
+</table>
+</div></main>
+<footer><div class="wrap">
+<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
+page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
+repository. <span class="tag owner">owner-report</span> a previous session's claim, not
+independently authenticated. <b>No artifact in this repository has ever been scored by the
+organiser.</b></div></footer></body></html>

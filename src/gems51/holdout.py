@@ -3,7 +3,7 @@
 The instrument is deliberately boring and explicit:
 
   * truth  = the visible catalogue inside the held-out fold (a PROXY; it cannot reward a genuinely
-    unmapped fault -- IR-51-PROXY-01);
+    unmapped fault -- IR-51-06);
   * every fold removes a 600 m buffer around its own catalogue from both training and scoring;
   * rules are compared at MATCHED pixel counts so no contrast can be won by emitting more mass;
   * the promotion gate, copied in spirit from the sibling repositories' preregistered rule, is

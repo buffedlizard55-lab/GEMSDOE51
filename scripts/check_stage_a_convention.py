@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Resolve the sign disagreement between the two Stage-A instruments (IR-51-INST-01).
+"""Resolve the sign disagreement between the two Stage-A instruments (IR-51-04).
 
 strain.stage_a_independent_test() averages the geodetic band over the WHOLE tile (every finite
 pixel, including cells outside the data footprint, which are stored as 0), while

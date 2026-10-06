@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "generated_utc": "2026-10-06T21:11:32Z",
- "note": "Discrepancies, deviations and self-caught errors. Flagged for human review; nothing here is an accusation about anyone.",
+ "note": "Discrepancies, deviations and self-caught errors. Flagged for human review; nothing here is an accusation about anyone. This is the ONE canonical numbering: earlier drafts used longer ids (IR-51-DATA-01, IR-51-INST-01, IR-51-PROXY-01, ...) which are mapped onto these items -- DATA-01->IR-51-14, DATA-02->IR-51-07, PROXY-01->IR-51-06, FOLD-01->IR-51-15, EXT-01->IR-51-10, INST-01->IR-51-04, BRIEF-01->IR-51-01, AI-01->IR-51-16.",
  "items": [
   {
    "id": "IR-51-01",
@@ -55,7 +55,7 @@
    "id": "IR-51-09",
    "severity": "low",
    "issue": "Dip had to be assumed for the strain sum because the joined trace table does not carry it: dip_direct is 'Unspecified' for 411 of 1,126 traces and the slip-sense class is known for the rest.",
-   "action": "Dips were NOT guessed: they were measured from the Siler (2022) USGS release (83,234 rows with Dip inside the footprint) and applied per sense (normal 61.9, RL 85.8, LL 81.6, unspecified 64.3 degrees median). Source and figures recorded in registry/claims.json."
+   "action": "Dips were NOT guessed: they were measured from the Siler (2022) USGS release (83,234 rows with Dip inside the footprint) and applied per sense (normal 61.9, RL 85.8, LL 81.6, unspecified 62.8 degrees median). Source and figures recorded in registry/claims.json."
   },
   {
    "id": "IR-51-10",
@@ -80,6 +80,24 @@
    "severity": "low",
    "issue": "This environment cannot submit to DrivenData (no credentials) and cannot reach the sciencebase.gov / gdr.openei.org download endpoints directly (network egress is restricted to a small allow-list).",
    "action": "The file is delivered for manual submission with a one-click download and a copy-paste form note. Free external data are listed in registry/sources.json with the evidence of their obtainability (sibling GitHub-Actions runner logs where bytes were actually fetched)."
+  },
+  {
+   "id": "IR-51-14",
+   "severity": "high",
+   "issue": "Data provenance: the four organiser rasters were obtained from owner-supplied public GitHub mirrors, because DrivenData requires a login and the organiser's own download endpoints are unreachable from this environment. The sha256 pins in registry/data_manifest.json prove that every byte matches the sibling repositories' published hashes; they do NOT prove that the mirrors are authentic copies of the organiser's files.",
+   "action": "Stated openly here, in the README and on the site. Anyone can re-pin the files from DrivenData and re-run scripts/check_submission.py + tests; every downstream number is a deterministic function of those bytes, so a byte mismatch would be detected, not hidden."
+  },
+  {
+   "id": "IR-51-15",
+   "severity": "medium",
+   "issue": "Fold-protocol bug found and fixed by this repository: the first spatially blocked holdout removed a 600 m band around the held-out truth from TRAINING as well as scoring. That deletes the negatives nearest the truth (the only hard ones), and at the buffer width first tried it also starved the fold -- 0 training positives, AUC = nan.",
+   "action": "Replaced by shrinking each spatial block itself by the buffer (src/gems51/detector.py, BUFFER_PX), which removes a boundary band from both training and scoring while keeping every positive that is not on a fold edge. The failing configuration is kept in the record because it is exactly the kind of silent-NaN failure a reviewer should look for."
+  },
+  {
+   "id": "IR-51-16",
+   "severity": "medium",
+   "issue": "The Official Rules (DOE/NLR, Sept 2026, docs.nlr.gov/docs/fy26osti/96647.pdf) are recorded in the sibling repository as requiring disclosure of generative-AI use in the final narrative. The rules PDF cannot be fetched from this environment, so the obligation is second-hand here.",
+   "action": "No competition narrative is shipped from this repository, so the obligation (if it exists) is not yet triggered. Recorded so that whoever writes the final narrative discloses tooling use. registry/sources.json item 'rules-nlr' carries the same flag."
   }
  ]
 }

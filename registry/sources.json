@@ -1,219 +1,227 @@
 {
-  "schema_version": 1,
-  "generated_utc": "2026-10-06",
-  "rule": "Only free, publicly available, official or primary sources. `verified` says who checked what: SELF = checked in this session from this environment; OWNER = recorded as verified by the sibling repository registries with a link to the evidence file (second-hand, quoted as such); RUNNER = bytes obtained/obtainability demonstrated by a GitHub Actions runner, whose log is linked.",
-  "sources": [
-    {
-      "id": "dd-problem",
-      "title": "DrivenData #306 DOE GEMS — problem description (metric, submission format)",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "used_for": "Official DTI definition, alpha=0.2, beta=0.8, R=300 m=3 px, worked example 0.60, float32/0..1/EPSG:32611 submission rules.",
-      "verified": "SELF (both chunks fetched and read verbatim 2026-10-06)",
-      "license": "Competition terms apply; page is public.",
-      "notes": "The metric block is reproduced verbatim in src/gems51/metric.py and cross-checked by a brute-force implementation in tests (9/9 pass)."
-    },
-    {
-      "id": "dd-submissions",
-      "title": "DrivenData #306 submission page (where the file is uploaded)",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/",
-      "used_for": "The one-click download target is documented against this page.",
-      "verified": "SELF (URL reachable; upload requires an account, which this environment does not have)",
-      "notes": "This repository cannot submit: no DrivenData credentials. The delivered file is UNSCORED."
-    },
-    {
-      "id": "dd-leaderboard",
-      "title": "DrivenData #306 public leaderboard",
-      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-      "used_for": "Score context and the honest statement of what the leading scores are.",
-      "verified": "SELF (read 2026-10-06; snapshot in registry/leaderboard_snapshot_2026-10-06.json, class UNVERIFIED-LIVE)",
-      "notes": "Rank 1 is 0.3774 on the read; the brief's '0.3195 is the leader' is stale (0.3195 is rank 7). See IR-51-BRIEF-01."
-    },
-    {
-      "id": "rules-nlr",
-      "title": "Official Rules (DOE/NLR, Sept 2026)",
-      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-      "used_for": "candidate disclosure obligations (generative-AI use) for the final narrative.",
-      "verified": "OWNER (sibling registry records 'read-in-full, all 7 chunks, line by line'); NOT verifiable from this sandbox",
-      "notes": "Flagged as IR-51-AI-01. No submission narrative is shipped from here, so the obligation (if it exists) is not yet triggered."
-    },
-    {
-      "id": "kreemer-2000",
-      "title": "Kreemer, Haines, Holt, Blewitt & Lavallée (2000), 'On the determination of a global strain rate model', Earth Planets Space 52(10):765–770, doi:10.1186/BF03352279",
-      "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
-      "used_for": "THE Stage-A formula. Eq. (2) average seismic strain rate from moment tensors; Eq. (3) the fault-slip variant: eps_ij = (1/2A) * sum_k (L_k * u_k / sin(dip_k)) * m_ij, with n fault segments in grid area A, length L_k, dip dip_k, slip rate u_k and unit moment tensor m_ij.",
-      "verified": "SELF (PDF text with both equations retrieved and read 2026-10-06; the same equations are restated in GJI 212(2):988 and GJI 146(2):399)",
-      "license": "Author/UNR-hosted PDF; cite the journal article.",
-      "notes": "The brief asked for a documented moment-tensor summation with its source. This is it, line by line: sum(L*u/sin dip) over 2A, contracted with the unit moment tensor. src/gems51/strain.py implements the scalar contraction and says so."
-    },
-    {
-      "id": "zeng-shen-2016",
-      "title": "Zeng & Shen (2016), 'A fault-based model for crustal deformation, fault slip rates and off-fault strain rate in California', BSSA 106(2):766–784, doi:10.1785/0120140250",
-      "url": "https://pubs.usgs.gov/publication/70160311",
-      "used_for": "Physical premise that a large, spatially structured moment budget is NOT carried by mapped faults (the Stage-A deficit idea).",
-      "verified": "OWNER + SELF (USGS Publications Warehouse record fetched earlier in this session; the abstract states the off-fault moment rate)",
-      "license": "USGS publication record; article © SSA.",
-      "notes": "Treated as motivation, not as a result: the deficit is measured here (median 0.530 of the geodetic second invariant unaccounted for) and then tested."
-    },
-    {
-      "id": "kostrov-1974",
-      "title": "Kostrov (1974), seismic moment / strain-rate summation",
-      "url": "https://doi.org/10.1016/0021-8928(75)90161-2",
-      "used_for": "Origin of the summation the fault-slip variant is built on.",
-      "verified": "SECOND-HAND (cited inside Kreemer et al. 2000, which is verified above)",
-      "notes": "No independent numeric use; included for completeness of the citation chain."
-    },
-    {
-      "id": "siler-2022",
-      "title": "Siler (2022), Slip- and dilation-tendency calculations for Quaternary faults of the Great Basin (USGS data release)",
-      "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
-      "used_for": "Per-fault dips and strikes, used to justify the dip value in the Stage-A sum (and to show the dip distribution by slip sense).",
-      "verified": "OWNER (listing and DataCite record re-checked; data file obtained through the owner mirror and hash-pinned here)",
-      "license": "USGS data release, public domain.",
-      "notes": "CSV slice used here: work/sb_slip_tendency_in_footprint.csv (84,484 rows)."
-    },
-    {
-      "id": "geodawn",
-      "title": "Glen & Earney (2024), GeoDAWN airborne geophysics (USGS EarthMRI)",
-      "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
-      "used_for": "Radiometric (K, Th, U, total count) and magnetic layers in the feature stack.",
-      "verified": "OWNER (ScienceBase item page and JSON read; survey specifications recorded)",
-      "license": "USGS, public domain.",
-      "notes": "In-footprint slices are part of the hash-pinned data set."
-    },
-    {
-      "id": "ingenious-gdr1391",
-      "title": "Ayling et al. (2022), INGENIOUS Great Basin regional dataset compilation, GDR submission 1391",
-      "url": "https://gdr.openei.org/submissions/1391",
-      "used_for": "Fault slip rates and trace lengths for the Stage-A fault-accommodated strain sum.",
-      "verified": "OWNER (GDR #1391 page re-fetched; CC BY 4.0 named) + SELF (the derived trace table is hash-pinned and re-verified here)",
-      "license": "CC BY 4.0 (attribution: INGENIOUS / GDR 1391).",
-      "notes": "gdr_qfaults_traces.csv carries slip_rate (mm/yr) for 1,126 traces; `clipped_length_m` gives the in-footprint length."
-    },
-    {
-      "id": "nbmg-qfaults-rest",
-      "title": "NBMG Qfaults_INGENIOUS ArcGIS REST layer 0",
-      "url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0",
-      "used_for": "Queryable source behind the visible catalogue for this region.",
-      "verified": "OWNER (recorded as queryable and restored locally in their data cache)",
-      "license": "Public ArcGIS service; attribution NBMG.",
-      "notes": "Not required by the pipeline (the catalogue raster is hash-pinned), listed because it is the authoritative live source."
-    },
-    {
-      "id": "usgs-qfaults",
-      "title": "USGS Quaternary Fault and Fold Database of the United States",
-      "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
-      "used_for": "One of the two label sources named by the competition.",
-      "verified": "OWNER (page verified; direct zip recorded as obtainable from a GitHub runner)",
-      "license": "USGS, public domain.",
-      "notes": "Would be the file to diff against if a reviewer wants to re-derive the catalogue independently."
-    },
-    {
-      "id": "usgs-3dep-1m",
-      "title": "USGS 3D Elevation Program (3DEP) 1 m DEMs",
-      "url": "https://data.usgs.gov/datacatalog/data/USGS:77ae0551-c61e-4979-aedd-d7",
-      "used_for": "The lidar source behind the scarp-feature layer (h19-4) used in the feature stack.",
-      "verified": "OWNER (official USGS catalog page fetched; public and free)",
-      "license": "USGS, public domain.",
-      "notes": "1m_DEM_links.csv was never obtained — see IR-51-DATA-01."
-    },
-    {
-      "id": "gdr-paleo-geothermal",
-      "title": "GDR 1391 — paleo-geothermal regional features (sinter, tufa, travertine)",
-      "url": "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip",
-      "used_for": "H51-3: independent, non-catalogue geothermal evidence for corroborating candidate faults.",
-      "verified": "RUNNER (bytes fetched and recorded by a GitHub Actions runner; link recorded in the owner's evidence/ci file)",
-      "license": "CC BY 4.0 (GDR 1391).",
-      "notes": "Genuinely new information for this competition: sinter/travertine deposits mark fossil discharge sites along faults."
-    },
-    {
-      "id": "gdr-2m-temp-probes",
-      "title": "GDR 1391 — INGENIOUS 2 m temperature-probe regional data",
-      "url": "https://gdr.openei.org/files/1391/2m_temperature_probe_INGENIOUS_regional.zip",
-      "used_for": "H51-3: shallow thermal anomaly conjunction.",
-      "verified": "RUNNER (bytes fetched by a GitHub Actions runner, per the owner's evidence file)",
-      "license": "CC BY 4.0 (GDR 1391).",
-      "notes": "Point data; requires a spatial join to fault candidates."
-    },
-    {
-      "id": "gdr-q-volcanics",
-      "title": "GDR 1391 — Great Basin Quaternary volcanics (polygons)",
-      "url": "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip",
-      "used_for": "Negative/false-positive control (faults do not follow young volcanic centres one-for-one).",
-      "verified": "RUNNER (bytes fetched by a GitHub Actions runner)",
-      "license": "CC BY 4.0 (GDR 1391).",
-      "notes": ""
-    },
-    {
-      "id": "heat-flow-2022",
-      "title": "DeAngelo et al. (2022), Heat flow maps and supporting data for the Great Basin",
-      "url": "https://www.sciencebase.gov/catalog/item/6297d2fad34ec53d276c5b28",
-      "used_for": "H51-3: heat-flow residual as an independent thermal screen.",
-      "verified": "OWNER (official ScienceBase item page fetched; listing read)",
-      "license": "USGS data release, public domain.",
-      "notes": "Byte obtainability from this sandbox is blocked; a runner can fetch it (same route as the GDR files)."
-    },
-    {
-      "id": "mt-conductance-2022",
-      "title": "Peacock & Bedrosian (2022), Electrical conductance maps of the Great Basin",
-      "url": "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b",
-      "used_for": "H51-2: multi-depth conductivity alignment (marks clay alteration / fluid pathways at depth).",
-      "verified": "OWNER (official ScienceBase item page fetched; five depth slices listed)",
-      "license": "USGS data release, public domain.",
-      "notes": "Requires resampling five depth slices; not attempted in this submission."
-    },
-    {
-      "id": "faulds-hinz-2015",
-      "title": "Faulds & Hinz (2015), Favorable tectonic and structural settings of geothermal systems",
-      "url": "https://www.osti.gov/servlets/purl/1724082",
-      "used_for": "Structural-setting priors: step-overs, relay ramps, fault intersections and terminations host most Great Basin geothermal systems.",
-      "verified": "OWNER (full OSTI-hosted paper read; abstract and reported rankings reproduced)",
-      "license": "US DOE/OSTI, public.",
-      "notes": "The physical justification for H51-1 (tip/step-over targeting) and H51-3."
-    },
-    {
-      "id": "hermant-2025",
-      "title": "Hermant, Kiersnowski & Bellanger (2025), 'Using Deep Learning to Map Quaternary Faults' (Stanford SGW)",
-      "url": "https://pangea.stanford.edu/ERE/db/GeoConf/papers/SGW/2025/Hermant.pdf",
-      "used_for": "Independent evidence that supervised learning on DEM-derived relief at this grid scale is the state of practice for Quaternary fault mapping.",
-      "verified": "OWNER (full PDF fetched and read)",
-      "license": "Author/conference PDF.",
-      "notes": "Used as methodology context only; no numbers are taken from it."
-    },
-    {
-      "id": "berkowitz-2000",
-      "title": "Berkowitz, Bour, Davy & Odling (2000), Scaling of fracture connectivity in geological formations, GRL 27(14):2061",
-      "url": "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/1999GL011241",
-      "used_for": "Why sparse lineament density can still connect (justifies emitting sparse dots rather than filled ribbons).",
-      "verified": "OWNER (publisher abstract rechecked)",
-      "license": "© AGU.",
-      "notes": ""
-    },
-    {
-      "id": "biasi-wesnousky-2016",
-      "title": "Biasi & Wesnousky (2016), Steps and gaps in ground ruptures, BSSA 106(3):1110",
-      "url": "https://pubs.geoscienceworld.org/ssa/bssa/article/106/3/1110/332142",
-      "used_for": "Typical step-over and gap distances (why a fault may be interrupted and therefore missed).",
-      "verified": "OWNER (secondary quote only)",
-      "license": "© SSA.",
-      "notes": "Numbers are used qualitatively, on purpose."
-    },
-    {
-      "id": "reference-solution",
-      "title": "DrivenData GEMS Prize reference solution (official baseline notebook/code)",
-      "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "used_for": "Sanity check on the expected approach (U-Net on the 19-band stack).",
-      "verified": "OWNER (inspected through the GitHub API; existence and content recorded)",
-      "license": "See repository.",
-      "notes": "Not copied. This repository's detector is a gradient-boosted tabular model on 44 channels with a blocked spatial CV, plus the strain-budget gate."
-    },
-    {
-      "id": "sibling-repos",
-      "title": "Owner's sibling repositories (GEMSDOE, GEMSDOE2..47, excluding 42/43)",
-      "url": "https://github.com/buffedlizard55-lab?tab=repositories",
-      "used_for": "Prior art. Their evidence ledgers (score JSONs, hypothesis registries, irregularity registers, live_mirror, pre-registration) were the starting point for this session's reading list.",
-      "verified": "OWNER + SELF (multiple registries fetched through the GitHub API on 2026-10-06, including GEMSDOE28 registry/sources.json, registry/next_hypotheses.json and registry/hypotheses.json)",
-      "license": "Owner's own repositories.",
-      "notes": "All comparisons against them in this repository are labelled PROXY and are run on identical masks, identical truth and matched mass."
-    }
-  ]
+ "schema_version": 1,
+ "generated_utc": "2026-10-06",
+ "rule": "Only free, publicly available, official or primary sources. `verified` says who checked what: SELF = checked in this session from this environment; OWNER = recorded as verified by the sibling repository registries with a link to the evidence file (second-hand, quoted as such); RUNNER = bytes obtained/obtainability demonstrated by a GitHub Actions runner, whose log is linked.",
+ "sources": [
+  {
+   "id": "dd-problem",
+   "title": "DrivenData #306 DOE GEMS \u2014 problem description (metric, submission format)",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "used_for": "Official DTI definition, alpha=0.2, beta=0.8, R=300 m=3 px, worked example 0.60, float32/0..1/EPSG:32611 submission rules.",
+   "verified": "SELF (both chunks fetched and read verbatim 2026-10-06)",
+   "license": "Competition terms apply; page is public.",
+   "notes": "The metric block is reproduced verbatim in src/gems51/metric.py and cross-checked by a brute-force implementation in tests (9/9 pass)."
+  },
+  {
+   "id": "dd-submissions",
+   "title": "DrivenData #306 submission page (where the file is uploaded)",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/",
+   "used_for": "The one-click download target is documented against this page.",
+   "verified": "SELF (URL reachable; upload requires an account, which this environment does not have)",
+   "notes": "This repository cannot submit: no DrivenData credentials. The delivered file is UNSCORED."
+  },
+  {
+   "id": "dd-leaderboard",
+   "title": "DrivenData #306 public leaderboard",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "used_for": "Score context and the honest statement of what the leading scores are.",
+   "verified": "SELF (read 2026-10-06; snapshot in registry/leaderboard_snapshot_2026-10-06.json, class UNVERIFIED-LIVE)",
+   "notes": "Rank 1 is 0.3774 on the read; the brief's '0.3195 is the leader' is stale (0.3195 is rank 7). See IR-51-01."
+  },
+  {
+   "id": "rules-nlr",
+   "title": "Official Rules (DOE/NLR, Sept 2026)",
+   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+   "used_for": "candidate disclosure obligations (generative-AI use) for the final narrative.",
+   "verified": "OWNER (sibling registry records 'read-in-full, all 7 chunks, line by line'); NOT verifiable from this sandbox",
+   "notes": "Flagged as IR-51-16. No submission narrative is shipped from here, so the obligation (if it exists) is not yet triggered."
+  },
+  {
+   "id": "kreemer-2000",
+   "title": "Kreemer, Haines, Holt, Blewitt & Lavall\u00e9e (2000), 'On the determination of a global strain rate model', Earth Planets Space 52(10):765\u2013770, doi:10.1186/BF03352279",
+   "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+   "used_for": "THE Stage-A formula. Eq. (2) average seismic strain rate from moment tensors; Eq. (3) the fault-slip variant: eps_ij = (1/2A) * sum_k (L_k * u_k / sin(dip_k)) * m_ij, with n fault segments in grid area A, length L_k, dip dip_k, slip rate u_k and unit moment tensor m_ij.",
+   "verified": "SELF (PDF text with both equations retrieved and read 2026-10-06; the same equations are restated in GJI 212(2):988 and GJI 146(2):399)",
+   "license": "Author/UNR-hosted PDF; cite the journal article.",
+   "notes": "The brief asked for a documented moment-tensor summation with its source. This is it, line by line: sum(L*u/sin dip) over 2A, contracted with the unit moment tensor. src/gems51/strain.py implements the scalar contraction and says so."
+  },
+  {
+   "id": "zeng-shen-2016",
+   "title": "Zeng & Shen (2016), 'A fault-based model for crustal deformation, fault slip rates and off-fault strain rate in California', BSSA 106(2):766\u2013784, doi:10.1785/0120140250",
+   "url": "https://pubs.usgs.gov/publication/70160311",
+   "used_for": "Physical premise that a large, spatially structured moment budget is NOT carried by mapped faults (the Stage-A deficit idea).",
+   "verified": "OWNER + SELF (USGS Publications Warehouse record fetched earlier in this session; the abstract states the off-fault moment rate)",
+   "license": "USGS publication record; article \u00a9 SSA.",
+   "notes": "Treated as motivation, not as a result: the deficit is measured here (median 0.530 of the geodetic second invariant unaccounted for) and then tested."
+  },
+  {
+   "id": "kostrov-1974",
+   "title": "Kostrov (1974), seismic moment / strain-rate summation",
+   "url": "https://doi.org/10.1016/0021-8928(75)90161-2",
+   "used_for": "Origin of the summation the fault-slip variant is built on.",
+   "verified": "SECOND-HAND (cited inside Kreemer et al. 2000, which is verified above)",
+   "notes": "No independent numeric use; included for completeness of the citation chain."
+  },
+  {
+   "id": "siler-2022",
+   "title": "Siler (2022), Slip- and dilation-tendency calculations for Quaternary faults of the Great Basin (USGS data release)",
+   "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+   "used_for": "Per-fault dips and strikes, used to justify the dip value in the Stage-A sum (and to show the dip distribution by slip sense).",
+   "verified": "OWNER (listing and DataCite record re-checked; data file obtained through the owner mirror and hash-pinned here)",
+   "license": "USGS data release, public domain.",
+   "notes": "CSV slice used here: work/sb_slip_tendency_in_footprint.csv (84,484 rows)."
+  },
+  {
+   "id": "geodawn",
+   "title": "Glen & Earney (2024), GeoDAWN airborne geophysics (USGS EarthMRI)",
+   "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+   "used_for": "Radiometric (K, Th, U, total count) and magnetic layers in the feature stack.",
+   "verified": "OWNER (ScienceBase item page and JSON read; survey specifications recorded)",
+   "license": "USGS, public domain.",
+   "notes": "In-footprint slices are part of the hash-pinned data set."
+  },
+  {
+   "id": "ingenious-gdr1391",
+   "title": "Ayling et al. (2022), INGENIOUS Great Basin regional dataset compilation, GDR submission 1391",
+   "url": "https://gdr.openei.org/submissions/1391",
+   "used_for": "Fault slip rates and trace lengths for the Stage-A fault-accommodated strain sum.",
+   "verified": "OWNER (GDR #1391 page re-fetched; CC BY 4.0 named) + SELF (the derived trace table is hash-pinned and re-verified here)",
+   "license": "CC BY 4.0 (attribution: INGENIOUS / GDR 1391).",
+   "notes": "gdr_qfaults_traces.csv carries slip_rate (mm/yr) for 1,126 traces; `clipped_length_m` gives the in-footprint length."
+  },
+  {
+   "id": "nbmg-qfaults-rest",
+   "title": "NBMG Qfaults_INGENIOUS ArcGIS REST layer 0",
+   "url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0",
+   "used_for": "Queryable source behind the visible catalogue for this region.",
+   "verified": "OWNER (recorded as queryable and restored locally in their data cache)",
+   "license": "Public ArcGIS service; attribution NBMG.",
+   "notes": "Not required by the pipeline (the catalogue raster is hash-pinned), listed because it is the authoritative live source."
+  },
+  {
+   "id": "usgs-qfaults",
+   "title": "USGS Quaternary Fault and Fold Database of the United States",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+   "used_for": "One of the two label sources named by the competition.",
+   "verified": "OWNER (page verified; direct zip recorded as obtainable from a GitHub runner)",
+   "license": "USGS, public domain.",
+   "notes": "Would be the file to diff against if a reviewer wants to re-derive the catalogue independently."
+  },
+  {
+   "id": "usgs-3dep-1m",
+   "title": "USGS 3D Elevation Program (3DEP) 1 m DEMs",
+   "url": "https://data.usgs.gov/datacatalog/data/USGS:77ae0551-c61e-4979-aedd-d7",
+   "used_for": "The lidar source behind the scarp-feature layer (h19-4) used in the feature stack.",
+   "verified": "OWNER (official USGS catalog page fetched; public and free)",
+   "license": "USGS, public domain.",
+   "notes": "1m_DEM_links.csv was never obtained \u2014 see IR-51-14."
+  },
+  {
+   "id": "gdr-paleo-geothermal",
+   "title": "GDR 1391 \u2014 paleo-geothermal regional features (sinter, tufa, travertine)",
+   "url": "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip",
+   "used_for": "H51-3: independent, non-catalogue geothermal evidence for corroborating candidate faults.",
+   "verified": "RUNNER (bytes fetched and recorded by a GitHub Actions runner; link recorded in the owner's evidence/ci file)",
+   "license": "CC BY 4.0 (GDR 1391).",
+   "notes": "Genuinely new information for this competition: sinter/travertine deposits mark fossil discharge sites along faults."
+  },
+  {
+   "id": "gdr-2m-temp-probes",
+   "title": "GDR 1391 \u2014 INGENIOUS 2 m temperature-probe regional data",
+   "url": "https://gdr.openei.org/files/1391/2m_temperature_probe_INGENIOUS_regional.zip",
+   "used_for": "H51-3: shallow thermal anomaly conjunction.",
+   "verified": "RUNNER (bytes fetched by a GitHub Actions runner, per the owner's evidence file)",
+   "license": "CC BY 4.0 (GDR 1391).",
+   "notes": "Point data; requires a spatial join to fault candidates."
+  },
+  {
+   "id": "gdr-q-volcanics",
+   "title": "GDR 1391 \u2014 Great Basin Quaternary volcanics (polygons)",
+   "url": "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip",
+   "used_for": "Negative/false-positive control (faults do not follow young volcanic centres one-for-one).",
+   "verified": "RUNNER (bytes fetched by a GitHub Actions runner)",
+   "license": "CC BY 4.0 (GDR 1391).",
+   "notes": ""
+  },
+  {
+   "id": "heat-flow-2022",
+   "title": "DeAngelo et al. (2022), Heat flow maps and supporting data for the Great Basin",
+   "url": "https://www.sciencebase.gov/catalog/item/6297d2fad34ec53d276c5b28",
+   "used_for": "H51-3: heat-flow residual as an independent thermal screen.",
+   "verified": "OWNER (official ScienceBase item page fetched; listing read)",
+   "license": "USGS data release, public domain.",
+   "notes": "Byte obtainability from this sandbox is blocked; a runner can fetch it (same route as the GDR files)."
+  },
+  {
+   "id": "mt-conductance-2022",
+   "title": "Peacock & Bedrosian (2022), Electrical conductance maps of the Great Basin",
+   "url": "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b",
+   "used_for": "H51-2: multi-depth conductivity alignment (marks clay alteration / fluid pathways at depth).",
+   "verified": "OWNER (official ScienceBase item page fetched; five depth slices listed)",
+   "license": "USGS data release, public domain.",
+   "notes": "Requires resampling five depth slices; not attempted in this submission."
+  },
+  {
+   "id": "faulds-hinz-2015",
+   "title": "Faulds & Hinz (2015), Favorable tectonic and structural settings of geothermal systems",
+   "url": "https://www.osti.gov/servlets/purl/1724082",
+   "used_for": "Structural-setting priors: step-overs, relay ramps, fault intersections and terminations host most Great Basin geothermal systems.",
+   "verified": "OWNER (full OSTI-hosted paper read; abstract and reported rankings reproduced)",
+   "license": "US DOE/OSTI, public.",
+   "notes": "The physical justification for H51-1 (tip/step-over targeting) and H51-3."
+  },
+  {
+   "id": "hermant-2025",
+   "title": "Hermant, Kiersnowski & Bellanger (2025), 'Using Deep Learning to Map Quaternary Faults' (Stanford SGW)",
+   "url": "https://pangea.stanford.edu/ERE/db/GeoConf/papers/SGW/2025/Hermant.pdf",
+   "used_for": "Independent evidence that supervised learning on DEM-derived relief at this grid scale is the state of practice for Quaternary fault mapping.",
+   "verified": "OWNER (full PDF fetched and read)",
+   "license": "Author/conference PDF.",
+   "notes": "Used as methodology context only; no numbers are taken from it."
+  },
+  {
+   "id": "berkowitz-2000",
+   "title": "Berkowitz, Bour, Davy & Odling (2000), Scaling of fracture connectivity in geological formations, GRL 27(14):2061",
+   "url": "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/1999GL011241",
+   "used_for": "Why sparse lineament density can still connect (justifies emitting sparse dots rather than filled ribbons).",
+   "verified": "OWNER (publisher abstract rechecked)",
+   "license": "\u00a9 AGU.",
+   "notes": ""
+  },
+  {
+   "id": "biasi-wesnousky-2016",
+   "title": "Biasi & Wesnousky (2016), Steps and gaps in ground ruptures, BSSA 106(3):1110",
+   "url": "https://pubs.geoscienceworld.org/ssa/bssa/article/106/3/1110/332142",
+   "used_for": "Typical step-over and gap distances (why a fault may be interrupted and therefore missed).",
+   "verified": "OWNER (secondary quote only)",
+   "license": "\u00a9 SSA.",
+   "notes": "Numbers are used qualitatively, on purpose."
+  },
+  {
+   "id": "reference-solution",
+   "title": "DrivenData GEMS Prize reference solution (official baseline notebook/code)",
+   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+   "used_for": "Sanity check on the expected approach (U-Net on the 19-band stack).",
+   "verified": "OWNER (inspected through the GitHub API; existence and content recorded)",
+   "license": "See repository.",
+   "notes": "Not copied. This repository's detector is a gradient-boosted tabular model on 44 channels with a blocked spatial CV, plus the strain-budget gate."
+  },
+  {
+   "id": "sibling-repos",
+   "title": "Owner's sibling repositories (GEMSDOE, GEMSDOE2..47, excluding 42/43)",
+   "url": "https://github.com/buffedlizard55-lab?tab=repositories",
+   "used_for": "Prior art. Their evidence ledgers (score JSONs, hypothesis registries, irregularity registers, live_mirror, pre-registration) were the starting point for this session's reading list.",
+   "verified": "OWNER + SELF (multiple registries fetched through the GitHub API on 2026-10-06, including GEMSDOE28 registry/sources.json, registry/next_hypotheses.json and registry/hypotheses.json)",
+   "license": "Owner's own repositories.",
+   "notes": "All comparisons against them in this repository are labelled PROXY and are run on identical masks, identical truth and matched mass."
+  },
+  {
+   "id": "gdr-1391-ingenious",
+   "title": "INGENIOUS - Great Basin Regional Dataset Compilation (GDR submission 1391), DOI 10.15121/1881483, CC-BY 4.0",
+   "url": "https://gdr.openei.org/submissions/1391",
+   "used_for": "Primary source behind H52-2 (Paleo Geothermal Features.zip, 19.85 MB: sinter/travertine/tufa spring deposits), H52-3 (2m Temperature Probes.zip, 1.03 MB), H52-4 (Quaternary Volcanics.zip) and H52-5 (MT conductance maps).",
+   "verified": "SELF (dataset landing page and its resource list read 2026-10-06; the data.gov catalogue entry confirms 16 resources and 'last checked 2026-09-10').",
+   "notes": "Direct download returns HTTP 000 from this sandbox; a GitHub Actions runner must fetch the bytes (the family has already fetched from this host that way). Some of these layers (2 m probes, Quaternary volcanics) exist in the sibling mirrors and are already pinned in registry/data_manifest.json."
+  }
+ ]
 }

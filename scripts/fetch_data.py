@@ -8,7 +8,7 @@ Why this exists: DrivenData requires a login, so the organizer's bytes cannot be
 unattended from this environment.  The sibling repositories mirror them as public GitHub blobs and
 pin every byte with sha256; this script fetches those mirrors and refuses to keep anything whose
 digest or size does not match the pin.  The mirrors are NOT organizer-authenticated -- see
-registry/irregularities.json IR-51-DATA-01 -- so the only thing that makes them usable is that
+registry/irregularities.json IR-51-14 -- so the only thing that makes them usable is that
 every byte is checked here, and the check is reported in data/restore_receipt.json.
 
 Requires: `gh` authenticated for github.com (or GH_TOKEN in the environment).
