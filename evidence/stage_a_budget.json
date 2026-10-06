@@ -1,0 +1,41 @@
+{
+ "n_tiles": 116,
+ "tile_px": 250,
+ "dip_by_sense_deg": {
+  "Normal": 61.9,
+  "Unspecified": 62.8,
+  "Left lateral": 81.6,
+  "Right lateral": 85.8,
+  "": 62.3
+ },
+ "n_traces": 1126,
+ "n_traces_in_footprint": 376,
+ "clipped_length_km_in_footprint": 6286.01256,
+ "slip_rate_mm_yr": {
+  "median": 0.1,
+  "max": 4.5
+ },
+ "moment_area_rate_mm_m_yr": 4914731.736122999,
+ "geodetic_ns_yr": {
+  "median": 21.027499198913574,
+  "p95": 51.789432525634766,
+  "max": 84.64978790283203
+ },
+ "geologic_ns_yr": {
+  "median": 6.001333746664153,
+  "p95": 126.8528043172098,
+  "max": 266.7695395890549
+ },
+ "ratio_geologic_over_geodetic": {
+  "median": 0.4552077505683563,
+  "p25": 0.08711710873135496,
+  "p75": 1.1821225608269654,
+  "mean": 1.0114395823228706
+ },
+ "deficit": {
+  "median": 0.5447922494316437,
+  "p25": -0.18212256082696537,
+  "p75": 0.9128828912686451
+ },
+ "formula": "eps_geo = (1/(2 A_tile)) * sum_k L_k u_dot_k / sin(dip_k)   [Kostrov 1974; Kreemer et al. 2000 eq. 3, scalar reduction]"
+}

@@ -1,0 +1,62 @@
+{
+ "instrument": "off-catalogue A/B, truth = B_far, official DTI",
+ "shipped_arm": "thin_d0.04_s3.0",
+ "promotion_rule": "mean paired DTI > 0 AND >= 3/4 folds positive",
+ "results": [
+  {
+   "arm": "thin_d0.01_s3.0",
+   "n_px": 6065,
+   "dti_B_far": 0.06981864321116232,
+   "delta_vs_shipped": -0.011342788523167054,
+   "folds_positive": 1,
+   "n_folds": 4,
+   "promoted": false
+  },
+  {
+   "arm": "thin_d0.02_s3.0",
+   "n_px": 12131,
+   "dti_B_far": 0.08589511504094857,
+   "delta_vs_shipped": 0.004733683306619199,
+   "folds_positive": 3,
+   "n_folds": 4,
+   "promoted": true
+  },
+  {
+   "arm": "thin_d0.03_s3.0",
+   "n_px": 18197,
+   "dti_B_far": 0.08444474650616071,
+   "delta_vs_shipped": 0.003283314771831332,
+   "folds_positive": 3,
+   "n_folds": 4,
+   "promoted": true
+  },
+  {
+   "arm": "thin_d0.04_s3.0",
+   "n_px": 24264,
+   "dti_B_far": 0.08116143173432938,
+   "delta_vs_shipped": NaN,
+   "folds_positive": 0,
+   "n_folds": 0,
+   "promoted": false
+  },
+  {
+   "arm": "thin_d0.06_s3.0",
+   "n_px": 36395,
+   "dti_B_far": 0.07334382746954185,
+   "delta_vs_shipped": -0.007817604264787528,
+   "folds_positive": 0,
+   "n_folds": 4,
+   "promoted": false
+  },
+  {
+   "arm": "thin_d0.08_s3.0",
+   "n_px": 48527,
+   "dti_B_far": 0.06705286175539651,
+   "delta_vs_shipped": -0.014108569978932858,
+   "folds_positive": 0,
+   "n_folds": 4,
+   "promoted": false
+  }
+ ],
+ "conclusion": "arm(s) cleared the bar: thin_d0.02_s3.0, thin_d0.03_s3.0"
+}

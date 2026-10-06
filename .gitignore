@@ -30,3 +30,16 @@ venv/
 
 # Scratch
 /tmp/
+
+# --- preserved from the PR #1/#2 implementation (see attic/pr1-2) ---
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+data/training_features.tif
+data/*.zip
+submissions/*.zip
+/tmp/
+
+work/
+*.npy

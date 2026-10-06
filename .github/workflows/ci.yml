@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy scikit-learn pandas rasterio pytest
+      - name: Format contract of the shipped raster (no dataset needed)
+        run: python scripts/check_submission.py docs/downloads/gemsdoe51-strainbudget-s1-v1.tif
+      - name: Independent format contract of this session's two artifacts
+        run: |
+          python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif
+          python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif
+      - name: Unit tests
+        # The pinned 557 MB dataset is intentionally not in the repository; tests that need it skip
+        # themselves (tests/conftest.py). Everything else, including the brute-force metric check and
+        # the shipped-raster digest check, runs here.
+        run: pytest tests -q
+      - name: Regenerate the site from the registries (fails if templates break)
+        run: python scripts/build_site.py
+      - name: Fail if the committed site is stale
+        run: |
+          if ! git diff --quiet -- docs; then
+            echo "::error::docs/ changed when regenerated — commit the regenerated site"
+            git diff --stat -- docs
+            exit 1
+          fi

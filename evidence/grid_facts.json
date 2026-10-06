@@ -1,0 +1,42 @@
+{
+ "epsg": 32611,
+ "shape": [
+  3730,
+  3292
+ ],
+ "pixel_m": 100.0,
+ "transform": [
+  100.0,
+  0.0,
+  243350.0,
+  0.0,
+  -100.0,
+  4508550.0
+ ],
+ "footprint_px": 5165852,
+ "submission_domain_px": 5167373,
+ "catalogue_positive_px": 60988,
+ "catalogue_positive_in_footprint_px": 60894,
+ "n_bands": 19,
+ "band_names": [
+  "mag_anom",
+  "rtp",
+  "tmi_hg",
+  "geod_2ndinv",
+  "iso_grav_anom_slope",
+  "tc",
+  "geod_shearrate",
+  "geod_dilaterate",
+  "tmi_vg",
+  "deq_n100a15",
+  "iso_grav_anom_vg",
+  "det_elev",
+  "iso_grav_anom",
+  "tmi",
+  "depth_to_base_surf",
+  "ieq_n100a15",
+  "cond_surf",
+  "iso_grav_anom_hg",
+  "det_elev_slope"
+ ]
+}

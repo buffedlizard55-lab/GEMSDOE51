@@ -1,0 +1,39 @@
+{
+ "tile_px": 250,
+ "quantile": 0.5,
+ "band": "geod_2ndinv",
+ "per_block": [
+  {
+   "block": 0,
+   "approved_tiles": 58,
+   "approved_px": 2280490,
+   "held_out_label_px": 29297,
+   "label_density_lift": 0.9437827694491755
+  },
+  {
+   "block": 1,
+   "approved_tiles": 58,
+   "approved_px": 1209436,
+   "held_out_label_px": 12579,
+   "label_density_lift": 1.0026826596261345
+  },
+  {
+   "block": 2,
+   "approved_tiles": 58,
+   "approved_px": 309065,
+   "held_out_label_px": 9433,
+   "label_density_lift": 0.9204159708376126
+  },
+  {
+   "block": 3,
+   "approved_tiles": 58,
+   "approved_px": 627686,
+   "held_out_label_px": 9585,
+   "label_density_lift": 0.9294055571522823
+  }
+ ],
+ "spearman_deficit_vs_label_density": -0.33770628349821685,
+ "mean_lift": 0.9490717392663013,
+ "folds_with_lift_gt_1": 1,
+ "n_folds": 4
+}

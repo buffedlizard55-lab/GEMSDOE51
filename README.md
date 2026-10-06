@@ -418,3 +418,46 @@ zone, none sits on a catalogued trace, and the argument for looking in any given
 on the method page. The same organizer post declined to disclose the data sources, fault types or
 coverage behind the hidden labels, so **no** validation instrument here — including ours — can be
 shown to match the hidden label style (IR-51-05).
+
+### Repository history: two independent implementations
+
+PR #1/#2 (an earlier session on a different branch) and this session each built the same library
+from scratch in parallel, so 27 paths conflicted add/add at the same names. This session's versions
+were kept for the shared code and site paths because they are what produced the shipped artifacts.
+Nothing was lost: every conflicting PR #1/#2 file is preserved verbatim under `attic/pr1-2/`, and
+all 74 non-conflicting files — the `evidence/*.json` register, `docs/claims.html`,
+`docs/strategy.html`, `docs/executive-summary.html`, `docs/assets/`, the CI workflows,
+`data/labels.tif`, `data/existing_faults.tif` and `data/sample_submission.tif` — carry through
+untouched. Recorded as **IR-51-07**.
+
+### Limitations, in the order they matter
+
+1. **IR-51-08 — the training labels are a duplicate of the known-fault raster.** Byte-identical
+   files, identical sha256, identical to the catalogue we derived independently from INGENIOUS. The
+   real target distribution has never been seen by any model in this repository. **This is the first
+   thing next session should chase**, because everything measured here measures our detector against
+   a proxy, not against the truth.
+2. **IR-51-05 — the organizer will not disclose the hidden labels' provenance.** We cannot tell
+   whether the truth is topographic, geophysical or field-mapped, and Phase 2's test set is rebuilt
+   from expert review of Phase 1 submissions.
+3. **The instrument's ceiling.** In-block AUC 0.673 and proxy DTI 0.282 is about as good as the
+   detector that produced the group's best 0.2778. Closing a 0.095 gap to the leader is a modelling
+   problem, not an emission-tuning problem.
+4. **Stage 1 does not work as specified.** The strain-budget deficit is worse than the raw geodetic
+   field on every measure. It is shipped as a soft prior because that costs nothing; the brief's
+   hard-gate version is shipped too, with its cost disclosed.
+5. **No authenticated data.** Every raster is an owner-mirrored public GitHub blob; provenance is
+   hash-consistent, not organizer-authenticated.
+6. **Regenerable bulk is not in git.** `data/raw/` and `data/prepared/` (~7 GB, the 2.67 GB feature
+   stack and 0.9 GB static extras) are rebuilt by `scripts/restore_data.py` → `prepare_data.py` →
+   `stack.build()` → `build_extras.py`, roughly four minutes end to end.
+
+### What next session should do
+
+* Get the real `labels.tif` (IR-51-08) and re-run the blocked holdout against it. If the mirror is
+  simply mislabelled, every number in this repository needs re-measuring.
+* Attack the localisation problem directly: the leader's implied ~200 m mean dot-to-trace distance
+  versus our ~260 m is the whole gap, so the next candidate hypothesis should be judged on that
+  statistic, not on AUC.
+* Try a sub-pixel emission position: the metric's triangular kernel rewards being *on* the trace,
+  and every dot here is snapped to a 100 m cell centre.

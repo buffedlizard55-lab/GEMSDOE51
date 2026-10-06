@@ -225,6 +225,15 @@ the resulting <code>data/submission_manifest.json</code>.</p></section>"""
     body = card + f"""
 <h2>What is offered</h2>
 {_ART}
+<p class="warn"><b>The biggest limitation, stated first.</b> The file this project has been calling
+the training labels is <b>byte-identical to the known-fault raster</b> — same sha256, element-wise
+equal, and equal again to the catalogue this session derived independently from the INGENIOUS
+compilation. The competition's real training labels have therefore <b>never been available to any
+GEMSDOE session</b> (IR-51-08). Every model here, including the one that produced the files below,
+is trained against the visible catalogue as a proxy for the hidden truth. That proxy has been
+honest enough to produce a verified, unique, portal-legal submission, but it is a proxy, and it is
+the reason our holdout number is an estimate of our own detector rather than a measurement against
+the real target. Nothing on this site should be read as a prediction of the leaderboard.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> The organizer has stated on the forum that the
 Phase 2 test set "will use a test set that is updated by expert review of all Phase 1 submissions,
 so your fault predictions have an impact on final evaluation even if they are not the most

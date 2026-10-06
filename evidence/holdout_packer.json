@@ -1,0 +1,83 @@
+{
+ "rows": [
+  {
+   "fold": 0,
+   "budget": 8000,
+   "n_chosen": 8000,
+   "dti_packer": 0.1318935249872772,
+   "dti_incumbent_matched": 0.13273046024890858,
+   "dti_pred": 0.11013258141605076,
+   "contrast": -0.0008369352616313941
+  },
+  {
+   "fold": 0,
+   "budget": 32000,
+   "n_chosen": 32000,
+   "dti_packer": 0.22975766962489835,
+   "dti_incumbent_matched": 0.2303843292203106,
+   "dti_pred": 0.28357199963899016,
+   "contrast": -0.0006266595954122489
+  },
+  {
+   "fold": 1,
+   "budget": 8000,
+   "n_chosen": 8000,
+   "dti_packer": 0.26604999843504157,
+   "dti_incumbent_matched": 0.26656976047266745,
+   "dti_pred": 0.07693966527625613,
+   "contrast": -0.0005197620376258816
+  },
+  {
+   "fold": 1,
+   "budget": 32000,
+   "n_chosen": 32000,
+   "dti_packer": 0.31245037196085246,
+   "dti_incumbent_matched": 0.31240190505144433,
+   "dti_pred": 0.175827032008272,
+   "contrast": 4.8466909408129144e-05
+  },
+  {
+   "fold": 2,
+   "budget": 8000,
+   "n_chosen": 8000,
+   "dti_packer": 0.2500717717680679,
+   "dti_incumbent_matched": 0.25294484730719397,
+   "dti_pred": 0.15619620291798225,
+   "contrast": -0.00287307553912608
+  },
+  {
+   "fold": 2,
+   "budget": 32000,
+   "n_chosen": 32000,
+   "dti_packer": 0.3227783039594256,
+   "dti_incumbent_matched": 0.3188186677174852,
+   "dti_pred": 0.30763578298100486,
+   "contrast": 0.003959636241940401
+  },
+  {
+   "fold": 3,
+   "budget": 8000,
+   "n_chosen": 8000,
+   "dti_packer": 0.21753461489940645,
+   "dti_incumbent_matched": 0.21345314559329467,
+   "dti_pred": 0.1622414477279631,
+   "contrast": 0.004081469306111779
+  },
+  {
+   "fold": 3,
+   "budget": 32000,
+   "n_chosen": 32000,
+   "dti_packer": 0.3098656231868203,
+   "dti_incumbent_matched": 0.3113662757787967,
+   "dti_pred": 0.3844419182020194,
+   "contrast": -0.0015006525919764035
+  }
+ ],
+ "mean_contrast": 0.00021656092896103762,
+ "folds_positive": 3,
+ "n_folds": 8,
+ "promoted": false,
+ "note": "ExpectedBudgetPacker vs the incumbent dot-thin rule at a matched dot count. dti_pred is the packer's own self-prediction and was found badly calibrated (predicts ~0.49 where ~0.27 is realized); it is recorded for audit, never used to size the emission.",
+ "criterion": "mean paired contrast > 0 AND positive on >= 75% of the 8 fold-budget rows",
+ "decision": "NOT PROMOTED: mean contrast +0.0002 with 3/8 rows positive. The measurement is unchanged; only the pass/fail threshold was corrected from a raw count of 3 to 75% of rows, and the corrected verdict is the one recorded."
+}

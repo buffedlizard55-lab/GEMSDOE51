@@ -1,0 +1,71 @@
+{
+ "schema_version": 1,
+ "read_utc": "2026-10-06",
+ "source_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+ "class_": "UNVERIFIED-LIVE",
+ "note": "Rows as displayed on the public leaderboard when read. Scores are on the visible public leaderboard, which is built from a SUBSET of the hidden expert labels; the final ranking uses the expanded label set. Only the rows listed were observed; intermediate ranks are omitted rather than guessed.",
+ "rows": [
+  {
+   "rank": 1,
+   "team": "xiaofanhu",
+   "score": 0.3774
+  },
+  {
+   "rank": 2,
+   "team": "alexoktaba",
+   "score": 0.3345
+  },
+  {
+   "rank": 3,
+   "team": "nchuzhoy",
+   "score": 0.3262
+  },
+  {
+   "rank": 4,
+   "team": "kinghorton42",
+   "score": 0.3222
+  },
+  {
+   "rank": 5,
+   "team": "joeyfezster",
+   "score": 0.322
+  },
+  {
+   "rank": 6,
+   "team": "Batik Shirt Brothers",
+   "score": 0.3218
+  },
+  {
+   "rank": 7,
+   "team": "DARD",
+   "score": 0.3195
+  },
+  {
+   "rank": 8,
+   "team": "ndavis7",
+   "score": 0.2888
+  },
+  {
+   "rank": 13,
+   "team": "extradr19",
+   "score": 0.2778
+  },
+  {
+   "rank": 15,
+   "team": "smashi34",
+   "score": 0.271
+  },
+  {
+   "rank": 16,
+   "team": "smrtdoog5",
+   "score": 0.2708
+  },
+  {
+   "rank": 20,
+   "team": "SDCF9",
+   "score": 0.26
+  }
+ ],
+ "brief_discrepancy": "The task brief states the top score to beat is 0.3195. On this read 0.3195 is rank 7 and the leader is 0.3774. Recorded as IR-51-01.",
+ "artifact_caveat": "The sibling artifact 'gemsdoe32-h33-h33-2-b2-...-zeros' cannot be cryptographically linked to the 0.2778 row; its own site labels it UNSCORED (projected 0.2747). See IR-51-02."
+}
