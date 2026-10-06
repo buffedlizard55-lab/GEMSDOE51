@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEMSDOE51 — DOE GEMS Prize</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="active" href="index.html">Executive summary</a>  
+  <a class="" href="how-to-submit.html">How to submit</a>  
+  <a class="" href="method.html">Method</a>  
+  <a class="" href="hypotheses.html">Hypotheses</a>  
+  <a class="" href="holdout.html">Holdout</a>  
+  <a class="" href="analysis.html">Analysis</a>  
+  <a class="" href="sources.html">Sources</a>  
+  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
+
+<section class="download">
+<h2>⬇ One-click submission file</h2>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif">Download gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip">.zip containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HD-SOFT-W010</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>GEMSDOE51 two-stage | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag bagged GBDT) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit (soft prior w=0.10) | 44069 dots at 2.4 px spacing, none within 200 m of the catalogue | proxy DTI 0.2820 / gate cost +0.0004 on the blocked holdout | UNSCORED</code></dd>
+<dt>Format</dt><dd>single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag</dd>
+<dt>sha256</dt><dd><code>5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b</code></dd>
+</dl>
+<p class="ev">format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified</p>
+</section>
+<h2>What is offered</h2>
+<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif">gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif</a><br><span class="ev">zip: <a href="downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip">gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip</a> &middot; nan twin: <a href="downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif">gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif</a></span></td><td>soft</td><td>H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10)</td><td>+0.0004</td><td>0.015</td><td>PASS</td></tr><tr><td>SECONDARY</td><td><a href="downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif">gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif</a><br><span class="ev">zip: <a href="downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z.zip">gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z.zip</a> &middot; nan twin: <a href="downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif">gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif</a></span></td><td>hard</td><td>H_D detector x 3-bag ensemble, emitted only inside the top 80% of tiles by the strain-budget deficit - the brief&#x27;s literal &#x27;points only inside approved tiles&#x27; design</td><td>-0.0025</td><td>0.014</td><td>PASS</td></tr></tbody></table>
+<p class="warn"><b>Phase 1 entries are not free.</b> The organizer has stated on the forum that the
+Phase 2 test set "will use a test set that is updated by expert review of all Phase 1 submissions,
+so your fault predictions have an impact on final evaluation even if they are not the most
+performant in Phase 1" (chrisk-dd, 2026-09-23). Every dot in the files below is therefore
+geologically defensible on its own terms, not just score-optimal: all of them lie outside the
+200 m exclusion zone, none sits on a catalogued trace, and the Stage 1 strain-budget argument for
+why each tile is worth looking at is published on the <a href="method.html">method</a> page.</p>
+<h2>What this is</h2>
+<p>GEMSDOE51 predicts geothermal-indicative faults in the GeoDAWN region that are
+<b>not</b> in the USGS / INGENIOUS catalogue, and ships them as a competition-legal GeoTIFF.
+It is a <b>two-stage</b> system: a coarse geodetic <i>strain-budget deficit</i> prior over
+10&nbsp;km tiles (Stage&nbsp;1), and a fine-scale fault detector whose emitted points are
+placed only inside the tiles Stage&nbsp;1 approves (Stage&nbsp;2). Both stages are scored
+separately on a preregistered spatially blocked holdout.</p>
+
+<h2>The three facts that decide everything</h2>
+<ol>
+<li><b>Known faults are masked.</b> DrivenData staff confirmed on 2026-09-16 that pixels
+corresponding to known USGS/INGENIOUS faults are excluded from evaluation, in both prize
+rounds. <a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">source</a></li>
+<li><b>"New fault" includes new geometry of an existing system.</b> Continuations, splays and
+parallel strands count. <a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">source</a></li>
+<li><b>The metric is a budget.</b> From the published definitions,
+<code>DTI = TP / (0.2·(TP+FP) + 0.8·|G|)</code>. The hidden truth size |G| is fixed, so a
+submission stands or falls on credit earned per unit of emitted mass. The break-even bar for a
+marginal pixel is <code>c = 0.2·DTI</code>.</li>
+</ol>
+
+<h2>Holdout at a glance</h2>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r4.5: 0.2781 / r6.0: 0.2625</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr></tbody></table>
+<p class="ev">Proxy DTI is measured with emission and scoring restricted to the held-out block and
+the mass set as a fixed multiple of that block's truth size, which is what makes it comparable
+to a live DTI. It is <b>not</b> a score.</p>
+
+<h2>Read next</h2>
+<ul>
+<li><a href="how-to-submit.html">How to submit, step by step</a> — including the fix for the
+<code>"Predicted values must be in range [0, 1]"</code> portal error.</li>
+<li><a href="method.html">Method</a> — the Kostrov strain budget, the detector, the emission rule.</li>
+<li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 scored separately.</li>
+<li><a href="irregularities.html">Irregularities</a> — including one in a sibling repository's own
+reporting that we could not reproduce.</li>
+</ul>
+
+</main>
+<footer><div class="wrap">
+<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
+evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
+independently verifiable here. Organizer-verified = none; no score on this site has been
+confirmed by DrivenData.</p>
+</div></footer>
+</body></html>

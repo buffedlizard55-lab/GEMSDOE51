@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------------------
+# Regenerable bulk rasters.
+#
+# These are multi-gigabyte and are rebuilt from the hash-pinned mirrors by
+#   python3 scripts/restore_data.py --group all
+#   python3 scripts/prepare_data.py        -> data/prepared/
+#   python3 scripts/build_extras.py        -> data/prepared/extras_static.dat
+#   python3 -c "import gems51.stack as s; s.build()"
+# so they are deliberately not in git.
+# ---------------------------------------------------------------------------
+data/raw/
+data/prepared/
+*.npy
+*.dat
+!data/prior/*.npy
+
+# Byte-for-byte copies of other groups' submissions are kept (1.8 MB): the
+# uniqueness gate in src/gems51/uniqueness.py compares against them, and the
+# gate is part of the deliverable, so its inputs are too.
+
+# Python / editors
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+*.swp
+
+# Scratch
+/tmp/

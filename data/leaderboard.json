@@ -1,0 +1,28 @@
+{
+ "read_at": "2026-10-06",
+ "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+ "evidence_class": "organizer-verified public scores",
+ "rows": [
+  {"rank": 1, "team": "xiaofanhu", "score": 0.3774, "when": "6h 29min ago"},
+  {"rank": 2, "team": "alexoktaba", "score": 0.3345, "when": "20h 2min ago"},
+  {"rank": 3, "team": "nchuzhoy", "score": 0.3262, "when": "2d 20h ago"},
+  {"rank": 4, "team": "kinghorton42", "score": 0.3222, "when": "2d 17h ago"},
+  {"rank": 5, "team": "joeyfezster", "score": 0.3220, "when": "7h 39min ago"},
+  {"rank": 6, "team": "Batik Shirt Brothers", "score": 0.3218, "when": "14h 49min ago"},
+  {"rank": 7, "team": "DARD", "score": 0.3195, "when": "4d 19h ago"},
+  {"rank": 8, "team": "ndavis7", "score": 0.2888, "when": "4d 1h ago"},
+  {"rank": 9, "team": "mzoorob", "score": 0.2884, "when": "3d 11h ago"},
+  {"rank": 10, "team": "GrigorSargsyan", "score": 0.2876, "when": "3d 20h ago"},
+  {"rank": 11, "team": "HardcoreTechGod", "score": 0.2854, "when": "2w 4d ago"},
+  {"rank": 12, "team": "op01", "score": 0.2792, "when": "2d 10h ago"},
+  {"rank": 13, "team": "extradr19", "score": 0.2778, "when": "2d 4h ago"},
+  {"rank": 14, "team": "wbg1", "score": 0.2750, "when": "20h 3min ago"},
+  {"rank": 15, "team": "smashi34", "score": 0.2710, "when": "20h 2min ago"},
+  {"rank": 16, "team": "smrtdoog5", "score": 0.2708, "when": "2d 5h ago"},
+  {"rank": 17, "team": "jgaines", "score": 0.2638, "when": "19h 56min ago"},
+  {"rank": 18, "team": "ad3002", "score": 0.2634, "when": "1d 9h ago"},
+  {"rank": 19, "team": "No Fault of Our Own", "score": 0.2628, "when": "1d 20h ago"},
+  {"rank": 20, "team": "SDCF9", "score": 0.2600, "when": "2d 18h ago"}
+ ],
+ "note": "The brief states 0.3195 is the current highest; at the time this snapshot was taken the top of the board was 0.3774 and 0.3195 sat at rank 7. The board moves daily."
+}

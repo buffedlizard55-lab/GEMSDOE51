@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analysis</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>  
+  <a class="" href="how-to-submit.html">How to submit</a>  
+  <a class="" href="method.html">Method</a>  
+  <a class="" href="hypotheses.html">Hypotheses</a>  
+  <a class="" href="holdout.html">Holdout</a>  
+  <a class="active" href="analysis.html">Analysis</a>  
+  <a class="" href="sources.html">Sources</a>  
+  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
+<h2>Why the best prior submission scored what it did</h2>
+<p>The group's best owner claim is <b>0.2778</b> (<code>gemsdoe32-h33-h33-2-b2</code>). Two of
+that family's artifacts give us a free natural experiment, because one is the other with 6,436 dots
+deleted.</p>
+
+<h3>The measurement</h3>
+<p>Measured here: the deleted set is exactly the emitted pixels at Euclidean distance 1–2 px from a
+catalogued fault pixel; the retained set all lie at ≥ 2.236 px. Writing <code>K = 0.8·|G|</code>:</p>
+<pre>TP(44 090) = 0.2600 · (0.2·44 090 + K) = 2 292.68 + 0.2600 K
+TP(37 654) = 0.2778 · (0.2·37 654 + K) = 2 092.06 + 0.2778 K
+ΔTP        =   200.62 − 0.0178 K</pre>
+<p><code>ΔTP ≥ 0</code> bounds the hidden truth at <b>|G| ≤ 14 090 px</b>. With the group's own
+generative truth model (12 691 px) → <b>ΔTP ≈ 20</b>. So the 6,436 deleted dots earned
+<b>0.003 credit each</b> against <b>0.139</b> for the dots that were kept — a factor of 45.
+<b>Predicting within 200 m of the catalogue is worth essentially nothing.</b> That is consistent
+with the organizer's confirmation that known fault pixels are masked out of scoring entirely.</p>
+
+<h3>What the leader is doing better</h3>
+<table class=''><thead><tr><th>submission</th><th>public DTI</th><th>emitted mass M</th><th>implied TP</th><th>credit per dot</th></tr></thead><tbody><tr><td>0.2600 anchor (group)</td><td>0.2600</td><td>44 090</td><td>4 736</td><td>0.107</td></tr><tr><td>0.2778 (group best)</td><td>0.2778</td><td>37 654</td><td>4 915</td><td>0.131</td></tr><tr><td>nchuzhoy (public #3)</td><td>0.3262</td><td>~40 000*</td><td>~5 770*</td><td>~0.144*</td></tr><tr><td>leader (public #1)</td><td>0.3774</td><td>~44 000*</td><td>~7 160*</td><td>~0.163*</td></tr></tbody></table>
+<p>The kernel is <code>k = 1 − d/3</code>. A credit of 0.131 means an emitted dot sits on average
+<b>2.6 px = 260 m</b> from the nearest hidden fault pixel; the leader's ~0.163 means <b>200 m</b>.
+That is the entire game: it is a localisation problem, not a coverage problem. An isolated dot
+landing exactly on a straight trace earns about 3.0 credit, so a mean of 0.131 means only about
+4&nbsp;% of the group's dots land <i>on</i> a hidden trace.</p>
+
+<h3>Why the dotted design worked, and where it runs out</h3>
+<p>Thinning a thick probability surface to isolated dots at ~2.4 px spacing removes mass that was
+already covered by a neighbouring dot, which is exactly the objective the metric rewards: 0.1922
+(continuous field) → 0.2477 → 0.2600 → 0.2778 as the emission got sparser and better spaced. It
+runs out when the dots start landing off the traces. Our holdout in-block AUC is 0.673 and our
+proxy DTI at matched mass is 0.282, so our detector is about as good as the one that produced
+0.2778. Beating 0.3774 needs a materially better field, not a better emission rule.</p>
+
+<h3>Honest expectation for this submission</h3>
+<p>Our instrument says <b>0.282 ± 0.02</b> at the live mass ratio, which brackets the group's best
+and sits well below the current leader of 0.3774. Expect this file to land in the <b>high
+0.2s</b>. That expectation is written down before the score is known.</p>
+<p class="ev">The two non-group rows of the table assume the same emitted mass as the group's
+files, which is not published, so those implied TPs are estimates, not measurements.</p>
+
+</main>
+<footer><div class="wrap">
+<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
+evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
+independently verifiable here. Organizer-verified = none; no score on this site has been
+confirmed by DrivenData.</p>
+</div></footer>
+</body></html>

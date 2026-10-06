@@ -1,0 +1,104 @@
+[
+ {
+  "id": "problem",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+  "what": "Problem description, performance metric, submission format",
+  "status": "verified 2026-10-06 - metric equations and the worked example (TP=3.00, FP=1.89, FN=2.00 -> 0.60) fetched verbatim"
+ },
+ {
+  "id": "overview",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+  "what": "Competition overview",
+  "status": "listed"
+ },
+ {
+  "id": "about",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/",
+  "what": "Additional resources",
+  "status": "listed, not fetched"
+ },
+ {
+  "id": "data_page",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+  "what": "training_features.tif, labels.tif, sample_submission.tif, 1m_DEM_links.csv",
+  "status": "login-walled; never contacted with credentials. All rasters restored from hash-pinned public GitHub mirrors instead (registry/data_manifest.json)"
+ },
+ {
+  "id": "leaderboard",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "what": "Public leaderboard",
+  "status": "verified 2026-10-06 - top score 0.3774"
+ },
+ {
+  "id": "rules_pdf",
+  "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+  "what": "Prize rules PDF (NLR document 96647)",
+  "status": "listed; not fetched in this session"
+ },
+ {
+  "id": "reference_solution",
+  "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+  "what": "Official reference solution",
+  "status": "listed"
+ },
+ {
+  "id": "masking_clarification",
+  "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516",
+  "what": "Organizer: known fault pixels are masked from evaluation in both rounds",
+  "status": "verified 2026-10-06 - chrisk-dd, 2026-09-16"
+ },
+ {
+  "id": "new_fault_definition",
+  "url": "https://community.drivendata.org/t/where-do-you-draw-the-line/11536",
+  "what": "Organizer: new fault = any fault pixel not already captured, including newly mapped geometry of an existing system",
+  "status": "verified 2026-10-06 - chrisk-dd, 2026-09-23"
+ },
+ {
+  "id": "how_test_faults_identified",
+  "url": "https://community.drivendata.org/t/how-were-the-new-test-faults-identified-data-sources-and-fault-types/11527",
+  "what": "Organizer answer to requests for the data sources, fault types and coverage behind the hidden labels",
+  "status": "verified 2026-10-06 - chrisk-dd, post 7, 2026-09-23, verbatim: \"We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.\" Same post: \"the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1.\""
+ },
+ {
+  "id": "geodawn",
+  "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+  "what": "GeoDAWN airborne magnetic and radiometric surveys",
+  "status": "listed"
+ },
+ {
+  "id": "geodawn_area",
+  "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+  "what": "GeoDAWN study-area map item",
+  "status": "listed"
+ },
+ {
+  "id": "ingenious",
+  "url": "https://gbcge.org/current-projects/ingenious/",
+  "what": "Great Basin Center for Geothermal Energy INGENIOUS project (label source)",
+  "status": "listed"
+ },
+ {
+  "id": "gdr_1391",
+  "url": "https://gdr.openei.org/submissions/1391",
+  "what": "Geothermal Data Repository submission 1391 - Nevada geothermal data, source of the QFaults trace table with slip rates",
+  "status": "data obtained via the owner mirror; the site itself is not reachable from this sandbox (HTTP 000)"
+ },
+ {
+  "id": "ucertf3",
+  "url": "https://doi.org/10.1785/0120130164",
+  "what": "Field et al. 2014, UCERF3 time-independent model, BSSA 104(3) 1122-1180 - precedent for balancing geodetic and geologic deformation",
+  "status": "cited by the brief; not fetched (paywalled)"
+ },
+ {
+  "id": "kostrov_1974",
+  "url": "https://ui.adsabs.harvard.edu/abs/1974IzPhE..10..541K/abstract",
+  "what": "Kostrov 1974, Seismic moment and long-term deformation of the lithosphere - the moment-tensor summation used in Stage 1",
+  "status": "cited; the formula is restated here in the form used by Ward (1998) and Stevens & Avouac (2015)"
+ },
+ {
+  "id": "codeload",
+  "url": "https://codeload.github.com/",
+  "what": "Transport used to restore the hash-pinned raster mirrors",
+  "status": "reachable from this sandbox (HTTP 301/200)"
+ }
+]

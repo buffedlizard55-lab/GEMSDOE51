@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Holdout</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>  
+  <a class="" href="how-to-submit.html">How to submit</a>  
+  <a class="" href="method.html">Method</a>  
+  <a class="" href="hypotheses.html">Hypotheses</a>  
+  <a class="active" href="holdout.html">Holdout</a>  
+  <a class="" href="analysis.html">Analysis</a>  
+  <a class="" href="sources.html">Sources</a>  
+  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
+
+<h2>Holdout: both stages, scored separately</h2>
+<h3>Design</h3>
+<p>The footprint is cut into 3&times;3 contiguous blocks. Each block is held out in turn; the
+detector never sees it; a 1.2&nbsp;km buffer around it is removed from the training pool.
+Emission and scoring are both restricted to the block, and the number of emitted dots is a fixed
+multiple of that block's own truth size — the official metric depends on mass and truth size only
+through their ratio, so matching M/|G| is what makes the proxy comparable to a live number.</p>
+
+<h3>Stage 2 — fine-scale arms</h3>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>DTI at M/|G|=2.0</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2781</td><td>0.2625</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr></tbody></table>
+
+<h3>Stage 1 — tile prior, alone</h3>
+<p>Stage&nbsp;1 is scored with <b>no Stage 2 involvement at all</b>: dots are thrown down uniformly
+at random inside the approved tiles and compared with dots thrown uniformly over the whole block.
+That isolates the prior.</p>
+<table class=''><thead><tr><th>quantity</th><th>mean over folds</th></tr></thead><tbody><tr><td>recall_q50.0</td><td>0.4987</td></tr><tr><td>recall_q70.0</td><td>0.3240</td></tr><tr><td>recall_q80.0</td><td>0.2226</td></tr><tr><td>s1_dti_q50.0_r3.47</td><td>0.1485</td></tr><tr><td>s1_dti_q70.0_r3.47</td><td>0.1238</td></tr><tr><td>s1_dti_q80.0_r3.47</td><td>0.0997</td></tr><tr><td>s1_dti_uniform_r3.47</td><td>0.1861</td></tr><tr><td>s2_ungated_r3.47</td><td>0.2816</td></tr><tr><td>s2_gated_q50.0_r3.47</td><td>0.1821</td></tr><tr><td>s2_gated_q70.0_r3.47</td><td>0.1468</td></tr><tr><td>s2_gated_q80.0_r3.47</td><td>0.1158</td></tr></tbody></table>
+
+<h3>Stage 1 on its own instrument</h3>
+<p>The deficit is computed from the catalogue, so it cannot be evaluated on a design that removes a
+whole spatial block — inside a held-out block the fault-accommodated term is identically zero and
+the deficit collapses to the raw geodetic field. Stage 1 is therefore scored on a <b>trace-level</b>
+holdout: a random fifth of the mapped traces is withheld, the remaining four fifths supply the
+budget, and uniform random dots are thrown down inside the approved tiles versus everywhere. No
+model is fitted, so there is no leakage to control.</p>
+<table class=''><thead><tr><th>prior</th><th>approved</th><th>area share</th><th>truth recall</th><th>lift = recall/area</th><th>proxy DTI (uniform random dots)</th></tr></thead><tbody><tr><td>deficit</td><td>top 50% of tiles</td><td>0.501</td><td>0.551</td><td>1.100</td><td>0.0507</td></tr><tr><td>geodetic_only</td><td>top 50% of tiles</td><td>0.500</td><td>0.620</td><td>1.239</td><td>0.0578</td></tr><tr><td>deficit</td><td>top 30% of tiles</td><td>0.301</td><td>0.319</td><td>1.059</td><td>0.0448</td></tr><tr><td>geodetic_only</td><td>top 30% of tiles</td><td>0.301</td><td>0.375</td><td>1.247</td><td>0.0534</td></tr><tr><td>deficit</td><td>top 20% of tiles</td><td>0.201</td><td>0.240</td><td>1.193</td><td>0.0459</td></tr><tr><td>geodetic_only</td><td>top 20% of tiles</td><td>0.201</td><td>0.256</td><td>1.273</td><td>0.0489</td></tr><tr><td>no gate</td><td>whole footprint</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.0494</td></tr></tbody></table><p class='ev'>Spearman rank correlation between each tile field and the density of held-out faults: deficit = +0.032, geodetic_only = +0.099, dil_deficit = +0.013, shear_deficit = +0.024</p>
+<p><b>Result: the strain-budget deficit is a weak prior, and subtracting the fault-accommodated
+term makes it weaker.</b> Against the raw geodetic field the deficit loses on every measure. The
+reason is physical as much as statistical: the mapped-fault term tracks where faults cluster, and
+faults that are mapped are surrounded by faults that are not, so the term carries <i>positive</i>
+information about where the missing ones are. Removing it throws that away.</p>
+
+<h3>Gate sweep: hard gate versus soft prior</h3>
+<table class=''><thead><tr><th>gate</th><th>setting</th><th>mean proxy DTI</th><th>paired Δ</th><th>folds better</th><th>per fold</th></tr></thead><tbody><tr><td>soft prior</td><td>w = 0.0</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>soft prior</td><td>w = 0.05</td><td>0.2818</td><td>+0.0001</td><td>3/6</td><td>0.275, 0.269, 0.284, 0.249, 0.307, 0.307</td></tr><tr><td>soft prior</td><td>w = 0.1</td><td>0.2820</td><td>+0.0004</td><td>4/6</td><td>0.274, 0.269, 0.285, 0.249, 0.307, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.2</td><td>0.2818</td><td>+0.0002</td><td>4/6</td><td>0.273, 0.268, 0.285, 0.249, 0.308, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.4</td><td>0.2810</td><td>-0.0007</td><td>2/6</td><td>0.272, 0.266, 0.283, 0.248, 0.308, 0.310</td></tr><tr><td>hard gate</td><td>all tiles (no gate)</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 90% of tiles</td><td>0.2803</td><td>-0.0013</td><td>0/6</td><td>0.275, 0.263, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 80% of tiles</td><td>0.2791</td><td>-0.0025</td><td>0/6</td><td>0.275, 0.256, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 70% of tiles</td><td>0.2779</td><td>-0.0038</td><td>0/6</td><td>0.275, 0.253, 0.283, 0.248, 0.304, 0.303</td></tr><tr><td>hard gate</td><td>top 60% of tiles</td><td>0.2721</td><td>-0.0095</td><td>0/6</td><td>0.272, 0.252, 0.264, 0.245, 0.296, 0.303</td></tr><tr><td>hard gate</td><td>top 30% of tiles</td><td>0.2055</td><td>-0.0762</td><td>0/6</td><td>0.260, 0.120, 0.021, 0.246, 0.295, 0.291</td></tr><tr><td>hard gate</td><td>top 10% of tiles</td><td>0.1372</td><td>-0.1445</td><td>0/6</td><td>0.142, 0.000, 0.000, 0.248, 0.188, 0.245</td></tr></tbody></table>
+<p>The hard gate is uniformly harmful and gets monotonically worse the tighter it is: it does not
+win a single fold at any setting, and at the top 30&nbsp;% and 10&nbsp;% it destroys the submission.
+The soft prior is flat across its whole range — every weight from 0.05 to 0.2 is within +0.0004 of
+ungated, and 0.4 is the first weight that hurts. That is the signature of a prior that is
+<i>not wrong</i> but also <i>not doing much</i>: the strain budget and the detector are looking at
+the same structures, so nudging one by the other mostly rearranges ties. The shipped primary uses
+w = 0.10; a hard-gated twin is offered with its cost printed on it.</p>
+
+<h3>Emission geometry</h3>
+<table class=''><thead><tr><th>spacing (px)</th><th>M/|G| = 1.5</th><th>M/|G| = 2.5</th><th>M/|G| = 3.47</th><th>M/|G| = 5</th><th>M/|G| = 7</th><th>M/|G| = 10</th></tr></thead><tbody><tr><td>1.5</td><td>0.2258</td><td>0.2478</td><td>0.2541</td><td>0.2518</td><td>0.2408</td><td>0.2182</td></tr><tr><td>2.4</td><td>0.2497</td><td>0.2743</td><td>0.2816</td><td>0.2736</td><td>0.2539</td><td>0.2443</td></tr><tr><td>3.5</td><td>0.2477</td><td>0.2678</td><td>0.2724</td><td>0.2684</td><td>0.2588</td><td>0.2562</td></tr><tr><td>5</td><td>0.1799</td><td>0.2000</td><td>0.2082</td><td>0.2130</td><td>0.2112</td><td>0.2110</td></tr><tr><td>7</td><td>0.1269</td><td>0.1405</td><td>0.1470</td><td>0.1518</td><td>0.1530</td><td>0.1533</td></tr></tbody></table><p class='ev'>Best cell: spacing 2.4 px, M/|G| = 3.47, mean proxy DTI 0.2816.</p>
+
+<h3>Known biases of this instrument</h3>
+<ul>
+<li>its truth is the visible catalogue, so it can only reward rediscovering the <i>kind</i> of fault
+that is already mapped, never a genuinely new style;</li>
+<li>truth density inside a block is several times the regional average, so absolute proxy DTI is
+optimistic;</li>
+<li>the block is treated as unmapped territory, whereas in reality known faults are interleaved
+with the hidden ones and their neighbourhoods are excluded from emission.</li>
+</ul>
+<p>A pass on this instrument licenses packaging a candidate. It is never a score.</p>
+
+</main>
+<footer><div class="wrap">
+<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
+evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
+independently verifiable here. Organizer-verified = none; no score on this site has been
+confirmed by DrivenData.</p>
+</div></footer>
+</body></html>
