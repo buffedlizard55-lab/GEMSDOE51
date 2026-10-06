@@ -1,0 +1,25 @@
+# --- data (never commit; fetch with scripts/fetch_data.py, hash-pinned) ---
+data/
+.cache/
+*.partial
+*.assembling
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# --- heavy intermediates ---
+work/
+*.npy
+*.npz
+!evidence/**/*.npz
+
+# --- os ---
+.DS_Store
+Thumbs.db

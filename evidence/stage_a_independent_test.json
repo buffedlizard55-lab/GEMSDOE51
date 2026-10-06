@@ -1,0 +1,17 @@
+{
+ "tile_px": 250,
+ "band": "geod_2ndinv",
+ "n_tiles": 116,
+ "sgmc_offcat_density": {
+  "spearman_rho": -0.2284790492921188,
+  "partial_rho_given_cat_density": -0.22019520491798883,
+  "top_quartile_lift": 0.8339986920243412,
+  "n": 116
+ },
+ "lidar_scarp_mean": {
+  "spearman_rho": -0.018422941968481432,
+  "partial_rho_given_cat_density": 0.0759774024544875,
+  "top_quartile_lift": 0.9683301592106401,
+  "n": 116
+ }
+}

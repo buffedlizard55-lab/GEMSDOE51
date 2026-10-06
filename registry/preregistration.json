@@ -1,0 +1,29 @@
+{
+ "schema_version": 1,
+ "written_utc": "2026-10-06T21:11:52Z",
+ "purpose": "Rules fixed before the shipped emission was built, so that no result can be reverse-engineered into a rule after the fact. Amended twice, with the amendments recorded below rather than edited away.",
+ "rules": {
+  "slot_rule": "Nothing is shipped unless it beats the incumbent on a pre-declared instrument: for an emission rule, mean paired DTI > 0 AND >=3/4 folds positive; for a belief field, mean paired DTI > 0 AND >=3/4 folds positive at matched mass.",
+  "fold_rule": "2x2 spatial blocks of the 3730x3292 grid with a 600 m (6 px) boundary band removed from BOTH training and scoring, implemented as distance-from-block-interior > 6 px.",
+  "stage_a_rule": "The coarse gate is adopted only if a candidate tile statistic beats a matched-mass control on an instrument independent of the visible catalogue. Instruments: (i) lidar scarp intensity, (ii) off-catalogue SGMC fault density. A split decision is reported as a split, not as a pass.",
+  "mass_rule": "Emission size is chosen from the measured mass sweep, never from a model's self-predicted DTI (the packer's dti_pred was measured to be badly calibrated: ~0.49 predicted vs ~0.27 realised).",
+  "uniqueness_rule": "Maximum Jaccard <= 0.25 against every scored sibling submission on disk, with no subset or superset relation.",
+  "range_rule": "float32, EPSG:32611, 100 m, same bounds, all-finite, values in [0,1], no nodata tag (the portal rejects the -3.4028e38 sentinel).",
+  "off_catalogue_rule": "Every shipped dot is >= 2 px (200 m) from every visible-catalogue pixel, inside an approved Stage-A tile, and inside the data footprint."
+ },
+ "amendments": [
+  {
+   "id": "A1",
+   "what": "Stage-A rule: the brief's literal deficit was replaced by geodetic strain magnitude.",
+   "when": "before the emission was built",
+   "why": "The deficit failed the pre-registered stage_a_rule on all three instruments available (lift 0.949/1/4 folds; rho -0.048 lidar; rho -0.228 SGMC). The replacement passes the lidar instrument (+0.376, lift 1.393) and fails the SGMC instrument (-0.166); the split is recorded as IR-51-04 and H51-3 remains in the hypothesis ledger as a refuted hypothesis."
+  },
+  {
+   "id": "A2",
+   "what": "Emission rule: a coverage lattice was trialled and then reverted.",
+   "when": "after the emission was built once, and BEFORE any submission",
+   "why": "The lattice won a sweep whose truth was a subsample of the visible catalogue (+0.0286 mean, 4/4 folds) and lost the faithful off-catalogue A/B instrument (-0.0104 mean, 1/4 folds). Under the pre-registered slot rule it is not promoted; the incumbent thin-dot rule ships. Evidence: evidence/offcat_holdout.json, evidence/emission_promotion.json. Recorded as IR-51-05."
+  }
+ ],
+ "not_registered_disclosure": "The A/B off-catalogue instrument itself was invented after the lattice sweep, i.e. after seeing a result on a weaker instrument. It was built because the weaker instrument could not see the failure mode that matters (a halo emission around known faults), and it is reported with its known bias: B faults come from the same compilation as A and are interleaved with it, so a halo rule looks better there than it deserves. The halo control in evidence/offcat_holdout.json quantifies that effect and shows the halo rule scoring ~0.001-0.023, i.e. the instrument does penalise halos."
+}

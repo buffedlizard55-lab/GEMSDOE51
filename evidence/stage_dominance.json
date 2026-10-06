@@ -1,0 +1,11 @@
+{
+ "approved_px": 2537841,
+ "emitted_px": 95927,
+ "fill_fraction": 0.03779866429772393,
+ "coverage_in_approved": 1.0,
+ "n_approved_tiles": 58,
+ "share_in_top_decile_tiles": 0.22211681799701857,
+ "uniform_share_of_top_decile": 0.144536241632159,
+ "tile_concentration_ratio": 1.536755179799819,
+ "verdict": "fine-scale selectivity present"
+}

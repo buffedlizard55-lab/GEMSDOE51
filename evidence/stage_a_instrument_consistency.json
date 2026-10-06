@@ -1,0 +1,38 @@
+{
+ "tile_px": 250,
+ "band": "geod_2ndinv",
+ "n_tiles": 114,
+ "convention_note": "whole = mean over every finite cell of the tile (out-of-footprint cells are 0, which drags the mean down for edge tiles); footprint = mean over footprint cells only, the convention the gate itself uses.",
+ "geod_whole": {
+  "scarp": {
+   "spearman_rho": 0.375970182853718,
+   "n": 114
+  },
+  "sgmc_offcat": {
+   "spearman_rho": -0.16552888932598186,
+   "n": 114
+  },
+  "cat_density": {
+   "spearman_rho": 0.3576494519139488,
+   "n": 114
+  }
+ },
+ "geod_footprint": {
+  "scarp": {
+   "spearman_rho": 0.375970182853718,
+   "n": 114
+  },
+  "sgmc_offcat": {
+   "spearman_rho": -0.16552888932598186,
+   "n": 114
+  },
+  "cat_density": {
+   "spearman_rho": 0.3576494519139488,
+   "n": 114
+  }
+ },
+ "footprint_fraction_of_tile": {
+  "median": 1.0,
+  "p10": 1.0
+ }
+}

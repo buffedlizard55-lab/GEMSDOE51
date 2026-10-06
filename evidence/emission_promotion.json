@@ -1,0 +1,95 @@
+{
+ "shipped_rule": "thin dots, belief priority, 4% of the candidate area, min separation 3 px",
+ "shipped_rule_mean_dti_B_far": 0.08116143173432938,
+ "catalogue_subsample_sweep": {
+  "instrument": "PROXY: truth = seeded 20% subsample of the visible catalogue",
+  "lattice_vs_thin_pairs": [
+   {
+    "fold": 0,
+    "dti_lattice": 0.12861758559438718,
+    "dti_incumbent": 0.09809660938260101,
+    "delta": 0.030520976211786177,
+    "n_lattice": 26798,
+    "n_incumbent": 96431
+   },
+   {
+    "fold": 1,
+    "dti_lattice": 0.1640132597511329,
+    "dti_incumbent": 0.0986242209394098,
+    "delta": 0.0653890388117231,
+    "n_lattice": 14897,
+    "n_incumbent": 53498
+   },
+   {
+    "fold": 2,
+    "dti_lattice": 0.14344256950173592,
+    "dti_incumbent": 0.13674520168241275,
+    "delta": 0.0066973678193231745,
+    "n_lattice": 5970,
+    "n_incumbent": 21389
+   },
+   {
+    "fold": 3,
+    "dti_lattice": 0.12948394320285328,
+    "dti_incumbent": 0.11751163831876324,
+    "delta": 0.01197230488409004,
+    "n_lattice": 8478,
+    "n_incumbent": 30526
+   }
+  ],
+  "mean_delta": 0.028644921931730623,
+  "folds_positive": 4,
+  "n_folds": 4,
+  "apparent_promotion": true
+ },
+ "offcat_instrument": {
+  "instrument": "FAITHFUL: fault systems split A/B, trained on A, truth = B, official DTI",
+  "note": "this is the instrument that decides; its per-fold rows are in evidence/offcat_holdout.json",
+  "lattice_q0.10_s3_B_far": {
+   "mean_delta": -0.00895558838850522,
+   "folds_positive": 1,
+   "n_folds": 4,
+   "per_fold": [
+    0.014827248338574267,
+    -0.009891283933296628,
+    -0.023702043226418668,
+    -0.01705627473287985
+   ]
+  },
+  "lattice_q0.20_s3_B_far": {
+   "mean_delta": 0.0038130953044359286,
+   "folds_positive": 2,
+   "n_folds": 4,
+   "per_fold": [
+    0.009493521541009617,
+    -0.006527485271083454,
+    0.014780408166298942,
+    -0.0024940632184813905
+   ]
+  },
+  "lattice_q0.10_s3_B_all": {
+   "mean_delta": -0.010355822549814035,
+   "folds_positive": 1,
+   "n_folds": 4,
+   "per_fold": [
+    0.010958721540027569,
+    -0.009277280961892505,
+    -0.007908686924150088,
+    -0.03519604385324111
+   ]
+  },
+  "lattice_q0.20_s3_B_all": {
+   "mean_delta": 0.003960170684210113,
+   "folds_positive": 2,
+   "n_folds": 4,
+   "per_fold": [
+    0.008874775290716883,
+    -0.006443548788317009,
+    0.02146455643598294,
+    -0.008055100201542362
+   ]
+  }
+ },
+ "decision": "The coverage-lattice promotion was REFUTED by the faithful instrument (-0.0104 mean paired DTI, 1/4 folds at q0.10; +0.0040 but only 2/4 folds at q0.20). Under the pre-registered rule (mean > 0 AND >=3/4 folds positive) no lattice is promoted, so the incumbent thin-dot rule ships.",
+ "lesson": "A promotion validated only against a subsample of the visible catalogue did not survive a holdout that withholds whole fault systems. This is exactly what the standing instruction to validate before spending a slot is for."
+}

@@ -1,0 +1,83 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-06T21:11:20Z",
+ "ranking_basis": "Expected DTI improvement per unit of implementation cost, with falsification status shown explicitly. Only H51-1 and H51-2 were allowed into the shipped emission.",
+ "hypotheses": [
+  {
+   "id": "H51-1",
+   "rank": 1,
+   "title": "Stage-A geodetic strain-budget gate: top-half tiles by geodetic strain magnitude, after the brief's literal deficit rule was tested and refuted",
+   "layers": [
+    "training_features.tif band 4 = geod_2ndinv (second invariant of the geodetic strain-rate tensor)",
+    "training_features.tif band 7 = geod_shearrate, band 8 = geod_dilaterate (comparison rules)",
+    "external/gdr_qfaults_traces.csv (INGENIOUS/GDR-1391 slip rates + clipped trace lengths)",
+    "external Siler (2022) slip-tendency table (per-sense dips, USGS ScienceBase 6296974d)"
+   ],
+   "formula": "eps_geo = (1/(2*A_tile)) * sum_k L_k*u_k/sin(dip_k)  -- Kreemer et al. (2000) EPSG 52:765-770 eq. (3), the fault-slip variant of the Kostrov (1974) summation; dip by slip sense from Siler (2022): normal 61.9 deg, right-lateral 85.8, left-lateral 81.6, unspecified 64.3 (medians of 83,234 measured rows).",
+   "signature": "Tile-level mass balance between what geodesy requires and what mapped faults can supply. 116 tiles of 25 km. Median geodetic second invariant 21.03 ns/yr; median mapped-fault equivalent 6.00 ns/yr; median ratio 0.455; median deficit 0.545.",
+   "why_off_catalogue": "A tile whose geodetic strain is not matched by mapped-fault moment is, by construction, a place where structure exists that the catalogue does not contain. The gate is deliberately coarse (58 of 116 tiles, 2,537,841 px = 49% of the footprint) so that Stage B, not Stage A, decides placement.",
+   "difference": "No sibling repository used fault slip rates at all. GEMSDOE26 tested the geodetic deformation field as a *feature* (dilcond-oof, 0.1223); here the geodetic field is a physically derived budget whose residual is measured and, when found wanting, replaced by the validated statistic rather than smuggled into the emission.",
+   "validation": "REFUTED as a locator, then replaced. (a) Blocked holdout: the deficit's approved tiles concentrate held-out catalogue labels with lift 0.949, only 1/4 folds above 1 (rho -0.338). (b) Independent instrument 1 (lidar scarp intensity, in-fill H19-4 layer): rho -0.048. (c) Independent instrument 2 (off-catalogue SGMC fault density): rho -0.228. The adopted substitute, geodetic strain magnitude, is +0.376 (top-quartile lift 1.393) on the lidar instrument and -0.166 on the SGMC instrument: a split decision, reported as a split (IR-51-INST-01).",
+   "gain_vs_cost": "Cost: 2 h of table work + a 116-tile instrument. Expected gain as a locator: 0 (refuted); gain as a *mask* that removes 51% of the emission domain at no measured cost in credit: kept. This is the single most important negative result in this repository."
+  },
+  {
+   "id": "H51-2",
+   "rank": 2,
+   "title": "Lidar scarp-feature ensemble as the decisive fine-scale channel inside approved tiles (Stage B detector)",
+   "layers": [
+    "external/lidar_scarp_features_u8.tif (12 scarp-proxy bands: ex_max/mean, step_max, lapneg/lappos_max, downface_max, 6 unlabelled)",
+    "training_features.tif 19 official bands incl. band 6 tc (magnetic tilt/curvature), det_elev, tmi_hg, tmi_vg, rtp, iso_grav_anom_hg, cond_surf, deq_n100a15",
+    "external/geodawn_rad_u8.tif (K, Th, U, TC) and geodawn_extensions_u8.tif (ThK, UK, UTh, TMI_up150)",
+    "external/derived_sgmc_faults_100m_u8.tif used as a DISTANCE channel only"
+   ],
+   "signature": "HistGradientBoosting (220 iters, lr 0.08, 31 leaves) on 44 channels; 4 spatially blocked folds with a 600 m boundary band removed from training and scoring; belief field emitted as sparse 1-px dots at 3 px minimum separation, sized at 4% of the candidate area.",
+   "why_off_catalogue": "The hidden expert set was produced inside a geothermal program: it contains Quaternary-active structures whose surface expression is a scarp in lidar but which the state/USGS compilations, digitised before the 3DEP lidar coverage existed, do not carry. A scarp-sharpness ensemble detects the *physical* fault trace, not its administrative record.",
+   "difference": "The sibling repositories used the same scarp layer mostly as one arm among many and never validated a belief FIELD against a published sibling field on identical masks. This repository does: AUC 0.7268 vs 0.6674 (oof_B) and 0.6687 (oof_D), higher on 4/4 folds; paired matched-mass DTI +0.0482 (8/8).",
+   "validation": "PROMOTED. Fold AUCs 0.6719 / 0.7987 / 0.7034 / 0.7331 (mean 0.7268) on the visible catalogue. Every alternative emitter trialled (credit-density ordering, redundancy-aware budget packing) FAILED the pre-registered promotion rule (mean paired contrast <= 0 or <3/4 folds) and is recorded as a negative result.",
+   "gain_vs_cost": "Cost: ~1 day (feature stack 2.16 GB, fold models). Measured gain: +0.0482 mean paired DTI at matched mass versus the best sibling out-of-fold field, on the only controlled instrument available. Transfers to the leaderboard only if the hidden set behaves like the holdout blocks."
+  },
+  {
+   "id": "H51-3",
+   "rank": 3,
+   "title": "Literal strain-budget DEFICIT (geodetic minus mapped-fault moment) as the Stage-A prior: implemented, tested, FALSIFIED",
+   "layers": [
+    "geod_2ndinv, geod_shearrate, geod_dilaterate (official bands 4/7/8)",
+    "INGENIOUS/GDR-1391 slip rates x clipped lengths",
+    "Siler (2022) per-sense dips"
+   ],
+   "signature": "Residual = geodetic second invariant minus the mapped-fault equivalent computed with the published formula. Under the brief it should mark the missing moment. It does not.",
+   "why_off_catalogue": "The physical argument is sound in principle (Zeng & Shen 2016 put a large off-fault moment rate in California; 17% of the worldwide GSRM moment rate sits in diffuse zones), which is exactly why the test was run. A sound argument with a negative test result must be reported as a negative result.",
+   "difference": "No sibling repository tested this rule at all; it comes from the task brief and from the literature cited above. It is reported here in full, including the formula, the numbers, and the two independent instruments that refute it.",
+   "validation": "FALSIFIED on all three available instruments (blocked holdout label density lift 0.949, 1/4 folds; rho -0.048 on lidar scarp intensity; rho -0.228 on off-catalogue SGMC density). Retained in the pipeline as a diagnostic column and in the site as the headline negative result.",
+   "gain_vs_cost": "Cost: 2 h. Measured gain: 0 as a locator. Value: it prevents a 0.3195-beating strategy from being built on an unvalidated premise."
+  },
+  {
+   "id": "H51-4",
+   "rank": 4,
+   "title": "Per-sense dip and slip-sense weighting inside the Kostrov sum (rigorous version of the Stage-A formula)",
+   "layers": [
+    "Siler (2022) slip- and dilation-tendency tables (83,234 rows with Dip and slip_sense in the footprint)",
+    "INGENIOUS trace table (868 normal, 87 right-lateral, 76 left-lateral, 95 other)"
+   ],
+   "signature": "Replace the single assumed 60-degree dip with the measured per-sense dip distribution, and (next) build the full unit-moment tensor m_ij from strike and dip rather than the scalar contraction. The tensor version requires a rake, which the joined table does not carry; the strike and dip columns do exist, so a partial tensor is available.",
+   "why_off_catalogue": "Not a detection idea: a measurement-quality idea. It changes the *magnitude* of the summed strain but not, to first order, the tile pattern (a scalar multiplier cancels in a quantile gate), so its value is scientific rather than score-bearing - unless the tensor version reveals that strike-slip and normal tiles need different geodetic bands.",
+   "difference": "The siblings used no slip rates and no dips at all; this is the only place in the family where the trace geometry and the per-sense dips are joined to the official strain-rate bands.",
+   "validation": "PARTIAL. Dips measured and applied (normal 61.9, RL 85.8, LL 81.6, unspecified 64.3 deg); the fraction of trace length with a resolved sense is 36% of total length (6,286 of 17,375 km inside the footprint). The full moment-tensor version is NOT TESTED: the joined table has strike and dip but no rake.",
+   "gain_vs_cost": "Cost for the partial version: done. Cost for the tensor version: ~3 h given a rake source (none is currently obtainable for free; INGENIOUS carries sense, not rake). Expected score gain: 0 unless the tensor reveals a band choice that the scalar hides. Ranked below the detection ideas for that reason."
+  },
+  {
+   "id": "H51-5",
+   "rank": 5,
+   "title": "Independent-compilation gap closure: score lineaments by agreement with the pre-Quaternary state map (SGMC) and Siler (2022) slip tendency",
+   "layers": [
+    "external/derived_sgmc_faults_100m_u8.tif (83,593 px of state-map faults not in the visible catalogue)",
+    "Siler (2022) slip-tendency and dilation-tendency attributes"
+   ],
+   "signature": "Fault strands present in the state geologic map but absent from the Quaternary catalogue; slip-tendency as a proxy for which of them are favourably oriented for slip under the present stress field.",
+   "why_off_catalogue": "A structure can be missing from the Quaternary compilation for want of a dedicated field study rather than for want of activity. That is a real gap class - it is simply not the class the hidden expert set belongs to.",
+   "difference": "Tested by the siblings as a live arm and scored poorly (their h18-4 'usgs-geologic-map-faults-gap' arm); here it is tested against two independent instruments at tile level.",
+   "validation": "REJECTED on both grounds: (a) the SGMC instrument has the WRONG SIGN against the adopted gate (rho -0.166) and against the deficit (-0.205), so SGMC-based gates are anti-correlated with the geodetic signal; (b) the sibling's own live result for this hypothesis is ~0.05. Also, 83,593 px of SGMC faults is a large mass that would need the same metrical discipline to be useful.",
+   "gain_vs_cost": "Cost: low (data already pinned). Expected gain: low; the pre-Quaternary class is the wrong target for a geothermal-indicative Quaternary set."
+  }
+ ]
+}

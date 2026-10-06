@@ -1,0 +1,175 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-06T21:11:44Z",
+ "note": "Classes: MEASURED = recomputed here from hash-pinned inputs; PROXY = scored against the visible catalogue, not the hidden expert labels; UNVERIFIED-LIVE = read from a live page and quoted, not reproducible offline.",
+ "claims": [
+  {
+   "id": "C51-001",
+   "claim": "The published metric reproduces exactly: TP_w=3.00, FP_w=1.89, FN_w=2.00 -> DTI=0.60, and a brute-force re-implementation of the three official sums agrees with the offset-scan implementation to 1e-9.",
+   "class": "MEASURED",
+   "evidence": "tests/test_metric.py (9/9 pass)",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+  },
+  {
+   "id": "C51-002",
+   "claim": "DTI = T/(0.2T + 0.2F + 0.8K) with T=TP_w, F=FP_w, K=number of truth pixels, using the official identity FN_w = K - T.",
+   "class": "MEASURED",
+   "evidence": "src/gems51/metric.py docstring + tests/test_metric.py",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+  },
+  {
+   "id": "C51-003",
+   "claim": "Marginal-inclusion theorem: adding mass with dT new credit and dF uncovered weight raises DTI iff dT(0.2F+0.8K) > 0.2*T*dF; for a single dot of kernel weight k this is k > 0.2*DTI.",
+   "class": "MEASURED",
+   "evidence": "src/gems51/metric.py, tests/test_metric.py::test_marginal_bar",
+   "source": "derived"
+  },
+  {
+   "id": "C51-004",
+   "claim": "Grid: EPSG:32611, 3730x3292, 100 m, transform [100,0,243350,0,-100,4508550]; footprint 5,165,852 px; sample-submission domain 5,167,373 px; catalogue positives 60,988 px (60,894 inside the footprint).",
+   "class": "MEASURED",
+   "evidence": "evidence/grid_facts.json, data/restore_receipt.json",
+   "source": ""
+  },
+  {
+   "id": "C51-005",
+   "claim": "The trace table carries slip rates: 1,126 INGENIOUS/GDR-1391 traces, slip_rate median 0.100 mm/yr, max 4.500; full length median 7,656 m (max 383,656 m); 376 centroids inside the footprint; 6,286 of 17,375 km of clipped length inside the footprint; sum(slip_rate*clipped_length) = 4.915e6 mm*m/yr.",
+   "class": "MEASURED",
+   "evidence": "evidence/stage_a_budget.json",
+   "source": "https://gdr.openei.org/submissions/1391"
+  },
+  {
+   "id": "C51-006",
+   "claim": "Per-sense dips measured from the Siler (2022) USGS release (83,234 rows with Dip in the region): normal 61.9 deg, right-lateral 85.8, left-lateral 81.6, unspecified 64.3 (medians).",
+   "class": "MEASURED",
+   "evidence": "work/sb_slip_tendency_in_footprint.csv",
+   "source": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d"
+  },
+  {
+   "id": "C51-007",
+   "claim": "Stage A as specified in the brief (deficit = geodetic strain magnitude minus mapped-fault moment equivalent, via the Kreemer et al. (2000) eq. (3) summation) gives a median ratio geologic/geodetic of 0.455 and a median deficit of 0.545 over 116 tiles of 25 km.",
+   "class": "MEASURED",
+   "evidence": "evidence/stage_a_budget.json",
+   "source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+  },
+  {
+   "id": "C51-008",
+   "claim": "The deficit FAILS as a locator: blocked-holdout label-density lift 0.949 with 1/4 folds above 1 (rho -0.338); rho -0.048 against lidar scarp intensity; rho -0.205 against off-catalogue SGMC density.",
+   "class": "MEASURED",
+   "evidence": "evidence/stage_a_holdout.json, evidence/stage_a_gate_comparison.json",
+   "source": ""
+  },
+  {
+   "id": "C51-009",
+   "claim": "Geodetic strain magnitude (band 4) is the best of six candidate gate rules on the lidar instrument: rho +0.376, top-quartile lift 1.393; it is NEGATIVE on the SGMC instrument (rho -0.166, lift 0.774). Split decision, reported as such.",
+   "class": "MEASURED",
+   "evidence": "evidence/stage_a_gate_comparison.json",
+   "source": ""
+  },
+  {
+   "id": "C51-010",
+   "claim": "The adopted gate is top-half tiles by geodetic strain magnitude: 58 tiles, 2,537,841 px (49% of the footprint).",
+   "class": "MEASURED",
+   "evidence": "evidence/emission_audit.json, evidence/stage_dominance.json",
+   "source": ""
+  },
+  {
+   "id": "C51-011",
+   "claim": "Stage B detector: 44 channels, HistGradientBoosting, 4 spatially blocked folds with a 600 m boundary band removed from training and scoring; fold AUCs 0.6719/0.7987/0.7034/0.7331, mean 0.7268 against the visible catalogue.",
+   "class": "PROXY",
+   "evidence": "evidence/stage_b_folds.json, evidence/auc_comparison.json",
+   "source": ""
+  },
+  {
+   "id": "C51-012",
+   "claim": "Against the sibling repositories' published out-of-fold fields on identical masks, this field is higher on 4/4 folds: mean AUC 0.7268 vs 0.6674 (oof_B) and 0.6687 (oof_D).",
+   "class": "PROXY",
+   "evidence": "evidence/auc_comparison.json",
+   "source": "https://github.com/buffedlizard55-lab/GEMSDOE31"
+  },
+  {
+   "id": "C51-013",
+   "claim": "At matched emitted mass with the identical emitter, this belief field beats the sibling oof_D field by +0.0482 mean paired DTI, positive in 8/8 paired comparisons (4 folds x {8k, 32k} dots).",
+   "class": "PROXY",
+   "evidence": "evidence/detector_contrast.json",
+   "source": ""
+  },
+  {
+   "id": "C51-014",
+   "claim": "Emission-mass sweep (belief-priority dots, 3 px minimum separation): density 0.005/0.01/0.02/0.04/0.08 of the candidate area gives mean fold DTI 0.1796/0.2318/0.2803/0.2997/0.2585; 0.04 is used.",
+   "class": "PROXY",
+   "evidence": "evidence/detector_contrast.json, evidence/emission_sweep.json",
+   "source": ""
+  },
+  {
+   "id": "C51-015",
+   "claim": "Two alternative emitters were tested and NOT promoted: credit-density ordering (mean paired DTI -0.0000, 1/4 folds) and the redundancy-aware expected-budget packer (mean +0.0002, 3/8 fold-budget rows; corrected criterion: mean > 0 AND positive on >= 75% of rows). The packer's self-predicted dti_pred (0.08-0.38) is also badly calibrated against the realised 0.13-0.23, so it is additionally barred from sizing anything.",
+   "class": "PROXY",
+   "evidence": "evidence/holdout_stage_b.json, evidence/holdout_packer.json",
+   "source": ""
+  },
+  {
+   "id": "C51-016",
+   "claim": "The coverage-lattice emission was refuted on the off-catalogue A/B instrument: mean paired DTI -0.0104 (1/4 folds) at q0.10 s3 and +0.0040 (2/4 folds) at q0.20 s3, so the incumbent thin-dot rule ships.",
+   "class": "PROXY",
+   "evidence": "evidence/offcat_holdout.json, evidence/emission_promotion.json",
+   "source": ""
+  },
+  {
+   "id": "C51-017",
+   "claim": "The shipped raster contains 95,927 emitting pixels, is float32 with all 12,279,160 cells finite, min 0.0, max 1.0, no nodata tag, EPSG:32611, and 100% of the dots lie inside the approved tiles and at least 2 px from every catalogue pixel.",
+   "class": "MEASURED",
+   "evidence": "evidence/submission_receipt.json, docs/downloads/checks-gemsdoe51-strainbudget-s1-v1.json",
+   "source": ""
+  },
+  {
+   "id": "C51-018",
+   "claim": "Uniqueness: maximum Jaccard against the 12 scored sibling submissions on disk is 0.0322 (threshold 0.25); no subset or superset relation with any of them.",
+   "class": "MEASURED",
+   "evidence": "evidence/uniqueness_gate.json",
+   "source": ""
+  },
+  {
+   "id": "C51-019",
+   "claim": "Stage dominance: fill fraction 3.8% of the approved area, coverage inside approved tiles 1.000, tile concentration 1.537x the uniform control, verdict 'fine-scale selectivity present' - i.e. the emission is not a densified version of the Stage-A footprint.",
+   "class": "MEASURED",
+   "evidence": "evidence/stage_dominance.json",
+   "source": ""
+  },
+  {
+   "id": "C51-020",
+   "claim": "Public leaderboard on 2026-10-06: rank 1 xiaofanhu 0.3774; rank 3 nchuzhoy 0.3262; rank 7 DARD 0.3195 (the brief's stated target); rank 13 extradr19 0.2778; rank 16 smrtdoog5 0.2708; rank 20 SDCF9 0.2600.",
+   "class": "UNVERIFIED-LIVE",
+   "evidence": "registry/leaderboard_snapshot.json",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+  },
+  {
+   "id": "C51-021",
+   "claim": "The sibling artifact gemgdoe32-h33-h33-2-b2-...-zeros contains 37,654 px, is all-finite float32, has no nodata tag, and reports 0 px within 200 m of the visible catalogue; its own site labels it UNSCORED with a modelled projection of 0.2747.",
+   "class": "UNVERIFIED-LIVE",
+   "evidence": "registry/leaderboard_snapshot.json, IR-51-02",
+   "source": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html"
+  },
+  {
+   "id": "C51-022",
+   "claim": "Under the official metric, a predicted pixel that sits on a truth pixel carries zero false-positive weight and a missed truth pixel costs 0.8, so with alpha=0.2 recall is worth four times precision; emissions of 30-40% of the hidden truth at ~90% wasted mass still score ~0.26-0.28.",
+   "class": "MEASURED",
+   "evidence": "src/gems51/metric.py + this page's arithmetic; corroborated by the sibling's published live-inversion (K ~ 12,700 px, credit ~ 4,791, mass 44,090)",
+   "source": ""
+  },
+  {
+   "id": "C51-023",
+   "claim": "A habitat-style region emission collapses to single-digit-millidigit scores: a domain-wide raster has F ~ 5.0M px and therefore DTI ~ 0.008, which is where the sibling's three habitat submissions actually scored (0.0041/0.1223/0.1352).",
+   "class": "PROXY",
+   "evidence": "site analysis page; sibling score ledger",
+   "source": ""
+  },
+  {
+   "id": "C51-024",
+   "claim": "Every number in this repository that is scored against the visible catalogue is a PROXY for the hidden expert label set and cannot reward a genuinely unmapped fault; no leaderboard score for this file is claimed anywhere.",
+   "class": "MEASURED",
+   "evidence": "this registry; README limitations",
+   "source": ""
+  }
+ ]
+}

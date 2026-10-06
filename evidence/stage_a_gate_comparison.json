@@ -1,0 +1,74 @@
+{
+ "tile_px": 250,
+ "n_tiles": 114,
+ "median_strain": 21.027499198913574,
+ "median_deficit": 0.5297731526718285,
+ "rules": {
+  "strain_2ndinv": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.16552888932598186,
+    "top_quartile_lift": 0.7741446436243994
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": 0.375970182853718,
+    "top_quartile_lift": 1.3926365109706147
+   },
+   "approved_tiles": 57
+  },
+  "strain_shear": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.1666252078797844,
+    "top_quartile_lift": 1.1122422709448359
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": 0.3617110365779624,
+    "top_quartile_lift": 1.3775436885552599
+   },
+   "approved_tiles": 57
+  },
+  "strain_dilatation": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.17931182530132544,
+    "top_quartile_lift": 0.7894737998853841
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": 0.16375007964012112,
+    "top_quartile_lift": 1.0527619775145187
+   },
+   "approved_tiles": 57
+  },
+  "deficit": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.20500005064889523,
+    "top_quartile_lift": 0.8148263082996439
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": -0.047695765584569644,
+    "top_quartile_lift": 0.9504171938978087
+   },
+   "approved_tiles": 57
+  },
+  "deficit_and_strain": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.10312089907009594,
+    "top_quartile_lift": 0.9526653043389709
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": 0.10537572410853888,
+    "top_quartile_lift": 1.1645187038698674
+   },
+   "approved_tiles": 114
+  },
+  "strain_per_moment": {
+   "sgmc_offcat_density": {
+    "spearman_rho": -0.18712472083363155,
+    "top_quartile_lift": 1.0089755443771302
+   },
+   "lidar_scarp_mean": {
+    "spearman_rho": 0.08041700505521539,
+    "top_quartile_lift": 1.2470514258196654
+   },
+   "approved_tiles": 57
+  }
+ }
+}

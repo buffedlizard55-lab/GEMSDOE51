@@ -1,0 +1,85 @@
+{
+ "schema_version": 1,
+ "generated_utc": "2026-10-06T21:11:32Z",
+ "note": "Discrepancies, deviations and self-caught errors. Flagged for human review; nothing here is an accusation about anyone.",
+ "items": [
+  {
+   "id": "IR-51-01",
+   "severity": "high",
+   "issue": "The task brief's numbers are stale. It states that 0.3195 is the top score to beat and that the sibling artifact h33-h33-2-b2-...-zeros (0.2778) is the highest published submission. The public leaderboard read on 2026-10-06 shows rank 1 at 0.3774 (xiaofanhu), rank 3 at 0.3262 (nchuzhoy), and 0.3195 at rank 7 (DARD).",
+   "action": "Targets restated from the live page; snapshot saved to registry/leaderboard_snapshot.json with the read time and the ranks actually observed. The 0.3195 figure is quoted as the stated target rather than as the leader."
+  },
+  {
+   "id": "IR-51-02",
+   "severity": "high",
+   "issue": "No cryptographic link exists between the sibling artifact file and the 0.2778 leaderboard row. The sibling's own site describes the file as UNSCORED and gives a modelled projection of 0.2747; a separate line lists 0.2778 for another participant. Rank 13 holds 0.2778 on the read page.",
+   "action": "Every reference to the artifact here is quoted as second-hand and labelled UNVERIFIED-LIVE. Nothing in this repository's numbers depends on that identification: all comparisons are run against the sibling's published out-of-fold fields, not against a claimed score."
+  },
+  {
+   "id": "IR-51-03",
+   "severity": "high",
+   "issue": "The brief's literal Stage-A rule - subtract the mapped-fault moment budget from the geodetic strain rate and keep the residual as the coarse prior - FAILS every falsifiable test run here: blocked-holdout label-density lift 0.949 (1/4 folds), rho -0.048 against lidar scarp intensity, rho -0.228 against off-catalogue state-map fault density.",
+   "action": "Implemented exactly as specified, evaluated, and reported as a refuted hypothesis (registry/hypotheses.json H51-3, evidence/stage_a_*.json). The gate that ships instead is the geodetic strain magnitude, which passes the lidar instrument (rho +0.376, lift 1.393) and fails the SGMC instrument (rho -0.166). This is a deliberate, documented deviation from the brief's literal instruction, forced by the brief's own rule that no unvalidated idea may be shipped."
+  },
+  {
+   "id": "IR-51-04",
+   "severity": "medium",
+   "issue": "Split instrument on the adopted gate: geodetic strain magnitude is positively associated with lidar scarp intensity (rho +0.376, lift 1.393) but negatively associated with off-catalogue SGMC fault density (rho -0.166, lift 0.774). The two independent instruments disagree in sign for the very rule that ships.",
+   "action": "Reported as a split, not as a clean pass, on the site and in this register. The gate is retained because the lidar instrument measures the same physical object as the target class (Quaternary surface faulting), while the SGMC layer is a state-map compilation dominated by pre-Quaternary bedrock structures and is itself a rejected hypothesis class (H51-5). A reviewer may reasonably take the opposite view."
+  },
+  {
+   "id": "IR-51-05",
+   "severity": "medium",
+   "issue": "A promotion that looked strong on one instrument was refuted by a better one. The coverage-lattice emission (1-px dots on a 3-px lattice over the top decile of belief) beat the incumbent thin-dot rule by +0.0286 mean paired DTI on 4/4 folds when the truth was a seeded 20% subsample of the visible catalogue. On the off-catalogue A/B instrument - fault systems split into training A and truth B, trained on A alone - the same rule LOSES: -0.0104 mean paired DTI, positive on only 1/4 folds. A looser lattice (q0.20) is +0.0040 but positive on only 2/4 folds.",
+   "action": "The lattice was briefly built into the shipped file during this session and then REVERTED when the faithful instrument reported. The shipped rule is the incumbent thin-dot shape (belief-priority dots, 4% of the candidate area, 3 px minimum separation); the lattice is retained as rule='lattice' for reproducibility and documented as refuted (evidence/emission_promotion.json). This is recorded as an irregularity rather than hidden because it is the clearest evidence that the pre-registration rule did its job."
+  },
+  {
+   "id": "IR-51-06",
+   "severity": "medium",
+   "issue": "Label circularity: the only offline truth available for training and holdout is the visible catalogue (USGS Quaternary + INGENIOUS), while the competition's hidden expert labels are defined as faults the catalogue does not contain. Any model trained on the visible labels is being rewarded for reproducing what is already mapped.",
+   "action": "Every holdout number in this repository is labelled PROXY where it is scored against the visible catalogue. Two countermeasures were added: (a) the off-catalogue A/B instrument in scripts/run_offcat_holdout.py, which withholds whole fault systems so that credit can only come from structures the training set never saw; (b) an explicit statement, everywhere a number appears, that no leaderboard score is claimed."
+  },
+  {
+   "id": "IR-51-07",
+   "severity": "medium",
+   "issue": "In the sibling corpus used as the scored comparison set, labels.tif and existing_faults.tif are byte-identical (sha256 7ba308cc...), even though the competition names two label sources. The pinned mirror may have collapsed them, or the organisers may ship the same raster under both names.",
+   "action": "Recorded, and treated as ONE catalogue everywhere (never as two independent sources). Both files remain hash-pinned in registry/data_manifest.json so the collision is reproducible."
+  },
+  {
+   "id": "IR-51-08",
+   "severity": "medium",
+   "issue": "Stage-A geometry approximation: a trace is assigned to the 25-km tile containing its centroid, and its full clipped length is credited to that tile. Median trace length is 7.7 km, so traces that cross a tile boundary are mis-credited; 376 of 1,126 traces (6,286 of 17,375 km of clipped length) fall in the footprint.",
+   "action": "Quantified in the site method section and in registry/claims.json. The instrument that matters (the gate's tile pattern vs independent evidence) is measured, not asserted, so the approximation's effect is bounded by those correlations. A line-clipping implementation is listed as remaining work."
+  },
+  {
+   "id": "IR-51-09",
+   "severity": "low",
+   "issue": "Dip had to be assumed for the strain sum because the joined trace table does not carry it: dip_direct is 'Unspecified' for 411 of 1,126 traces and the slip-sense class is known for the rest.",
+   "action": "Dips were NOT guessed: they were measured from the Siler (2022) USGS release (83,234 rows with Dip inside the footprint) and applied per sense (normal 61.9, RL 85.8, LL 81.6, unspecified 64.3 degrees median). Source and figures recorded in registry/claims.json."
+  },
+  {
+   "id": "IR-51-10",
+   "severity": "low",
+   "issue": "Feature-stack provenance: only 6 of the 12 bands in the external lidar scarp-feature raster carry descriptions (ex_max, ex_mean, step_max, lapneg_max, lappos_max, downface_max). The other six are unnamed.",
+   "action": "The six unnamed bands are used as generic scarp-sharpness channels and listed as unnamed in the method page rather than being given invented names."
+  },
+  {
+   "id": "IR-51-11",
+   "severity": "low",
+   "issue": "Units of the official geodetic bands are not stated in the raster metadata; the numbers are consistent with nanostrain per year but this is an inference.",
+   "action": "Stated as an inference. The gate is a quantile of the within-region distribution, so it is invariant to any positive rescaling; absolute values are never used in a formula that mixes them with other units except the reported ratio, which is dimensionless and labelled indicative."
+  },
+  {
+   "id": "IR-51-12",
+   "severity": "low",
+   "issue": "The expected-budget packer's self-predicted DTI (dti_pred ~ 0.49) is badly calibrated against the realised holdout value (~0.27), so any emission scored with it would be sized far too large.",
+   "action": "The packer was rejected on the holdout (mean paired contrast -0.0034, 1/4 folds) and is additionally barred from sizing the emission; sizing uses the measured mass sweep (density 4% of the candidate area). Recorded so a future session does not trust dti_pred."
+  },
+  {
+   "id": "IR-51-13",
+   "severity": "low",
+   "issue": "This environment cannot submit to DrivenData (no credentials) and cannot reach the sciencebase.gov / gdr.openei.org download endpoints directly (network egress is restricted to a small allow-list).",
+   "action": "The file is delivered for manual submission with a one-click download and a copy-paste form note. Free external data are listed in registry/sources.json with the evidence of their obtainability (sibling GitHub-Actions runner logs where bytes were actually fetched)."
+  }
+ ]
+}
