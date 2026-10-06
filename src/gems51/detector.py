@@ -1,216 +1,132 @@
-"""Stage B -- fine-scale detector, trained and scored on spatially blocked folds.
+"""Stage-2 fine-scale fault detector and the fold machinery around it.
 
-Protocol (documented, preregistered in registry/preregistration.json):
-
-1. Folds are 2x2 spatial blocks over the footprint (4 folds), matching the sibling
-   repositories' four-quadrant convention so the numbers are comparable.
-2. For each fold b: every pixel within `buffer_px` of the *visible catalogue in fold b* is removed
-   from both training and scoring, and the held-out fold is never used for fitting.  The buffer
-   exists because the scored quantity is "does the detector recover fault ground it has not been
-   shown"; proximity to a mapped trace is a trivial leak.
-3. The classifier is a HistGradientBoostingClassifier over the Stage B feature stack; the
-   positives in the three training folds are all used, negatives are subsampled (documented
-   ratio).  Output = belief field b(x) = P(pixel is a mapped fault | features), in [0, 1].
-4. The belief field is then consumed by `emission.py`; the fold results are reported per fold and
-   paired against the incumbent rule at matched pixel counts.
-
-Nothing in this module ever reads the organizer's hidden labels: they do not exist in the
-download.  The only truth available is the visible catalogue, which is a *proxy*: it cannot
-reward a genuinely unmapped fault (see registry/irregularities.json IR-51-06).
+Leakage control
+---------------
+Two of the sixty features are *context* features: distance to the nearest
+catalogued fault pixel and local catalogued-fault density.  They are computed
+from the catalogue **that the fold is allowed to see**.  If they were computed
+from the full catalogue they would hand the held-out truth straight to the
+model, and the holdout would report a number that means nothing.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
+from scipy import ndimage as ndi
+from sklearn.ensemble import HistGradientBoostingClassifier
 
-from . import grid, metric
-from .features import FEATURE_NAMES, load_or_build
+from .grid import GRID
 
-RNG_SEED = 51
-NEG_PER_POS = 3
-MAX_TRAIN_PX = 250_000
-BUFFER_PX = 6.0          # 600 m, as used by the sibling holdouts
+STACK_PATH_KEY = "stack.dat"
 
 
-@dataclass
-class FoldResult:
-    fold: int
-    auc: float
-    n_train_pos: int
-    n_train_neg: int
-    test_px: int
+class Stack:
+    """Memory-mapped feature stack with fold-dependent context columns."""
+
+    def __init__(self, prepared_dir):
+        import json
+        from pathlib import Path
+        self.dir = Path(prepared_dir)
+        self.names = json.loads((self.dir / "stack_names.json").read_text())
+        self.n = len(self.names)
+        self.data = np.memmap(self.dir / STACK_PATH_KEY, dtype=np.float32, mode="r",
+                              shape=(self.n, *GRID.shape))
+        self.i_dcat = self.names.index("d_cat")
+        self.i_cden = self.names.index("cat_dens")
+        # ---------------------------------------------------------------------
+        # IR-51-LEAK-01: d_cat and cat_dens are derived from the catalogue, and
+        # in this holdout design the training positives ARE catalogue pixels.
+        # Every positive therefore has d_cat == 0 and every negative d_cat > 0,
+        # so a model given these two columns learns "d_cat == 0" and nothing
+        # else -- measured in-block AUC collapsed to exactly 0.500 while the
+        # physical features alone reach 0.63.  They are excluded from the model
+        # and used only at emission time (as the exclusion radius around known
+        # faults, which is physically the same information).
+        # ---------------------------------------------------------------------
+        self.static = [i for i in range(self.n) if i not in (self.i_dcat, self.i_cden)]
+
+    # ---------------------------------------------------------------- context
+    @staticmethod
+    def context(catalogue: np.ndarray, density_size: int = 21):
+        """(log1p distance to nearest fault px, count of fault px in a density_size window)."""
+        d = ndi.distance_transform_edt(~catalogue).astype(np.float32)
+        dens = ndi.uniform_filter(catalogue.astype(np.float32), size=density_size,
+                                  mode="constant") * float(density_size ** 2)
+        return np.log1p(d).astype(np.float32), dens.astype(np.float32)
+
+    # ---------------------------------------------------------------- sampling
+    def block_matrix(self, rows: slice, footprint_blk: np.ndarray,
+                     extra: list[np.ndarray] | None = None) -> np.ndarray:
+        """Feature matrix for every footprint pixel of a row block.
+
+        Rows are read one feature at a time; fancy-indexing the whole
+        (58, 3730, 3292) stack at once would materialise a 2.8 GB copy.
+        """
+        extra = extra or []
+        f = len(self.static)
+        n = int(footprint_blk.sum())
+        X = np.empty((f + len(extra), n), dtype=np.float32)
+        for j, i in enumerate(self.static):
+            X[j] = np.asarray(self.data[i], dtype=np.float32)[rows][footprint_blk]
+        for j, a in enumerate(extra):
+            X[f + j] = np.asarray(a, dtype=np.float32)[rows][footprint_blk]
+        return X.T
+
+    def sample(self, pos_mask: np.ndarray, neg_pool: np.ndarray, n_neg: int,
+               rng: np.random.Generator, extra: list | None = None):
+        """Sample a training matrix: all positives + ``n_neg`` background pixels.
+
+        ``extra`` is a list of (name, full-grid array) context columns appended to
+        the physical features.  Catalogue-derived columns must NOT be passed here
+        (see IR-51-LEAK-01).
+        """
+        py, px = np.nonzero(pos_mask)
+        ny_all, nx_all = np.nonzero(neg_pool)
+        k = min(n_neg, ny_all.size)
+        sel = rng.choice(ny_all.size, size=k, replace=False)
+        ny, nx = ny_all[sel], nx_all[sel]
+
+        feats = self.static
+        extra = extra or []
+        n_static = len(feats)
+        X = np.empty((py.size + k, n_static + len(extra)), dtype=np.float32)
+        y = np.zeros(py.size + k, dtype=np.int8)
+        y[:py.size] = 1
+        all_y = np.concatenate([py, ny])
+        all_x = np.concatenate([px, nx])
+        del py, px, ny, nx
+        for j, i in enumerate(feats):
+            col = np.asarray(self.data[i], dtype=np.float32)
+            X[:, j] = col[all_y, all_x]
+        for j, a in enumerate(extra):
+            X[:, n_static + j] = np.asarray(a, dtype=np.float32)[all_y, all_x]
+        return X, y
 
 
-def _sample_training(stack, cat, train_mask, rng):
-    """Stratified sample: all positives (capped) + NEG_PER_POS negatives."""
-    pos_idx = np.flatnonzero((cat & train_mask).ravel())
-    neg_idx = np.flatnonzero((~cat & train_mask).ravel())
-    if pos_idx.size > MAX_TRAIN_PX // (1 + NEG_PER_POS):
-        pos_idx = rng.choice(pos_idx, MAX_TRAIN_PX // (1 + NEG_PER_POS), replace=False)
-    n_neg = min(neg_idx.size, max(pos_idx.size * NEG_PER_POS, 20_000))
-    neg_idx = rng.choice(neg_idx, n_neg, replace=False)
-    idx = np.concatenate([pos_idx, neg_idx])
-    rows, cols = np.unravel_index(idx, grid.SHAPE)
-    X = np.empty((idx.size, stack.shape[0]), dtype=np.float32)
-    for k in range(stack.shape[0]):
-        X[:, k] = stack[k][rows, cols]
-    y = np.concatenate([np.ones(pos_idx.size), np.zeros(neg_idx.size)]).astype(np.int8)
-    X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
-    return X, y
+def fit_detector(X: np.ndarray, y: np.ndarray, seed: int = 0, **kw):
+    params = dict(loss="log_loss", learning_rate=0.08, max_iter=320,
+                  max_leaf_nodes=63, min_samples_leaf=40, l2_regularization=1.0,
+                  max_bins=255, early_stopping=False, random_state=seed)
+    params.update(kw)
+    m = HistGradientBoostingClassifier(**params)
+    m.fit(X, y)
+    return m
 
 
-def predict_box(model, stack, r0: int, r1: int, block: int = 200) -> np.ndarray:
-    """Predict the belief field over rows [r0, r1) in row blocks."""
-    cols = grid.SHAPE[1]
-    out = np.zeros((r1 - r0, cols), dtype=np.float32)
-    for s0 in range(r0, r1, block):
-        s1 = min(s0 + block, r1)
-        X = np.empty((stack.shape[0], (s1 - s0) * cols), dtype=np.float32)
-        for k in range(stack.shape[0]):
-            X[k] = stack[k, s0:s1, :].ravel()
-        X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0).T
-        out[s0 - r0:s1 - r0, :] = model.predict_proba(X)[:, 1].reshape(s1 - s0, cols)
-    return out.astype(np.float32)
-
-
-def predict_full_grid(model, stack) -> np.ndarray:
-    from .paths import WORK_DIR
-    rows, _ = grid.SHAPE
-    out = predict_box(model, stack, 0, rows)
-    WORK_DIR.mkdir(parents=True, exist_ok=True)
-    np.save(WORK_DIR / "belief_field_full.npy", out)
-    return out
-
-
-def run_folds(verbose: bool = True, n_blocks: int = 2, save_belief: bool = True):
-    """Train/predict each spatially blocked fold.  Returns (results, belief_by_fold)."""
-    from sklearn.ensemble import HistGradientBoostingClassifier
-    from sklearn.metrics import roc_auc_score
-
-    stack = load_or_build(verbose=verbose)
-    cat = grid.catalogue()
-    fp = grid.footprint()
-    d_cat = grid.catalogue_distance()
-    block = grid.spatial_blocks(n_blocks)
-    rng = np.random.default_rng(RNG_SEED)
-    rows_n = grid.SHAPE[0]
-    per_r = int(np.ceil(rows_n / n_blocks))
-
-    # Shrink every block by BUFFER_PX so that a 600 m band along every fold boundary is removed
-    # from BOTH training and scoring.  (The naive alternative -- removing pixels near the truth --
-    # deletes the positives themselves and yields AUC = nan with 0 training positives; that error
-    # was made and fixed in this repository, see registry/irregularities.json IR-51-15.)
-    from scipy.ndimage import distance_transform_edt as _edt
-    shrunk = {}
-    for bb in range(n_blocks * n_blocks):
-        m = block == bb
-        d_in = _edt(m)   # distance from inside the block to the nearest non-block pixel
-        shrunk[bb] = m & (d_in > BUFFER_PX)
-
-    results, beliefs = [], {}
-    for b in range(n_blocks * n_blocks):
-        test_mask = shrunk[b] & fp
-        train_ok = np.zeros(grid.SHAPE, bool)
-        for k, sm in shrunk.items():
-            if k != b:
-                train_ok |= sm
-        train_mask = train_ok & fp
-        X, y = _sample_training(stack, cat, train_mask, rng)
-        model = HistGradientBoostingClassifier(
-            max_iter=220, learning_rate=0.08, max_depth=None, max_leaf_nodes=31,
-            min_samples_leaf=40, l2_regularization=1.0, random_state=RNG_SEED, early_stopping=False)
-        model.fit(X, y)
-        r0 = (b // n_blocks) * per_r
-        r1 = min(r0 + per_r, rows_n)
-        sub = predict_box(model, stack, r0, r1)
-        belief = np.zeros(grid.SHAPE, dtype=np.float32)
-        belief[r0:r1, :] = sub
-        beliefs[b] = belief
-        lab = (cat & test_mask)
-        sc = belief[test_mask]
-        auc = float(roc_auc_score(lab[test_mask], sc)) if lab[test_mask].any() else float("nan")
-        r = FoldResult(fold=b, auc=auc, n_train_pos=int(y.sum()), n_train_neg=int((y == 0).sum()),
-                       test_px=int(test_mask.sum()))
-        results.append(r)
-        if verbose:
-            print(f"[stage B] fold {b}: AUC={auc:.4f} train_pos={r.n_train_pos} "
-                  f"test_px={r.test_px:,}")
-    return results, beliefs
-
-
-# ---------------------------------------------------------------------------------------------
-# Emission rules compared on the folds (matched pixel counts; paired contrasts)
-# ---------------------------------------------------------------------------------------------
-
-def rule_incumbent(belief: np.ndarray, mask: np.ndarray, n_px: int, min_dist: float = 2.8,
-                   seed: int = RNG_SEED) -> np.ndarray:
-    """Incumbent-style dot-thin rule: priority = belief, enforce min separation (greedy)."""
-    return _greedy_by_score(belief, mask, n_px, min_dist)
-
-
-def rule_credit_density(belief: np.ndarray, mask: np.ndarray, n_px: int, min_dist: float = 2.8,
-                        seed: int = RNG_SEED) -> np.ndarray:
-    """Ours: priority = kernel-matched belief (expected credit) / expected cost (1 - belief)."""
-    from scipy.ndimage import convolve
-    k = metric.kernel
-    r = int(np.ceil(metric.RADIUS_PX))
-    kern = np.zeros((2 * r + 1, 2 * r + 1), dtype=np.float32)
-    for dy in range(-r, r + 1):
-        for dx in range(-r, r + 1):
-            kern[dy + r, dx + r] = float(k(np.hypot(dy, dx)))
-    credit = convolve(np.nan_to_num(belief, nan=0.0).astype(np.float32), kern, mode="constant")
-    cost = np.clip(1.0 - np.nan_to_num(belief, nan=0.0), 1e-3, 1.0)
-    score = (credit / cost).astype(np.float32)
-    return _greedy_by_score(score, mask, n_px, min_dist)
-
-
-def _greedy_by_score(score: np.ndarray, mask: np.ndarray, n_px: int, min_dist: float) -> np.ndarray:
-    """Greedy accept by descending score with a hard minimum separation (in pixels)."""
-    cand = mask & np.isfinite(score)
-    flat = np.flatnonzero(cand.ravel())
-    if flat.size == 0 or n_px <= 0:
-        return np.zeros(grid.SHAPE, bool)
-    order = flat[np.argsort(-score.ravel()[flat], kind="stable")]
-    taken_rows, taken_cols, taken = [], [], []
-    cell = max(1, int(np.floor(min_dist)))
-    occupied: dict[tuple[int, int], list[tuple[int, int]]] = {}
-    md2 = min_dist ** 2
-    for idx in order:
-        if len(taken) >= n_px:
-            break
-        rr, cc = divmod(int(idx), grid.SHAPE[1])
-        key = (rr // cell, cc // cell)
-        ok = True
-        for ddr in (-1, 0, 1):
-            for ddc in (-1, 0, 1):
-                for (tr, tc) in occupied.get((key[0] + ddr, key[1] + ddc), ()):
-                    if (rr - tr) ** 2 + (cc - tc) ** 2 < md2:
-                        ok = False
-                        break
-                if not ok:
-                    break
-            if not ok:
-                break
-        if not ok:
+def predict_grid(model, stack: Stack, footprint: np.ndarray,
+                 extra: list | None = None, chunk: int = 186) -> np.ndarray:
+    """Score every footprint pixel; NaN elsewhere."""
+    H, W = GRID.shape
+    out = np.full((H, W), np.nan, dtype=np.float32)
+    for r0 in range(0, H, chunk):
+        r1 = min(r0 + chunk, H)
+        rows = slice(r0, r1)
+        fb = footprint[rows]
+        if not fb.any():
             continue
-        occupied.setdefault(key, []).append((rr, cc))
-        taken_rows.append(rr)
-        taken_cols.append(cc)
-        taken.append(idx)
-    out = np.zeros(grid.SHAPE, bool)
-    out[np.array(taken_rows, dtype=np.int32), np.array(taken_cols, dtype=np.int32)] = True
-    return out
-
-
-def fold_masks(n_blocks: int = 2, buffer_px: float = BUFFER_PX):
-    """Shrunk fold masks (dict) after removing the 600 m boundary band from every fold."""
-    from scipy.ndimage import distance_transform_edt as _edt
-    block = grid.spatial_blocks(n_blocks)
-    fp = grid.footprint()
-    out = {}
-    for b in range(n_blocks * n_blocks):
-        m = block == b
-        out[b] = m & (_edt(m) > buffer_px) & fp
+        X = stack.block_matrix(rows, fb, extra)
+        p = model.predict_proba(X)[:, 1].astype(np.float32)
+        tmp = out[rows]
+        tmp[fb] = p
+        out[rows] = tmp
     return out

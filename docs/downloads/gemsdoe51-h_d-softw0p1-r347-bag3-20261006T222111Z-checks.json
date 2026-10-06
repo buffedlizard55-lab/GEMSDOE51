@@ -1,0 +1,150 @@
+{
+ "generated_utc": "20261006T222111Z",
+ "arm": "H_D",
+ "ratio": 3.47,
+ "g_hidden_estimate": 12700,
+ "stage1_q": 70.0,
+ "gate_mode": "soft",
+ "gate_weight": 0.1,
+ "tile_px": 100,
+ "nms_radius": 2.4,
+ "excl_radius": 2.0,
+ "n_dots": 44069,
+ "extra_features": [
+  "lidrel_facecoh09",
+  "lidrel_facecoh21",
+  "detelev_facecoh09",
+  "detelev_facecoh21"
+ ],
+ "stage1": {
+  "approved_px": 1552597,
+  "approved_share_of_footprint": 0.30046156915709393,
+  "emitted_share_inside_approved": 0.2030679162222878,
+  "lift_over_area": 0.6758532107516064,
+  "threshold": 0.15780445969125212,
+  "fault_median_II_nanostrain": 0.0,
+  "obs_median_II_nanostrain": 21.016352256722218,
+  "kostrov_meta": {
+   "tile_px": 100,
+   "tile_shape": [
+    38,
+    33
+   ],
+   "h_seis_m": 15000.0,
+   "median_centroid_distance_px": 36.345563690772494,
+   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+   "regional_median_slip_rate_mm_yr": 0.1,
+   "total_mapped_trace_km": 6821.350197517395
+  }
+ },
+ "primary": {
+  "file": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+  "zip": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip",
+  "nan_twin": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+  "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
+  "submission_name": "GEMSDOE51 H_D two-stage",
+  "note": "GEMSDOE51 two-stage: H_D detector with the 10 km Kostrov strain-budget deficit as a soft multiplicative prior w=0.1; 44,069 dots at 2.4 px spacing, none within 200 m of the catalogue; both stages holdout-scored separately. UNSCORED",
+  "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "transform_matches_template": true,
+   "shape_matches_template": true,
+   "all_cells_finite": true,
+   "nan_cells": 0,
+   "values_outside_0_1": 0,
+   "min_value": 0.0,
+   "max_value": 1.0,
+   "nodata_tag_is_none": true,
+   "positive_px": 44069,
+   "total_mass": 44069.0,
+   "portal_legal": true
+  },
+  "evidence": "format checks are MEASURED by re-reading the written bytes; no score on this page is organizer-verified",
+  "format_table": [
+   [
+    "single band",
+    "True"
+   ],
+   [
+    "dtype float32",
+    "True"
+   ],
+   [
+    "CRS EPSG:32611",
+    "True"
+   ],
+   [
+    "geotransform matches template",
+    "True"
+   ],
+   [
+    "3730 x 3292",
+    "True"
+   ],
+   [
+    "all cells finite",
+    "True"
+   ],
+   [
+    "values inside [0, 1]",
+    "True"
+   ],
+   [
+    "nodata tag absent",
+    "True"
+   ],
+   [
+    "positive pixels",
+    "44,069"
+   ],
+   [
+    "total emitted mass",
+    "44,069"
+   ]
+  ]
+ },
+ "nan_twin_checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "crs_epsg_32611": true,
+  "transform_matches_template": true,
+  "shape_matches_template": true,
+  "all_cells_finite": false,
+  "nan_cells": 7111787,
+  "values_outside_0_1": 0,
+  "min_value": 0.0,
+  "max_value": 1.0,
+  "nodata_tag_is_none": false,
+  "positive_px": 44069,
+  "total_mass": 44069.0,
+  "portal_legal": true
+ },
+ "uniqueness": {
+  "candidate": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+  "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
+  "byte_duplicate_of": [],
+  "support_jaccard": {
+   "g25_dotted_02600": 0.015317,
+   "g32_anchor_02708": 0.015317,
+   "g32_h33b2_02778": 0.016544
+  },
+  "support_containment": {
+   "g25_dotted_02600": 0.03018,
+   "g32_anchor_02708": 0.03018,
+   "g32_h33b2_02778": 0.03018
+  },
+  "stage1_dominance": {
+   "approved_area_share_of_footprint": 0.30046156915709393,
+   "emitted_pixels_inside_approved": 8949,
+   "emitted_pixels_total": 44069,
+   "emitted_share_inside_approved": 0.2030679162222878,
+   "lift_over_area_share": 0.6758532107516064
+  },
+  "verdict": "PASS",
+  "notes": [
+   "emission is under-represented inside the Stage 1 approved tiles (lift 0.68): the fine-scale model is placing points by its own criteria, so Stage 1 does not dominate -- but note the two stages are mildly anti-correlated at the point level"
+  ]
+ }
+}

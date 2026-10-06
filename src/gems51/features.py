@@ -1,138 +1,147 @@
-"""Feature stack for Stage B.
+"""Feature stack construction for the GEMS fault-discovery detector.
 
-Sources (all hash-pinned, restored by scripts/fetch_data.py):
-  * 19 official bands of `training_features.tif` (organizer download; band tags read from the file)
-  * 12 lidar scarp-proxy bands  (external/lidar_scarp_features_u8.tif, uint8, 0-255, 0 = nodata)
-  * 4 GeoDAWN radiometric bands (external/geodawn_rad_u8.tif: K, Th, U, TC)
-  * 4 GeoDAWN extension bands   (external/geodawn_extensions_u8.tif: ThK, UK, UTh, TMI_up150)
-  * 1 SGMC fault raster         (external/derived_sgmc_faults_100m_u8.tif, binary)
+Layer inventory
+---------------
+A. Competition ``training_features.tif`` (19 float32 bands, EPSG:32611, 100 m):
+   the band names and descriptions below are read straight from the GeoTIFF's
+   own band descriptions (see ``registry/prepared_manifest.json``), not guessed.
 
-Derived transforms (computed here, documented in the site):
-  * log_det_elev        difference of Gaussians of the detrended elevation (scarp sharpness)
-  * ridge_det_elev      structure-tensor ridge-ness of detrended elevation (curvilinear edges)
-  * edge_tc             gradient magnitude of the `tc` tilt-angle / curvature magnetic edge band
-  * dist_sgmc           distance (px) to the SGMC fault raster
+B. Owner-supplied external mirrors, all hash-pinned in ``registry/data_manifest.json``:
+   ``external/lidar_scarp_features_u8.tif``  (12 bands, 1 m DEM derived)
+   ``external/geodawn_rad_u8.tif``           (K, Th, U, TC)
+   ``external/derived_sgmc_faults_100m_u8.tif`` (USGS SGMC faults rasterised)
 
-The stack is written ONE CHANNEL AT A TIME into a memory-mapped .npy file (43 x 3730 x 3292
-float32 = 2.1 GB on disk) so that building it, sampling it for training and predicting from it
-never require the whole tensor in RAM.  Honest note: this module used to build the stack in
-memory and was OOM-killed in this sandbox at 43 channels; the memmap form is the fix.
+C. Point observations from GDR submission 1391 (https://gdr.openei.org/submissions/1391):
+   wells/springs and volcanic vents, clipped to the footprint.
 """
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
-import rasterio
-from scipy.ndimage import distance_transform_edt, gaussian_filter, sobel
 
-from . import grid
-from .paths import GEODAWN_EXT, GEODAWN_RAD, LIDAR_SCARP, SGMC_FAULTS, WORK_DIR
+from .grid import GRID, SENTINEL, read_band
 
-#: 12 bands.  The first six names are read from the file's own band descriptions; bands 7-12
-#: carry no description in the mirrored file, so they are carried as unlabelled placeholders and
-#: flagged in registry/irregularities.json IR-51-10 rather than guessed at.
-LIDAR_BAND_NAMES = ("ex_max", "ex_mean", "step_max", "lapneg_max", "lappos_max", "downface_max",
-                    "band07_unlabelled", "band08_unlabelled", "band09_unlabelled",
-                    "band10_unlabelled", "band11_unlabelled", "band12_unlabelled")
-RAD_BAND_NAMES = ("K", "Th", "U", "TC")
-EXT_BAND_NAMES = ("ThK", "UK", "UTh", "TMI_up150")
+# ---- band order of data/raw/training_features.tif (1-based, from the file itself)
+COMPETITION_BANDS = [
+    ("mag_anom", "Magnetic anomaly - deviation from expected Earth's magnetic field"),
+    ("rtp", "Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects"),
+    ("tmi_hg", "Total magnetic intensity horizontal gradient"),
+    ("geod_2ndinv", "Geodetic second invariant - magnitude of the strain rate tensor"),
+    ("iso_grav_anom_slope", "Isostatic gravity anomaly slope"),
+    ("tc", "Tilt angle or total curvature - magnetic field derivative for edge detection"),
+    ("geod_shearrate", "Geodetic shear rate - angular deformation rate from GPS/InSAR"),
+    ("geod_dilaterate", "Geodetic dilatation rate - volumetric strain rate"),
+    ("tmi_vg", "Total magnetic intensity vertical gradient"),
+    ("deq_n100a15", "Distance to earthquake (n=100 km radius, a=15 deg azimuth)"),
+    ("iso_grav_anom_vg", "Isostatic gravity anomaly vertical gradient"),
+    ("det_elev", "Detrended elevation - topography with regional trends removed"),
+    ("iso_grav_anom", "Isostatic gravity anomaly"),
+    ("tmi", "Total magnetic intensity"),
+    ("depth_to_base_surf", "Depth to basement surface - thickness of sedimentary cover"),
+    ("ieq_n100a15", "Earthquake intensity or density (n=100 km radius, a=15 deg)"),
+    ("cond_surf", "Conductivity surface - electrical conductivity of the subsurface"),
+    ("iso_grav_anom_hg", "Isostatic gravity anomaly horizontal gradient"),
+    ("det_elev_slope", "Detrended elevation slope"),
+]
 
-FEATURE_NAMES: tuple[str, ...] = (
-    *grid.BAND_NAMES,
-    *(f"lidar_{n}" for n in LIDAR_BAND_NAMES),
-    *(f"rad_{n}" for n in RAD_BAND_NAMES),
-    *(f"ext_{n}" for n in EXT_BAND_NAMES),
-    "sgmc", "log_det_elev", "ridge_det_elev", "edge_tc", "dist_sgmc",
-)
-N_CHANNELS = len(FEATURE_NAMES)
-STACK_PATH = WORK_DIR / "feature_stack.npy"
+# ---- band order of data/raw/external/lidar_scarp_features_u8.tif
+LIDAR_BANDS = ["ex_max", "ex_mean", "step_max", "lapneg_max", "lappos_max",
+               "downface_max", "upface_max", "cross_max", "relief", "coh100",
+               "strike", "valid"]
 
+# ---- band order of data/raw/external/geodawn_rad_u8.tif
+RAD_BANDS = ["K", "Th", "U", "TC"]
 
-def _u8(path, band: int = 1) -> np.ndarray:
-    with rasterio.open(path) as ds:
-        a = ds.read(band).astype(np.float32)
-        nod = ds.nodata
-    if nod is not None:
-        a[a == nod] = np.nan
-    return a
-
-
-def _ridge_ness(x: np.ndarray, sigma: float = 2.0) -> np.ndarray:
-    """Structure-tensor ridge-ness: |lambda_max - lambda_min| of the smoothed Hessian."""
-    xs = gaussian_filter(np.nan_to_num(x, nan=0.0).astype(np.float32), sigma)
-    gx = sobel(xs, axis=1, mode="nearest")
-    gy = sobel(xs, axis=0, mode="nearest")
-    jxx = gaussian_filter(gx * gx, sigma)
-    jyy = gaussian_filter(gy * gy, sigma)
-    jxy = gaussian_filter(gx * gy, sigma)
-    tr, det = jxx + jyy, jxx * jyy - jxy * jxy
-    disc = np.sqrt(np.maximum(tr * tr / 4.0 - det, 0.0))
-    return np.abs(2.0 * disc).astype(np.float32)
+GEODETIC = {"geod_2ndinv": 3, "geod_shearrate": 6, "geod_dilaterate": 7}  # 0-based index
 
 
-def channel_generators() -> Iterator[tuple[str, object]]:
-    """Yield (name, callable) lazily so only one channel is in RAM at a time."""
-    for n in grid.BAND_NAMES:
-        yield n, (lambda n=n: grid.read_band(n))
-    for i, nm in enumerate(LIDAR_BAND_NAMES, start=1):
-        yield f"lidar_{nm}", (lambda i=i: _u8(LIDAR_SCARP, i))
-    for i, nm in enumerate(RAD_BAND_NAMES, start=1):
-        yield f"rad_{nm}", (lambda i=i: _u8(GEODAWN_RAD, i))
-    for i, nm in enumerate(EXT_BAND_NAMES, start=1):
-        yield f"ext_{nm}", (lambda i=i: _u8(GEODAWN_EXT, i))
-    yield "sgmc", (lambda: _u8(SGMC_FAULTS, 1).astype(np.float32))
+@dataclass
+class Stack:
+    """A stack of aligned rasters.  ``data`` is (n, H, W) float32 with NaN = invalid."""
+    names: list
+    data: np.ndarray          # np.memmap or ndarray, float32, (n, H, W)
+    footprint: np.ndarray     # bool (H, W)
 
-    def _dog():
-        det = np.nan_to_num(grid.read_band("det_elev"), nan=0.0).astype(np.float32)
-        return (gaussian_filter(det, 1.0) - gaussian_filter(det, 4.0)).astype(np.float32)
+    def __post_init__(self):
+        assert self.data.shape[0] == len(self.names)
+        assert self.data.shape[1:] == self.footprint.shape
 
-    def _tc_edge():
-        tc = np.nan_to_num(grid.read_band("tc"), nan=0.0).astype(np.float32)
-        return np.hypot(sobel(tc, axis=1, mode="nearest"),
-                        sobel(tc, axis=0, mode="nearest")).astype(np.float32)
+    def index(self, name: str) -> int:
+        return self.names.index(name)
 
-    def _dist_sgmc():
-        s = _u8(SGMC_FAULTS, 1)
-        return distance_transform_edt(~(s > 0)).astype(np.float32)
-
-    yield "log_det_elev", _dog
-    yield "ridge_det_elev", (lambda: _ridge_ness(grid.read_band("det_elev")))
-    yield "edge_tc", _tc_edge
-    yield "dist_sgmc", _dist_sgmc
+    def get(self, name: str) -> np.ndarray:
+        return self.data[self.index(name)]
 
 
-def build_stack(path=None, verbose: bool = True) -> str:
-    path = path or STACK_PATH
-    path.parent.mkdir(parents=True, exist_ok=True)
-    mm = np.lib.format.open_memmap(path, mode="w+", dtype=np.float32,
-                                   shape=(N_CHANNELS, *grid.SHAPE))
-    names = []
-    for k, (name, fn) in enumerate(channel_generators()):
-        arr = fn()
-        mm[k] = arr
-        names.append(name)
-        del arr
-        if verbose and (k % 10 == 0 or k == N_CHANNELS - 1):
-            print(f"[features] {k + 1}/{N_CHANNELS} {name}", flush=True)
-    mm.flush()
-    del mm
-    if tuple(names) != FEATURE_NAMES:
-        missing = set(FEATURE_NAMES) ^ set(names)
-        raise AssertionError(f"channel/name mismatch ({len(names)} vs {N_CHANNELS}); "
-                             f"symmetric difference: {sorted(missing)[:6]}")
-    return str(path)
+def clean_band(arr: np.ndarray, nodata=None) -> np.ndarray:
+    """float32 -> float32 with the competition sentinel and non-finite cells as NaN."""
+    a = np.asarray(arr, dtype=np.float32)
+    out = np.where(np.isfinite(a), a, np.nan).astype(np.float32)
+    if nodata is not None and np.isfinite(nodata):
+        out[out == np.float32(nodata)] = np.nan
+    out[out <= SENTINEL / 2.0] = np.nan
+    return out
 
 
-def load_or_build(verbose: bool = True):
-    """Return a read-only memmap of the stack, building it if missing or stale."""
-    if STACK_PATH.exists():
-        try:
-            mm = np.load(STACK_PATH, mmap_mode="r")
-            if mm.shape[0] == N_CHANNELS and mm.shape[1:] == grid.SHAPE:
-                return mm
-        except ValueError:
-            pass
-    build_stack(verbose=verbose)
-    return np.load(STACK_PATH, mmap_mode="r")
+def robust_standardise(a: np.ndarray, mask: np.ndarray, lo=2.0, hi=98.0) -> np.ndarray:
+    """Median/IQR-ish standardisation computed only on ``mask``; NaN elsewhere."""
+    v = a[mask & np.isfinite(a)]
+    med = np.median(v)
+    p_lo, p_hi = np.percentile(v, lo), np.percentile(v, hi)
+    scale = max((p_hi - p_lo) / 2.0, 1e-9)
+    out = (a - med) / scale
+    out[~np.isfinite(out)] = np.nan
+    return np.clip(out, -8.0, 8.0).astype(np.float32)
+
+
+def rank_transform(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """Empirical-CDF (rank) transform to [0, 1] computed on ``mask``.
+
+    Rank transform is the right default for heavy-tailed geophysical layers:
+    it is monotone, immune to outliers, and gives a tree/GBDT model a
+    well-conditioned input without ever seeing the test-fold distribution.
+    """
+    out = np.full(a.shape, np.nan, dtype=np.float32)
+    v = a[mask & np.isfinite(a)]
+    if v.size == 0:
+        return out
+    order = np.argsort(v, kind="mergesort")
+    ranks = np.empty(v.size, dtype=np.float64)
+    ranks[order] = np.arange(1, v.size + 1, dtype=np.float64)
+    # average ranks for ties
+    sv = v[order]
+    i = 0
+    while i < sv.size:
+        j = i
+        while j + 1 < sv.size and sv[j + 1] == sv[i]:
+            j += 1
+        if j > i:
+            ranks[order[i:j + 1]] = ranks[order[i:j + 1]].mean()
+        i = j + 1
+    r = np.full(a.shape, np.nan, dtype=np.float64)
+    r[mask & np.isfinite(a)] = ranks / v.size
+    out = r.astype(np.float32)
+    out[~mask] = np.nan
+    return out
+
+
+def load_competition_stack(raw: Path) -> tuple[list, np.ndarray, np.ndarray]:
+    """Load the 19 competition bands; returns (names, (19,H,W) f32 with NaN, footprint)."""
+    import rasterio
+    path = raw / "training_features.tif"
+    names, arrs = [], []
+    with rasterio.open(path) as src:
+        assert (src.height, src.width) == GRID.shape, "unexpected feature raster shape"
+        descs = list(src.descriptions)
+        for i in range(src.count):
+            nm = COMPETITION_BANDS[i][0]
+            if descs and descs[i]:
+                nm = descs[i].split(" - ")[0].strip()
+            names.append(nm)
+            arrs.append(clean_band(src.read(i + 1), src.nodata))
+    data = np.stack(arrs).astype(np.float32)
+    footprint = np.isfinite(data).all(axis=0)
+    return names, data, footprint

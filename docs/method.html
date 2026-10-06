@@ -1,75 +1,93 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Method &amp; gates — GEMSDOE51</title><style>
-:root{--ink:#12202c;--mut:#5b6b7c;--bg:#f5f7fa;--card:#fff;--line:#dbe2ea;--ok:#0d7a4a;
---warn:#8a5300;--acc:#0b5fa5}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
-font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-header{background:#0c1a28;color:#fff;padding:20px 0 14px}
-header .in,main,footer .in{max-width:1080px;margin:0 auto;padding:0 20px}
-h1{margin:0 0 4px;font-size:1.42rem}h2{margin:30px 0 8px;font-size:1.2rem;
-border-bottom:2px solid var(--line);padding-bottom:5px}h3{margin:18px 0 6px;font-size:1.02rem}
-a{color:var(--acc)}nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:7px}
-nav a{color:#cfe3ff;text-decoration:none;border:1px solid #2b4462;border-radius:999px;
-padding:4px 12px;font-size:.86rem}nav a.on{background:#cfe3ff;color:#0c1a28;border-color:#cfe3ff}
-main{padding:6px 0 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;
-padding:18px 20px;margin:14px 0;box-shadow:0 1px 2px rgba(16,24,40,.05)}
-.hero{border:2px solid var(--ok);background:linear-gradient(180deg,#f1fbf5,#fff)}
-.btn{display:inline-block;background:var(--ok);color:#fff;font-weight:700;text-decoration:none;
-padding:13px 20px;border-radius:10px;font-size:1.03rem;margin:5px 8px 5px 0}
-.btn.alt{background:#fff;color:var(--ok);border:2px solid var(--ok)}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;word-break:break-all}
-table{border-collapse:collapse;width:100%;margin:9px 0;font-size:.92rem}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:#eef2f7}.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:.75rem;
-font-weight:700;border:1px solid}
-.p-meas{color:var(--ok);border-color:var(--ok);background:#eafaf1}
-.p-proxy{color:var(--warn);border-color:var(--warn);background:#fff6e8}
-.p-live{color:var(--acc);border-color:var(--acc);background:#eaf2fc}
-ul,ol{margin:8px 0 8px 22px;padding:0}li{margin:4px 0}
-.mut{color:var(--mut)}.small{font-size:.88rem;line-height:1.5}
-pre{background:#0c1a28;color:#e8eef5;padding:12px 14px;border-radius:9px;overflow-x:auto;
-font-size:.85rem;line-height:1.5}
-footer{color:var(--mut);font-size:.85rem;padding:18px 0 40px}
-</style></head><body>
-<header><div class="in"><h1>GEMSDOE51 — DOE GEMS Prize, round 1</h1>
-<div class="small">DrivenData #306 · GeoDAWN / NW Nevada · unique, gated, <strong>unscored</strong>
-submission · every number traceable to a file in this repository</div>
-<nav><a class="" href="index.html">Executive summary</a><a class="" href="analysis.html">Why 0.2778? Can we beat it?</a><a class="" href="strategy.html">Strategy versus the leaders</a><a class="" href="hypotheses.html">Hypotheses</a><a class="on" href="method.html">Method &amp; gates</a><a class="" href="irregularities.html">Irregularities</a><a class="" href="claims.html">Claims</a><a class="" href="sources.html">Sources</a><a class="" href="leaderboard.html">Leaderboard</a></nav></div></header><main><div class="in"><div class="card"><h1>Method, gates and prudence rules</h1>
-<pre>python3 scripts/fetch_data.py --group all      # restore 26 sha256-pinned files, fail closed
-python3 scripts/run_all.py --skip-data         # full pipeline, fresh evidence
-python3 scripts/rebuild_submission.py          # rebuild the shipped raster from the cached field
-python3 scripts/run_offcat_holdout.py          # off-catalogue A/B instrument (decisive test)
-python3 scripts/check_stage_a_convention.py    # IR-51-04 follow-up
-python3 scripts/build_site.py                  # regenerate this site
-pytest tests -q                                # 9 tests incl. brute-force metric</pre>
-<h3>Prudence rules (fixed before the emission was built; registry/preregistration.json)</h3>
-<ul>
-<li><strong>Slot rule:</strong> nothing ships unless it beats the incumbent on a declared instrument
-(mean paired DTI &gt; 0 AND ≥ 3/4 folds positive).</li>
-<li><strong>Fold rule:</strong> 2×2 spatial blocks with a 600 m boundary band removed from
-<em>both</em> training and scoring.</li>
-<li><strong>Mass rule:</strong> emission size comes from the measured mass sweep, never from a
-model's self-prediction (the packer's dti_pred was ~0.49 against a realised ~0.27).</li>
-<li><strong>Off-catalogue rule:</strong> every dot is ≥ 2 px from the catalogue, inside an approved
-tile, inside the footprint.</li>
-<li><strong>Range rule:</strong> float32, all-finite, [0,1], no nodata tag.</li>
-</ul>
-<h3>Data provenance</h3>
-<p class="small">26 files, 576,896,511 bytes, every one pinned by
-sha256 in <span class="mono">registry/data_manifest.json</span>. The pins prove <strong>mirror
-consistency, not organiser authentication</strong>: the bytes come from owner-published public GitHub
-mirrors because the DrivenData data page is login-walled (IR-51-13). A reviewer with portal access
-should re-download and diff.</p>
-<h3>What was tried and did not work (so it is not retried)</h3>
-<ul>
-<li>The brief's literal strain-budget deficit as a locator — refuted on three instruments (H51-3).</li>
-<li>Credit-density emission ordering (−0.0019, 2/4 folds) and redundancy-aware expected-budget
-packing (−0.0034, 1/4 folds).</li>
-<li>The coverage-lattice emission (−0.0104, 1/4 folds on the faithful instrument; IR-51-05).</li>
-<li>SGMC/pre-Quaternary gap closure (wrong sign on both instruments; H51-5).</li>
-</ul></div></div></main>
-<footer><div class="in">Repository: <a href="https://github.com/buffedlizard55-lab/GEMSDOE51">github.com/buffedlizard55-lab/GEMSDOE51</a>.
-No leaderboard score is claimed for any file here. Provenance limitation: organiser bytes are behind
-a login wall, so inputs come from owner-published mirrors pinned by sha256 — the pins prove mirror
-consistency, not organiser authentication.</div></footer></body></html>
+<title>Method</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>  
+  <a class="" href="how-to-submit.html">How to submit</a>  
+  <a class="active" href="method.html">Method</a>  
+  <a class="" href="hypotheses.html">Hypotheses</a>  
+  <a class="" href="holdout.html">Holdout</a>  
+  <a class="" href="analysis.html">Analysis</a>  
+  <a class="" href="sources.html">Sources</a>  
+  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
+
+<h2>Method</h2>
+<h3>Stage 1 — geodetic strain-budget deficit (coarse prior only)</h3>
+<p>Kostrov (1974) moment-tensor summation, per tile:</p>
+<pre>eps_dot_ij  =  (1 / (2·mu·V)) · sum_k  Mdot_ij^(k)
+Mdot_ij^(k) =  mu · A_k · sdot_k · ( n_i·m_j + n_j·m_i )
+A_k = L_k · W_k ,  W_k = H / sin(delta) ,  V = A_tile · H</pre>
+<p>mu and H cancel, giving the two working equations used in the code:</p>
+<pre>strike-slip :  eps_dot_sn = L_k · sdot_k / (2 · A_tile · sin delta)
+dip-slip    :  eps_dot_nn = L_k · sdot_k · cot(delta) / A_tile</pre>
+<p>Slip rates come from the INGENIOUS compilation mirrored in
+<a href="https://gdr.openei.org/submissions/1391">GDR submission 1391</a> — the attribute
+<code>slip_rate</code> (mm/yr) is present on all 1,126 traces, confirmed directly in
+<code>data/raw/external/gdr_qfaults_traces.csv</code>. Geometry (trace length per cell) comes from
+the catalogue raster itself, so L is exact at 100&nbsp;m resolution; dip follows from
+<code>slip_sense</code> (normal 60°, strike-slip 90°) and H is 15&nbsp;km with 10/20&nbsp;km
+sensitivities.</p>
+<p><b>Result, measured over the 10&nbsp;km tiles:</b> the mapped faults accommodate a median of
+<b>5.3</b> nanostrain/yr of second invariant <i>on tiles that contain a mapped trace</i>,
+against an observed geodetic median of <b>21.0</b> — about <b>25&nbsp;%</b>. Over
+<i>all</i> tiles the fault-accommodated median is exactly <b>0.0</b>, because most tiles contain no
+mapped trace at all. That is the structural reason the deficit is a weak prior: the fault term is
+near-null almost everywhere, so subtracting it mostly subtracts nothing, and where it is not null
+it is measuring how well-mapped a tile already is rather than how much strain is unaccounted
+for.</p>
+<p class="warn"><b>Convention caveat (IR-51-02).</b> The three geodetic layers shipped with the
+competition satisfy no exact algebraic identity — <code>sqrt(dil²+shear²)</code>,
+<code>sqrt((dil²+shear²)/2)</code> and <code>|dil|+|shear|</code> all miss by more than 30&nbsp;%
+locally (best r = 0.993) — so the invariant convention behind <code>geod_2ndinv</code> is not
+recoverable from the shipped data. Stage&nbsp;1 is therefore stated in <b>quantile space</b>,
+<code>Q(observed) − Q(fault)</code>, which is invariant to any monotone rescaling of either side.
+No absolute claim rests on the nanostrain/yr numbers.</p>
+<p>Used strictly as a prior over broad tiles. It approves tiles; it never places a point.</p>
+
+<h3>Stage 2 — fine-scale detector</h3>
+<p>Histogram gradient boosting over 58 physical layers: the 19 competition bands (rank
+transformed), ten 1&nbsp;m-DEM-derived scarp layers, four radiometric layers, the USGS SGMC fault
+raster, and a multi-scale lineament bank (gradient magnitude, crestness and Hessian anisotropy of
+detrended elevation, TMI, isostatic gravity and lidar relief at 150&nbsp;m and 400&nbsp;m).
+Missing data inside a smoothing window is handled by normalised convolution rather than
+zero-fill.</p>
+<p class="warn"><b>Leak control (IR-51-LEAK-01).</b> Any feature derived from the catalogue is a
+perfect training leak in a blocked holdout, because every positive has distance-to-catalogue
+exactly 0. Measured: in-block AUC collapsed to 0.500 with those columns present and recovered to
+0.667 without them. Catalogue-derived quantities are therefore excluded from the model and used
+only at emission time.</p>
+
+<h3>Emission</h3>
+<p>Greedy non-maximum suppression at a 2.4&nbsp;px radius, every point at least 200&nbsp;m from any
+catalogued fault pixel, at a mass chosen from the holdout. The reason for the sparsity is the
+break-even bar: a marginal pixel earning expected kernel credit <code>c</code> raises the score only
+if <code>c &gt; 0.2·DTI</code>, and pixels adjacent to an already-emitted dot earn almost nothing
+because the dot beside them already collected the credit.</p>
+<p class="warn"><b>Where Stage&nbsp;1 enters, in the two shipped files.</b> In the <b>primary</b>
+file the deficit enters as a <b>soft multiplicative prior</b>: the detector's field is multiplied by
+<code>1 + 0.10·z</code> where <code>z</code> is the standardised tile deficit clipped to ±4, so a
+high-deficit tile and a low-deficit tile differ by at most a few percent — enough to break ties
+between otherwise equal pixels, not enough to veto a strong detection. In the <b>secondary</b> file
+it enters as the brief's literal <b>hard gate</b>: emission is permitted only inside the top
+80&nbsp;% of tiles. The holdout says the soft version costs nothing (+0.0004, 4 of 6 folds) and the
+hard version costs 0.0025 and loses in 6 of 6 folds. Both numbers are on the
+<a href="holdout.html">holdout</a> page.</p>
+
+</main>
+<footer><div class="wrap">
+<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
+evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
+independently verifiable here. Organizer-verified = none; no score on this site has been
+confirmed by DrivenData.</p>
+</div></footer>
+</body></html>

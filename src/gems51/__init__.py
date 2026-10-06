@@ -1,10 +1,7 @@
-"""GEMSDOE51 -- a two-stage, strain-budget-constrained fault-discovery system for the DOE GEMS Prize.
+"""GEMSDOE51 — two-stage fault-discovery system for the DOE GEMS Prize (DrivenData #306).
 
-Stage A (coarse):  geodetic strain-budget deficit  -> approved broad tiles.
-Stage B (fine):    spatial-CV detector restricted to approved tiles -> sparse dot emission.
-
-Everything is auditable: every number in the site comes from a script in this repository and a
-receipt in `evidence/`.
+Stage 1 (coarse, prior only): geodetic strain-budget deficit over broad tiles.
+Stage 2 (fine, scored separately): a fault-detector field whose emitted points are
+placed only inside the tiles Stage 1 approves.
 """
-
-__version__ = "0.1.0"
+__version__ = "1.0.0"

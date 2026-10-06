@@ -1,79 +1,62 @@
-"""Distance-Weighted Tversky Index (DTI) for the DOE GEMS Prize Challenge.
+"""Official Distance-Weighted Tversky Index (DTI) for the DOE GEMS Prize Challenge.
 
-VERBATIM SOURCE (read in full, twice, on 2026-10-06):
-  https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric
+Source of the equations (verbatim, fetched 2026-10-06):
+    https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric
 
-Published definition (competition problem description, "Performance metric"):
+Published formulation
+---------------------
+    k(d)   = max(1 - d/R, 0),                        R = 300 m = 3 px at 100 m
+    TP_w   = sum_{g in G} max_{x : d(x,g) <= R}  p(x) * k(d(x,g))
+    FP_w   = sum_{x : p(x) > 0} p(x) * [1 - max_{g in G} k(d(x,g))]
+    FN_w   = sum_{g in G} [1 - max_{x : d(x,g) <= R} p(x) * k(d(x,g))]  = |G| - TP_w
+    DTI(a,b) = TP_w / (TP_w + a*FP_w + b*FN_w + eps),  a = 0.2, b = 0.8
 
-    k(d) = (1 - d/R)_+ = max(1 - d/R, 0),          R = 300 m  (= 3 px at 100 m)
+Two algebraic identities used throughout this repository (both proved in
+``tests/test_metric.py``):
 
-    TP_w = sum_{g in G} max_{x : d(x,g) <= R}  p(x) k(d(x,g))
-    FP_w = sum_{x : p(x) > 0}  p(x) [1 - max_{g in G} k(d(x,g))]
-    FN_w = sum_{g in G} [1 - max_{x : d(x,g) <= R} p(x) k(d(x,g))]
+    (I1)  FN_w = |G| - TP_w                       (immediate from the definitions)
+    (I2)  DTI  = TP_w / ( a*(TP_w + FP_w) + b*|G| + eps )
+          because TP + a FP + b(|G| - TP) = (1-b) TP + a FP + b|G| and 1-b = a.
 
-    DTI(alpha, beta) = TP_w / (TP_w + alpha FP_w + beta FN_w + eps),  alpha=0.2, beta=0.8.
+(I2) is the single most useful fact in the competition: the score is a *budget*.
+|G| is fixed by the hidden truth, so a submission is decided by the ratio of
+credit earned (TP_w) to mass emitted (TP_w + FP_w).  Differentiating (I2) with
+respect to adding one pixel of value p that earns credit c gives the
+**break-even credit bar** for the marginal emitted pixel:
 
-Two exact identities are used throughout this repository and are unit-tested:
+    c = a * DTI          ( = 0.2 * DTI ; e.g. 0.0556 at DTI = 0.278 )
 
-  (I1)  FN_w = |G| - TP_w              (substituted straight into the definition)
-  (I2)  T + F = sum_x p(x) - (sum_x p(x) k(d_g(x))) + (sum_g p_best(x_g)) ...
-        In the *dotted* regime used here (binary mass, no mutual coverage), the closed form
-        T = sum_g p_best, F = sum_x p(x)(1 - k_near(x)), K = |G| gives
-        DTI = T / (0.2(T + F) + 0.8 K)  -- the "budget" form, tested in tests/test_metric.py.
+A pixel whose expected kernel credit is below that bar *lowers* the score.
 
-MARGINAL-INCLUSION THEOREM (derived here, tested numerically in tests/test_metric.py).
-Add one unit of mass whose realised kernel credit against the *current* best is dT and whose own
-uncovered distance weight is dF.  Writing D = alpha(T+F) + beta K,
+Known-fault masking
+-------------------
+DrivenData staff (chrisk-dd) confirmed on 2026-09-16 that known USGS/INGENIOUS
+fault pixels are excluded from evaluation, and that the Final Prize Round
+re-scoring masks them too:
+    https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516
+and on 2026-09-23 that "new fault" means *any* fault pixel not already captured
+by USGS/INGENIOUS, explicitly including newly mapped geometry (continuations,
+splays, parallel strands) of an existing fault system:
+    https://community.drivendata.org/t/where-do-you-draw-the-line/11536
 
-    DTI' > DTI  <=>  (T + dT) D > T (D + alpha(dT + dF))
-                <=>  dT (D - alpha T) > alpha T dF
-                <=>  dT (alpha F + beta K) > alpha T dF.                       (T1)
-
-For a dot that lands on a pixel at kernel distance k from the nearest ground-truth pixel and
-covers exactly one ground-truth pixel (dT = k, dF = 1 - k), (T1) reduces to
-
-    k > alpha * DTI   (equivalently dT/dF > alpha*T/(alpha*F + beta*K)).          (T2)
-
-Equation (T2) is the "credit bar": alpha*DTI.  It is used in emission.py as the pruning rule and
-reported in the site.  NOTE ON PRIOR ART: an earlier expression alpha*s/(1-alpha*s) appears in the
-sibling repositories GEMSDOE28/GEMSDOE32 (their file `src/gems32/metric.py`, irregularity
-IR-32-BAR-01) and is NOT used here; (T1) is the general form and (T2) is the special case.
+We implement masking as a boolean ``known`` grid: those cells are removed from
+the scored domain for *both* the truth set and the prediction mass.
 """
 
 from __future__ import annotations
-
-from dataclasses import dataclass
 
 import numpy as np
 from scipy.ndimage import distance_transform_edt
 
 ALPHA: float = 0.2
 BETA: float = 0.8
-RADIUS_PX: float = 3.0          # 300 m / 100 m pixel
+RADIUS_PX: float = 3.0
 EPS: float = 1e-12
-
-__all__ = [
-    "ALPHA", "BETA", "RADIUS_PX", "EPS", "kernel", "dti_from_components",
-    "evaluate", "evaluate_binary", "evaluate_bruteforce", "marginal_bar",
-    "marginal_gain_components", "CreditAudit", "credit_audit",
-]
 
 
 def kernel(d, radius: float = RADIUS_PX):
-    """Triangular kernel k(d) = max(1 - d/R, 0); d and radius in pixels."""
+    """Triangular kernel k(d) = max(1 - d/R, 0); d in pixels (1 px = 100 m)."""
     return np.maximum(1.0 - np.asarray(d, dtype=np.float64) / radius, 0.0)
-
-
-def _shift(arr: np.ndarray, dy: int, dx: int) -> np.ndarray:
-    """Return ``out`` with ``out[y, x] = arr[y - dy, x - dx]`` (zero fill outside)."""
-    out = np.zeros_like(arr)
-    h, w = arr.shape
-    ys0, ys1 = max(0, dy), min(h, h + dy)
-    xs0, xs1 = max(0, dx), min(w, w + dx)
-    if ys0 < ys1 and xs0 < xs1:
-        out[ys0:ys1, xs0:xs1] = arr[max(0, -dy):min(h, h - dy),
-                                    max(0, -dx):min(w, w - dx)]
-    return out
 
 
 def _offsets(radius: float = RADIUS_PX):
@@ -90,151 +73,115 @@ def _offsets(radius: float = RADIUS_PX):
 _OFFS = _offsets()
 
 
-def _check(pred, truth, valid):
+def _prepare(pred, truth, valid, known):
     pred = np.asarray(pred, dtype=np.float64)
     truth = np.asarray(truth)
-    if pred.ndim != 2:
-        raise ValueError("prediction must be a 2-D grid")
-    if truth.shape != pred.shape:
+    if pred.ndim != 2 or pred.shape != truth.shape:
         raise ValueError("prediction and truth must be equal-shaped 2-D grids")
-    if valid is None:
-        valid = np.ones(pred.shape, bool)
-    else:
-        valid = np.asarray(valid, bool)
-        if valid.shape != pred.shape:
-            raise ValueError("valid mask grid mismatch")
-    inside = pred[valid]
-    if inside.size and (not np.isfinite(inside).all()):
-        raise ValueError("predictions inside the scored domain must be finite")
-    if inside.size and ((inside < 0.0).any() or (inside > 1.0).any()):
-        raise ValueError("predictions inside the scored domain must lie in [0, 1]")
-    return pred, truth, valid
+    valid = np.ones(pred.shape, bool) if valid is None else np.asarray(valid, bool)
+    known = np.zeros(pred.shape, bool) if known is None else np.asarray(known, bool)
+    active = valid & ~known
+    if active.sum() == 0:
+        raise ValueError("empty scored domain")
+    vals = pred[active]
+    if not np.isfinite(vals).all() or (vals < 0).any() or (vals > 1).any():
+        raise ValueError("predictions inside the scored domain must be finite and in [0, 1]")
+    p = np.where(active, pred, 0.0)
+    g = active & (truth > 0)
+    return p, g, active
 
 
-def _clean(pred, truth, valid):
-    """Zero the prediction and truth outside the scored domain."""
-    p = np.where(valid & np.isfinite(pred), pred, 0.0).astype(np.float64)
-    g = valid & (np.asarray(truth) > 0)
-    return p, g
+def dti(pred, truth, valid=None, known=None, alpha=ALPHA, beta=BETA, radius=RADIUS_PX):
+    """Exact DTI for arbitrary soft predictions in [0, 1].
 
-
-def evaluate(pred, truth, valid=None) -> dict:
-    """Exact DTI for a soft or binary prediction.  Returns components + score."""
-    pred, truth, valid = _check(pred, truth, valid)
-    p, g = _clean(pred, truth, valid)
+    Returns a dict with tp, fp, fn, n_truth, dti, coverage, mass.
+    """
+    p, g, active = _prepare(pred, truth, valid, known)
     H, W = p.shape
-    n_truth = int(g.sum())
-    if n_truth == 0:
-        return dict(tp=0.0, fp=float(p.sum()), fn=0.0, n_truth=0, dti=0.0, coverage=0.0)
-    best = np.zeros(p.shape, dtype=np.float64)
-    for dy, dx, k in _OFFS:
-        # best[y, x] = max over offsets of p[y + dy, x + dx] * k   (credit for truth at (y, x))
-        np.maximum(best, _shift(p, -dy, -dx) * k, out=best)
-    np.clip(best, 0.0, 1.0, out=best)
-    tp = float(best[g].sum())
-    fn = float(n_truth) - tp
-    d_g = distance_transform_edt(~g)
-    fp = float((p * (1.0 - kernel(d_g))).sum())
-    return dict(tp=tp, fp=fp, fn=fn, n_truth=n_truth,
-                dti=dti_from_components(tp, fp, fn), coverage=tp / n_truth)
+    n = int(g.sum())
+    mass = float(p.sum())
+    if n == 0:
+        return dict(tp=0.0, fp=float(p.sum()), fn=0.0, n_truth=0,
+                    dti=0.0, coverage=0.0, mass=mass)
+    yy, xx = np.nonzero(g)
+    credit = np.zeros(n, dtype=np.float64)
+    # exact: max over the (2*ceil(R)+1)^2 neighbourhood of each truth pixel
+    for dy, dx, k in _offsets(radius):
+        ny, nx = yy + dy, xx + dx
+        ok = (ny >= 0) & (ny < H) & (nx >= 0) & (nx < W)
+        if not ok.any():
+            continue
+        credit[ok] = np.maximum(credit[ok], p[ny[ok], nx[ok]] * k)
+    tp = float(credit.sum())
+    fn = float(n) - tp
+    d = distance_transform_edt(~g)
+    fp = float((p * (1.0 - kernel(d, radius))).sum())
+    dti_v = tp / (tp + alpha * fp + beta * fn + EPS)
+    return dict(tp=tp, fp=fp, fn=fn, n_truth=n, dti=float(dti_v),
+                coverage=tp / n, mass=mass)
 
 
-def evaluate_binary(pred_bool, truth, valid=None) -> dict:
-    """Fast exact DTI for a binary {0,1} prediction (EDT identity), same convention."""
-    pred_bool = np.asarray(pred_bool, bool)
+def dti_binary(pred_bool, truth, valid=None, known=None, alpha=ALPHA, beta=BETA, radius=RADIUS_PX):
+    """Fast exact DTI for binary {0,1} predictions (Euclidean distance transforms)."""
+    pb = np.asarray(pred_bool, bool)
     truth = np.asarray(truth, bool)
-    if pred_bool.shape != truth.shape:
-        raise ValueError("prediction and truth must be equal-shaped grids")
-    valid_ = np.ones(pred_bool.shape, bool) if valid is None else np.asarray(valid, bool)
-    p = pred_bool & valid_
-    g = truth & valid_
-    n_truth = int(g.sum())
-    if n_truth == 0:
-        return dict(tp=0.0, fp=float(p.sum()), fn=0.0, n_truth=0, dti=0.0, coverage=0.0)
+    valid_ = np.ones(pb.shape, bool) if valid is None else np.asarray(valid, bool)
+    known_ = np.zeros(pb.shape, bool) if known is None else np.asarray(known, bool)
+    active = valid_ & ~known_
+    p = pb & active
+    g = truth & active
+    n = int(g.sum())
+    if n == 0:
+        return dict(tp=0.0, fp=float(p.sum()), fn=0.0, n_truth=0,
+                    dti=0.0, coverage=0.0, mass=float(p.sum()))
     if not p.any():
-        return dict(tp=0.0, fp=0.0, fn=float(n_truth), n_truth=n_truth, dti=0.0, coverage=0.0)
-    d_p = distance_transform_edt(~p)
-    tp = float(kernel(d_p[g]).sum())
-    fn = float(n_truth) - tp
-    d_g = distance_transform_edt(~g)
-    fp = float((1.0 - kernel(d_g[p])).sum())
-    return dict(tp=tp, fp=fp, fn=fn, n_truth=n_truth,
-                dti=dti_from_components(tp, fp, fn), coverage=tp / n_truth)
+        return dict(tp=0.0, fp=0.0, fn=float(n), n_truth=n,
+                    dti=0.0, coverage=0.0, mass=0.0)
+    dp = distance_transform_edt(~p)
+    tp = float(kernel(dp[g], radius).sum())
+    fn = float(n) - tp
+    dg = distance_transform_edt(~g)
+    fp = float((1.0 - kernel(dg[p], radius)).sum())
+    d = tp / (tp + alpha * fp + beta * fn + EPS)
+    return dict(tp=tp, fp=fp, fn=fn, n_truth=n, dti=float(d), coverage=tp / n, mass=float(p.sum()))
 
 
-def evaluate_bruteforce(pred, truth, radius: float = RADIUS_PX) -> dict:
-    """Literal transcription of the published equations, O(|G|*|P|).  Test oracle only."""
+def dti_bruteforce(pred, truth, valid=None, known=None, alpha=ALPHA, beta=BETA, radius=RADIUS_PX):
+    """Literal O(|G|*|P|) transcription of the published equations — for unit tests only."""
     pred = np.asarray(pred, dtype=np.float64)
     truth = np.asarray(truth, bool)
-    gs = np.argwhere(truth)
+    valid_ = np.ones(pred.shape, bool) if valid is None else np.asarray(valid, bool)
+    known_ = np.zeros(pred.shape, bool) if known is None else np.asarray(known, bool)
+    active = valid_ & ~known_
+    pred = np.where(active, pred, 0.0)
+    g = np.argwhere(active & truth)
     xs = np.argwhere(pred > 0)
     tp = fn = 0.0
-    for g in gs:
+    for gy, gx in g:
         best = 0.0
-        for x in xs:
-            d = float(np.hypot(*(x - g)))
-            if d <= radius:
-                best = max(best, pred[tuple(x)] * max(1.0 - d / radius, 0.0))
+        for xy, xx in xs:
+            dd = float(np.hypot(xy - gy, xx - gx))
+            if dd <= radius:
+                best = max(best, pred[xy, xx] * float(kernel(dd, radius)))
         tp += best
         fn += 1.0 - best
     fp = 0.0
-    for x in xs:
-        kmin = 0.0
-        for g in gs:
-            kmin = max(kmin, max(1.0 - float(np.hypot(*(x - g))) / radius, 0.0))
-        fp += pred[tuple(x)] * (1.0 - kmin)
-    return dict(tp=tp, fp=fp, fn=fn, n_truth=float(len(gs)),
-                dti=dti_from_components(tp, fp, fn))
+    for xy, xx in xs:
+        best = 0.0
+        for gy, gx in g:
+            best = max(best, float(kernel(float(np.hypot(xy - gy, xx - gx)), radius)))
+        fp += pred[xy, xx] * (1.0 - best)
+    return dict(tp=tp, fp=fp, fn=fn, n_truth=float(len(g)),
+                dti=float(tp / (tp + alpha * fp + beta * fn + EPS)),
+                coverage=tp / max(len(g), 1), mass=float(pred.sum()))
 
 
-def dti_from_components(tp: float, fp: float, fn: float) -> float:
-    """DTI from the three published components (alpha=0.2, beta=0.8)."""
-    return float(tp / (tp + ALPHA * fp + BETA * fn + EPS))
+def breakeven_credit_bar(dti_value: float, alpha: float = ALPHA) -> float:
+    """Expected credit a marginal pixel must earn to break even (c = alpha * DTI)."""
+    return alpha * float(dti_value)
 
 
-def marginal_bar(current_dti: float) -> float:
-    """Credit bar alpha*DTI, the special case (T2) of the theorem (T1)."""
-    return ALPHA * float(current_dti)
-
-
-def marginal_gain_components(d_tp: float, d_fp: float, tp: float, fp: float,
-                             n_truth: float) -> float:
-    """Exact change in DTI of adding (d_tp, d_fp) to a state (tp, fp, n_truth).
-
-    Sign test uses the general theorem (T1).  Returned as the actual delta so callers can rank.
-    """
-    d0 = ALPHA * (tp + fp) + BETA * n_truth
-    d1 = ALPHA * (tp + d_tp + fp + d_fp) + BETA * n_truth
-    return float((tp + d_tp) / (d1 + EPS) - tp / (d0 + EPS))
-
-
-@dataclass(frozen=True)
-class CreditAudit:
-    n_emitted: int
-    total_mass: float
-    redundancy_fraction: float
-    mean_self_kernel: float
-    mean_nearest_truth_px: float = float("nan")
-
-
-def credit_audit(mask, truth=None) -> CreditAudit:
-    """Structure audit of an emission mask, optionally against a truth set."""
-    m = np.asarray(mask, dtype=np.float64)
-    pos = m > 0
-    n = int(pos.sum())
-    if n == 0:
-        return CreditAudit(0, 0.0, 0.0, 0.0)
-    best = np.zeros(m.shape)
-    for dy, dx, k in _OFFS:
-        if dy == 0 and dx == 0:
-            continue                       # own pixel: 1.0 * mask, no information
-        np.maximum(best, _shift(m, -dy, -dx) * k, out=best)
-    red = np.clip(best, 0.0, 1.0)
-    d_truth = float("nan")
-    if truth is not None:
-        g = np.asarray(truth, bool)
-        d_truth = float(distance_transform_edt(~g)[pos].mean()) if g.any() else float("nan")
-    return CreditAudit(n_emitted=n, total_mass=float(m.sum()),
-                       redundancy_fraction=float((red[pos] > 0).mean()),
-                       mean_self_kernel=float(red[pos].mean()),
-                       mean_nearest_truth_px=d_truth)
+def implied_truth_size(tp: float, fp: float, dti_value: float, alpha=ALPHA, beta=BETA):
+    """Invert identity (I2) for |G| given a measured (tp, fp, dti)."""
+    return (tp * (1.0 - beta * dti_value) / (alpha * dti_value)) - tp - fp \
+        if dti_value > 0 else float("nan")

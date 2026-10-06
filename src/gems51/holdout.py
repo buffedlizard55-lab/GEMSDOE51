@@ -1,72 +1,93 @@
-"""Spatially blocked holdout instrument -- scored separately for Stage A and Stage B.
+"""Spatially blocked holdout: a proxy instrument for *hidden* faults.
 
-The instrument is deliberately boring and explicit:
+Why this instrument
+-------------------
+The scored truth (newly identified faults) is not public, so no local number can
+be a score.  What we can do is the standard substitution: hold out a contiguous
+spatial block of the *visible* catalogue, forbid the detector from ever seeing
+that block, and score it as if those pixels were new discoveries.  Everything
+outside the block is treated as "known" and therefore **masked**, exactly as the
+organizer says the real scorer does
+(https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516).
 
-  * truth  = the visible catalogue inside the held-out fold (a PROXY; it cannot reward a genuinely
-    unmapped fault -- IR-51-06);
-  * every fold removes a 600 m buffer around its own catalogue from both training and scoring;
-  * rules are compared at MATCHED pixel counts so no contrast can be won by emitting more mass;
-  * the promotion gate, copied in spirit from the sibling repositories' preregistered rule, is
-    "mean paired contrast > 0 on at least 3 of 4 folds".
-
-Stage A and Stage B are scored in separate calls and their results are reported separately, as the
-task requires.  Stage A is scored as a *tile-level* prior (does it concentrate held-out labels?);
-Stage B is scored as an *emission rule* under the exact published metric.
+The instrument is biased and we say so:
+  * its truth is the visible catalogue, so it can only reward rediscovering the
+    *kind* of fault that is already mapped -- never a genuinely new style;
+  * the held-out block is not masked against its own neighbours, so a prediction
+    within 300 m of the block edge is credited more easily than in the real
+    scoring, where the neighbouring known fault pixels are masked too.
+A pass on this instrument licenses packaging a candidate.  It is never a score.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field as dc_field
+
 import numpy as np
+from scipy import ndimage as ndi
 
-from . import detector, emission, grid, metric
+
+def blocked_folds(shape: tuple[int, int], footprint: np.ndarray,
+                  n_rows: int = 3, n_cols: int = 3, min_truth: int = 500):
+    """Split the raster into n_rows x n_cols contiguous blocks; each block is a fold.
+
+    Blocks containing fewer than ``min_truth`` catalogue pixels are dropped --
+    a fold with a handful of truth pixels has a hopelessly noisy DTI.
+    """
+    H, W = shape
+    folds = []
+    rs = np.array_split(np.arange(H), n_rows)
+    cs = np.array_split(np.arange(W), n_cols)
+    for br in rs:
+        for bc in cs:
+            blk = np.zeros(shape, bool)
+            blk[br[0]:br[-1] + 1, bc[0]:bc[-1] + 1] = True
+            blk &= footprint
+            folds.append(blk)
+    return [b for b in folds]
 
 
-def stage_b_fold_contrast(beliefs: dict[int, np.ndarray], budget_px: int = 8_000,
-                          spacing_px: float = 2.8, n_blocks: int = 2) -> dict:
-    """Paired per-fold contrast of emission rules under the exact DTI."""
-    cat = grid.catalogue()
-    rng = np.random.default_rng(detector.RNG_SEED)
-    folds = detector.fold_masks(n_blocks)
+@dataclass
+class FoldSpec:
+    index: int
+    truth: np.ndarray        # catalogue pixels held out (pretend-new faults)
+    known: np.ndarray        # catalogue pixels treated as already known (masked by the scorer)
+    train_pos: np.ndarray    # catalogue pixels the detector may learn from
+    train_neg_pool: np.ndarray  # candidate background pixels the detector may learn from
+    scored: np.ndarray       # valid & ~known: the domain the scorer actually sees
+    block: np.ndarray        # the held-out block itself (for in-block diagnostics)
+    buffer_px: int = 0
 
-    rows = []
-    for b, belief in sorted(beliefs.items()):
-        test = folds.get(b)
-        if test is None or not test.any():
-            continue
-        ours = detector.rule_credit_density(belief, test, budget_px, spacing_px)
-        inc = detector.rule_incumbent(belief, test, budget_px, spacing_px)
-        idx = np.flatnonzero(test.ravel())
-        pick = rng.choice(idx, min(budget_px, idx.size), replace=False)
-        rand = np.zeros(grid.SHAPE, bool)
-        rand.ravel()[pick] = True
-        r_ours = metric.evaluate_binary(ours, cat, valid=test)
-        r_inc = metric.evaluate_binary(inc, cat, valid=test)
-        r_rand = metric.evaluate_binary(rand, cat, valid=test)
-        rows.append(dict(fold=int(b), test_px=int(test.sum()),
-                         n_ours=int(ours.sum()), n_incumbent=int(inc.sum()),
-                         dti_ours=r_ours["dti"], dti_incumbent=r_inc["dti"],
-                         dti_random=r_rand["dti"],
-                         tp_ours=r_ours["tp"], tp_incumbent=r_inc["tp"],
-                         d_ours_minus_incumbent=r_ours["dti"] - r_inc["dti"],
-                         d_ours_minus_random=r_ours["dti"] - r_rand["dti"]))
-    if not rows:
-        return dict(folds=[], error="no folds scored")
-    d_inc = np.array([r["d_ours_minus_incumbent"] for r in rows])
-    d_rand = np.array([r["d_ours_minus_random"] for r in rows])
-    out = dict(budget_px=budget_px, spacing_px=spacing_px, folds=rows,
-               mean_dti_ours=float(np.mean([r["dti_ours"] for r in rows])),
-               mean_dti_incumbent=float(np.mean([r["dti_incumbent"] for r in rows])),
-               mean_dti_random=float(np.mean([r["dti_random"] for r in rows])),
-               mean_contrast_vs_incumbent=float(d_inc.mean()),
-               folds_positive_vs_incumbent=int((d_inc > 0).sum()),
-               mean_contrast_vs_random=float(d_rand.mean()),
-               folds_positive_vs_random=int((d_rand > 0).sum()),
-               n_folds=len(rows),
-               promoted=bool((d_inc > 0).sum() >= 3))
+    @property
+    def n_truth(self) -> int:
+        return int(self.truth.sum())
+
+
+def make_folds(footprint: np.ndarray, catalogue: np.ndarray, buffer_px: int = 12,
+               n_rows: int = 3, n_cols: int = 3, min_truth: int = 500):
+    """Build fold specs with an exclusion buffer around the held-out block.
+
+    ``buffer_px`` pixels on either side of the block boundary are removed from
+    the training pool so that a detector cannot win by memorising the faults
+    that run straight through the boundary.
+    """
+    blocks = blocked_folds(footprint.shape, footprint, n_rows, n_cols)
+    kept = [b for b in blocks if int((b & catalogue).sum()) >= min_truth]
+    out = []
+    for i, blk in enumerate(kept):
+        # the held-out block, dilated by buffer_px, is off-limits for training
+        grow = ndi.binary_dilation(blk, structure=np.ones((3, 3)), iterations=max(buffer_px, 0))
+        forbidden = grow & footprint
+        train_pos = catalogue & ~forbidden
+        train_neg_pool = footprint & ~catalogue & ~forbidden
+        out.append(FoldSpec(index=i, truth=catalogue & blk,
+                            known=catalogue & ~blk,
+                            train_pos=train_pos, train_neg_pool=train_neg_pool,
+                            scored=footprint & ~(catalogue & ~blk),
+                            block=blk, buffer_px=buffer_px))
     return out
 
 
-def stage_a_fold_table(stage_a_rows: list[dict], n_blocks: int = 2) -> dict:
-    """Report the Stage A tile prior separately (label density lift in approved tiles)."""
-    return dict(note="Stage A is reported separately; see strain.stage_a_holdout and "
-                     "strain.stage_a_independent_test for the falsification evidence.")
+def distance_to(mask: np.ndarray) -> np.ndarray:
+    """Euclidean distance (px) to the nearest True cell."""
+    return ndi.distance_transform_edt(~mask)

@@ -1,137 +1,86 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Holdout results — GEMSDOE51</title><style>
-:root{--bg:#0e1116;--panel:#161b22;--ink:#e6edf3;--dim:#9aa7b4;--acc:#4dd4ac;--warn:#f0883e;
---bad:#f85149;--line:#243040;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
-header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#111823,#0e1116)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
-header .wrap{padding:26px 22px 18px}
-h1{font-size:1.55rem;margin:0 0 6px}
-h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-h3{font-size:1rem;margin:22px 0 8px;color:var(--acc)}
-.sub{color:var(--dim);font-size:.92rem}
-nav{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
-nav a{color:var(--dim)}nav a:hover{color:var(--acc)}nav a.on{color:var(--acc);font-weight:600}
-main{padding:8px 0 70px}
-.hero{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:12px;
-background:linear-gradient(180deg,#12241f,#111823)}
-.hero h2{margin:0 0 4px;border:0;font-size:1.18rem;color:var(--acc)}
-.hero .file{font-family:var(--mono);font-size:1.02rem;word-break:break-all;margin:10px 0}
-.btn{display:inline-block;background:var(--acc);color:#08120f;font-weight:700;padding:13px 22px;
-border-radius:9px;margin:10px 10px 6px 0;font-size:1rem}
-.btn:hover{filter:brightness(1.1);text-decoration:none}
-.btn.alt{background:#233042;color:var(--ink)}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.9rem;display:block;overflow-x:auto}
-th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
-th{background:#131a23;color:var(--dim);font-weight:600;white-space:nowrap}
-td.num,th.num{text-align:right;font-family:var(--mono);white-space:nowrap}
-code,.mono{font-family:var(--mono);font-size:.87em}
-pre{background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:.84rem}
-.pass{color:var(--acc);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}
-.dim{color:var(--dim)}.small{font-size:.86rem}
-ul{padding-left:22px}li{margin:5px 0}
-.tag{display:inline-block;font-size:.71rem;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
-color:var(--dim);margin-right:6px;vertical-align:middle}
-.tag.official{color:var(--acc);border-color:var(--acc)}
-.tag.owner{color:var(--warn);border-color:var(--warn)}
-.tag.measured{color:#79c0ff;border-color:#79c0ff}
-footer{border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
-footer .wrap{padding:20px 22px 40px}
-</style></head><body>
+<title>Holdout</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
 <header><div class="wrap">
-<h1>GEMSDOE51 — geodetic strain-budget deficit + validated Hessian-ridge emission</h1>
-<div class="sub">DOE GEMS Prize (DrivenData #306, GeoDAWN / NW Nevada) ·
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem</a> ·
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> ·
-<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">rules</a></div>
-<nav><a class="" href="index.html">Overview</a><a class="" href="executive-summary.html">How to submit</a><a class="" href="analysis.html">Why 0.2778 was highest</a><a class="on" href="holdout.html">Holdout results</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="sources.html">Verified sources</a><a class="" href="irregularities.html">Irregularities</a></nav></div></header><main><div class="wrap">
-<h1 style="font-size:1.3rem">Holdout results — both stages, separately</h1>
-<p>Two protocols, deliberately. The first was preregistered and it <b>failed</b>; the failure is
-published and diagnosed; the second was run to test the diagnosis and the arm set was extended
-under a rule stated in the receipt before the shipped file was built.</p>
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>  
+  <a class="" href="how-to-submit.html">How to submit</a>  
+  <a class="" href="method.html">Method</a>  
+  <a class="" href="hypotheses.html">Hypotheses</a>  
+  <a class="active" href="holdout.html">Holdout</a>  
+  <a class="" href="analysis.html">Analysis</a>  
+  <a class="" href="sources.html">Sources</a>  
+  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
 
-<h2>Stage 1 — the coarse prior</h2>
-<table>
-<tr><th>quantity</th><th class="num">value</th></tr>
-<tr><td>tiles</td><td class="num">32 px (3.2 km); 117 × 103 = 12,051</td></tr>
-<tr><td>usable tiles (have geodetic data, ≥ 25 % valid)</td><td class="num">5,121 (42.5 %)</td></tr>
-<tr><td>approved tiles (top 35 % of usable by deficit)</td><td class="num">1,793 = 35.0 % of usable</td></tr>
-<tr><td>approved tile area as a share of the footprint</td><td class="num">35.5 %</td></tr>
-<tr><td>mass stage 1 contributes</td><td class="num">0.0</td></tr>
-</table
+<h2>Holdout: both stages, scored separately</h2>
+<h3>Design</h3>
+<p>The footprint is cut into 3&times;3 contiguous blocks. Each block is held out in turn; the
+detector never sees it; a 1.2&nbsp;km buffer around it is removed from the training pool.
+Emission and scoring are both restricted to the block, and the number of emitted dots is a fixed
+multiple of that block's own truth size — the official metric depends on mass and truth size only
+through their ratio, so matching M/|G| is what makes the proxy comparable to a live number.</p>
 
-<h2>Stage 2 — the emission rules</h2>
-<h3>Protocol A — spatially blocked 4-quadrant holdout, official metric, whole-map emission, 44,090-dot budget</h3><table><tr><th>contrast</th><th class='num'>mean ΔDTI</th><th class='num'>positive</th></tr><tr><td class='mono'>A1_hessianridge_gated - A2_steered_gated [P]</td><td class='num pass'>+0.01126</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A3_random_gated [P]</td><td class='num fail'>-0.01363</td><td class='num'>1/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A0_core_shell_only [P]</td><td class='num pass'>+0.01881</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1_hessianridge_gated - A4_hessianridge_ungated [P]</td><td class='num pass'>+0.00242</td><td class='num'>4/4</td></tr></table>
-<p class="small dim">A0 core+shell only · A1 top-of-ranking peak packing · A2 strike-steered
-peaks · A3 uniform random · A4 ungated (stage-1 prior removed).</p>
-<h3>Protocol B — leave-one-TRACE-out, hidden truth spread across the map, 4 draws</h3><table><tr><th>contrast</th><th class='num'>mean ΔDTI</th><th class='num'>positive</th></tr><tr><td class='mono'>A1 - A3_random [dti]</td><td class='num fail'>-0.00631</td><td class='num'>0/4</td></tr><tr><td class='mono'>A1 - A2_steered [dti]</td><td class='num pass'>+0.00081</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1 - A0_core_shell_only [dti]</td><td class='num pass'>+0.00791</td><td class='num'>4/4</td></tr><tr><td class='mono'>A1 - A1_hessianridge [dti]</td><td class='num fail'>+0.00000</td><td class='num'>0/4</td></tr></table>
-<p>Arm ranking by mean DTI under Protocol B:</p>
-<pre>[
-  {
-    "arm": "A5_weighted",
-    "mean_dti": 0.03323717595339035
-  },
-  {
-    "arm": "A6_hybrid",
-    "mean_dti": 0.031102448675428475
-  },
-  {
-    "arm": "A1_hessianridge",
-    "mean_dti": 0.025600173502507602
-  },
-  {
-    "arm": "A7_buffered_peaks",
-    "mean_dti": 0.025310927016464313
-  },
-  {
-    "arm": "A2_steered",
-    "mean_dti": 0.024792828216116707
-  }
-]</pre>
-<div class="panel"><b>Shipped arm:</b> <span class="mono">A5_weighted</span> —
-mean DTI 0.03324, beats uniform random by
-0.00132 in 4/4
-draws. Per-draw deltas: <span class="mono">[0.0008642620547723093, 0.0013151218224472933, 0.0011964813687543006, 0.0019154610199396127]</span></div>
+<h3>Stage 2 — fine-scale arms</h3>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>DTI at M/|G|=2.0</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2781</td><td>0.2625</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr></tbody></table>
 
-<h2>The negative result, stated plainly</h2>
-<div class="panel">
-<p><b>The strike-steering hypothesis failed.</b> Gating the Hessian ridge response by alignment
-with the mapped-fault strike — the original idea for stage 2 — produced a field with
-<b>AUC 0.4542</b>, i.e. <i>worse than chance</i>, against the unsteered field's 0.7005 in the same
-run, and cost <b>−0.01126 DTI</b> on the blocked holdout, 0/4 folds. It is retained in
-<code>stage2_emission.py</code> behind <code>steer=False</code> as a documented ablation and is
-<b>not shipped</b>.</p>
-<p><b>The detector did not beat uniform random under Protocol A</b> (−0.01363, 1/4 folds), which
-is why the preregistered promotion rule returned <span class="fail">FAIL</span>. Diagnosed: with
-the truth confined to one quadrant, every dot outside that quadrant is a pure 0.2 cost and
-returns nothing, so the arm that spreads dots most uniformly into the evaluated quadrant wins no
-matter how good its ranking is. The organisers confirm the real hidden faults are spread over the
-whole GeoDAWN region, so Protocol A mis-specifies the task — which is exactly why Protocol B
-exists. <b>The failure is reported, not explained away</b>: Protocol A's own numbers stand in
-<code>evidence/holdout_run.json</code> with <code>promotion_pass: false</code>.</p>
-</div>
+<h3>Stage 1 — tile prior, alone</h3>
+<p>Stage&nbsp;1 is scored with <b>no Stage 2 involvement at all</b>: dots are thrown down uniformly
+at random inside the approved tiles and compared with dots thrown uniformly over the whole block.
+That isolates the prior.</p>
+<table class=''><thead><tr><th>quantity</th><th>mean over folds</th></tr></thead><tbody><tr><td>recall_q50.0</td><td>0.4987</td></tr><tr><td>recall_q70.0</td><td>0.3240</td></tr><tr><td>recall_q80.0</td><td>0.2226</td></tr><tr><td>s1_dti_q50.0_r3.47</td><td>0.1485</td></tr><tr><td>s1_dti_q70.0_r3.47</td><td>0.1238</td></tr><tr><td>s1_dti_q80.0_r3.47</td><td>0.0997</td></tr><tr><td>s1_dti_uniform_r3.47</td><td>0.1861</td></tr><tr><td>s2_ungated_r3.47</td><td>0.2816</td></tr><tr><td>s2_gated_q50.0_r3.47</td><td>0.1821</td></tr><tr><td>s2_gated_q70.0_r3.47</td><td>0.1468</td></tr><tr><td>s2_gated_q80.0_r3.47</td><td>0.1158</td></tr></tbody></table>
 
-<h2>Limitations of these instruments</h2>
+<h3>Stage 1 on its own instrument</h3>
+<p>The deficit is computed from the catalogue, so it cannot be evaluated on a design that removes a
+whole spatial block — inside a held-out block the fault-accommodated term is identically zero and
+the deficit collapses to the raw geodetic field. Stage 1 is therefore scored on a <b>trace-level</b>
+holdout: a random fifth of the mapped traces is withheld, the remaining four fifths supply the
+budget, and uniform random dots are thrown down inside the approved tiles versus everywhere. No
+model is fitted, so there is no leakage to control.</p>
+<table class=''><thead><tr><th>prior</th><th>approved</th><th>area share</th><th>truth recall</th><th>lift = recall/area</th><th>proxy DTI (uniform random dots)</th></tr></thead><tbody><tr><td>deficit</td><td>top 50% of tiles</td><td>0.501</td><td>0.551</td><td>1.100</td><td>0.0507</td></tr><tr><td>geodetic_only</td><td>top 50% of tiles</td><td>0.500</td><td>0.620</td><td>1.239</td><td>0.0578</td></tr><tr><td>deficit</td><td>top 30% of tiles</td><td>0.301</td><td>0.319</td><td>1.059</td><td>0.0448</td></tr><tr><td>geodetic_only</td><td>top 30% of tiles</td><td>0.301</td><td>0.375</td><td>1.247</td><td>0.0534</td></tr><tr><td>deficit</td><td>top 20% of tiles</td><td>0.201</td><td>0.240</td><td>1.193</td><td>0.0459</td></tr><tr><td>geodetic_only</td><td>top 20% of tiles</td><td>0.201</td><td>0.256</td><td>1.273</td><td>0.0489</td></tr><tr><td>no gate</td><td>whole footprint</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.0494</td></tr></tbody></table><p class='ev'>Spearman rank correlation between each tile field and the density of held-out faults: deficit = +0.032, geodetic_only = +0.099, dil_deficit = +0.013, shear_deficit = +0.024</p>
+<p><b>Result: the strain-budget deficit is a weak prior, and subtracting the fault-accommodated
+term makes it weaker.</b> Against the raw geodetic field the deficit loses on every measure. The
+reason is physical as much as statistical: the mapped-fault term tracks where faults cluster, and
+faults that are mapped are surrounded by faults that are not, so the term carries <i>positive</i>
+information about where the missing ones are. Removing it throws that away.</p>
+
+<h3>Gate sweep: hard gate versus soft prior</h3>
+<table class=''><thead><tr><th>gate</th><th>setting</th><th>mean proxy DTI</th><th>paired Δ</th><th>folds better</th><th>per fold</th></tr></thead><tbody><tr><td>soft prior</td><td>w = 0.0</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>soft prior</td><td>w = 0.05</td><td>0.2818</td><td>+0.0001</td><td>3/6</td><td>0.275, 0.269, 0.284, 0.249, 0.307, 0.307</td></tr><tr><td>soft prior</td><td>w = 0.1</td><td>0.2820</td><td>+0.0004</td><td>4/6</td><td>0.274, 0.269, 0.285, 0.249, 0.307, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.2</td><td>0.2818</td><td>+0.0002</td><td>4/6</td><td>0.273, 0.268, 0.285, 0.249, 0.308, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.4</td><td>0.2810</td><td>-0.0007</td><td>2/6</td><td>0.272, 0.266, 0.283, 0.248, 0.308, 0.310</td></tr><tr><td>hard gate</td><td>all tiles (no gate)</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 90% of tiles</td><td>0.2803</td><td>-0.0013</td><td>0/6</td><td>0.275, 0.263, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 80% of tiles</td><td>0.2791</td><td>-0.0025</td><td>0/6</td><td>0.275, 0.256, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 70% of tiles</td><td>0.2779</td><td>-0.0038</td><td>0/6</td><td>0.275, 0.253, 0.283, 0.248, 0.304, 0.303</td></tr><tr><td>hard gate</td><td>top 60% of tiles</td><td>0.2721</td><td>-0.0095</td><td>0/6</td><td>0.272, 0.252, 0.264, 0.245, 0.296, 0.303</td></tr><tr><td>hard gate</td><td>top 30% of tiles</td><td>0.2055</td><td>-0.0762</td><td>0/6</td><td>0.260, 0.120, 0.021, 0.246, 0.295, 0.291</td></tr><tr><td>hard gate</td><td>top 10% of tiles</td><td>0.1372</td><td>-0.1445</td><td>0/6</td><td>0.142, 0.000, 0.000, 0.248, 0.188, 0.245</td></tr></tbody></table>
+<p>The hard gate is uniformly harmful and gets monotonically worse the tighter it is: it does not
+win a single fold at any setting, and at the top 30&nbsp;% and 10&nbsp;% it destroys the submission.
+The soft prior is flat across its whole range — every weight from 0.05 to 0.2 is within +0.0004 of
+ungated, and 0.4 is the first weight that hurts. That is the signature of a prior that is
+<i>not wrong</i> but also <i>not doing much</i>: the strain budget and the detector are looking at
+the same structures, so nudging one by the other mostly rearranges ties. The shipped primary uses
+w = 0.10; a hard-gated twin is offered with its cost printed on it.</p>
+
+<h3>Emission geometry</h3>
+<table class=''><thead><tr><th>spacing (px)</th><th>M/|G| = 1.5</th><th>M/|G| = 2.5</th><th>M/|G| = 3.47</th><th>M/|G| = 5</th><th>M/|G| = 7</th><th>M/|G| = 10</th></tr></thead><tbody><tr><td>1.5</td><td>0.2258</td><td>0.2478</td><td>0.2541</td><td>0.2518</td><td>0.2408</td><td>0.2182</td></tr><tr><td>2.4</td><td>0.2497</td><td>0.2743</td><td>0.2816</td><td>0.2736</td><td>0.2539</td><td>0.2443</td></tr><tr><td>3.5</td><td>0.2477</td><td>0.2678</td><td>0.2724</td><td>0.2684</td><td>0.2588</td><td>0.2562</td></tr><tr><td>5</td><td>0.1799</td><td>0.2000</td><td>0.2082</td><td>0.2130</td><td>0.2112</td><td>0.2110</td></tr><tr><td>7</td><td>0.1269</td><td>0.1405</td><td>0.1470</td><td>0.1518</td><td>0.1530</td><td>0.1533</td></tr></tbody></table><p class='ev'>Best cell: spacing 2.4 px, M/|G| = 3.47, mean proxy DTI 0.2816.</p>
+
+<h3>Known biases of this instrument</h3>
 <ul>
-<li><b>The holdout's truth is the mapped catalogue</b>, so it structurally cannot reward a
-genuinely new fault. Its distance statistics differ from the hidden set's. This is the group's
-registered <code>IR-32-PROXY-01</code> limitation, reproduced here, not fixed.</li>
-<li><b>Protocol A's truth sits in one quadrant</b>; Protocol B removes whole traces; neither
-reproduces the real hidden set's distribution.</li>
-<li><b>Protocol B's hidden traces are removed from the model's catalogue</b>, so it is
-structurally blind to the category the organisers said counts most (continuations and splays of
-existing systems). A dot placed just off a retained trace scores zero here and might score well
-in reality. That is stated, not hidden.</li>
-<li><b>No organiser score exists for any file in this repository.</b></li>
+<li>its truth is the visible catalogue, so it can only reward rediscovering the <i>kind</i> of fault
+that is already mapped, never a genuinely new style;</li>
+<li>truth density inside a block is several times the regional average, so absolute proxy DTI is
+optimistic;</li>
+<li>the block is treated as unmapped territory, whereas in reality known faults are interleaved
+with the hidden ones and their neighbourhoods are excluded from emission.</li>
 </ul>
-</div></main>
+<p>A pass on this instrument licenses packaging a candidate. It is never a score.</p>
+
+</main>
 <footer><div class="wrap">
-<b>Evidence classes.</b> <span class="tag official">official</span> read from a competition
-page, with a link. <span class="tag measured">measured-here</span> computed by a script in this
-repository. <span class="tag owner">owner-report</span> a previous session's claim, not
-independently authenticated. <b>No artifact in this repository has ever been scored by the
-organiser.</b></div></footer></body></html>
+<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
+evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
+independently verifiable here. Organizer-verified = none; no score on this site has been
+confirmed by DrivenData.</p>
+</div></footer>
+</body></html>

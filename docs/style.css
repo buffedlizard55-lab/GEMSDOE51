@@ -1,0 +1,38 @@
+
+:root{--ink:#12181f;--mut:#5b6875;--line:#dde4ec;--bg:#f7f9fc;--acc:#0b6b8f;--warn:#b4530a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+header{background:#0e2233;color:#fff;padding:22px 0 0}
+header h1{margin:0;font-size:26px;letter-spacing:.4px}
+header .sub{margin:2px 0 14px;color:#a9c3d6;font-size:14px}
+nav{display:flex;flex-wrap:wrap;gap:2px}
+nav a{color:#cfe0ec;text-decoration:none;padding:9px 13px;font-size:14px;border-radius:6px 6px 0 0}
+nav a:hover{background:#17334a}
+nav a.active{background:var(--bg);color:var(--ink);font-weight:600}
+main{padding:26px 0 46px;background:var(--bg);min-height:60vh}
+h2{margin:30px 0 10px;font-size:21px;border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{margin:22px 0 8px;font-size:17px;color:#1c3purple}
+h3{color:#1b3b52}
+p,li{color:#22303d}
+a{color:var(--acc)}
+table{border-collapse:collapse;width:100%;margin:12px 0;background:#fff;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#eef3f8;font-weight:600}
+tbody tr:nth-child(even){background:#fbfdff}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+pre{background:#0f2233;color:#e6f0f8;padding:12px 14px;border-radius:7px;overflow-x:auto}
+pre.note{background:#123;color:#cfe;border-left:4px solid var(--acc)}
+section.download{background:#fff;border:2px solid var(--acc);border-radius:10px;padding:18px 20px;margin:6px 0 8px}
+section.download.missing{border-color:var(--warn)}
+a.btn{display:inline-block;background:var(--acc);color:#fff;padding:13px 24px;border-radius:8px;
+text-decoration:none;font-weight:700;font-size:18px}
+a.btn:hover{background:#095b7a}
+p.big{margin:12px 0 6px}
+dl.kv dt{font-weight:600;margin-top:9px}
+dl.kv dd{margin:1px 0;word-break:break-all}
+.ev{color:var(--mut);font-size:13px;font-style:italic}
+.warn{background:#fff7ed;border-left:4px solid var(--warn);padding:10px 13px;border-radius:0 6px 6px 0}
+.missing{color:var(--warn);font-style:italic}
+ol.steps li{margin:8px 0}
+footer{border-top:1px solid var(--line);padding:16px 0 30px;color:var(--mut);font-size:13px}

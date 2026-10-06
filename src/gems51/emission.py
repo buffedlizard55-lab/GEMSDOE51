@@ -1,181 +1,95 @@
-"""Emission -- turning a belief field into a submission mask with the budget rule explicit.
+"""Turning a continuous detector field into an emitted point set.
 
-Why the rule is not "emit every pixel above a threshold"
---------------------------------------------------------
-The published metric is a ratio whose denominator is
+Theory (from the metric identity DTI = TP / (a*(TP+FP) + b*|G|))
+---------------------------------------------------------------
+|G| is fixed by the hidden truth, so the only thing under our control is the
+ratio of credit earned to mass emitted.  Two consequences drive every function
+here:
 
-    D = alpha (TP_w + FP_w) + beta |G|,      alpha = 0.2, beta = 0.8.
+1. **Redundancy is expensive.**  For each truth pixel the scorer takes the
+   *maximum* over nearby predictions, so two dots 1 px apart on the same trace
+   earn the credit of one and cost the mass of two.  Dots must be separated.
 
-Every unit of emitted mass that is not the best cover of a ground-truth pixel contributes ~1 to
-FP_w and therefore ~alpha = 0.2 to D, while a ground-truth pixel that stays uncovered contributes
-beta = 0.8.  Recall is therefore four times as expensive as precision, and emitting mass
-"just in case" is *cheap but not free*.  The exact marginal rule follows from the theorem in
-`metric.py`:
+2. **There is a break-even bar.**  Adding a pixel of value p that earns expected
+   credit c changes DTI by  sign(c - a*DTI).  With a = 0.2 the bar is
+   c = 0.2 * DTI ~ 0.056 at DTI = 0.28.  Below it, emitting *lowers* the score.
 
-    a dot of unit mass that lands on a pixel at kernel distance k from the nearest truth pixel,
-    raising the best credit of a single truth pixel by dT = k with own cost dF = 1 - k, improves
-    the score iff   k > alpha * DTI          (the "credit bar", metric.marginal_bar)
-
-and in general (metric.py eq. T1)    dT (alpha F + beta K) > alpha T dF.
-
-What is implemented here
-------------------------
-`ExpectedBudgetPacker` ranks candidate dots by *credit density* -- expected kernel-matched belief
-divided by expected cost -- and then picks the prefix of that ranking that maximises the
-*expected* DTI under a documented point-process model of the hidden truth:
-
-    b(x)          = belief that pixel x is a hidden fault pixel (from Stage B; probability scale)
-    credit(x)     = sum_y b(y) k(|x - y|)       (matched filter; 1 kernel radius support)
-    cost(x)       = 1 - b(x)                    (expected mass that misses the truth)
-    T_pred(S)     = sum_y b(y) max_{x in S, |x-y|<=R} k(|x-y|)     (redundancy-aware)
-    F_pred(S)     = sum_{x in S} cost(x)
-    K_pred        = sum_x b(x)
-    DTI_pred(S)   = T_pred / (alpha (T_pred + F_pred) + beta K_pred)
-
-The prefix maximising DTI_pred is emitted (`choose_prefix`).  This makes the model's own
-trade-off explicit and auditable rather than a tuned threshold, and it is the piece that the
-sibling repositories' greedy coverage arms (their A1/A2/A3 arms) do not do: they optimise mass or
-credit, not the published ratio, and they do not expose the fixed point at which extra mass stops
-paying.
-
-Assumptions stated openly (nothing here is a measured score):
-  * the truth is modelled as independent Bernoulli(b(x)) pixels -- the hidden faults are neither
-    independent nor Bernoulli, so DTI_pred is a ranking instrument, not a prediction of the
-    leaderboard;
-  * cost(x) = 1 - b(x) ignores the partial credit of a dot that lands 1-2 px off a fault;
-  * the model is calibrated only against the visible catalogue (proxy truth).
+Both are derived in ``tests/test_metric.py`` (``test_break_even_bar_*``).
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
-from scipy.ndimage import convolve
+from scipy import ndimage as ndi
 
-from . import grid, metric
-
-
-def kernel_stamp() -> np.ndarray:
-    r = int(np.ceil(metric.RADIUS_PX))
-    k = np.zeros((2 * r + 1, 2 * r + 1), dtype=np.float32)
-    for dy in range(-r, r + 1):
-        for dx in range(-r, r + 1):
-            k[dy + r, dx + r] = float(metric.kernel(np.hypot(dy, dx)))
-    return k
+from .grid import GRID
 
 
-def credit_field(belief: np.ndarray) -> np.ndarray:
-    """Matched-filter credit c(x) = sum_y b(y) k(|x-y|)."""
-    b = np.nan_to_num(belief, nan=0.0).astype(np.float32)
-    return convolve(b, kernel_stamp(), mode="constant")
+def suppress_within(field: np.ndarray, exclude: np.ndarray) -> np.ndarray:
+    """Set the field to -inf where emission is forbidden (e.g. near known faults)."""
+    f = np.array(field, dtype=np.float32, copy=True)
+    f[exclude | ~np.isfinite(f)] = -np.inf
+    return f
 
 
-@dataclass
-class Packing:
-    rows: np.ndarray
-    cols: np.ndarray
-    counts: np.ndarray
-    t_pred: np.ndarray
-    f_pred: np.ndarray
-    dti_pred: np.ndarray
-    best_count: int
-    spacing_px: float
+def nms_dots(field: np.ndarray, n_dots: int, radius: float = 2.4,
+             exclude: np.ndarray | None = None, valid: np.ndarray | None = None):
+    """Greedy non-maximum suppression: take the best pixel, blank its neighbourhood, repeat.
+
+    ``radius`` is in pixels (1 px = 100 m).  At radius 2.4 two emitted dots are
+    never closer than sqrt(2) px yet rarely within 2.4 px, which is the scale at
+    which two dots start competing for the same truth pixel (kernel support is
+    3 px).
+    """
+    f = suppress_within(field, exclude) if exclude is not None else np.array(field, dtype=np.float32)
+    if valid is not None:
+        f = np.where(valid, f, -np.inf)
+    work = f.copy()
+    H, W = work.shape
+    yy, xx = np.mgrid[0:H, 0:W]
+    # circular suppression footprint
+    r = int(np.ceil(radius))
+    dy, dx = np.mgrid[-r:r + 1, -r:r + 1]
+    nb = (dy * dy + dx * dx) <= radius * radius
+    offs = [(int(a), int(b)) for a, b in zip(dy[nb], dx[nb])]
+
+    chosen = []
+    # work in flat argmax order via a heap-free approach: repeated max is O(n) per
+    # step which is too slow for 5 M pixels x 40 k dots, so we pre-select a
+    # candidate pool that is comfortably larger than n_dots and thin within it.
+    pool_size = min(int((work > -np.inf).sum()), max(n_dots * 12, n_dots + 4096))
+    flat = work.ravel()
+    cand = np.argpartition(flat, -pool_size)[-pool_size:]
+    cand = cand[np.argsort(flat[cand])[::-1]]
+    cand = [(int(c // W), int(c % W)) for c in cand]
+
+    taken = np.zeros((H, W), bool)
+    for y, x in cand:
+        if len(chosen) >= n_dots:
+            break
+        if not np.isfinite(work[y, x]):
+            continue
+        v = work[y, x]
+        if v <= -np.inf:
+            continue
+        chosen.append((y, x))
+        for oy, ox in offs:
+            ny, nx = y + oy, x + ox
+            if 0 <= ny < H and 0 <= nx < W:
+                work[ny, nx] = -np.inf
+    ys = np.array([c[0] for c in chosen], dtype=np.int32)
+    xs = np.array([c[1] for c in chosen], dtype=np.int32)
+    return ys, xs
 
 
-class ExpectedBudgetPacker:
-    """Greedy credit-density packing with redundancy-aware prefix selection."""
-
-    def __init__(self, spacing_px: float = 2.8, n_prefix: int = 60, max_dots: int = 400_000):
-        self.spacing = float(spacing_px)
-        self.n_prefix = int(n_prefix)
-        self.max_dots = int(max_dots)
-
-    def _order(self, belief: np.ndarray, candidate: np.ndarray):
-        b = np.nan_to_num(belief, nan=0.0).astype(np.float32)
-        credit = credit_field(belief)
-        cost = np.clip(1.0 - b, 1e-3, 1.0)
-        score = np.where(candidate, credit / cost, -np.inf)
-        flat = np.flatnonzero(np.isfinite(score) & candidate)
-        if flat.size == 0:
-            return np.array([], int), np.array([], int), b
-        order = flat[np.argsort(-score.ravel()[flat], kind="stable")]
-        return order, score, b
-
-    def pack(self, belief: np.ndarray, candidate: np.ndarray) -> Packing:
-        order, _score, b = self._order(belief, candidate)
-        if order.size == 0:
-            empty = np.array([], int)
-            return Packing(empty, empty, np.array([0]), np.array([0.0]), np.array([0.0]),
-                           np.array([0.0]), 0, self.spacing)
-        cell = max(1, int(np.floor(self.spacing)))
-        md2 = self.spacing ** 2
-        occupied: dict[tuple[int, int], list[tuple[int, int]]] = {}
-        rows, cols = [], []
-        width = grid.SHAPE[1]
-        for idx in order:
-            if len(rows) >= self.max_dots:
-                break
-            rr, cc = divmod(int(idx), width)
-            key = (rr // cell, cc // cell)
-            ok = True
-            for a in (-1, 0, 1):
-                for c2 in (-1, 0, 1):
-                    for (tr, tc) in occupied.get((key[0] + a, key[1] + c2), ()):
-                        if (rr - tr) ** 2 + (cc - tc) ** 2 < md2:
-                            ok = False
-                            break
-                    if not ok:
-                        break
-                if not ok:
-                    break
-            if not ok:
-                continue
-            occupied.setdefault(key, []).append((rr, cc))
-            rows.append(rr)
-            cols.append(cc)
-        rows = np.array(rows, dtype=np.int32)
-        cols = np.array(cols, dtype=np.int32)
-        return self._prefix_curve(rows, cols, b)
-
-    def _prefix_curve(self, rows, cols, b) -> Packing:
-        n = rows.size
-        if n == 0:
-            z = np.array([0])
-            return Packing(rows, cols, z, z.astype(float), z.astype(float), z.astype(float), 0,
-                           self.spacing)
-        steps = np.unique(np.linspace(1, n, min(self.n_prefix, n)).astype(int))
-        t_pred, f_pred, dti = [], [], []
-        k_stamp = kernel_stamp()
-        r = int(np.ceil(metric.RADIUS_PX))
-        for m in steps:
-            mask = np.zeros(grid.SHAPE, bool)
-            mask[rows[:m], cols[:m]] = True
-            best = convolve(mask.astype(np.float32), k_stamp, mode="constant")
-            np.clip(best, 0.0, 1.0, out=best)
-            T = float((b * best).sum())
-            F = float(np.clip(1.0 - b[rows[:m], cols[:m]], 0.0, 1.0).sum())
-            K = float(b.sum())
-            D = metric.ALPHA * (T + F) + metric.BETA * K
-            t_pred.append(T)
-            f_pred.append(F)
-            dti.append(T / (D + metric.EPS) if D > 0 else 0.0)
-        dti = np.array(dti)
-        best_i = int(np.argmax(dti))
-        return Packing(rows, cols, steps, np.array(t_pred), np.array(f_pred), dti,
-                       int(steps[best_i]), self.spacing)
+def rasterise(ys: np.ndarray, xs: np.ndarray, values=None, shape=GRID.shape) -> np.ndarray:
+    out = np.zeros(shape, dtype=np.float32)
+    v = np.ones(len(ys), dtype=np.float32) if values is None else np.asarray(values, np.float32)
+    out[ys, xs] = v
+    return out
 
 
-def prune_below_bar(mask: np.ndarray, belief: np.ndarray, dti_pred: float) -> np.ndarray:
-    """Remove dots whose matched-filter credit is below the credit bar alpha*DTI_pred."""
-    bar = metric.marginal_bar(dti_pred)
-    credit = credit_field(belief)
-    keep = mask & (credit >= bar)
-    return keep
-
-
-def to_values(mask: np.ndarray) -> np.ndarray:
-    """Binary mask -> float32 raster on the submission grid (zeros elsewhere)."""
-    v = np.zeros(grid.SHAPE, dtype=np.float32)
-    v[mask] = 1.0
-    return v
+def thin_to_mask(ys, xs) -> np.ndarray:
+    m = np.zeros(GRID.shape, bool)
+    m[ys, xs] = True
+    return m

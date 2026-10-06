@@ -1,0 +1,218 @@
+[
+ {
+  "stack": "lidar",
+  "layer": "lappos_max",
+  "auc": 0.5814230718524588,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "lapneg_max",
+  "auc": 0.5770633327295905,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "step_max",
+  "auc": 0.5720497445140533,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "relief",
+  "auc": 0.5714886518570681,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "ex_max",
+  "auc": 0.5702582582838464,
+  "n": 3893184
+ },
+ {
+  "stack": "comp",
+  "layer": "geod_2ndinv",
+  "auc": 0.5701787515350865,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "geod_shearrate",
+  "auc": 0.5689810121873415,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "ieq_n100a15",
+  "auc": 0.5686181488279214,
+  "n": 5164312
+ },
+ {
+  "stack": "lidar",
+  "layer": "upface_max",
+  "auc": 0.5639164521879049,
+  "n": 3207200
+ },
+ {
+  "stack": "comp",
+  "layer": "det_elev_slope",
+  "auc": 0.5576879301873665,
+  "n": 5164312
+ },
+ {
+  "stack": "lidar",
+  "layer": "ex_mean",
+  "auc": 0.5573320729892377,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "downface_max",
+  "auc": 0.5545353668872298,
+  "n": 3207200
+ },
+ {
+  "stack": "comp",
+  "layer": "deq_n100a15",
+  "auc": 0.5504764200773749,
+  "n": 5164312
+ },
+ {
+  "stack": "lidar",
+  "layer": "cross_max",
+  "auc": 0.5462752047633216,
+  "n": 3207200
+ },
+ {
+  "stack": "comp",
+  "layer": "iso_grav_anom_slope",
+  "auc": 0.533575573845787,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "iso_grav_anom_vg",
+  "auc": 0.5274364090026779,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "tmi_hg",
+  "auc": 0.5268437923267116,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "geod_dilaterate",
+  "auc": 0.525488980063061,
+  "n": 5164312
+ },
+ {
+  "stack": "sgmc",
+  "layer": "sgmc_fault",
+  "auc": 0.5248173407129819,
+  "n": 5167373
+ },
+ {
+  "stack": "comp",
+  "layer": "depth_to_base_surf",
+  "auc": 0.5118815248133238,
+  "n": 5164312
+ },
+ {
+  "stack": "lidar",
+  "layer": "strike",
+  "auc": 0.5099684009361574,
+  "n": 3893184
+ },
+ {
+  "stack": "lidar",
+  "layer": "valid",
+  "auc": 0.4999946853408059,
+  "n": 3894460
+ },
+ {
+  "stack": "comp",
+  "layer": "iso_grav_anom_hg",
+  "auc": 0.4997120019653896,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "rtp",
+  "auc": 0.49763263109236366,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "mag_anom",
+  "auc": 0.4911642485857293,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "tmi",
+  "auc": 0.4886710258886587,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "tmi_vg",
+  "auc": 0.4865682012385715,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "det_elev",
+  "auc": 0.4845655326695584,
+  "n": 5164312
+ },
+ {
+  "stack": "comp",
+  "layer": "cond_surf",
+  "auc": 0.48328712745707275,
+  "n": 5164312
+ },
+ {
+  "stack": "rad",
+  "layer": "U",
+  "auc": 0.4772209838004477,
+  "n": 5166085
+ },
+ {
+  "stack": "lidar",
+  "layer": "coh100",
+  "auc": 0.4751165928580354,
+  "n": 3882902
+ },
+ {
+  "stack": "comp",
+  "layer": "iso_grav_anom",
+  "auc": 0.4592986784290879,
+  "n": 5164312
+ },
+ {
+  "stack": "rad",
+  "layer": "Th",
+  "auc": 0.45099521555037736,
+  "n": 5166085
+ },
+ {
+  "stack": "comp",
+  "layer": "tc",
+  "auc": 0.44798442774841235,
+  "n": 5164300
+ },
+ {
+  "stack": "rad",
+  "layer": "TC",
+  "auc": 0.4479642761943421,
+  "n": 5166085
+ },
+ {
+  "stack": "rad",
+  "layer": "K",
+  "auc": 0.4398648872346502,
+  "n": 5166085
+ }
+]
