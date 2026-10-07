@@ -30,7 +30,7 @@ multiple of that block's own truth size — the official metric depends on mass 
 through their ratio, so matching M/|G| is what makes the proxy comparable to a live number.</p>
 
 <h3>Stage 2 — fine-scale arms</h3>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>DTI at M/|G|=2.0</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2781</td><td>0.2625</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr></tbody></table>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>DTI at M/|G|=2.0</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2736</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr></tbody></table>
 
 <h3>Stage 1 — tile prior, alone</h3>
 <p>Stage&nbsp;1 is scored with <b>no Stage 2 involvement at all</b>: dots are thrown down uniformly
@@ -62,8 +62,72 @@ ungated, and 0.4 is the first weight that hurts. That is the signature of a prio
 the same structures, so nudging one by the other mostly rearranges ties. The shipped primary uses
 w = 0.10; a hard-gated twin is offered with its cost printed on it.</p>
 
-<h3>Emission geometry</h3>
+<h3>Stage 2 &mdash; does auto-context stacking help? (no)</h3>
+<p>A per-pixel tree cannot say &ldquo;there is a long coherent high-belief lineament through this
+pixel&rdquo;, and that sentence is the whole difference between a fault and a geophysical blob. The
+organizer&rsquo;s reference solution buys it with a U-Net over 128&times;128 patches. Auto-context
+(Tu &amp; Bai 2010) buys it for a tree: a level-1 belief map is summarised at several scales and
+those summaries are appended to the raw features for a level-2 model. The level-1 belief used to
+build level-2 <i>training</i> rows is cross-fitted over two spatially contiguous slabs
+(Breiman 1996), so the stack cannot learn to over-trust a belief that already saw the label.</p>
+<table class=''><thead><tr><th>model</th><th>in-block AUC</th><th>DTI at M/|G|=2.5</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=4.5</th><th>DTI at M/|G|=6</th></tr></thead><tbody><tr><td>level 1</td><td>0.6652</td><td>0.2731</td><td>0.2787</td><td>0.2744</td><td>0.2598</td></tr><tr><td>level 2</td><td>0.6737</td><td>0.2728</td><td>0.2799</td><td>0.2757</td><td>0.2613</td></tr><tr><td>paired &Delta; (L2 &minus; L1)</td><td></td><td><b>-0.0003</b></td><td><b>+0.0012</b></td><td><b>+0.0013</b></td><td><b>+0.0016</b></td></tr><tr><td>folds positive</td><td></td><td>4/6</td><td>4/6</td><td>3/6</td><td>5/6</td></tr></tbody></table><p class='ev'>per-fold paired &Delta; at the shipped mass ratio 3.47: +0.0102, -0.0092, +0.0012, -0.0117, +0.0012, +0.0158. The sign alternates. The preregistered promotion rule was a paired mean of at least +0.006 <i>and</i> at least 4/6 folds positive; auto-context clears the fold count and misses the effect size by 5&times;, so it is <b>not shipped</b> (IR-51-12).</p>
+<p><b>It improves ranking and does not improve score.</b> In-block AUC rises +0.0085, consistently,
+and the paired DTI at the shipped mass moves +0.0012. The explanation is the useful part: the
+re-ordering happens <i>inside</i> the top 3.47&times;|G| pixels that were already being emitted, so
+it buys no new credit. <b>Global AUC is the wrong proxy for this metric</b>; credit-per-dot at the
+shipped mass is the right one. The code is kept and reachable
+(<code>build_submission_v2.py --level 2</code>); it is not shipped.</p>
+
+<h3>Stage 2 &mdash; emission geometry at matched mass (the one change that shipped)</h3>
+<p>The detector field is held <i>fixed</i> and only the rule that turns it into emitted pixels is
+varied, with every rule given the same number of dots. The metric forces this question:
+<code>TP_w</code> is a sum over the truth of the <i>max</i> over nearby predictions, so a dot 2&nbsp;px
+off the crest earns one third of a crest dot, and a second dot across the width of the same
+structure earns nothing extra while costing a full unit of false-positive mass. Isotropic NMS is
+blind to both facts. The shipped rule scores each pixel as
+<code>rank(belief)<sup>1&minus;w</sup> &times; rank(line-accumulated ridgeness)<sup>w</sup></code>
+&mdash; a multi-scale Frangi ridge filter answering &ldquo;am I on the crest?&rdquo; and a
+Vanderbrug straight-line accumulator answering &ldquo;does this persist for 900&nbsp;m in one
+direction?&rdquo; &mdash; then spreads dots <i>along</i> the surviving crest.</p>
+<table class=''><thead><tr><th>emission rule</th><th>mean proxy DTI</th><th>paired delta vs incumbent</th><th>folds better</th><th>per-fold delta</th></tr></thead><tbody><tr><td><b>ste_L9_w0.35_s2.4_nothin</b> (shipped)</td><td>0.2836</td><td>+0.0020</td><td>4/6</td><td>+0.0023, +0.0029, +0.0042, -0.0023, -0.0019, +0.0065</td></tr><tr><td>ste_L9_w0.7_s2.4_nothin</td><td>0.2832</td><td>+0.0015</td><td>4/6</td><td>+0.0054, +0.0023, +0.0076, -0.0101, -0.0030, +0.0071</td></tr><tr><td>ste_L9_w0.5_s2.4_nothin</td><td>0.2832</td><td>+0.0015</td><td>4/6</td><td>+0.0022, +0.0030, +0.0058, -0.0044, -0.0039, +0.0066</td></tr><tr><td>ste_L9_w0.7_s3_nothin</td><td>0.2832</td><td>+0.0015</td><td>3/6</td><td>+0.0086, -0.0083, -0.0000, +0.0047, -0.0012, +0.0055</td></tr><tr><td>ste_L9_w0.5_s3_nothin</td><td>0.2828</td><td>+0.0012</td><td>4/6</td><td>+0.0070, -0.0088, -0.0032, +0.0050, +0.0022, +0.0048</td></tr><tr><td>ste_L9_w0.85_s2.4_nothin</td><td>0.2823</td><td>+0.0006</td><td>4/6</td><td>+0.0062, +0.0026, +0.0041, -0.0126, -0.0037, +0.0072</td></tr><tr><td>ste_L9_w0.35_s3_nothin</td><td>0.2822</td><td>+0.0006</td><td>4/6</td><td>+0.0076, -0.0107, -0.0054, +0.0086, +0.0015, +0.0019</td></tr><tr><td>ste_L9_w0.85_s3_nothin</td><td>0.2821</td><td>+0.0005</td><td>3/6</td><td>+0.0071, -0.0103, -0.0008, +0.0027, -0.0019, +0.0058</td></tr><tr><td>ste_L9_w0_s2.4_nothin (control: must equal the incumbent)</td><td>0.2817</td><td>+0.0000</td><td>3/6</td><td>-0.0000, +0.0000, +0.0002, -0.0000, -0.0000, +0.0000</td></tr><tr><td><b>iso_nms_r2.4</b> (incumbent)</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>+0.0000, +0.0000, +0.0000, +0.0000, +0.0000, +0.0000</td></tr><tr><td>ste_L9_w0_s3_nothin (control: must equal the incumbent)</td><td>0.2796</td><td>-0.0020</td><td>3/6</td><td>+0.0020, -0.0136, -0.0108, +0.0131, +0.0002, -0.0028</td></tr></tbody></table>
+<p>The <code>w = 0</code> control reproducing isotropic NMS to within 2&times;10<sup>&minus;4</sup>
+on every fold is what proves the implementation is a <b>strict generalisation</b> of the incumbent:
+the shipped rule cannot be worse than it through a coding error. <code>w = 0.35</code> ships rather
+than the 3-fold pilot&rsquo;s <code>w = 0.7</code> because it has the same six-fold mean with a
+5&times; smaller worst-fold loss. <b>Stated plainly: +0.0020 with a sign-test p of 0.344 is not
+statistically separable from zero.</b> It ships because it is free, because its limit provably
+reduces to the incumbent, and because a second independent instrument corroborates it &mdash; not
+because the evidence is strong. That pilot/full-sweep discrepancy is logged as IR-51-13: folds
+0, 2 and 4 are the three <i>easiest</i> folds, and testing on them inflated the effect by 65&nbsp;%.</p>
+
+<h3>Emission mass</h3>
 <table class=''><thead><tr><th>spacing (px)</th><th>M/|G| = 1.5</th><th>M/|G| = 2.5</th><th>M/|G| = 3.47</th><th>M/|G| = 5</th><th>M/|G| = 7</th><th>M/|G| = 10</th></tr></thead><tbody><tr><td>1.5</td><td>0.2258</td><td>0.2478</td><td>0.2541</td><td>0.2518</td><td>0.2408</td><td>0.2182</td></tr><tr><td>2.4</td><td>0.2497</td><td>0.2743</td><td>0.2816</td><td>0.2736</td><td>0.2539</td><td>0.2443</td></tr><tr><td>3.5</td><td>0.2477</td><td>0.2678</td><td>0.2724</td><td>0.2684</td><td>0.2588</td><td>0.2562</td></tr><tr><td>5</td><td>0.1799</td><td>0.2000</td><td>0.2082</td><td>0.2130</td><td>0.2112</td><td>0.2110</td></tr><tr><td>7</td><td>0.1269</td><td>0.1405</td><td>0.1470</td><td>0.1518</td><td>0.1530</td><td>0.1533</td></tr></tbody></table><p class='ev'>Best cell: spacing 2.4 px, M/|G| = 3.47, mean proxy DTI 0.2816.</p>
+
+<h3>The honest instrument: off-catalogue A/B</h3>
+<p>Everything above shares one flaw. A blocked holdout hides a whole <i>region</i>, so inside it no
+fault is mapped at all &mdash; it cannot measure the task the competition actually sets, which is
+finding a fault the catalogue missed <i>while other faults in the same place are mapped and masked
+out of scoring</i>. So a second instrument was built. The catalogue&rsquo;s 8-connected components
+are treated as fault <i>systems</i> and split into <b>A</b> (visible: training positives, and the
+scorer&rsquo;s known-mask) and <b>B</b> (hidden pretend-new faults, left inside the negative class
+exactly as real unmapped faults are). <code>B_far</code> keeps only B components at least 5&nbsp;px
+from any A pixel &mdash; structures that are not merely an interleaved strand of a mapped zone.</p>
+<table class=''><thead><tr><th>rule</th><th>DTI vs B_all</th><th>DTI vs B_far (strict)</th></tr></thead><tbody><tr><td>detector + strike-coherent trace emission <b>(shipped)</b></td><td>0.1921</td><td>0.0813</td></tr><tr><td>detector + isotropic NMS (incumbent)</td><td>0.1885</td><td>0.0812</td></tr><tr><td>uniform random inside the footprint (null)</td><td>0.0844</td><td>0.0424</td></tr><tr><td>ring of dots 2&ndash;5 px around visible faults (halo control)</td><td>0.0873</td><td>0.0022</td></tr></tbody></table>
+<p>Four folds; A = 41,247&nbsp;px, B = 19,741&nbsp;px, B_far = 6,130&nbsp;px in 158 components.
+Two readings, both of which matter more than any tuning result on this page:</p>
+<ol>
+<li><b>The detector is not a catalogue halo.</b> The halo control scores <b>0.0022</b> against
+<code>B_far</code> &mdash; effectively nothing, 37&times; below the detector. Whatever the model has
+learned, it is not &ldquo;draw a ring around what is already mapped&rdquo;. That matters for Phase 2,
+where every emitted dot goes to expert review.</li>
+<li><b>Discovery is about 3.5&times; harder than rediscovery.</b> The blocked-holdout proxy reads
+0.282; the same detector reads <b>0.081</b> against genuinely off-catalogue structures &mdash; still
+1.9&times; uniform random, so it is finding real new geometry, but IR-51-11 is now a measured
+number rather than a caveat.</li>
+</ol>
+<p class="ev">Stated bias of this instrument: B is drawn from the same compilation as A, so a rule
+that merely haloes the catalogue flatters itself here. The <code>halo_ring</code> control is
+included precisely to quantify that, and it shows the effect is absent for this detector.</p>
 
 <h3>Known biases of this instrument</h3>
 <ul>

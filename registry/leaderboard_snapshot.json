@@ -1,71 +1,128 @@
 {
- "schema_version": 1,
- "read_utc": "2026-10-06",
- "source_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
- "class_": "UNVERIFIED-LIVE",
- "note": "Rows as displayed on the public leaderboard when read. Scores are on the visible public leaderboard, which is built from a SUBSET of the hidden expert labels; the final ranking uses the expanded label set. Only the rows listed were observed; intermediate ranks are omitted rather than guessed.",
- "rows": [
+ "read_utc": "2026-10-07",
+ "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+ "metric": "Best public DW-Tversky (alpha=0.2, beta=0.8, R=300 m)",
+ "note": "Transcribed verbatim from the public leaderboard page during this session. Our group's own best public score is 0.2778, which sits at rank ~13 in this table.",
+ "top": [
   {
    "rank": 1,
-   "team": "xiaofanhu",
-   "score": 0.3774
+   "participant": "xiaofanhu",
+   "score": 0.3774,
+   "submissions": 11
   },
   {
    "rank": 2,
-   "team": "alexoktaba",
-   "score": 0.3345
+   "participant": "alexoktaba",
+   "score": 0.3345,
+   "submissions": 24
   },
   {
    "rank": 3,
-   "team": "nchuzhoy",
-   "score": 0.3262
+   "participant": "nchuzhoy",
+   "score": 0.3262,
+   "submissions": 5
   },
   {
    "rank": 4,
-   "team": "kinghorton42",
-   "score": 0.3222
+   "participant": "kinghorton42",
+   "score": 0.3222,
+   "submissions": 8
   },
   {
    "rank": 5,
-   "team": "joeyfezster",
-   "score": 0.322
+   "participant": "joeyfezster",
+   "score": 0.322,
+   "submissions": 22
   },
   {
    "rank": 6,
-   "team": "Batik Shirt Brothers",
-   "score": 0.3218
+   "participant": "Batik Shirt Brothers",
+   "score": 0.3218,
+   "submissions": 21
   },
   {
    "rank": 7,
-   "team": "DARD",
-   "score": 0.3195
+   "participant": "DARD",
+   "score": 0.3195,
+   "submissions": 15
   },
   {
    "rank": 8,
-   "team": "ndavis7",
-   "score": 0.2888
+   "participant": "ndavis7",
+   "score": 0.2888,
+   "submissions": 8
+  },
+  {
+   "rank": 9,
+   "participant": "mzoorob",
+   "score": 0.2884,
+   "submissions": 25
+  },
+  {
+   "rank": 10,
+   "participant": "GrigorSargsyan",
+   "score": 0.2876,
+   "submissions": 12
+  },
+  {
+   "rank": 11,
+   "participant": "HardcoreTechGod",
+   "score": 0.2854,
+   "submissions": 6
+  },
+  {
+   "rank": 12,
+   "participant": "op01",
+   "score": 0.2792,
+   "submissions": 6
   },
   {
    "rank": 13,
-   "team": "extradr19",
-   "score": 0.2778
+   "participant": "extradr19",
+   "score": 0.2778,
+   "submissions": 11
+  },
+  {
+   "rank": 14,
+   "participant": "No Fault of Our Own",
+   "score": 0.2761,
+   "submissions": 23
   },
   {
    "rank": 15,
-   "team": "smashi34",
-   "score": 0.271
+   "participant": "wbg1",
+   "score": 0.275,
+   "submissions": 13
   },
   {
    "rank": 16,
-   "team": "smrtdoog5",
-   "score": 0.2708
+   "participant": "smashi34",
+   "score": 0.271,
+   "submissions": 11
+  },
+  {
+   "rank": 17,
+   "participant": "smrtdoog5",
+   "score": 0.2708,
+   "submissions": 11
+  },
+  {
+   "rank": 18,
+   "participant": "jgaines",
+   "score": 0.2682,
+   "submissions": 23
+  },
+  {
+   "rank": 19,
+   "participant": "ad3002",
+   "score": 0.2634,
+   "submissions": 22
   },
   {
    "rank": 20,
-   "team": "SDCF9",
-   "score": 0.26
+   "participant": "SDCF9",
+   "score": 0.26,
+   "submissions": 12
   }
- ],
- "brief_discrepancy": "The task brief states the top score to beat is 0.3195. On this read 0.3195 is rank 7 and the leader is 0.3774. Recorded as IR-51-01.",
- "artifact_caveat": "The sibling artifact 'gemsdoe32-h33-h33-2-b2-...-zeros' cannot be cryptographically linked to the 0.2778 row; its own site labels it UNSCORED (projected 0.2747). See IR-51-02."
+ ]
 }

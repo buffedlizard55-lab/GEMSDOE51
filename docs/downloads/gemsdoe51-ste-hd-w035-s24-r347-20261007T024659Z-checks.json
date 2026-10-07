@@ -111,9 +111,7 @@
     "total emitted mass",
     "44,069"
    ]
-  ],
-  "note": "GEMSDOE51 | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag GBDT) | NEW: strike-coherent trace emission (multi-scale Frangi ridge x 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px) replacing isotropic NMS: +0.0020 paired DTI on 6 blocked folds, 4/6, w->0 control provably reduces to the incumbent | Stage 1 geodetic strain-budget deficit as a soft prior w=0.1 (dominance lift 0.963) | 44,069 dots at mass ratio 3.47x|G|, none within 200 m of the catalogue | off-catalogue A/B: 0.0813 vs 0.0424 random and 0.0022 catalogue-halo control | UNSCORED",
-  "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process, then re-verified by scripts/run_uniqueness_gate.py which shares no code with this builder; no score on this site is organizer-verified"
+  ]
  },
  "nan_twin_checks": {
   "single_band": true,
@@ -158,65 +156,5 @@
   },
   "verdict": "PASS",
   "notes": []
- },
- "artifacts": [
-  {
-   "role": "PRIMARY",
-   "file": "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
-   "zip": "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip",
-   "nan_twin": "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
-   "gate_mode": "soft",
-   "description": "H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10), emitted by strike-coherent trace emission: multi-scale Frangi ridge + 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px",
-   "holdout_cost_vs_ungated": 0.002,
-   "uniqueness": {
-    "candidate": "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
-    "sha256": "e13394d96baf6867f3a6851d9243de74f8d37c581ff003dbdf3e7497f58dab38",
-    "byte_duplicate_of": [],
-    "support_jaccard": {
-     "g25_dotted_02600": 0.01623,
-     "g32_anchor_02708": 0.01623,
-     "g32_h33b2_02778": 0.017531,
-     "own:gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.186548,
-     "own:gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.234028
-    },
-    "support_containment": {
-     "g25_dotted_02600": 0.03195,
-     "g32_anchor_02708": 0.03195,
-     "g32_h33b2_02778": 0.03195,
-     "own:gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.314439,
-     "own:gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.379292
-    },
-    "stage1_dominance": {
-     "approved_area_share_of_footprint": 0.8005069500498609,
-     "emitted_pixels_inside_approved": 33975,
-     "emitted_pixels_total": 44069,
-     "emitted_share_inside_approved": 0.7709501009780118,
-     "lift_over_area_share": 0.9630773360930743
-    },
-    "verdict": "PASS",
-    "notes": []
-   }
-  }
- ],
- "stage1_stats": {
-  "approved_px": 4136518,
-  "approved_share_of_footprint": 0.8005069500498609,
-  "emitted_share_inside_approved": 0.7709501009780118,
-  "lift_over_area": 0.9630773360930743,
-  "threshold": -0.339622641509434,
-  "fault_median_II_nanostrain": 0.0,
-  "obs_median_II_nanostrain": 21.016352256722218,
-  "kostrov_meta": {
-   "tile_px": 100,
-   "tile_shape": [
-    38,
-    33
-   ],
-   "h_seis_m": 15000.0,
-   "median_centroid_distance_px": 36.345563690772494,
-   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
-   "regional_median_slip_rate_mm_yr": 0.1,
-   "total_mapped_trace_km": 6821.350197517395
-  }
  }
 }

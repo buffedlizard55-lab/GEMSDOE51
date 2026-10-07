@@ -25,7 +25,7 @@
 <ol class="steps">
 <li><b>Download the file.</b> Go to the <a href="index.html">executive summary</a> and click the
 big download button. You get a single-band GeoTIFF called
-<code>gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif</code>.</li>
+<code>gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif</code>.</li>
 <li><b>Open the submission page.</b>
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
 (requires login). The form is titled <b>New submission</b>.</li>
@@ -33,7 +33,7 @@ big download button. You get a single-band GeoTIFF called
 also upload the <code>.zip</code>; both contain the same single GeoTIFF.</li>
 <li><b>Note (optional).</b> Paste this exact string so you can tell this submission apart later:</li>
 </ol>
-<pre class="note">GEMSDOE51 two-stage | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag bagged GBDT) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit (soft prior w=0.10) | 44069 dots at 2.4 px spacing, none within 200 m of the catalogue | proxy DTI 0.2820 / gate cost +0.0004 on the blocked holdout | UNSCORED</pre>
+<pre class="note">GEMSDOE51 | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag GBDT) | NEW: strike-coherent trace emission (multi-scale Frangi ridge x 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px) replacing isotropic NMS: +0.0020 paired DTI on 6 blocked folds, 4/6, w-&gt;0 control provably reduces to the incumbent | Stage 1 geodetic strain-budget deficit as a soft prior w=0.1 (dominance lift 0.963) | 44,069 dots at mass ratio 3.47x|G|, none within 200 m of the catalogue | off-catalogue A/B: 0.0813 vs 0.0424 random and 0.0022 catalogue-halo control | UNSCORED</pre>
 <ol class="steps" start="5">
 <li><b>Submit.</b> The score appears on the
 <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a>
@@ -57,7 +57,7 @@ re-opening the file from disk after writing, not from memory. An official NaN-ou
 offered alongside it.</p>
 
 <h2>What the validator checks</h2>
-<table class=''><thead><tr><th>requirement</th><th>this file</th></tr></thead><tbody><tr><td>single band</td><td>True</td></tr><tr><td>dtype float32</td><td>True</td></tr><tr><td>CRS EPSG:32611</td><td>True</td></tr><tr><td>geotransform matches template</td><td>True</td></tr><tr><td>3730 x 3292</td><td>True</td></tr><tr><td>all 12,279,160 cells finite</td><td>True</td></tr><tr><td>values inside [0, 1]</td><td>True</td></tr><tr><td>nodata tag absent</td><td>True</td></tr><tr><td>positive pixels</td><td>44,069</td></tr><tr><td>total emitted mass</td><td>44,069</td></tr></tbody></table>
+<table class=''><thead><tr><th>requirement</th><th>this file</th></tr></thead><tbody><tr><td>single band</td><td>True</td></tr><tr><td>dtype float32</td><td>True</td></tr><tr><td>CRS EPSG:32611</td><td>True</td></tr><tr><td>geotransform matches template</td><td>True</td></tr><tr><td>3730 x 3292</td><td>True</td></tr><tr><td>all cells finite</td><td>True</td></tr><tr><td>values inside [0, 1]</td><td>True</td></tr><tr><td>nodata tag absent</td><td>True</td></tr><tr><td>positive pixels</td><td>44,069</td></tr><tr><td>total emitted mass</td><td>44,069</td></tr></tbody></table>
 
 <h2>Rules and deadlines</h2>
 <p>Read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">competition rules</a>

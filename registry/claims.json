@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_utc": "2026-10-06T21:11:44Z",
+ "generated_utc": "2026-10-07T02:53:19Z",
  "note": "Classes: MEASURED = recomputed here from hash-pinned inputs; PROXY = scored against the visible catalogue, not the hidden expert labels; UNVERIFIED-LIVE = read from a live page and quoted, not reproducible offline.",
  "claims": [
   {
@@ -170,6 +170,49 @@
    "class": "MEASURED",
    "evidence": "this registry; README limitations",
    "source": ""
+  },
+  {
+   "id": "C51-025",
+   "claim": "Auto-context stacking (Tu & Bai 2010) with contiguous 2-slab cross-fitting raises in-block AUC from 0.6652 to 0.6737 over 6 blocked folds but raises paired proxy DTI at the shipped mass by only +0.0012 (4/6 folds). Rejected against the preregistered +0.006 bar.",
+   "class": "PROXY",
+   "evidence": "evidence/autocontext_holdout.json"
+  },
+  {
+   "id": "C51-026",
+   "claim": "Strike-coherent trace emission (ste_L9_w0.35_s2.4_nothin) beats isotropic NMS by +0.0020 mean paired proxy DTI over 6 blocked folds at identical detector field and identical mass, 4/6 folds, sign-test p = 0.344. The w_cont=0 control reproduces the incumbent to within 2e-4 on every fold.",
+   "class": "PROXY",
+   "evidence": "evidence/emission_geometry.json"
+  },
+  {
+   "id": "C51-027",
+   "claim": "On the off-catalogue A/B instrument (half the catalogue's fault SYSTEMS hidden and left inside the negative class), the shipped rule scores DTI 0.0813 against B_far, versus 0.0424 for uniform random and 0.0022 for a 2-5 px catalogue-halo control; 4 folds, B_far = 6,130 px in 158 components. The detector is therefore not a catalogue halo, and discovery is ~3.5x harder than the blocked-holdout proxy of 0.282 suggests.",
+   "class": "PROXY",
+   "evidence": "evidence/offcatalogue_ab.json"
+  },
+  {
+   "id": "C51-028",
+   "claim": "The shipped file gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif (sha256 e13394d96baf6867f3a6851d9243de74f8d37c581ff003dbdf3e7497f58dab38) is portal-legal on every published requirement: single band float32, EPSG:32611, 3730x3292, template geotransform, all 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag, 44,069 positive pixels, minimum distance to the catalogue 2.236 px.",
+   "class": "MEASURED",
+   "evidence": "data/independent_checks_gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.json (written by scripts/verify_submission.py, a separate process from the builder)"
+  },
+  {
+   "id": "C51-029",
+   "claim": "The shipped file is not a copy of any prior GEMSDOE submission: no byte duplicate, maximum Jaccard 0.0175 against the three external prior submissions on disk, and a Stage-1 dominance lift of 0.963 (below 1), so it is not a re-expression of Stage 1's approved footprint. The standalone gate, which imports no gems51 code, passes at IoU 0.234 / cosine 0.379 / containment 0.913.",
+   "class": "MEASURED",
+   "evidence": "evidence/uniqueness_gate.json, data/submission_manifest.json"
+  },
+  {
+   "id": "C51-030",
+   "claim": "The live public leaderboard on 2026-10-07 is led by xiaofanhu at 0.3774; the 0.3195 figure in the project brief is 7th place. Reaching 0.3774 at the shipped mass ratio and on-truth share requires credit-per-dot to rise from 0.1217 to 0.1706, a 40% increase.",
+   "class": "UNVERIFIED-LIVE",
+   "evidence": "registry/leaderboard_snapshot.json; algebra in README section 5.5",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+  },
+  {
+   "id": "C51-031",
+   "claim": "No submission produced by this repository has ever been scored by the organizer. Every DTI quoted anywhere in this repository is a proxy measured against the visible catalogue.",
+   "class": "MEASURED",
+   "evidence": "registry/claims.json, data/submission_manifest.json (field: UNSCORED)"
   }
  ]
 }

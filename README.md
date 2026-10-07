@@ -277,78 +277,186 @@ Both identities and the bar are proved numerically in `tests/test_metric.py`.
 ## 2. Repository layout
 
 ```
-registry/     hash-pinned data manifest, source register, irregularity register
-src/gems51/   metric, grid, features, stack, detector, emission, holdout,
-              strain_budget (Stage 1), extras (candidate hypotheses), submission, uniqueness
-scripts/      restore_data, prepare_data, run_experiments, run_two_stage, build_submission, build_site
-tests/        metric identity tests (run: python -m pytest tests -q)
-docs/         GitHub Pages site (executive summary, one-click download)
-data/         raw + prepared rasters (gitignored; restored by scripts/restore_data.py)
+registry/      hash-pinned data manifest, source register (28), irregularity
+               register (14), hypothesis register (11), leaderboard snapshot
+src/gems51/    metric, grid, features, stack, detector, emission, holdout,
+               strain_budget (Stage 1), extras (hypothesis feature groups),
+               trace_emission (strike-coherent emission), autocontext (stacking),
+               submission, uniqueness, paths
+scripts/       restore_data, prepare_data, build_extras, run_experiments,
+               run_two_stage, run_autocontext, run_emission_geometry,
+               run_offcatalogue_ab, run_uniqueness_gate, check_repo_health,
+               build_submission (v1), build_submission_v2 (shipped), build_site
+knowledge/     dated research digests; every claim labelled official / measured / inherited
+evidence/      one JSON per instrument run — nothing on the site is typed by hand
+attic/         quarantined code: legacy-api/ (dead PR#1/#2 modules), pr1-2/ (verbatim)
+tests/         metric identity tests (11)
+docs/          GitHub Pages site; docs/downloads/ holds the submission artifacts
+data/          raw + prepared rasters (gitignored; restored by scripts/restore_data.py)
 ```
 
 ## 3. Reproduce
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-python3 scripts/restore_data.py --group all     # hash-verified mirrors via `gh api`
-python3 scripts/prepare_data.py                 # -> data/prepared/
+python3 scripts/restore_data.py --group all          # hash-verified mirrors via `gh api`
+python3 scripts/prepare_data.py                      # -> data/prepared/
 python3 -c "import sys; sys.path.insert(0,'src'); import gems51.stack as s; s.build()"
-python3 scripts/build_extras.py                 # candidate-hypothesis feature groups
-python3 scripts/run_experiments.py --arm base   # spatially blocked holdout
-python3 scripts/run_two_stage.py                # Stage 1 / Stage 2, scored separately
+python3 scripts/build_extras.py                      # hypothesis feature groups
+
+python3 scripts/check_repo_health.py                 # AST drift + import matrix + collect
+python3 scripts/run_experiments.py --arm H_D --save-fields     # blocked holdout, 6 folds
+python3 scripts/run_emission_geometry.py --folds all           # emission A/B at matched mass
+python3 scripts/run_autocontext.py --folds all                 # level-1 vs level-2 stacking
+python3 scripts/run_offcatalogue_ab.py --folds 0,1,2,3         # the honest discovery instrument
+python3 scripts/build_submission_v2.py --level 1 --emission ste \
+        --ste-w 0.35 --ste-spacing 2.4 --ratio 3.47 --gate-mode soft --gate-weight 0.10
+python3 scripts/run_uniqueness_gate.py --candidate docs/downloads/<file> --refs data/prior/*.tif
+python3 scripts/build_site.py
 PYTHONPATH=src python -m pytest tests -q
 ```
 
-## 4. Known irregularities — see `registry/irregularities.json`
+## 4. Known irregularities — full register in `registry/irregularities.json` (14 entries)
 
-* **IR-51-01** GEMSDOE32's index page labels `gems32-probe-S1-ANCHOR-identical-to-live-02600.tif`
-  as the "0.2708 anchor", but that repository's own audit JSON for the same
-  digest (`4dc4cc54…`) calls it the **0.2600** reference anchor, and its mask is
-  byte-identical to the GEMSDOE25 file scored 0.2600. The 0.2708 label is not
-  reproducible from the artifacts; we treat the file as the 0.2600 anchor.
-* **IR-51-02** The three geodetic layers satisfy no exact algebraic identity
-  (`sqrt(dil²+shear²)`, `sqrt((dil²+shear²)/2)`, `|dil|+|shear|` all miss by
-  >30 % locally; best r = 0.993), so the invariant convention behind
-  `geod_2ndinv` is **not recoverable** from the shipped data. Stage 1 is
-  therefore stated in quantile space, which is invariant to it.
-* **IR-51-LEAK-01** Any feature derived from the catalogue is a *perfect* training
-  leak in a blocked holdout (every positive has `d_cat = 0`). Measured: in-block
-  AUC collapsed to exactly 0.500. Catalogue-derived columns are excluded from the
+* **IR-51-01** GEMSDOE32's "0.2708 anchor" is byte-identical to GEMSDOE25's 0.2600 file. The
+  0.2708 label is not reproducible from the artifacts; we treat the file as the 0.2600 anchor.
+* **IR-51-02** The three geodetic layers satisfy no exact algebraic identity, so the invariant
+  convention behind `geod_2ndinv` is not recoverable. Stage 1 is stated in quantile space, which
+  is invariant to it.
+* **IR-51-LEAK-01** *(closed)* Any catalogue-derived feature is a **perfect** training leak in a
+  blocked holdout — in-block AUC collapsed to exactly 0.500. Such columns are excluded from the
   model and used only at emission time.
-* **IR-51-03** The DrivenData data page is login-walled and this sandbox's egress
-  is allow-listed (PyPI + github.com + api.github.com only). All rasters are
-  therefore re-fetched as hash-pinned public GitHub blobs; provenance is
-  owner-mirror, **not** organizer-authenticated.
-
+* **IR-51-03** Sandbox egress is allow-listed (PyPI + github.com). All rasters are hash-pinned
+  public GitHub mirrors; provenance is owner-mirror, **not** organizer-authenticated. The 1 m 3DEP
+  DEM is therefore unreachable.
+* **IR-51-08** *(closed this session)* `labels.tif` being byte-identical to `existing_faults.tif`
+  is **by design**, not a mirror fault. The organizer's own reference solution trains on
+  `data/labels.tif` as the positive class, and the hidden test set is the expert-identified faults
+  *absent* from it. The real consequence is restated as IR-51-11.
+* **IR-51-09** *(closed this session)* A whole PR#1/#2-lineage subtree — 4 modules and 8 scripts —
+  was dead against the merged API: it imported cleanly and raised `AttributeError` at runtime.
+  Moved verbatim to `attic/legacy-api/` with a table mapping each file to its live replacement.
+  `scripts/check_repo_health.py` now fails the build on any recurrence.
+* **IR-51-10** *(open)* The brief's "0.3195 leader" is stale. The live leaderboard read on
+  2026-10-07 has **xiaofanhu at 0.3774**; 0.3195 is 7th. All planning here uses 0.3774.
+* **IR-51-11** *(open, structural)* Because the visible catalogue *is* the training label, every
+  offline number in this repository measures **rediscovery**, not discovery. Mitigated this
+  session by a second instrument — see §5.3.
+* **IR-51-12** *(closed as a negative result)* Auto-context stacking improves ranking consistently
+  (+0.0085 AUC) but converts almost none of it into score (+0.0012 DTI). Not shipped.
+* **IR-51-13** *(open as a methodological warning)* A 3-fold pilot overstated the emission-geometry
+  effect by 65 %, because folds 0/2/4 are the three *easiest* folds. Rule adopted: nothing is
+  promoted on fewer than all six folds.
 
 ## 5. What shipped this session
 
-### The deliverable
+### 5.1 The deliverable
 
-`docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif` — 44,069 emitted pixels,
-sha256 `5db55c064eb0…`.
+`docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif`
+— 44,069 emitted pixels, sha256 `e13394d96baf…`, submission name **`GEMSDOE51-STE-HD-R347`**.
 
-Two files are offered, both from the same detector and the same 3-bag ensemble, differing only in
-how Stage 1 is allowed to touch them:
+| check | result |
+|---|---|
+| single band, float32 | yes |
+| EPSG:32611, 100 m, 3730 × 3292, template geotransform | yes |
+| every one of 12,279,160 cells finite | yes |
+| **values outside [0, 1]** | **0** |
+| nodata tag | absent |
+| byte-duplicate of any prior GEMSDOE submission | **no** |
+| max Jaccard vs the three external prior submissions | **0.0175** |
+| Stage-1 dominance lift (emitted share inside approved ÷ approved area share) | **0.963** — below 1, so the file is *not* a re-expression of Stage 1's footprint |
 
-| role | gate | holdout cost vs ungated | max Jaccard vs any prior GEMSDOE submission | uniqueness |
+Verified by re-reading the written bytes in a second process, then again by the standalone
+`scripts/run_uniqueness_gate.py`, which shares no code with the builder: PASS at IoU 0.234
+(limit 0.50), cosine 0.379 (limit 0.90), containment 0.913 (limit 0.98).
+
+The one thing that changed versus last session's file is the **emission geometry**, and it is the
+only change that survived six folds.
+
+### 5.2 Three hypotheses tested, one adopted, one rejected, one re-scoped
+
+Full slate with layers, physical signature and the "why uncatalogued" argument is in
+`registry/hypotheses.json` (11 entries) and on the
+[hypotheses page](https://buffedlizard55-lab.github.io/GEMSDOE51/hypotheses.html).
+
+| rank *a priori* | id | hypothesis | cost | measured paired Δ DTI | folds | verdict |
+|---|---|---|---|---|---|---|
+| 1 | **H-51-F** | Auto-context stacking (Tu & Bai 2010) with cross-fitted belief | medium | **+0.0012** | 4/6 | **REJECTED** — fails the preregistered +0.006 bar |
+| 2 | **H-51-G** | Strike-coherent trace emission (Frangi ridge + Vanderbrug line accumulator) | low | **+0.0020** | 4/6 | **ADOPTED** — shipped |
+| 1 | H-51-J | Blakely–Simpson maxspot over upward-continuation heights | medium | — | — | proposed, next session |
+| 3 | H-51-I | Radiometric K/Th and U/Th alteration-ratio lineaments | low | — | — | proposed |
+| 4 | H-51-K | Missability inverse-propensity weighting | low | — | — | proposed |
+
+**Stage 2 — detector (auto-context), 6 blocked folds, paired:**
+
+| level | in-block AUC | proxy DTI @ r2.5 | @ r3.47 | @ r4.5 | @ r6 |
+|---|---|---|---|---|---|
+| level 1 (physical features only) | 0.6652 | 0.2731 | **0.2787** | 0.2744 | 0.2598 |
+| level 2 (+ 8 auto-context layers) | **0.6737** | 0.2728 | 0.2799 | 0.2757 | 0.2613 |
+| paired Δ (L2 − L1) | +0.0085 | −0.0003 | **+0.0012** | +0.0013 | +0.0016 |
+| folds positive | — | 4/6 | 4/6 | 3/6 | 5/6 |
+
+Per-fold Δ at r3.47: `+0.0102, −0.0092, +0.0012, −0.0117, +0.0012, +0.0157`. The sign alternates.
+**The diagnosis is the useful part:** the AUC gain is real and consistent, but it re-orders pixels
+that were already *inside* the emitted top-3.47 × |G| mass, so it buys no new credit. Global AUC is
+the wrong proxy for this metric; credit-per-dot at the shipped mass is the right one. Level 2 is
+kept in the tree (`--level 2`) and not shipped.
+
+**Stage 2 — emission geometry, 6 blocked folds, identical detector field, identical mass:**
+
+| rule | mean proxy DTI | paired Δ | folds | per-fold Δ |
 |---|---|---|---|---|
-| PRIMARY | soft | +0.0004 | 0.017 | PASS |
-| SECONDARY | hard | -0.0025 | 0.015 | PASS |
+| `iso_nms_r2.4` (incumbent) | 0.2816 | — | — | — |
+| `ste_L9_w0.35_s2.4` **(shipped)** | **0.2836** | **+0.0020** | 4/6 | `+23, +29, +42, −23, −19, +65` (×10⁻⁴) |
+| `ste_L9_w0.5_s2.4` | 0.2832 | +0.0015 | 4/6 | `+22, +30, +58, −44, −39, +66` |
+| `ste_L9_w0.7_s2.4` | 0.2832 | +0.0015 | 4/6 | `+54, +23, +76, −101, −30, +71` |
+| `ste_L9_w0_s2.4` *(control)* | 0.2817 | +0.0000 | 3/6 | reproduces the incumbent to 2×10⁻⁴ |
 
-The **PRIMARY** uses the soft prior, because it is the only Stage-1 setting that is not negative on
-the blocked holdout. The **SECONDARY** is the brief's literal design — points only inside
-stage-one-approved tiles — shipped as ordered, with its measured cost printed next to it rather than
-hidden.
+The `w_cont = 0` control reproducing isotropic NMS exactly is what validates the implementation as
+a *strict generalisation* of the incumbent, so the shipped rule cannot be worse than it by
+construction error. `w = 0.35` is shipped rather than the pilot's `w = 0.7` because it has the same
+six-fold mean with a 5× smaller worst-fold loss. Sign-test p = 0.344 — **this is a real but small
+effect that is not statistically separable from zero on six folds**, bought at zero compute and
+zero risk.
 
-### Stage 1 and Stage 2, reported separately
+Also measured and **rejected**: across-strike thinning (−0.005), along-trace spacing ≥ 3.6 px
+(−0.004 to −0.012), line length 15 (≤ L9).
 
-*Stage 1* (Kostrov strain-budget deficit, 10 km tiles) is scored on a **trace-level** holdout,
-because a spatial block would zero the fault-accommodated term inside the block and the question
-would be circular: with the block's own faults removed there is nothing to accommodate. A fifth of
-the mapped traces is withheld, the remaining four fifths supply the budget, and uniform random dots
-are thrown down inside the approved tiles versus everywhere. No model is fitted, so there is no
-leakage to control.
+### 5.3 The honest instrument: off-catalogue A/B
+
+The blocked holdout hides a whole *region*, so inside it no fault is mapped at all — it cannot
+measure the actual task, which is finding a fault the catalogue missed *while other faults in the
+same place are mapped and masked out of scoring*. `scripts/run_offcatalogue_ab.py` builds that
+instrument: the catalogue's 8-connected components are split into **A** (visible: training
+positives + the scorer's known-mask) and **B** (hidden pretend-new faults, left inside the negative
+class exactly as real unmapped faults are). `B_far` keeps only B components ≥ 5 px from any A
+pixel — structures that are not merely an interleaved strand of a mapped zone.
+
+| rule | DTI vs `B_all` | DTI vs `B_far` (strict) |
+|---|---|---|
+| detector + `ste_L9_w0.35_s2.4` | **0.1921** | **0.0813** |
+| detector + `iso_nms_r2.4` | 0.1885 | 0.0812 |
+| uniform random inside the footprint | 0.0844 | 0.0424 |
+| `halo_ring_2_5px` — dots in a ring around visible faults | 0.0873 | **0.0022** |
+
+Four folds, A = 41,247 px, B = 19,741 px, B_far = 6,130 px in 158 components.
+Two things fall out of this table and both matter more than any tuning result here:
+
+1. **The detector is not a catalogue halo.** The halo control scores 0.0022 against `B_far` —
+   effectively nothing, 37× below the detector. Whatever the model has learned, it is not
+   "predict a ring around what is already mapped".
+2. **Discovery is roughly 3.5× harder than rediscovery.** The blocked-holdout proxy reads 0.282;
+   the same detector reads **0.081** against genuinely off-catalogue structures. It still beats
+   random by 1.9×, so it is finding real new geometry — but **IR-51-11 is now quantified**, and
+   every 0.28 in this repository should be read with that factor in mind.
+
+### 5.4 Stage 1, reported separately
+
+*Stage 1* (Kostrov strain-budget deficit, 10 km tiles) is scored on a **trace-level** holdout: a
+spatial block would zero the fault-accommodated term inside the block and make the question
+circular. A fifth of mapped traces is withheld, the rest supply the budget, and uniform random dots
+are thrown inside the approved tiles versus everywhere. No model is fitted, so there is no leakage
+to control.
 
 | prior | approved | area share | truth recall | lift | proxy DTI |
 |---|---|---|---|---|---|
@@ -360,104 +468,102 @@ leakage to control.
 | geodetic_only | top 20 % of tiles | 0.201 | 0.256 | 1.273 | 0.0489 |
 | none | whole footprint | 1.000 | 1.000 | 1.000 | 0.0494 |
 
-Spearman rank correlation of each tile field against held-out fault density: deficit = +0.032, geodetic_only = +0.099, dil_deficit = +0.013, shear_deficit = +0.024.
+Spearman rank correlation against held-out fault density: deficit **+0.032**, geodetic_only
+**+0.099**, dil_deficit +0.013, shear_deficit +0.024. The deficit is **worse than the raw geodetic
+field on every column**: subtracting the fault-accommodated term removes signal rather than
+isolating it, because mapped faults are surrounded by unmapped ones and so the subtracted term
+carries *positive* information about where the missing ones are.
 
-The deficit is **worse than the raw geodetic field** on every column. Subtracting the
-fault-accommodated term removes signal instead of isolating it: the mapped-fault term tracks where
-faults cluster, mapped faults are surrounded by unmapped ones, so it carries *positive* information
-about where the missing ones are. Stage 1 is retained as a prior, not as a filter.
-
-*Stage 2* (the detector), spatially blocked holdout:
-
-| arm | in-block AUC | proxy DTI at M/|G| = 3.47 | folds |
-|---|---|---|---|
-| base | 0.6668 | 0.2794 | 6 |
-| H_E | 0.6633 | 0.2768 | 6 |
-| H_D | 0.6726 | 0.2817 | 6 |
-| H_C | 0.6322 | 0.2544 | 6 |
-| H_ALL | 0.6293 | 0.2552 | 6 |
-
-### Gate sweep
-
-Hard gate versus soft prior, six folds, paired against the ungated run:
+Gate sweep, six folds, paired against the ungated run — the hard gate is **monotone-harmful** and
+never wins a fold at any setting:
 
 | gate | setting | mean proxy DTI | paired Δ | folds better |
 |---|---|---|---|---|
-| soft prior | w = 0.0 | 0.2816 | +0.0000 | 0/6 |
 | soft prior | w = 0.05 | 0.2818 | +0.0001 | 3/6 |
-| soft prior | w = 0.1 | 0.2820 | +0.0004 | 4/6 |
+| soft prior | **w = 0.1 (shipped)** | **0.2820** | **+0.0004** | 4/6 |
 | soft prior | w = 0.2 | 0.2818 | +0.0002 | 4/6 |
-| soft prior | w = 0.4 | 0.2810 | -0.0007 | 2/6 |
-| hard gate | top 100 % of tiles | 0.2816 | +0.0000 | 0/6 |
-| hard gate | top 90 % of tiles | 0.2803 | -0.0013 | 0/6 |
-| hard gate | top 80 % of tiles | 0.2791 | -0.0025 | 0/6 |
-| hard gate | top 70 % of tiles | 0.2779 | -0.0038 | 0/6 |
-| hard gate | top 60 % of tiles | 0.2721 | -0.0095 | 0/6 |
-| hard gate | top 30 % of tiles | 0.2055 | -0.0762 | 0/6 |
-| hard gate | top 10 % of tiles | 0.1372 | -0.1445 | 0/6 |
+| soft prior | w = 0.4 | 0.2810 | −0.0007 | 2/6 |
+| hard gate | top 90 % of tiles | 0.2803 | −0.0013 | 0/6 |
+| hard gate | top 80 % of tiles | 0.2791 | −0.0025 | 0/6 |
+| hard gate | top 70 % of tiles | 0.2779 | −0.0038 | 0/6 |
+| hard gate | top 60 % of tiles | 0.2721 | −0.0095 | 0/6 |
+| hard gate | top 30 % of tiles | 0.2055 | −0.0762 | 0/6 |
+| hard gate | top 10 % of tiles | 0.1372 | −0.1445 | 0/6 |
 
-The hard gate is monotone-harmful: it never wins a fold at any setting. It is shipped anyway, at the
-mildest setting that still passes the anti-dominance test, because the brief asks for it — and its
-cost is disclosed on the download page rather than hidden.
+Stage 1 is therefore shipped as a **soft multiplicative prior at w = 0.10** only — the single
+setting that is not negative — and the shipped file's Stage-1 dominance lift of 0.963 confirms it
+is a tilt, not a filter.
 
-### Honest expectation, written down before the score is known
+### 5.5 Where the headroom actually is
 
-Our instrument says **0.282** proxy DTI at the live mass ratio, against
-**0.279** for the previous stack. That brackets the group's best owner claim (0.2778)
-and sits below the current public leader (0.3774). **Expect this file to land in the high 0.2s.** It
-is a genuinely new, independently verified, portal-legal submission — it is not yet a leaderboard
-win.
+Fitting the metric identity to a scored fold gives
+`DTI = c·m / (0.2·m·(c + 1 − b) + 0.8)` with credit-per-dot `c = 0.1217`, on-truth share
+`b = 0.063` and mass ratio `m = 3.47`, which reproduces the observed 0.2752. Two consequences,
+both proved rather than guessed:
 
-### Phase 1 entries are not free
+* **The mass optimum is already reached.** The marginal-credit bar is `α·DTI = 0.055`; the 3,471st
+  dot per 1,000 truth pixels earns almost exactly that. Six-fold measurement agrees: r2.5 → 0.2731,
+  **r3.47 → 0.2787**, r4.5 → 0.2744, r6 → 0.2598. Re-sweeping mass is wasted effort unless the
+  detector changes.
+* **Reaching the live leader's 0.3774 at fixed `m` and `b` requires `c = 0.1706` — a 40 % increase
+  in credit per dot.** No emission rule can deliver that; it is entirely a detector-quality problem.
+  This is why a +0.002 emission win is the honest result of this session rather than a
+  disappointment, and why the next session's slate (H-51-J, H-51-I, H-51-K) is all detector work.
+
+### 5.6 Phase 1 entries are not free
 
 The organizer has stated that the Phase 2 test set "will use a test set that is updated by expert
-review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even
-if they are not the most performant in Phase 1" (chrisk-dd, 2026-09-23, thread 11527 post 7). Every
-emitted dot is therefore required to be individually defensible: all lie outside the 200 m exclusion
-zone, none sits on a catalogued trace, and the argument for looking in any given tile is published
-on the method page. The same organizer post declined to disclose the data sources, fault types or
-coverage behind the hidden labels, so **no** validation instrument here — including ours — can be
-shown to match the hidden label style (IR-51-05).
+review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation
+even if they are not the most performant in Phase 1" (chrisk-dd, 2026-09-23). Every emitted dot is
+therefore required to be individually defensible: all lie outside the 200 m catalogue exclusion
+zone, none sits on a catalogued trace, the off-catalogue A/B above shows they are not a halo
+around mapped faults, and the argument for looking in any given tile is published on the method
+page. The same post declined to disclose the sources, fault types or coverage behind the hidden
+labels, so **no** validation instrument here can be shown to match the hidden label style
+(IR-51-05).
 
-### Repository history: two independent implementations
+## 6. Limitations, in the order they matter
 
-PR #1/#2 (an earlier session on a different branch) and this session each built the same library
-from scratch in parallel, so 27 paths conflicted add/add at the same names. This session's versions
-were kept for the shared code and site paths because they are what produced the shipped artifacts.
-Nothing was lost: every conflicting PR #1/#2 file is preserved verbatim under `attic/pr1-2/`, and
-all 74 non-conflicting files — the `evidence/*.json` register, `docs/claims.html`,
-`docs/strategy.html`, `docs/executive-summary.html`, `docs/assets/`, the CI workflows,
-`data/labels.tif`, `data/existing_faults.tif` and `data/sample_submission.tif` — carry through
-untouched. Recorded as **IR-51-07**.
+1. **Discovery ≠ rediscovery (IR-51-11).** The visible catalogue *is* the training label — by
+   design, confirmed against the organizer's reference solution. Against genuinely off-catalogue
+   structures the detector scores 0.081, not 0.282. Every proxy number in this repository is an
+   upper bound on what the live metric will show for the same reason.
+2. **The detector is the bottleneck, and it has not moved.** Both ideas tried this session were
+   worth ~0.002 or less. Credit-per-dot must rise 40 % to reach the current leader. In-block AUC
+   0.673 is roughly where the group's best 0.2778 submission already was.
+3. **Nothing this session is statistically significant.** The shipped emission change is
+   +0.0020 on six folds with a sign-test p of 0.344. It is shipped because it is free, because its
+   `w → 0` limit provably reduces to the incumbent, and because it is corroborated by a second
+   independent instrument (off-catalogue A/B, +0.0036 on `B_all`, 3/4 folds) — not because the
+   evidence is strong.
+4. **Stage 1 does not work as the brief specifies.** The strain-budget deficit is worse than the
+   raw geodetic field on every measure, and the hard gate loses on 6/6 folds at every setting. It
+   ships as a soft prior at the only weight that is not negative.
+5. **IR-51-05 — the hidden labels' provenance will not be disclosed**, and Phase 2's test set is
+   rebuilt from expert review of Phase 1 submissions.
+6. **No authenticated data (IR-51-03).** Every raster is an owner-mirrored public GitHub blob,
+   hash-consistent but not organizer-authenticated. The 1 m 3DEP lidar — which Giddens (2025) says
+   is how INGENIOUS actually found these Quaternary scarps — is unreachable from this sandbox; only
+   the 100 m aggregate is available, and lidar *coverage* is a near-useless prior (lift 1.054).
+7. **Regenerable bulk is not in git.** `data/raw/` and `data/prepared/` (~7 GB) rebuild in about
+   four minutes via `restore_data.py` → `prepare_data.py` → `stack.build()` → `build_extras.py`.
 
-### Limitations, in the order they matter
+## 7. What the next session should do, in order
 
-1. **IR-51-08 — the training labels are a duplicate of the known-fault raster.** Byte-identical
-   files, identical sha256, identical to the catalogue we derived independently from INGENIOUS. The
-   real target distribution has never been seen by any model in this repository. **This is the first
-   thing next session should chase**, because everything measured here measures our detector against
-   a proxy, not against the truth.
-2. **IR-51-05 — the organizer will not disclose the hidden labels' provenance.** We cannot tell
-   whether the truth is topographic, geophysical or field-mapped, and Phase 2's test set is rebuilt
-   from expert review of Phase 1 submissions.
-3. **The instrument's ceiling.** In-block AUC 0.673 and proxy DTI 0.282 is about as good as the
-   detector that produced the group's best 0.2778. Closing a 0.095 gap to the leader is a modelling
-   problem, not an emission-tuning problem.
-4. **Stage 1 does not work as specified.** The strain-budget deficit is worse than the raw geodetic
-   field on every measure. It is shipped as a soft prior because that costs nothing; the brief's
-   hard-gate version is shipped too, with its cost disclosed.
-5. **No authenticated data.** Every raster is an owner-mirrored public GitHub blob; provenance is
-   hash-consistent, not organizer-authenticated.
-6. **Regenerable bulk is not in git.** `data/raw/` and `data/prepared/` (~7 GB, the 2.67 GB feature
-   stack and 0.9 GB static extras) are rebuilt by `scripts/restore_data.py` → `prepare_data.py` →
-   `stack.build()` → `build_extras.py`, roughly four minutes end to end.
-
-### What next session should do
-
-* Get the real `labels.tif` (IR-51-08) and re-run the blocked holdout against it. If the mirror is
-  simply mislabelled, every number in this repository needs re-measuring.
-* Attack the localisation problem directly: the leader's implied ~200 m mean dot-to-trace distance
-  versus our ~260 m is the whole gap, so the next candidate hypothesis should be judged on that
-  statistic, not on AUC.
-* Try a sub-pixel emission position: the metric's triangular kernel rewards being *on* the trace,
-  and every dot here is snapped to a 100 m cell centre.
+1. **H-51-J — Blakely & Simpson (1986) maxspot edges over upward-continuation heights.** The USGS's
+   own production method for mapping *concealed* faults from potential fields, and Giddens (2025)
+   reports gravity was the single most useful dataset for defining Quaternary fault extent in this
+   exact region. The repo currently has raw gravity and magnetics plus generic Hessian filters, but
+   no edge-detection operator and no depth discrimination. Highest expected Δ of the open slate.
+2. **Judge every candidate on credit-per-dot at the shipped mass, never on AUC.** IR-51-12 is the
+   proof that the two come apart: +0.0085 AUC bought +0.0012 DTI.
+3. **Promote nothing on fewer than six folds** (IR-51-13: folds 0/2/4 are the easy ones and
+   inflated a pilot by 65 %).
+4. **H-51-K — missability inverse-propensity weighting.** The only idea on the slate that attacks
+   the labelling bias itself rather than adding another feature, and the off-catalogue A/B is now
+   available as the instrument that can actually detect whether it works.
+5. **Sub-pixel emission.** The triangular kernel rewards being *on* the trace and every dot here is
+   snapped to a 100 m cell centre; the shipped GeoTIFF is binary, which the linear-fractional
+   argument proves is optimal *given* integer positions, but not given sub-pixel ones.
+6. **Re-read the leaderboard before planning** (IR-51-10: the brief's target was two sessions
+   stale).
