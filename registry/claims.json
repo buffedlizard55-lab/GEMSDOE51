@@ -161,7 +161,7 @@
       "id": "C51-023",
       "class": "INFERRED_FROM_OWNER_REPORTED_SCORES",
       "claim": "Treating the owner-reported 0.2600 and 0.2778 for the 44,090 px dotted support and its 37,654 px catalogue-halo-deleted derivative (both supports MEASURED here) as accurate, and assuming the surviving dots keep their credit, eliminating the common credit term gives R = 200.6 - 0.01424*|G| for the total credit R of the 6,436 deleted dots. R >= 0 therefore requires |G| <= 14,088 truth pixels, and at the repository's 12,700-pixel planning value the deleted dots averaged 0.003 credit each. This is arithmetic on owner-reported numbers, not an organizer-authenticated measurement, and it establishes no hidden-label property by itself.",
-      "evidence": "data/refs/_inventory_stats.json; knowledge/03_why_the_dotted_family_wins_2026-10-07.md",
+      "evidence": "evidence/sibling_reference_stats_20261007.json; knowledge/03_why_the_dotted_family_wins_2026-10-07.md",
       "source": "owner-reported scores (not organizer-verified); official metric definition"
     },
     {
