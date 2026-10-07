@@ -58,3 +58,24 @@ def test_check_submission_reports_zero_out_of_range_values_as_pass(monkeypatch, 
     output = capsys.readouterr().out
     assert "PASS  values_outside_0_1: 0" in output
     assert "LOCAL FORMAT CHECKS PASS" in output
+
+
+@pytest.mark.parametrize('outside', [-9999, np.inf, -np.inf, 1.01])
+def test_invalid_outside_rejected(monkeypatch, outside):
+    _small_grid(monkeypatch)
+    with pytest.raises(ValueError, match='outside'):
+        submission.encode_submission_array(np.zeros((2,3)), np.ones((2,3),bool), outside)
+
+
+def test_zero_encoded_tiff_is_globally_finite(tmp_path, monkeypatch):
+    from rasterio.transform import Affine
+    monkeypatch.setattr(submission, 'GRID', SimpleNamespace(shape=(16,16), epsg=32611,
+        transform=(100.,0.,243350.,0.,-100.,4508550.)))
+    fp=np.zeros((16,16),bool);fp[2:14,2:14]=True
+    a=np.zeros((16,16),np.float32);a[8,8]=1
+    rec=submission.write_tif(tmp_path/'a.tif',a,fp)
+    assert rec['checks']['all_cells_finite_in_range']
+    assert rec['checks']['global_invalid_cells']==0
+    assert rec['nodata'] is None
+    with pytest.raises(ValueError, match='NoData'):
+        submission.write_tif(tmp_path/'bad.tif',a,fp,nodata=-9999)

@@ -19,13 +19,13 @@ from gems51.submission import verify  # noqa: E402
 
 def _passes(name: str, value: object, checks: dict) -> bool:
     """Interpret count-valued and alternative footprint checks."""
-    if name == "values_outside_0_1":
+    if name in {"values_outside_0_1", "global_invalid_cells"}:
         return value == 0
-    if name == "outside_footprint_zeros":
+    if name in {"outside_footprint_zeros", "outside_footprint_nan", "nodata_tag_is_nan"}:
         # The current contract accepts either finite zero outside or explicit
         # NaN/NoData outside; this diagnostic is not a failure when the NaN
         # alternative is the one present on disk.
-        return bool(value) or bool(checks.get("outside_footprint_nan"))
+        return bool(checks.get("outside_footprint_zeros")) or bool(checks.get("outside_footprint_nan"))
     return bool(value)
 
 
@@ -44,7 +44,7 @@ def main() -> int:
         return 1
     checks = report["checks"]
     for name, value in checks.items():
-        if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells"}:
+        if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells", "global_invalid_cells", "all_cells_finite_in_range"}:
             continue
         display = value
         if name == "outside_footprint_zeros" and not value and checks.get("outside_footprint_nan"):
