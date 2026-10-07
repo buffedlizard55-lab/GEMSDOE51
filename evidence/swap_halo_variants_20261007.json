@@ -1,0 +1,43 @@
+{
+ "schema_version": 1,
+ "parent": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+ "rim_px": 2.5,
+ "total_mass": 44069,
+ "frozen_receipt_mean": 0.285340602656319,
+ "basis": [
+  "rim dots earn 0.148 SGMC credit each vs 0.314 support average",
+  "hidden truth ~5.2x sparser than SGMC truth; rim expected live credit ~0.028 < ~0.06 breakeven",
+  "visible-catalogue proxy returns exactly 0 for any halo-free support (structurally unable to arbitrate)",
+  "sibling live record: pruning the <=1 px rim raised 0.2600 -> 0.2708"
+ ],
+ "results": {
+  "parent": {
+   "px": 44069,
+   "proxy_mean": 0.06488957681403411,
+   "S": 0.2190552202130097,
+   "L": 0.07043264493824763,
+   "S_cov": 0.2091045952847425,
+   "L_cov": 0.07674474656363606
+  },
+  "core_only": {
+   "px": 33364,
+   "proxy_mean": 0.0030546245866201398,
+   "S": 0.2005563772133026,
+   "L": 0.061666766359640725,
+   "S_cov": 0.1847277854262163,
+   "L_cov": 0.06289279592424955
+  },
+  "swap": {
+   "px": 44069,
+   "proxy_mean": 0.01194102218064215,
+   "S": 0.20651270985019488,
+   "L": 0.05790875066043904,
+   "S_cov": 0.19699641143963842,
+   "L_cov": 0.06302229136741579
+  }
+ },
+ "caveats": [
+  "S and L are local proxies, not the organizer's hidden labels",
+  "no organizer score exists for this or any local artifact"
+ ]
+}
