@@ -78,6 +78,127 @@ def cross_physics_edge_features(magnetic: np.ndarray, gravity: np.ndarray,
     return {"alignment": alignment, "coedge": coedge}
 
 
+def _masked_gaussian(field: np.ndarray, valid: np.ndarray, sigma: float) -> np.ndarray:
+    """Mask-normalized Gaussian smoothing of a source derivative field."""
+    valid = np.asarray(valid, dtype=bool) & np.isfinite(field)
+    numerator = ndi.gaussian_filter(
+        np.where(valid, field, 0.0).astype(np.float32), sigma=float(sigma), mode="nearest"
+    )
+    denominator = ndi.gaussian_filter(
+        valid.astype(np.float32), sigma=float(sigma), mode="nearest"
+    )
+    out = np.full(field.shape, np.nan, dtype=np.float32)
+    good = valid & (denominator >= 0.2)
+    np.divide(numerator, denominator, out=out, where=good)
+    return out
+
+
+def _tie_aware_rank01(values: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    """Average-tie empirical rank; a constant field has zero edge strength."""
+    from scipy.stats import rankdata
+
+    out = np.full(values.shape, np.nan, dtype=np.float32)
+    valid = np.asarray(valid, dtype=bool) & np.isfinite(values)
+    if not valid.any():
+        return out
+    selected = values[valid]
+    if selected.size == 1 or float(selected.max()) <= float(selected.min()):
+        out[valid] = 0.0
+        return out
+    ranks = rankdata(selected, method="average")
+    out[valid] = ((ranks - 1.0) / (selected.size - 1.0)).astype(np.float32)
+    return out
+
+
+def tilt_angle_edge_feature(vertical_gradient: np.ndarray,
+                            horizontal_gradient: np.ndarray,
+                            mask: np.ndarray, sigma: float,
+                            tilt_tolerance_rad: float = 0.20) -> np.ndarray:
+    """Scale-normalized potential-field tilt-edge confidence.
+
+    ``theta = atan2(VG, abs(HG))`` is a tilt-like phase proxy between the
+    supplied vertical-gradient band and the absolute value of the supplied
+    horizontal-gradient band for the *same source field*. The local gravity HG
+    band contains signed values; taking its absolute value avoids sign
+    cancellation. Because the available band metadata does not establish whether
+    HG is a full 2-D magnitude or one signed horizontal component, this is not
+    claimed to be the conventional total-horizontal-derivative tilt angle. The
+    empirical-rank HG strength downweights near-zero gradients, while
+    ``exp(-abs(theta)/tau)`` emphasizes near-zero phase. Raw supplied bands are
+    used rather than independently rank-transformed scalar fields. All values
+    outside ``mask`` remain NaN.
+    """
+    vertical = np.asarray(vertical_gradient, dtype=np.float32)
+    horizontal = np.asarray(horizontal_gradient, dtype=np.float32)
+    mask = np.asarray(mask, dtype=bool)
+    if vertical.shape != horizontal.shape or mask.shape != vertical.shape:
+        raise ValueError("vertical gradient, horizontal gradient, and mask must match")
+    if sigma <= 0 or tilt_tolerance_rad <= 0:
+        raise ValueError("sigma and tilt_tolerance_rad must be positive")
+
+    valid = mask & np.isfinite(vertical) & np.isfinite(horizontal)
+    # The supplied gravity HG band is signed in the local mirror; abs(HG) is a
+    # magnitude proxy, not a claim that this band is the full 2-D THDR.
+    horizontal_magnitude = np.abs(horizontal)
+    vg = _masked_gaussian(vertical, valid, sigma)
+    hg = _masked_gaussian(horizontal_magnitude, valid, sigma)
+    valid &= np.isfinite(vg) & np.isfinite(hg)
+    hg = np.maximum(hg, 0.0)
+    strength = _tie_aware_rank01(hg, valid)
+    theta = np.arctan2(vg, hg)
+    score = strength * np.exp(-np.abs(theta) / float(tilt_tolerance_rad))
+    score[~valid] = np.nan
+    return score.astype(np.float32)
+
+
+def _build_hk1_tilt_features(stack, footprint: np.ndarray) -> dict[str, np.ndarray]:
+    """Read raw like-unit gradient pairs and build preregistered H51-K1 features."""
+    import rasterio
+    from pathlib import Path
+
+    raw_path = Path(stack.dir).parent / "raw" / "training_features.tif"
+    if not raw_path.is_file():
+        raise FileNotFoundError(f"raw competition feature raster is required: {raw_path}")
+
+    required = ("tmi_hg", "tmi_vg", "iso_grav_anom_hg", "iso_grav_anom_vg")
+    with rasterio.open(raw_path) as src:
+        GRID.assert_matches(dict(transform=src.transform, height=src.height,
+                                 width=src.width, crs=src.crs))
+        descriptions = [d.split(" - ")[0].strip() if d else "" for d in src.descriptions]
+        if len(set(descriptions)) != len(descriptions):
+            raise ValueError("competition raster has missing or duplicate band descriptions")
+        absent = [name for name in required if name not in descriptions]
+        if absent:
+            raise ValueError(f"competition raster is missing required H51-K1 bands: {absent}")
+        raw = {}
+        for name in required:
+            values = src.read(descriptions.index(name) + 1).astype(np.float32)
+            values[~np.isfinite(values) | (values <= -1e38)] = np.nan
+            raw[name] = values
+
+    mag_mask = footprint & np.isfinite(raw["tmi_hg"]) & np.isfinite(raw["tmi_vg"])
+    grav_mask = footprint & np.isfinite(raw["iso_grav_anom_hg"]) & np.isfinite(raw["iso_grav_anom_vg"])
+    mag_by_scale = [tilt_angle_edge_feature(raw["tmi_vg"], raw["tmi_hg"],
+                                             mag_mask, sigma=s)
+                    for s in (2.0, 5.0)]
+    grav_by_scale = [tilt_angle_edge_feature(raw["iso_grav_anom_vg"],
+                                              raw["iso_grav_anom_hg"],
+                                              grav_mask, sigma=s)
+                     for s in (2.0, 5.0)]
+    mag_persist = np.minimum(mag_by_scale[0], mag_by_scale[1])
+    grav_persist = np.minimum(grav_by_scale[0], grav_by_scale[1])
+    joint_valid = np.isfinite(mag_persist) & np.isfinite(grav_persist)
+    joint = np.full(footprint.shape, np.nan, dtype=np.float32)
+    joint[joint_valid] = np.sqrt(np.maximum(
+        mag_persist[joint_valid] * grav_persist[joint_valid], 0.0
+    )).astype(np.float32)
+    return {
+        "hk1_mag_persist": mag_persist.astype(np.float32),
+        "hk1_grav_persist": grav_persist.astype(np.float32),
+        "hk1_joint_persist": joint,
+    }
+
+
 def build_static(stack, footprint: np.ndarray) -> dict:
     """Hypothesis groups that use no catalogue information."""
     g = {}
@@ -180,6 +301,14 @@ def build_static(stack, footprint: np.ndarray) -> dict:
     # high-gradient or local co-location score.  See _build_endpoint_bridge for
     # the exact finite, label-independent construction.
     g.update(_build_endpoint_bridge(get, footprint))
+
+    # ---------------------------------------------------------------- H51-K1
+    # Cross-scale tilt-edge persistence from the raw, like-unit TMI and gravity
+    # derivative pairs. This candidate was preregistered before implementation
+    # in knowledge/candidate-hypotheses-2026-10-07.md. The two scale-specific
+    # scores are collapsed with a pixelwise minimum; the model receives only the
+    # magnetic, gravity, and joint persistent responses, not six tunable scales.
+    g.update(_build_hk1_tilt_features(stack, footprint))
 
     return g
 

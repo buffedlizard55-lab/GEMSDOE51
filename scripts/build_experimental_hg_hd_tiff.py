@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Build a format-valid H-G+H-D research TIFF without replacing the current primary.
+"""Historical H-G+H-D research TIFF writer, disabled after a failed holdout.
 
-The matched six-block holdout for H-G+H-D was slightly below H-D. This script exists
-only to materialize the tested feature recipe for audit/education and a uniqueness
-comparison; it does not authorize a competition upload or overwrite the primary
-manifest. The hidden truth size is unknown: 12,700 is only the project's historical
-planning proxy used with M/|G|=3.47 to set a comparable dot budget (44,069).
+The matched six-block holdout for H-G+H-D was below H-D and the historical output
+is not slot-eligible. This script is retained as implementation history, but it
+now fails closed rather than materializing another TIFF from a non-promoted recipe.
+The hidden truth size remains unknown; 12,700 was only a planning proxy.
 """
 from __future__ import annotations
 
@@ -27,7 +26,6 @@ sys.path.insert(0, str(ROOT / "src"))
 from gems51 import strain_budget as sb  # noqa: E402
 from gems51.detector import Stack, fit_detector, predict_grid  # noqa: E402
 from gems51.emission import nms_dots, rasterise  # noqa: E402
-from gems51.extras import build_magnetic_gravity_intersections  # noqa: E402
 from gems51.grid import GRID  # noqa: E402
 from gems51.submission import write_tif  # noqa: E402
 
@@ -48,6 +46,12 @@ def main() -> int:
         help="optional deterministic output basename (without .tif/.zip suffixes); defaults to UTC timestamp",
     )
     args = parser.parse_args()
+    # Stop before data reads or side effects; the remaining implementation is
+    # retained only so the archived recipe can still be inspected.
+    raise SystemExit(
+        "research TIFF build blocked: H-G+H-D lost its matched spatial holdout; "
+        "the historical artifact is audit-only and this script will not create another TIFF."
+    )
     if args.basename and Path(args.basename).name != args.basename:
         parser.error("--basename must be a filename component, not a path")
 

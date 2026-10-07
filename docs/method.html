@@ -52,13 +52,8 @@ The combined residual prior is the pixelwise maximum of the second-invariant, di
 shear rank residuals. These are coarse diagnostics, not dimensional strain rates and not fine
 point placers.</p>
 <table class=''><thead><tr><th>field</th><th>mean Spearman rank</th><th>mean q70 lift</th></tr></thead><tbody><tr><td>geodetic second-invariant deficit</td><td>0.0402</td><td>1.0929</td></tr><tr><td>dilatation rank residual</td><td>0.0204</td><td>1.0653</td></tr><tr><td>shear rank residual</td><td>0.0306</td><td>1.0722</td></tr><tr><td>combined residual diagnostic</td><td>0.0353</td><td>1.1477</td></tr><tr><td>geodetic-only control</td><td>0.0993</td><td>1.2469</td></tr></tbody></table>
-<p class="warn">The rerun shows the geodetic-only control has the strongest mean q70 lift
-(1.2469); the combined residual is only a diagnostic
-(1.1477) and was not selected for the primary.
-The promoted artifact sets <code>stage1_weight=0.0</code>. Stage 1 therefore remains a broad,
-non-dominant prior and does not hard-gate or dominate Stage 2. Full per-split results and
-configuration are in <a href="downloads/stage1_trace_holdout.json">the trace receipt</a>;
-the formula caveat and decision are in <a href="downloads/stage1_reconciliation_20261007.json">the reconciliation</a>.</p>
+<p class="warn">The q70 trace screen shows the geodetic-only control has the strongest mean lift
+(1.2469); the combined residual is a diagnostic, not a fine-scale placer. The earlier H-H/H-D local benchmark uses <code>stage1_weight=0.0</code> and no hard gate. A separate q10 deficit trace holdout approved 90.06% of the footprint, retained 95.39% of held-out trace pixels (lift 1.059), and yielded uniform-in-mask DTI 0.05063 versus 0.04856 over the full footprint. For the K1 spatial screen, the q10 prior was recomputed from fold-known traces after removing held-out trace rows; the mask covered 90.13% of area on average (implied lift 1.109), with every tested K1 point inside. This is a broad allowed-domain constraint with zero soft score weight, not evidence of a strong Stage-1 predictor. Receipts: <a href="downloads/stage1_trace_holdout.json">q40–q80 trace results</a>, <a href="downloads/stage1_q10_trace_holdout_20261007.json">q10 trace results</a>, and <a href="downloads/stage1_reconciliation_20261007.json">formula reconciliation</a>.</p>
 
 <h3>Stage 2 — fine-scale detector and sparse emission</h3>
 <p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
@@ -71,10 +66,8 @@ known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maxi
 or STE at approximately 2.4 pixels. The official metric gives a marginal-pixel credit bar
 near <code>0.2*DTI</code>; this motivates sparse dots, but does not prove any individual
 prediction is a real fault.</p>
-<p>The current primary is the fixed 50/50 H-H/H-D probability blend emitted with STE line length
-9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its matched six-fold
-proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher).
-This is a local promotion result only; no organizer score or acceptance is claimed.</p>
+<p>The earlier local H-H/H-D blend uses fixed 50/50 probabilities and STE line length 9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its historical six-fold proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher). It is a local benchmark only: it predates q10 confinement and only 86.71% of its points fall inside the full-map q10 approved domain. It is not upload-eligible.</p>
+<p>H51-K1's ungated mean was 0.2855703, but after the preregistered fold-specific q10 mask its mean was 0.2850766, below the frozen best; paired gated Δ versus gated H-D/H-H was +0.000178 with 3/6 folds better. The fresh ungated baseline also missed the 1e-5 reproduction tolerance. Thus K1 is not promoted, no new TIFF was written, and no slot is authorized. Full per-fold evidence is <a href="downloads/hk1_spatial_holdout_20261007.json">here</a>.</p>
 
 </main>
 <footer><div class="wrap">

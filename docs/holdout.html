@@ -63,14 +63,20 @@ checks are unavailable for these two candidates, so neither is slot-eligible. Se
 visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
 <h3>Stage 1 — trace-held-out residual diagnostics, reported separately</h3>
-<p>The current runner holds out complete trace-table rows associated with held-out catalogue pixels
-before building the mapped-fault budget. It reports the geodetic second-invariant deficit and
-rank-space dilatation/shear residual controls. Mean q70 lifts are 1.0929 for the deficit, 1.0653
-for dilatation, 1.0722 for shear, and 1.1477 for their combined diagnostic maximum; geodetic-only
-is 1.2469. These are coarse prior diagnostics, not fine-scale emission scores. The promoted
-primary uses <code>stage1_weight=0.0</code>. See the <a href="downloads/stage1_trace_holdout.json">trace receipt</a>
-and <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
-These proxy comparisons are not tests against hidden expert labels.</p>
+<p>The current runner removes complete held-out trace-table rows before building the fault-budget
+field. Mean q70 lifts are 1.0929 for the deficit, 1.0653 for dilatation, 1.0722 for shear, and
+1.1477 for their combined diagnostic maximum; geodetic-only is 1.2469. These are coarse proxy
+diagnostics, not fine-scale scores. The older H-H/H-D artifact has <code>stage1_weight=0.0</code>
+and no hard gate. The separate q10 deficit trace holdout reported approved area
+0.901, trace recall
+0.954, lift
+1.059, and uniform-in-mask DTI
+0.05063 versus full-footprint uniform
+0.04856. See the
+<a href="downloads/stage1_trace_holdout.json">q40–q80 trace receipt</a>,
+<a href="downloads/stage1_q10_trace_holdout_20261007.json">q10 trace receipt</a>, and
+<a href="downloads/stage1_reconciliation_20261007.json">formula reconciliation</a>.
+These are visible-catalogue proxies, not tests against hidden expert labels.</p>
 <table class=''><thead><tr><th>prior</th><th>approved</th><th>area share</th><th>truth recall</th><th>lift = recall/area</th><th>proxy DTI (uniform random dots)</th></tr></thead><tbody><tr><td>deficit</td><td>top 50% of tiles</td><td>0.501</td><td>0.545</td><td>1.087</td><td>0.0494</td></tr><tr><td>dilatation_residual</td><td>top 50% of tiles</td><td>0.501</td><td>0.539</td><td>1.075</td><td>0.0487</td></tr><tr><td>shear_residual</td><td>top 50% of tiles</td><td>0.501</td><td>0.546</td><td>1.090</td><td>0.0489</td></tr><tr><td>combined_residual_prior</td><td>top 50% of tiles</td><td>0.501</td><td>0.548</td><td>1.093</td><td>0.0490</td></tr><tr><td>geodetic_only</td><td>top 50% of tiles</td><td>0.500</td><td>0.620</td><td>1.239</td><td>0.0577</td></tr><tr><td>deficit</td><td>top 30% of tiles</td><td>0.302</td><td>0.330</td><td>1.093</td><td>0.0475</td></tr><tr><td>dilatation_residual</td><td>top 30% of tiles</td><td>0.301</td><td>0.321</td><td>1.065</td><td>0.0459</td></tr><tr><td>shear_residual</td><td>top 30% of tiles</td><td>0.301</td><td>0.323</td><td>1.072</td><td>0.0452</td></tr><tr><td>combined_residual_prior</td><td>top 30% of tiles</td><td>0.302</td><td>0.346</td><td>1.148</td><td>0.0481</td></tr><tr><td>geodetic_only</td><td>top 30% of tiles</td><td>0.301</td><td>0.375</td><td>1.247</td><td>0.0524</td></tr><tr><td>deficit</td><td>top 20% of tiles</td><td>0.201</td><td>0.241</td><td>1.196</td><td>0.0459</td></tr><tr><td>dilatation_residual</td><td>top 20% of tiles</td><td>0.201</td><td>0.217</td><td>1.082</td><td>0.0419</td></tr><tr><td>shear_residual</td><td>top 20% of tiles</td><td>0.202</td><td>0.238</td><td>1.177</td><td>0.0455</td></tr><tr><td>combined_residual_prior</td><td>top 20% of tiles</td><td>0.201</td><td>0.241</td><td>1.204</td><td>0.0468</td></tr><tr><td>geodetic_only</td><td>top 20% of tiles</td><td>0.201</td><td>0.256</td><td>1.273</td><td>0.0474</td></tr><tr><td>no gate</td><td>whole footprint</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.0500</td></tr></tbody></table><p class='ev'>Spearman rank correlation between each tile field and the density of held-out faults: deficit = +0.040, dilatation_residual = +0.020, shear_residual = +0.031, combined_residual_prior = +0.035, geodetic_only = +0.099, dilatation_only = +0.053, shear_only = +0.092</p><p class='ev'>Dilatation and shear rows use rank-space residuals q(observed scalar) - q(fault tensor second invariant); their source units and conventions are unresolved, so these are diagnostics only. The combined row is the pixelwise maximum of the three residual fields and was not used to place the primary Stage-2 points.</p>
 
 <h3>Historical Stage 1 alone and hard-gate effect on Stage 2</h3>
@@ -87,6 +93,27 @@ weights are marginal. H-D soft w=0.20 narrowly cleared the numeric holdout rule,
 support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; threshold 0.50;
 containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
 See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
+
+<h3>H51-K1 Stage-2 spatial holdout (after fold-specific Stage-1 q10 mask)</h3>
+<p>The ungated H-D/H-H benchmark was freshly reconstructed at mean
+0.285315 versus frozen
+0.285341; the difference
+-0.00002545 exceeded the
+preregistered 1e-5 tolerance. H51-K1 ungated mean was
+0.285570; after the
+mandatory q10 mask it was
+0.285077, below
+the frozen 0.2853406 best. The same-fold q10-gated comparison gave paired Δ
++0.000178,
+positive in 3/6
+folds. Status: <b>NOT PROMOTED; no TIFF written; no slot authorized.</b> Stage-1 q10 area share
+was 0.901,
+all scored K1 points were in approved tiles, and lift was
+1.109.
+</p>
+<table class=''><thead><tr><th>fold</th><th>fresh H-D/H-H (ungated)</th><th>K1 blend (ungated)</th><th>fresh H-D/H-H (q10)</th><th>K1 blend (q10)</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283529</td><td>0.283432</td><td>0.283529</td><td>+0.000097</td></tr><tr><td>1</td><td>0.271784</td><td>0.275603</td><td>0.270436</td><td>0.274444</td><td>+0.004008</td></tr><tr><td>2</td><td>0.290270</td><td>0.292220</td><td>0.289119</td><td>0.290417</td><td>+0.001298</td></tr><tr><td>3</td><td>0.243359</td><td>0.242234</td><td>0.243359</td><td>0.242234</td><td>-0.001126</td></tr><tr><td>4</td><td>0.305049</td><td>0.304764</td><td>0.305049</td><td>0.304764</td><td>-0.000286</td></tr><tr><td>5</td><td>0.317996</td><td>0.315072</td><td>0.317996</td><td>0.315072</td><td>-0.002924</td></tr></tbody></table>
+<p class="ev">Full receipts: <a href="downloads/hk1_spatial_holdout_20261007.json">K1 six-fold outcome</a> and
+<a href="downloads/stage1_q10_trace_holdout_20261007.json">separate Stage-1 q10 trace holdout</a>.</p>
 
 <h3>Interpretation limit</h3>
 <p>These proxy holdouts can compare candidate methods for known-fault recovery. They cannot establish

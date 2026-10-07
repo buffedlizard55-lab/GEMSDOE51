@@ -94,7 +94,7 @@
         "https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and",
         "https://pangea.stanford.edu/ERE/db/WGC/papers/WGC/2015/11100.pdf"
       ],
-      "promotion_status": "PRIMARY ARTIFACT BUILT AND LOCALLY VALIDATED; no organizer upload or score is claimed. Do not infer that the blend proves H-H alone; it is a fixed combination of the H-H arm and H-D.",
+      "promotion_status": "Historical local proxy screen passed at the time, but the retained TIFF now fails the q10 all-points-inside constraint (86.71% inside) and live portal validation remains unresolved. Audit-only; NOT CLEARED FOR UPLOAD. No organizer upload, score, or H-H-only causal effect is claimed; the tested artifact is a fixed H-H/H-D blend.",
       "measured_holdout": {
         "candidate": "fixed 50/50 H-H/H-D probability blend + STE L9 w=0.35 spacing=2.4",
         "mean_proxy_dti": 0.285340602656319,
@@ -145,5 +145,5 @@
       "promotion_status": "NOT YET VIABLE; first verify source metadata and spatial support, then compare the interaction against matched edge-only and seismicity-only controls."
     }
   ],
-  "post_test_decision": "The H-H model arm was implemented and the predeclared fixed 50/50 H-H/H-D blend plus STE passed the six-fold local promotion rule: mean proxy DTI 0.2853406 versus H-D 0.2816627, paired delta +0.0036779, positive in 4/6 folds. The unique full-catalogue GeoTIFF is the current primary artifact. This is a visible-known-fault proxy result only; no organizer score, portal acceptance, or pure-H-H causal/geological claim is made. Stage 1 remains a coarse diagnostic with weight 0.0. H-I and H-J remain untested."
+  "post_test_decision": "Historical local-screen outcome: the H-H model arm was implemented and the predeclared fixed 50/50 H-H/H-D blend plus STE passed the six-fold local promotion rule: mean proxy DTI 0.2853406 versus H-D 0.2816627, paired delta +0.0036779, positive in 4/6 folds. Subsequent q10 allowed-domain review found only 86.71% of the old file's points inside the approved area, and the user-reported portal range error remains unresolved. That GeoTIFF is audit-only and NOT CLEARED FOR UPLOAD. The later H51-K1 candidate failed its q10-gated promotion screen and produced no TIFF; there is currently no upload-eligible artifact. These are visible-known-fault proxy results only; no organizer score or portal acceptance is claimed. Stage 1 remains a coarse diagnostic with weight 0.0. H-I and H-J remain untested."
 }

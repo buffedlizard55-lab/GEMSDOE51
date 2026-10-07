@@ -20,7 +20,7 @@
     {
       "id": "C51-003",
       "class": "MEASURED",
-      "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. The raw training-feature raster and prepared arrays used by the current primary are restored and hash-recorded in data/restore_receipt.json; owner mirrors remain not organizer-authenticated.",
+      "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. The raw training-feature raster and prepared arrays used by the historical H-H/H-D benchmark are restored and hash-recorded in data/restore_receipt.json; owner mirrors remain not organizer-authenticated.",
       "evidence": "data/sample_submission.tif; src/gems51/grid.py; data/restore_receipt.json",
       "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     },
@@ -41,7 +41,7 @@
     {
       "id": "C51-006",
       "class": "HISTORICAL_PROXY_WITH_FORMULA_CAVEAT_AND_CURRENT_UPDATE",
-      "claim": "The historical five-split Stage-1 receipt is retained as a pre-audit comparison, not current validation. The current five-split trace holdout removes held-out trace rows before the budget and reports mean q70 lifts 1.0929 (second-invariant deficit), 1.0653 (dilatation rank residual), 1.0722 (shear rank residual), 1.1477 (combined diagnostic), and 1.2469 (geodetic-only control). These are rank diagnostics only; the primary uses Stage-1 weight 0.0.",
+      "claim": "The historical five-split Stage-1 receipt is retained as a pre-audit comparison, not current validation. The current five-split trace holdout removes held-out trace rows before the budget and reports mean q70 lifts 1.0929 (second-invariant deficit), 1.0653 (dilatation rank residual), 1.0722 (shear rank residual), 1.1477 (combined diagnostic), and 1.2469 (geodetic-only control). These are rank diagnostics only; the historical H-H/H-D benchmark uses Stage-1 weight 0.0 and is audit-only. The later q10 allowed-domain requirement is separate.",
       "evidence": "data/stage1_trace_holdout.json; evidence/stage1_reconciliation_20261007.json; evidence/stage1_formula_audit.json",
       "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     },
@@ -118,7 +118,7 @@
     {
       "id": "C51-017",
       "class": "SUPERSEDED_WORKSPACE_LIMITATION",
-      "claim": "The current checkout now contains the restored raw/prepared/reference inputs used for the current H-H/H-D build and trace-held-out Stage-1 rerun. Archived PR #6 reproductions remain separately limited where their exact inputs or formulas differ.",
+      "claim": "The current checkout contains the restored raw/prepared/reference inputs used for the historical H-H/H-D build and trace-held-out Stage-1 rerun. Archived PR #6 reproductions remain separately limited where their exact inputs or formulas differ.",
       "evidence": "data/stage1_trace_holdout.json; data/submission_manifest.json; evidence/stage1_reconciliation_20261007.json",
       "source": "local checkout and hash-pinned data manifest"
     },
@@ -131,8 +131,8 @@
     },
     {
       "id": "C51-019",
-      "class": "CURRENT_MEASURED_LOCAL_PROMOTION_AND_FORMAT_AUDIT",
-      "claim": "The current fixed 50/50 H-H/H-D probability blend plus STE passed the frozen six-fold local promotion rule, source-aware scoped uniqueness, q70 Stage-1 non-dominance, and written GeoTIFF format checks. It is a new local primary artifact, not an organizer upload, score, portal acceptance, hidden-label result, or pure-H-H causal proof.",
+      "class": "HISTORICAL_LOCAL_PROMOTION_SUPERSEDED_FOR_UPLOAD",
+      "claim": "The historical fixed 50/50 H-H/H-D probability blend plus STE passed its then-frozen six-fold local proxy promotion rule, source-aware scoped uniqueness, q70 Stage-1 diagnostic, and local GeoTIFF format checks. Later q10 confinement found only 86.71% of its points inside the approved domain, and the user-reported portal range error remains unresolved with unknown triggering-file identity. The file is retained for audit only and NOT CLEARED FOR UPLOAD; it is not an organizer score, portal acceptance, hidden-label result, or pure-H-H causal proof.",
       "evidence": "data/submission_manifest.json; evidence/hh_blend_holdout.json; docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json; evidence/hypothesis_slate_20261007.json",
       "source": "local measurements; official format specification at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     }

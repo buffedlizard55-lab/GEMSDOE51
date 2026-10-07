@@ -22,17 +22,18 @@
 </div></header>
 <main class="wrap">
 
-<section class="download">
-<h2>⬇ One-click submission file</h2>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a></p>
+<section class="download missing">
+<h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
+<p><b>No upload-eligible artifact is available.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
 <p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
-<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.</code></dd>
-<dt>Format</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
+<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
 <dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
 </dl>
-<p class="ev">evidence/hh_blend_holdout.json; local format/uniqueness receipts were measured from the final bytes; no DrivenData score or acceptance is claimed</p>
+<p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
 </section>
 <section class="download missing">
 <h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
@@ -87,7 +88,7 @@ They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_sof
 <a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
 <a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
-<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
+<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>EXISTING_LOCAL_BEST_NOT_UPLOADABLE</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
@@ -96,18 +97,19 @@ holdouts therefore hide and recover known faults as a <b>proxy</b>; they do not 
 of genuinely new faults or predict an organizer score. Local source rasters are hash-pinned public
 mirrors, not organizer-authenticated.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
-by experts for the expanded label set. Any future emission should therefore be geologically
-justifiable as well as holdout-tested. The current primary is linked above; it is locally
-validated and holdout-promoted, but has not been uploaded and has no organizer score claim.</p>
+by experts for the expanded label set. Any future emission must be geologically justifiable as well
+as holdout-tested. The earlier H-H/H-D blend is linked above for audit only. The new H51-K1
+candidate failed the preregistered final gated promotion rule, so no replacement TIFF was written.
+A user-reported portal range error is unresolved; no artifact is described as portal-ready.</p>
 <h2>What this is</h2>
-<p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
-a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
-fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 proxy receipts
-suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
-rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
-must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
-proxy holdouts. The H-H/H-D blend above clears the recorded local promotion, uniqueness,
-non-dominance, and format gates; it remains unscored by the organizer.</p>
+<p>GEMSDOE51 studies fault indications in the GeoDAWN region. Stage 1 is a coarse 10&nbsp;km
+geodetic strain-budget diagnostic; Stage 2 is a fine-scale detector. The separately evaluated q10
+Stage-1 deficit mask approved about 90% of the footprint, with weak trace-holdout enrichment, and
+was used as a fold-specific allowed-domain constraint for the K1 comparison. Its soft score weight
+was zero; every scored K1 point was inside the fold-specific approved mask. The historical H-H/H-D
+benchmark predates this q10 condition and only 86.71% of its points fall inside the current full-map
+q10 mask, so it does not satisfy the all-points-inside constraint. H51-K1 was not promoted, and
+all local holdout values remain visible-catalogue proxies, not organizer scores.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
