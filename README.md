@@ -1,10 +1,32 @@
-# GEMSDOE51 — DOE GEMS / GeoDAWN fault-discovery research record
+# GEMSDOE51 — DOE GEMS fault-discovery research
 
-**Current decision (2026-10-07): NO NEW UPLOAD-ELIGIBLE TIFF. NO COMPETITION SLOT USED.**
+## New TIFF: download yes; submit NO
 
-The existing local H-H/H-D blend is retained as the best reproducible local benchmark (six-fold visible-catalogue proxy mean DTI `0.2853406`), but it is an earlier artifact, not the new TIFF requested in this work. It has not been uploaded or accepted by DrivenData. A user-reported submission-form error—“Predicted values must be in range [0, 1]”—is unresolved, and the exact file that triggered it was not identified. The local verifier does not emulate the portal.
+[Live site](https://buffedlizard55-lab.github.io/GEMSDOE51/) · [Pull request12](https://github.com/buffedlizard55-lab/GEMSDOE51/pull/12) · [Three-pass review and handoff](knowledge/review-three-passes-20261007.md)
 
-The preregistered H51-K1 candidate was implemented and evaluated on the six spatial folds with a fold-specific, leakage-controlled broad Stage-1 q10 mask. It **did not pass** the preregistered promotion gates. No candidate TIFF or replacement ZIP was written. Do not treat the earlier local benchmark as portal-ready or upload-eligible.
+**A genuinely new P1 prediction TIFF has been generated. It is research-only, NOT recommended for competition submission. No slot was used.** The spatial holdout did not beat the current benchmark; we will not mislabel a failed experiment as a high-scoring submission.
+
+- **[Download new TIFF](docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif)** · [single-TIFF ZIP](docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip)
+- [Executive summary / latest results](docs/latest.html) · [How to submit — currently blocked](docs/how-to-submit.html)
+- Identifier: `GEMSDOE51-P1-Q10-2a687636c85e`
+- Note: `RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.`
+- SHA256: `73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4`
+- Final-byte checks: one float32 band, EPSG32611, 3730×3292, exact template transform, **all12,279,160 cells finite in[0,1]**, zero NaNs, zero out-of-range values, no NoData tag. This addresses numeric range hazards, not proven portal acceptance.
+- New P1 holdout mean: **0.2839869**, paired gated baseline **0.2848987**, Δ **−0.0009117**, only **2/6** folds improved. Frozen-best reproduction also remains outside tolerance. **NOT PROMOTED.**
+- All44,069 emitted points are in approved Stage1 tiles, covering90.09% of footprint. Lift1.110; within-tile occupancy0.947%. **84.64%** of gated dots also occur in the same detector's ungated output (support Jaccard0.7337). This passes operational broadness/confinement checks, not proof of causal independence.
+- Initial available-reference uniqueness gate: **PASS**, max support Jaccard0.183076 / containment0.309492. **Broader family gate: NOT CLEARED.** All365 pinned payloads were restored;364 matching-shape maps compared with no byte/support duplicate (max Jaccard0.152086), but dense probability maps fully contain sparse supports (containment1.0), and one toy format-test TIFF has a different grid. [Full receipt](evidence/p1_family_audit_20261007.json). Do not infer global novelty or upload eligibility from the initial narrower PASS.
+
+### What changed this session
+
+1. **Data placement is resolved:** ten pinned inputs downloaded and SHA-verified; six-fold training and full-grid inference ran on CPU. No GPU was needed for this HGB pipeline. Data/raw and prepared rasters remain out of Git.
+2. **Official source verification is stronger:** obtained original INGENIOUS DBF, field definitions, geodetic metadata and regional trace geometry through GitHub Actions. All1,126 mirrored trace rows match official name/rate/sense. `SLIPRTNUM` units are now verified as mm/year; rate component and individual dips remain assumptions.
+3. **Source-corrected physical budget:** implemented Kreemer Eq3 using84,331 actual vector segments clipped to10km tiles, source-matched principal-strain shear, and explicit unit/component scenarios. Separate five-trace-split holdout:90.15% area,96.01% recall, lift1.0650. This audit is not silently substituted into P1's preregistered legacy gate.
+4. **Four new hypotheses ranked; P1 tested without result-driven tuning.** The failed result is retained with a new downloadable diagnostic map, not spent on a weekly slot.
+5. **Format checks strengthened:** invalid outside sentinels/NoData tags fail closed; full-grid finite/range checks accompany every new TIFF. Source definitions corrected several earlier physical explanations.
+
+Read [the new hypothesis slate](knowledge/next-candidates-20261007.md), [official-source/equation review](knowledge/official-source-review-20261007.md), and [P1 measured receipt](evidence/p1_holdout_20261007.json) before future work. The task is **fault discovery**, not direct prediction of geothermal vents. Neither the user-reported0.2778 nor0.3195 can be certified surpassed by this local catalogue proxy.
+
+**Historical material below is retained for audit.** Earlier claims that no new TIFF exists or slip-rate units are unknown are superseded by this update; the earlier K1 failure and benchmark measurements are unchanged. The standing brief is included below and expanded in the2026-10-07 intake appendix. Read it each session (`AGENTS.md`).
 
 ## Full user task brief and standing acceptance criteria
 
@@ -16,11 +38,11 @@ This full working brief is retained so a future session can continue without ask
 >
 > Validate the leading candidate on the same spatially blocked holdout before using any competition submission slot. Do not spend a slot on an idea that has not beaten the current spatially blocked best under a preregistered rule. Report Stage 1 and Stage 2 holdouts separately. Stage 1 must remain coarse and non-dominant. Reconcile that with the requirement that every Stage-2 prediction point lie inside an approved Stage-1 tile; implement and validate the actual allowed-domain mask rather than assuming `stage1_weight=0.0` provides confinement.
 >
-> If and only if a candidate passes promotion, Stage-1 confinement/non-dominance, scoped uniqueness, and format gates, generate a substantively new, uniquely named and commented single-band GeoTIFF. Do not copy, relabel, or merely re-encode a previous submission to satisfy the requirement. Make file/download/submission status obvious. Check exact grid, CRS, affine transform, dtype, `[0,1]` values (including the outside-footprint encoding against the live portal issue), and the official submission format. Never claim upload, organizer score, or acceptance without evidence.
+> Only recommend submission if a candidate passes promotion, Stage-1 confinement/non-dominance, scoped uniqueness, and format gates. A substantively new, uniquely named diagnostic GeoTIFF may be generated after a failed completed holdout only when prominently marked RESEARCH ONLY / NOT FOR SUBMISSION. Do not copy, relabel, or merely re-encode a previous submission to satisfy the requirement. Make file/download/submission status obvious. Check exact grid, CRS, affine transform, dtype, `[0,1]` values (including the outside-footprint encoding against the live portal issue), and the official submission format. Never claim upload, organizer score, or acceptance without evidence.
 >
 > Review and update the site, preserve auditable research and source links, include this full prompt in README, and autonomously attempt a pull request and merge to `main`. State blockers and irregularities. No manual user input is expected.
 
-This session is fixed to branch `arena/ec87b811-gemsdoe51`. Do not switch branches. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
+This session is fixed to branch `arena/63e96db6-gemsdoe51`. Do not switch branches. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
 
 ## Current status and local benchmark
 
@@ -29,6 +51,7 @@ This session is fixed to branch `arena/ec87b811-gemsdoe51`. Do not switch branch
 | Existing local H-H/H-D blend + STE L9 | Historical local best only; not portal-validated, not uploaded, no organizer score |
 | Six-fold H-H/H-D proxy DTI | `0.2853406027`, visible known-fault catalogue; `4/6` folds beat H-D |
 | Existing H-D proxy comparator | `0.2816626603` |
+| P1 odd/even profile screen | 0.2839869; NOT PROMOTED; new research TIFF generated, no slot |
 | H51-K1 new-operator screen | **NOT PROMOTED**; no new TIFF; no slot |
 | Portal `[0,1]` validation error | **OPEN BLOCKER**; triggering file identity unknown |
 | Organizer score / acceptance | None verified for GEMSDOE51 |

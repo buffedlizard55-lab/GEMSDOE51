@@ -44,11 +44,13 @@ def main() -> int:
         return 1
     checks = report["checks"]
     for name, value in checks.items():
-        if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells", "global_invalid_cells", "all_cells_finite_in_range"}:
+        if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells", "global_invalid_cells", "all_cells_finite_in_range", "portal_legal"}:
             continue
         display = value
         if name == "outside_footprint_zeros" and not value and checks.get("outside_footprint_nan"):
             display = "False (NaN outside is the accepted alternative)"
+        if name in {"outside_footprint_nan", "nodata_tag_is_nan"} and not value and checks.get("outside_footprint_zeros"):
+            display = "False (finite zero outside / no NaN tag is the alternative)"
         print(f"  {'PASS' if _passes(name, value, checks) else 'FAIL'}  {name}: {display}")
     print(f"  file  {report['file']}")
     print(f"  sha256  {report['sha256']}")

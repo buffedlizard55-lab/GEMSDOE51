@@ -23,7 +23,45 @@
 </div></header>
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
-<p>P1 experiment in progress. No new submission authorized.</p>
+<h2>Latest experiment: evidence and decision</h2><section class="download missing">
+<p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
+<h2>New, independently generated TIFF</h2>
+<p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
+This is a newly trained prediction map, not a renamed or re-encoded prior submission. It has not cleared every promotion gate. No competition slot was used.</p>
+<p><a class="btn" download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download new research TIFF</a></p>
+<p><a download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">Download ZIP containing one TIFF</a> · <a href="latest.html">Results, checks &amp; decision</a> · <a href="how-to-submit.html">Submission instructions</a></p>
+<dl class="kv"><dt>Unique identifier</dt><dd><code>GEMSDOE51-P1-Q10-2a687636c85e</code></dd>
+<dt>Short comment (research only)</dt><dd><code>RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.</code></dd>
+<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag.</dd>
+<dt>Stage2 proxy DTI</dt><dd>0.283987 vs paired gated baseline 0.284899; 2/6 folds improved. Not an organizer score.</dd>
+<dt>Stage1 confinement</dt><dd>44,069/44,069 points inside approved tiles; approved area 90.09%; lift 1.110.</dd>
+<dt>Uniqueness scope</dt><dd>Broader family gate: NOT_CLEARED; exact duplicate: False. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
+<dt>SHA-256</dt><dd><code>73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4</code></dd></dl>
+<p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
+</section>
+<h3>Stage2: spatially blocked fine-scale detector</h3>
+<p>P1 decomposes detrended-elevation normal profiles into antisymmetric step and symmetric ridge/valley signals at ±200m and ±500m. Three features extend H-H, blended50/50 with freshly fitted H-D. No earlier submission is an input. Fixed six-fold splits, 1.2km buffer,250,000 negative samples and250 HGB iterations; STE L9/w0.35/spacing2.4, ratio3.47. Predictions confined to the frozen fold-specific q10 strain prior.</p>
+<table><thead><tr><th>Fold</th><th>Baseline ungated</th><th>Baseline q10</th><th>P1 q10</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283432</td><td>0.280968</td></tr><tr><td>1</td><td>0.271784</td><td>0.270436</td><td>0.274441</td></tr><tr><td>2</td><td>0.290270</td><td>0.289119</td><td>0.288570</td></tr><tr><td>3</td><td>0.243359</td><td>0.243359</td><td>0.236952</td></tr><tr><td>4</td><td>0.305049</td><td>0.305049</td><td>0.305500</td></tr><tr><td>5</td><td>0.317996</td><td>0.317996</td><td>0.317490</td></tr></tbody></table>
+<p>Mean P1=0.2839869; paired Δ=-0.0009117. Frozen best=0.2853406; reproduced baseline drift=-0.00002545. Promotion rules were not relaxed after results.</p><ul><li>six_folds: <strong>PASS</strong></li><li>baseline_reproduced: <strong>FAIL</strong></li><li>beats_frozen: <strong>FAIL</strong></li><li>beats_paired: <strong>FAIL</strong></li><li>positive_folds: <strong>FAIL</strong></li><li>stage1_broad: <strong>PASS</strong></li><li>confinement: <strong>PASS</strong></li></ul>
+<h3>Stage1: separate holdouts, not the fine-scale score</h3>
+<p>The frozen legacy q10 trace holdout: DTI0.050627 vs uniform0.048564; approved area90.06%, recall95.39%. This is weak coarse enrichment, not a detector.</p>
+<p>The new <strong>official-vector</strong> five-split trace audit has mean approved area 90.15%, trace recall 96.01%, and lift 1.0650. It uses actual clipped segment lengths rather than centroid rate assignment. This separate source-corrected audit is <em>not</em> silently substituted into P1's frozen legacy gate. It requires its own paired Stage2 test before production use.</p>
+<p>Actual artifact gate ablation: 84.64% of gated points also occur in the same detector's ungated output; support Jaccard 0.7337. Within approved tiles, only 0.95% of cells receive a point. Broadness/lift is an operational check, not proof of causal independence.</p>
+<h3>Source corrections and limitations</h3>
+<p>Official DBF confirms mm/year and matches all1,126 mirrored records. Source shear is min(|e1|,|e2|) for opposite-signed principal strains, else0. Actual-vector tensor summation and scalar residuals are now implemented with explicit dip/component/unit scenarios. Off-fault and aseismic strain or erroneous catalogue rates can cause a deficit. The task predicts faults, not vents.</p>
+<p>All-finite zero-outside encoding removes NaNs and out-of-range sentinels from this file. The published null/NaN-outside language and portal behavior remain unverified together; the historical error-triggering file is unknown. Do not treat a local check as a successful portal submission.</p>
+<p>Neither the user-reported0.2778 attribution nor the stated0.3195 leaderboard high establishes an achievable score here. GEMSDOE32's own primary page still says UNSCORED. Reused catalogue folds cannot certify hidden-fault or leaderboard performance.</p>
+<h3>Audit files and next experiment</h3>
+<ul>
+<li><a href="downloads/p1_final_verification_20261007.json">Independent final-byte, ZIP and tile-confinement verification</a></li>
+<li><a href="downloads/p1_holdout_20261007.json">Complete P1 holdout</a></li>
+<li><a href="downloads/official_vector_budget_20261007.json">Vector-budget equation, residuals and five-split Stage1 holdout</a></li>
+<li><a href="downloads/official_attribute_audit_20261007.json">Official DBF match receipt</a></li>
+<li><a href="downloads/official-source-review-20261007.md">Source ledger, exact equations and scientific corrections</a></li>
+<li><a href="downloads/next-candidates-20261007.md">Four ranked hypotheses and preregistered rules</a></li>
+<li><a href="../registry/official/receipt.json">Official archive hashes and field inventory</a></li>
+</ul>
+<p>Next: resolve frozen-baseline drift, verify outside-footprint semantics with the organizer, introduce an untouched spatial/trace-family lockbox, and test the official-vector mask with a new fine-scale candidate. Preserve this negative experiment. Do not tune P1 until it passes the same reused folds.</p><h3>Broader family audit</h3><p>365/365 inventory payloads restored; verdict NOT_CLEARED; exact duplicate=False; maximum support Jaccard=0.1521, containment=1.0000. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>
 </main>
 <footer><div class="wrap">
 <p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>

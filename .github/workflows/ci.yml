@@ -21,6 +21,8 @@ jobs:
           pip install numpy scipy scikit-learn pandas rasterio pytest
       - name: Format contract of the research-only raster (not an upload recommendation)
         run: python scripts/check_submission.py docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif
+      - name: Verify new P1 research artifact (never an upload recommendation)
+        run: python scripts/verify_p1_artifact.py
       - name: Compile current Python sources
         run: python -m compileall -q scripts src tests
       - name: Unit tests

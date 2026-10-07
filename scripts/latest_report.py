@@ -1,16 +1,32 @@
 """Render the latest experiment from measured JSON; no fabricated score fallbacks."""
+
 from pathlib import Path
-import json,html
-ROOT=Path(__file__).resolve().parents[1]
+import json, html
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def render():
-    path=ROOT/'evidence/p1_artifact_20261007.json'
-    if not path.exists():return '', ''
-    a=json.loads(path.read_text());h=json.loads((ROOT/'evidence/p1_holdout_20261007.json').read_text())
-    v=json.loads((ROOT/'evidence/official_vector_budget_20261007.json').read_text())
-    esc=html.escape;s=h['summary'];c=a['format']['checks'];g=a['uniqueness'];st=a['stage1']
-    banner=f'''<section class="download missing">
+    path = ROOT / "evidence/p1_artifact_20261007.json"
+    if not path.exists():
+        return "", ""
+    a = json.loads(path.read_text())
+    h = json.loads((ROOT / "evidence/p1_holdout_20261007.json").read_text())
+    v = json.loads((ROOT / "evidence/official_vector_budget_20261007.json").read_text())
+    esc = html.escape
+    s = h["summary"]
+    c = a["format"]["checks"]
+    g = a["uniqueness"]
+    st = a["stage1"]
+    family_path = ROOT / "evidence/p1_family_audit_20261007.json"
+    family_result = json.loads(family_path.read_text()) if family_path.exists() else {}
+    family_notice = (
+        "Broader family gate: "
+        + family_result.get("verdict", "PENDING")
+        + "; exact duplicate: "
+        + str(family_result.get("exact_duplicate", "not checked"))
+    )
+    banner = f"""<section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
 <h2>New, independently generated TIFF</h2>
 <p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
@@ -22,13 +38,20 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 <dt>Numeric checks</dt><dd>{a['format']['count']} band · float32 · EPSG:32611 · 3730 × 3292 · min {c['min_value']:g}, max {c['max_value']:g} · {c['global_invalid_cells']} nonfinite/out-of-range cells · no NoData tag.</dd>
 <dt>Stage2 proxy DTI</dt><dd>{s['candidate_gated']:.6f} vs paired gated baseline {s['baseline_gated']:.6f}; {s['positive_folds']}/6 folds improved. Not an organizer score.</dd>
 <dt>Stage1 confinement</dt><dd>{st['emitted_pixels_inside_approved']:,}/{st['emitted_pixels_total']:,} points inside approved tiles; approved area {st['approved_area_share_of_footprint']:.2%}; lift {st['lift_over_area_share']:.3f}.</dd>
+<dt>Uniqueness scope</dt><dd>{esc(family_notice)}. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
 <dt>SHA-256</dt><dd><code>{esc(a['sha256'])}</code></dd></dl>
 <p><a href="downloads/{esc(a['checks_file'])}">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
-</section>'''
-    rows=''.join(f"<tr><td>{r['fold']}</td><td>{r['scores']['baseline_ungated']['dti']:.6f}</td><td>{r['scores']['baseline_gated']['dti']:.6f}</td><td>{r['scores']['candidate_gated']['dti']:.6f}</td></tr>" for r in h['rows'])
-    gates=''.join(f'<li>{esc(k)}: <strong>{"PASS" if val else "FAIL"}</strong></li>' for k,val in h['gates'].items())
-    vh=v['holdout']
-    detail=f'''<h2>Latest experiment: evidence and decision</h2>{banner}
+</section>"""
+    rows = "".join(
+        f"<tr><td>{r['fold']}</td><td>{r['scores']['baseline_ungated']['dti']:.6f}</td><td>{r['scores']['baseline_gated']['dti']:.6f}</td><td>{r['scores']['candidate_gated']['dti']:.6f}</td></tr>"
+        for r in h["rows"]
+    )
+    gates = "".join(
+        f'<li>{esc(k)}: <strong>{"PASS" if val else "FAIL"}</strong></li>'
+        for k, val in h["gates"].items()
+    )
+    vh = v["holdout"]
+    detail = f"""<h2>Latest experiment: evidence and decision</h2>{banner}
 <h3>Stage2: spatially blocked fine-scale detector</h3>
 <p>P1 decomposes detrended-elevation normal profiles into antisymmetric step and symmetric ridge/valley signals at ±200m and ±500m. Three features extend H-H, blended50/50 with freshly fitted H-D. No earlier submission is an input. Fixed six-fold splits, 1.2km buffer,250,000 negative samples and250 HGB iterations; STE L9/w0.35/spacing2.4, ratio3.47. Predictions confined to the frozen fold-specific q10 strain prior.</p>
 <table><thead><tr><th>Fold</th><th>Baseline ungated</th><th>Baseline q10</th><th>P1 q10</th></tr></thead><tbody>{rows}</tbody></table>
@@ -43,6 +66,7 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 <p>Neither the user-reported0.2778 attribution nor the stated0.3195 leaderboard high establishes an achievable score here. GEMSDOE32's own primary page still says UNSCORED. Reused catalogue folds cannot certify hidden-fault or leaderboard performance.</p>
 <h3>Audit files and next experiment</h3>
 <ul>
+<li><a href="downloads/p1_final_verification_20261007.json">Independent final-byte, ZIP and tile-confinement verification</a></li>
 <li><a href="downloads/p1_holdout_20261007.json">Complete P1 holdout</a></li>
 <li><a href="downloads/official_vector_budget_20261007.json">Vector-budget equation, residuals and five-split Stage1 holdout</a></li>
 <li><a href="downloads/official_attribute_audit_20261007.json">Official DBF match receipt</a></li>
@@ -50,10 +74,10 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 <li><a href="downloads/next-candidates-20261007.md">Four ranked hypotheses and preregistered rules</a></li>
 <li><a href="../registry/official/receipt.json">Official archive hashes and field inventory</a></li>
 </ul>
-<p>Next: resolve frozen-baseline drift, verify outside-footprint semantics with the organizer, introduce an untouched spatial/trace-family lockbox, and test the official-vector mask with a new fine-scale candidate. Preserve this negative experiment. Do not tune P1 until it passes the same reused folds.</p>'''
-    family=ROOT/'evidence/p1_family_audit_20261007.json'
+<p>Next: resolve frozen-baseline drift, verify outside-footprint semantics with the organizer, introduce an untouched spatial/trace-family lockbox, and test the official-vector mask with a new fine-scale candidate. Preserve this negative experiment. Do not tune P1 until it passes the same reused folds.</p>"""
+    family = ROOT / "evidence/p1_family_audit_20261007.json"
     if family.exists():
-        f=json.loads(family.read_text())
-        if 'verdict' in f:
-            detail+=f"<h3>Broader family audit</h3><p>{f['downloaded']}/{f['expected']} inventory payloads restored; verdict {esc(f['verdict'])}; exact duplicate={f['exact_duplicate']}; maximum support Jaccard={f['max_jaccard']:.4f}, containment={f['max_containment']:.4f}. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>"
-    return banner,detail
+        f = json.loads(family.read_text())
+        if "verdict" in f:
+            detail += f"<h3>Broader family audit</h3><p>{f['downloaded']}/{f['expected']} inventory payloads restored; verdict {esc(f['verdict'])}; exact duplicate={f['exact_duplicate']}; maximum support Jaccard={f['max_jaccard']:.4f}, containment={f['max_containment']:.4f}. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>"
+    return banner, detail

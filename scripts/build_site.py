@@ -282,6 +282,7 @@ def build():
                 expected_downloads.add(value)
     supporting_files = (
         "p1_holdout_20261007.json", "p1_family_audit_20261007.json",
+        "p1_stage1_tiles_20261007.json", "p1_final_verification_20261007.json",
         "official_vector_budget_20261007.json", "official_attribute_audit_20261007.json",
         "geodetic_identity_audit_20261007.json",
         "official-source-review-20261007.md", "next-candidates-20261007.md",
