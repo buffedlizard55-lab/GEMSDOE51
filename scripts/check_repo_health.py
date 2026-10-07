@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -133,7 +134,7 @@ def main() -> int:
     r = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q",
                         str(ROOT / "tests")],
                        capture_output=True, text=True,
-                       env={"PYTHONPATH": str(ROOT / "src"), "PATH": "/usr/bin:/bin"})
+                       env={**os.environ, "PYTHONPATH": str(ROOT / "src")})
     tests_ok = r.returncode == 0
 
     # ---- dead site links -------------------------------------------------
