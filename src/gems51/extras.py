@@ -199,6 +199,52 @@ def _build_hk1_tilt_features(stack, footprint: np.ndarray) -> dict[str, np.ndarr
     }
 
 
+def facecoh_group(get, footprint: np.ndarray) -> dict[str, np.ndarray]:
+    """H-D — scarp-facing coherence (extracted so it can be built alone).
+
+    A through-going range-front fault has one facing direction for kilometres;
+    noise, drainages and dune fields do not.  We measure
+    ``|mean unit gradient| / mean |gradient|`` of the 1 m-DEM relief and of
+    detrended elevation over 9x9 and 21x21 windows -> high where a single scarp
+    dominates the window, regardless of how small that scarp is.  The 21x21
+    window tests *persistence* of the facing direction.
+
+    Extracted verbatim from ``build_static`` (same code path, no behaviour
+    change) because the full static build peaks above this sandbox's memory
+    limit; ``scripts/build_arm_extras.py`` builds this group alone.
+    """
+    g: dict[str, np.ndarray] = {}
+    k = np.ones((9, 9), np.float32)
+    k21 = np.ones((21, 21), np.float32)
+    for src, lab in [("lid_relief", "lidrel"), ("comp_det_elev", "detelev")]:
+        f = get(src)
+        m = np.isfinite(f) & footprint
+        gx = _ncd(f, m, 2.0, [0, 1])
+        gy = _ncd(f, m, 2.0, [1, 0])
+        mag = np.hypot(gx, gy)
+        ok = m & np.isfinite(mag) & (mag > 0)
+        ux = np.where(ok, gx / np.maximum(mag, 1e-9), 0.0)
+        uy = np.where(ok, gy / np.maximum(mag, 1e-9), 0.0)
+        wgt = np.where(ok, mag, 0.0)
+        sx = ndi.convolve(ux * wgt, k, mode="nearest")
+        sy = ndi.convolve(uy * wgt, k, mode="nearest")
+        sw = ndi.convolve(wgt, k, mode="nearest")
+        with np.errstate(divide="ignore", invalid="ignore"):
+            coh = np.hypot(sx, sy) / np.maximum(sw, 1e-9)
+        coh[~m] = np.nan
+        g[f"{lab}_facecoh09"] = coh.astype(np.float32)
+        del sx, sy, sw, coh
+        sx = ndi.convolve(ux * wgt, k21, mode="nearest")
+        sy = ndi.convolve(uy * wgt, k21, mode="nearest")
+        sw = ndi.convolve(wgt, k21, mode="nearest")
+        with np.errstate(divide="ignore", invalid="ignore"):
+            coh21 = np.hypot(sx, sy) / np.maximum(sw, 1e-9)
+        coh21[~m] = np.nan
+        g[f"{lab}_facecoh21"] = coh21.astype(np.float32)
+        del sx, sy, sw, coh21, gx, gy, mag, ux, uy, wgt
+    return g
+
+
 def build_static(stack, footprint: np.ndarray) -> dict:
     """Hypothesis groups that use no catalogue information."""
     g = {}
@@ -259,37 +305,7 @@ def build_static(stack, footprint: np.ndarray) -> dict:
         g[f"mg_coedge_{suffix}"] = feats["coedge"]
 
     # ---------------------------------------------------------------- H-D
-    # Scarp-facing coherence.  A through-going range-front fault has one facing
-    # direction for kilometres; noise, drainages and dune fields do not.  We
-    # measure |mean unit gradient| / mean |gradient| of the 1 m-DEM relief and of
-    # detrended elevation over a 9x9 window -> high where a single scarp
-    # dominates the window, regardless of how small that scarp is.
-    for src, lab in [("lid_relief", "lidrel"), ("comp_det_elev", "detelev")]:
-        f = get(src)
-        m = np.isfinite(f) & footprint
-        gx = _ncd(f, m, 2.0, [0, 1])
-        gy = _ncd(f, m, 2.0, [1, 0])
-        mag = np.hypot(gx, gy)
-        ok = m & np.isfinite(mag) & (mag > 0)
-        ux = np.where(ok, gx / np.maximum(mag, 1e-9), 0.0)
-        uy = np.where(ok, gy / np.maximum(mag, 1e-9), 0.0)
-        wgt = np.where(ok, mag, 0.0)
-        sx = ndi.convolve(ux * wgt, k, mode="nearest")
-        sy = ndi.convolve(uy * wgt, k, mode="nearest")
-        sw = ndi.convolve(wgt, k, mode="nearest")
-        with np.errstate(divide="ignore", invalid="ignore"):
-            coh = np.hypot(sx, sy) / np.maximum(sw, 1e-9)
-        coh[~m] = np.nan
-        g[f"{lab}_facecoh09"] = coh.astype(np.float32)
-        # and the same at a longer 21x21 window -> tests *persistence*
-        k21 = np.ones((21, 21), np.float32)
-        sx = ndi.convolve(ux * wgt, k21, mode="nearest")
-        sy = ndi.convolve(uy * wgt, k21, mode="nearest")
-        sw = ndi.convolve(wgt, k21, mode="nearest")
-        with np.errstate(divide="ignore", invalid="ignore"):
-            coh21 = np.hypot(sx, sy) / np.maximum(sw, 1e-9)
-        coh21[~m] = np.nan
-        g[f"{lab}_facecoh21"] = coh21.astype(np.float32)
+    g.update(facecoh_group(get, footprint))
 
     # ---------------------------------------------------------------- H-51-M
     # Cross-scale crest coincidence (session 2026-10-07, knowledge/02 §3 rank 2)

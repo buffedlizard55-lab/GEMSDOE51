@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_utc": "2026-10-07T05:02:00Z",
+  "generated_utc": "2026-10-07T21:20:00Z",
   "note": "Current claims only. PROXY means the local truth is the existing known-fault catalogue, not the hidden expert-labeled new-fault test set. OWNER-REPORTED is attributed to sibling project pages and is not organizer-verified. No leaderboard standings are stored or monitored.",
   "claims": [
     {
@@ -135,6 +135,48 @@
       "claim": "The historical fixed 50/50 H-H/H-D probability blend plus STE passed its then-frozen six-fold local proxy promotion rule, source-aware scoped uniqueness, q70 Stage-1 diagnostic, and local GeoTIFF format checks. Later q10 confinement found only 86.71% of its points inside the approved domain, and the user-reported portal range error remains unresolved with unknown triggering-file identity. The file is retained for audit only and NOT CLEARED FOR UPLOAD; it is not an organizer score, portal acceptance, hidden-label result, or pure-H-H causal proof.",
       "evidence": "data/submission_manifest.json; evidence/hh_blend_holdout.json; docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json; evidence/hypothesis_slate_20261007.json",
       "source": "local measurements; official format specification at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-020",
+      "class": "MEASURED",
+      "claim": "On the off-catalogue A/B instrument (independently split fault systems; matched mass M/|G|=3.47; four folds), multiplying the static H-D fold field by a Gaussian weight in the distance-to-visible-inventory coordinate with centre 15 px and sigma 15 px raises mean DTI_all from 0.188507 (unweighted) to 0.205821 (+0.017314) and mean DTI_far from 0.081198 to 0.083816, while the near-field profile (centre 3 px, sigma 3 px) falls to 0.174227 / 0.028322. The weight is applied at emission time from the visible catalogue only and adds no model feature, so it does not reintroduce catalogue leakage into the detector. This is a proxy measurement on the visible catalogue, not an organizer score.",
+      "evidence": "evidence/ring_profile_ab.json",
+      "source": "local experiment; metric definition at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-021",
+      "class": "MEASURED",
+      "claim": "The static (58 physical-layer) field, fitted on split-A systems only and scored against independently held-out split-B fault pixels that lie at least 5 px from every A pixel, reaches AUC_all 0.6302 / 0.7789 / 0.6572 / 0.7080 (mean 0.6936) and AUC_far 0.5658 / 0.7477 / 0.6140 / 0.6669 (mean 0.6486) over folds 0-3. The physical arm therefore ranks unmapped, non-adjacent fault pixels above chance without any catalogue-distance feature; the inventory-context arm (H51-N1) loses to it in every regime on the same folds.",
+      "evidence": "evidence/h51_n1_ab_static_fields.json; evidence/h51_n1_ab_fold0_timing.json",
+      "source": "local measurements on owner-mirrored hash-pinned competition data"
+    },
+    {
+      "id": "C51-022",
+      "class": "DERIVED_FROM_OFFICIAL_METRIC",
+      "claim": "Because alpha + beta = 1 in the published metric, a submission of M unit-valued dots with mean triangular-kernel credit k scores DTI = k*M/(0.2*M + 0.8*|G|); the index is strictly increasing in a common dot value v, so v = 1 is optimal for a fixed support; and appending one further unit dot improves the score iff its marginal credit exceeds 0.2*DTI (about 0.056 at DTI = 0.28). No hidden-label quantity is assumed.",
+      "evidence": "tests/test_metric.py; src/gems51/credit_emission.py; knowledge/03_why_the_dotted_family_wins_2026-10-07.md",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-023",
+      "class": "INFERRED_FROM_OWNER_REPORTED_SCORES",
+      "claim": "Treating the owner-reported 0.2600 and 0.2778 for the 44,090 px dotted support and its 37,654 px catalogue-halo-deleted derivative (both supports MEASURED here) as accurate, and assuming the surviving dots keep their credit, eliminating the common credit term gives R = 200.6 - 0.01424*|G| for the total credit R of the 6,436 deleted dots. R >= 0 therefore requires |G| <= 14,088 truth pixels, and at the repository's 12,700-pixel planning value the deleted dots averaged 0.003 credit each. This is arithmetic on owner-reported numbers, not an organizer-authenticated measurement, and it establishes no hidden-label property by itself.",
+      "evidence": "evidence/sibling_reference_stats_20261007.json; knowledge/03_why_the_dotted_family_wins_2026-10-07.md",
+      "source": "owner-reported scores (not organizer-verified); official metric definition"
+    },
+    {
+      "id": "C51-024",
+      "class": "MEASURED",
+      "claim": "Paired six-fold screen of the brief-compliant emission configuration (scripts/run_h51_n2_holdout.py): the baseline rule reproduces data/holdout_H_D.json fold-for-fold with maximum absolute deviation 0.0 (mean 0.2816626603034904), so the comparison harness is exact. Switching to the compliant rule (224 m catalogue exclusion + every point inside the Stage-1 q10 approved tiles) costs -0.0015468840586742583 mean proxy DTI and wins 0/6 folds; all emitted points are inside the approved tiles by construction. The 15 px far-field ring weight, which helped the off-catalogue A/B instrument (+0.017314 in C51-020), is rejected on this instrument (-0.113310 mean, 0/6 folds), so the two instruments disagree and no ring weight is used in any artifact. No ring parameter was searched afterwards.",
+      "evidence": "evidence/h51_n2_paired_holdout.json; data/holdout_H_D.json; evidence/ring_profile_ab.json",
+      "source": "local measurements on owner-mirrored hash-pinned competition data"
+    },
+    {
+      "id": "C51-025",
+      "class": "MEASURED",
+      "claim": "The recommended upload candidate gemsdoe51-h51n2-creditthin-20261007T210820Z.tif (sha256 b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22) is 38,100 unit-valued dots (nearest-neighbour spacing median 3.0 px) emitted by greedy NMS at 2.4 px on the H-D physical arm, with every dot at least 2.24 px from the mapped catalogue and every dot inside the Stage-1 strain-deficit q10 approved tiles (approved area 0.900926 of footprint; emission lift 1.109969 < 1.5). It passes the pre-write and staged uniqueness gates against all 39 locally held prior rasters (max support Jaccard 0.154578, max containment 0.288740; limits 0.50/0.60) and is written all-finite: nan_cells = 0, values_outside_0_1 = 0, zeros outside the footprint, single-band float32 EPSG:32611 on the template grid. No upload, portal acceptance or organizer score is claimed.",
+      "evidence": "evidence/submission_h51n2.json; docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json; tests/test_submission_candidate.py; data/submission_manifest.json",
+      "source": "local measurements; format requirement text at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     }
   ]
 }
