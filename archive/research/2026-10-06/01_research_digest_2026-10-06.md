@@ -1,3 +1,5 @@
+> **ARCHIVED / SUPERSEDED.** This 2026-10-06 digest predates the corrected 2026-10-07 evidence and contains methods and conclusions that were later revised. Do not treat its Stage-1 claims, hidden-label assumptions, or candidate result as current. Current status and corrections are in `../../../README.md`, `../../../knowledge/analysis.md`, and `../../../knowledge/gemsdoe32-case-study-2026-10-07.md`. It contains no organizer-verified score.
+
 # Research digest — session 2026-10-06 (GEMSDOE51)
 
 Everything here is either **official** (read from a competition page, with a link) or

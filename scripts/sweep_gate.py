@@ -65,19 +65,26 @@ def main() -> int:
     cfg = sb.BudgetConfig(tile_px=a.tile_px)
     folds = make_folds(footprint, catalogue, buffer_px=12, n_rows=3, n_cols=3,
                        min_truth=500)[:a.folds]
+    trace_y, trace_x, trace_ids = sb.trace_assignments(catalogue, df)
     weights = [float(v) for v in a.weights.split(",")]
     hard_q = [float(v) for v in a.hard_q.split(",")]
     ratios = [float(v) for v in a.ratios.split(",")]
 
     res = {w: [] for w in weights}
     res_hard = {q: [] for q in hard_q}
+    stage1_trace_rows = []
     t0 = time.time()
     for fold in folds:
         fp = P / f"field_{a.arm}_fold{fold.index}.npy"
         if not fp.exists():
             continue
         field = np.load(fp)
-        exx, eyy, exy, lent, npix, asg, mom, tsh, meta = sb.kostrov_tiles(fold.known, df, cfg)
+        held = np.unique(trace_ids[fold.block[trace_y, trace_x]])
+        df_budget = df.loc[~df.index.isin(held)]
+        stage1_trace_rows.append(dict(fold=int(fold.index), held_out=int(len(held)),
+                                      budget_rows=int(len(df_budget))))
+        exx, eyy, exy, lent, npix, asg, mom, tsh, meta = sb.kostrov_tiles(
+            fold.known, df_budget, cfg, area_mask=footprint)
         II_f = sb.invariant(exx, eyy, exy, "II")
         obsII = sb.observed_tiles(obs, footprint, a.tile_px)
         dom = sb.observed_tiles(np.ones(GRID.shape, np.float32), footprint, a.tile_px)
@@ -112,7 +119,7 @@ def main() -> int:
         print(f"  fold {fold.index} ({time.time()-t0:.0f}s)", flush=True)
         del field
 
-    out = {"config": vars(a),
+    out = {"config": vars(a), "stage1_trace_rows": stage1_trace_rows,
            "soft": {str(w): dict(mean=float(np.mean(v)), per_fold=[float(x) for x in v])
                     for w, v in res.items()},
            "hard": {str(q): dict(mean=float(np.mean(v)), per_fold=[float(x) for x in v])

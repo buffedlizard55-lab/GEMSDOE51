@@ -12,8 +12,7 @@ nav a:hover{background:#17334a}
 nav a.active{background:var(--bg);color:var(--ink);font-weight:600}
 main{padding:26px 0 46px;background:var(--bg);min-height:60vh}
 h2{margin:30px 0 10px;font-size:21px;border-bottom:2px solid var(--line);padding-bottom:6px}
-h3{margin:22px 0 8px;font-size:17px;color:#1c3purple}
-h3{color:#1b3b52}
+h3{margin:22px 0 8px;font-size:17px;color:#1b3b52}
 p,li{color:#22303d}
 a{color:var(--acc)}
 table{border-collapse:collapse;width:100%;margin:12px 0;background:#fff;font-size:14px}

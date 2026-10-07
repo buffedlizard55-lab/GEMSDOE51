@@ -8,101 +8,50 @@
 <h1>GEMSDOE51</h1>
 <p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
 <nav>
-  <a class="active" href="index.html">Executive summary</a>  
-  <a class="" href="how-to-submit.html">How to submit</a>  
-  <a class="" href="method.html">Method</a>  
-  <a class="" href="hypotheses.html">Hypotheses</a>  
-  <a class="" href="holdout.html">Holdout</a>  
-  <a class="" href="analysis.html">Analysis</a>  
-  <a class="" href="sources.html">Sources</a>  
-  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="active" href="index.html">Executive summary</a>
+  <a class="" href="how-to-submit.html">How to submit</a>
+  <a class="" href="method.html">Method</a>
+  <a class="" href="hypotheses.html">Hypotheses</a>
+  <a class="" href="holdout.html">Holdout</a>
+  <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
+  <a class="" href="sources.html">Sources</a>
+  <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
 </nav>
 </div></header>
 <main class="wrap">
-
-<section class="download">
-<h2>⬇ One-click submission file</h2>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif">Download gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip">.zip containing the same single GeoTIFF</a></p>
-<dl class="kv">
-<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-STE-HD-R347</code></dd>
-<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>GEMSDOE51 | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag GBDT) | NEW: strike-coherent trace emission (multi-scale Frangi ridge x 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px) replacing isotropic NMS: +0.0020 paired DTI on 6 blocked folds, 4/6, w-&gt;0 control provably reduces to the incumbent | Stage 1 geodetic strain-budget deficit as a soft prior w=0.1 (dominance lift 0.963) | 44,069 dots at mass ratio 3.47x|G|, none within 200 m of the catalogue | off-catalogue A/B: 0.0813 vs 0.0424 random and 0.0022 catalogue-halo control | UNSCORED</code></dd>
-<dt>Format</dt><dd>single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag</dd>
-<dt>sha256</dt><dd><code>e13394d96baf6867f3a6851d9243de74f8d37c581ff003dbdf3e7497f58dab38</code></dd>
-</dl>
-<p class="ev">format checks are MEASURED by re-reading the written bytes in a second, independent process, then re-verified by scripts/run_uniqueness_gate.py which shares no code with this builder; no score on this site is organizer-verified</p>
-</section>
-<h2>This session, work stream B (2026-10-07): a second candidate submission</h2>
-<p>The site's primary download above is stream A's strike-coherent emission (best holdout,
-0.2836). Stream B independently built a <b>second, structurally different candidate</b> from the
-same detector family, so this week's three submission slots can span two hypotheses instead of
-one. Its story:</p>
-<ul>
-<li><b>Studied why the group's best scored 0.2778</b>: it is a <i>removal</i> result &mdash; pruning
-dots within 200 m of the mapped catalogue raised the live score 0.2600 &rarr; 0.2708 &rarr; 0.2778
-(GEMSDOE32 Round 4, live-anchored safety 2.08). Mass near mapped faults is dead mass. Full write-up:
-<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md">knowledge/02</a>.</li>
-<li><b>Five new candidate hypotheses pre-registered</b> (H-51-L, H-51-M, H-51-P, H-51-S, H-51-V;
-letters L/M because stream A already owns F/G) with layers, signatures and novelty checks &mdash;
-see the <a href="hypotheses.html">hypotheses</a> page.</li>
-<li><b>H-51-L (trace-axis snap) validated and falsified</b> on the blocked holdout under a
-pre-registered rule: at conserved mass and spacing, window=2 costs &minus;0.0033 proxy DTI,
-window=1 is neutral. Two earlier failure modes (spacing collapse; silent mass loss) were
-reproduced, explained and unit-tested. Registered as IR-51-14 with the instrument caveat.</li>
-<li><b>H-51-M (cross-scale crest coincidence) adopted</b>: in-block AUC 0.6747
-(+0.0021 over H_D) and proxy DTI
-0.2826 (+0.0009 over H_D at M/|G| = 3.47) &mdash; the second-best arm
-measured in this repository, 0.0010 below stream A's emission.</li>
-</ul>
-<section class="download">
-<h3>&#11015; Stream B candidate (H-51-M two-stage)</h3>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif">Download gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1.zip">.zip containing the same single GeoTIFF</a></p>
-<dl class="kv">
-<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HM-SOFT-W010</code></dd>
-<dt>sha256</dt><dd><code>c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839</code></dd>
-</dl>
-<p class="ev">44,069 dots &middot; float32 EPSG:32611 3730&times;3292 &middot; all cells finite in [0,1] &middot;
-0 dots within 200 m of the catalogue &middot; Stage-1 dominance lift 0.978 &middot; holdout cost of the soft
-prior +0.0000. The hard top-80% tile variant (the brief's literal design) is also in
-<code>docs/downloads</code> and costs &minus;0.0027 on holdout, disclosed.</p>
-</section>
-
+<section class="download missing">
+<h2>⬇ No eligible submission file</h2>
+<p><b>No new GeoTIFF was generated, and no submission slot is recommended.</b>
+The narrowed H51-X1 implementation failed its six-fold promotion test
+(mean proxy DTI 0.2797, versus
+0.2817 for H-D). Its broader
+preregistered layer family was not fully tested. The H-D soft w=0.20 proposal had only a small holdout gain and failed uniqueness
+(Jaccard 0.861;
+limit 0.50). Archived TIFFs are not current recommendations and are not linked here.</p>
+<p>When a genuinely distinct candidate passes the promotion, format, uniqueness, and
+Stage-1 dominance checks, this card will contain the downloadable file, checksum,
+unique submission name, and optional note.</p></section>
 <h2>What is offered</h2>
-<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif</a><br><span class="ev">zip: <a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip</a> &middot; nan twin: <a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif</a></span></td><td>soft</td><td>H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10), emitted by strike-coherent trace emission: multi-scale Frangi ridge + 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px</td><td>+0.0020</td><td>0.016</td><td>PASS</td></tr></tbody></table>
-<p class="warn"><b>The biggest limitation, stated first.</b> The visible USGS/INGENIOUS fault
-catalogue <b>is</b> the training label — <code>labels.tif</code> is byte-identical to
-<code>existing_faults.tif</code>, and this is <b>by design</b>: the organizer's own reference
-solution trains on exactly that file, and the hidden test set is the expert-identified faults
-<i>absent</i> from it (IR-51-08, closed). The consequence is IR-51-11: every offline number here
-measures <b>rediscovery</b>, not discovery. This session quantified the gap with a second
-instrument that hides half the catalogue's fault <i>systems</i> and leaves them inside the negative
-class. Against those genuinely off-catalogue structures the detector scores <b>0.0813</b>, not the
-0.282 the blocked holdout reports — still 1.9&times; uniform random, and 37&times; a
-catalogue-halo control (0.0022), so it is finding real new geometry rather than ringing what is
-already mapped. Read every 0.28 on this site with that factor in mind. Nothing here should be read
-as a prediction of the leaderboard.</p>
-<p class="warn"><b>Phase 1 entries are not free.</b> The organizer has stated on the forum that the
-Phase 2 test set "will use a test set that is updated by expert review of all Phase 1 submissions,
-so your fault predictions have an impact on final evaluation even if they are not the most
-performant in Phase 1" (chrisk-dd, 2026-09-23). Every dot in the files below is therefore
-geologically defensible on its own terms, not just score-optimal: all of them lie outside the
-200 m exclusion zone, none sits on a catalogued trace, and the Stage 1 strain-budget argument for
-why each tile is worth looking at is published on the <a href="method.html">method</a> page.</p>
+<p class='warn'><b>No current submission artifact is eligible or linked.</b> The previous candidates are retained outside the published download directory for audit only; the latest proposal failed uniqueness before a TIFF was written.</p>
+<p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
+training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
+expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
+<code>existing_faults.tif</code> are byte-identical, consistent with that description. Our blocked
+holdouts therefore hide and recover known faults as a <b>proxy</b>; they do not validate localization
+of genuinely new faults or predict an organizer score. Local source rasters are hash-pinned public
+mirrors, not organizer-authenticated.</p>
+<p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
+by experts for the expanded label set. Any future emission should therefore be geologically
+justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
 <h2>What this is</h2>
-<p>GEMSDOE51 predicts geothermal-indicative faults in the GeoDAWN region that are
-<b>not</b> in the USGS / INGENIOUS catalogue, and ships them as a competition-legal GeoTIFF.
-It is a <b>two-stage</b> system: a coarse geodetic <i>strain-budget deficit</i> prior over
-10&nbsp;km tiles (Stage&nbsp;1), and a fine-scale fault detector whose output is turned into
-emitted pixels by a <i>strike-coherent trace emitter</i> (Stage&nbsp;2). Both stages are scored
-separately on a preregistered spatially blocked holdout, and the whole system is scored again on an
-off-catalogue A/B that is the closest offline analogue of the real task.</p>
-<p>Stage&nbsp;1 ships as a <b>soft multiplicative prior at w = 0.10</b>, not as a filter: a six-fold
-paired sweep found the hard gate monotone-harmful at every setting (it never wins a fold), and the
-soft prior at w = 0.10 is the only setting that is not negative. The shipped file's Stage-1
-dominance lift is <b>0.963</b> — below 1 — so the submission is demonstrably <i>not</i> a
-re-expression of Stage 1's approved footprint.</p>
+<p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
+a 10&nbsp;km geodetic strain-budget statistic is tested only as a <b>weak broad-tile prior</b>
+(Stage&nbsp;1); a fine-scale detector supplies point locations (Stage&nbsp;2). The evidence shows
+Stage&nbsp;1 is weak, and a hard gate harms Stage&nbsp;2, so the prior must not dictate the fine-scale
+map. Both stages are evaluated separately on local spatial holdouts; no current artifact clears all
+promotion and uniqueness checks.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -112,36 +61,29 @@ rounds. <a href="https://community.drivendata.org/t/scoring-clarification-are-kn
 <li><b>"New fault" includes new geometry of an existing system.</b> Continuations, splays and
 parallel strands count. <a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">source</a></li>
 <li><b>The metric is a budget.</b> From the published definitions,
-<code>DTI = TP / (0.2·(TP+FP) + 0.8·|G|)</code>. The hidden truth size |G| is fixed, so a
+<code>DTI = TP_w / (0.2·(TP_w+FP_w) + 0.8·|G|)</code>. The hidden truth size |G| is fixed for an organizer evaluation but undisclosed locally, so a
 submission stands or falls on credit earned per unit of emitted mass. The break-even bar for a
 marginal pixel is <code>c = 0.2·DTI</code>.</li>
 </ol>
 
 <h2>Holdout at a glance</h2>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r5.0: 0.2736</td><td>6</td></tr><tr><td>H_M</td><td>0.6747</td><td>r2.0: 0.2701 / r3.47: 0.2826 / r4.5: 0.2770 / r6.0: 0.2611</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr></tbody></table>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r4.5: 0.2781 / r6.0: 0.2625</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr><tr><td>H_X1</td><td>0.6667</td><td>r3.47: 0.2797</td><td>6</td></tr></tbody></table>
 <p class="ev">Proxy DTI is measured with emission and scoring restricted to the held-out block and
 the mass set as a fixed multiple of that block's truth size, which is what makes it comparable
 to a live DTI. It is <b>not</b> a score.</p>
 
 <h2>Read next</h2>
 <ul>
-<li><a href="executive-summary.html">Executive summary</a> — the one-page version: the file, how
-to submit it, what it is worth, and the proof that it is not a copy of anything.</li>
-<li><a href="how-to-submit.html">How to submit, step by step</a> — including the fix for the
-<code>"Predicted values must be in range [0, 1]"</code> portal error.</li>
-<li><a href="hypotheses.html">Hypotheses</a> — eleven candidates, each with its layers, physical
-signature, and the measured outcome filled in after the run.</li>
-<li><a href="method.html">Method</a> — the Kostrov strain budget, the detector, the emission rule.</li>
-<li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 scored separately.</li>
-<li><a href="irregularities.html">Irregularities</a> — including one in a sibling repository's own
-reporting that we could not reproduce.</li>
+<li><a href="how-to-submit.html">Submission status and instructions</a> — including the required generative-AI narrative disclosure.</li>
+<li><a href="analysis.html">GEMSDOE32 case study</a> — what the owner-reported projection does and does not establish.</li>
+<li><a href="hypotheses.html">Ranked geological hypotheses</a> — features, physical signatures, expected costs, and data needs.</li>
+<li><a href="method.html">Method and formula</a> — exact Stage-1 equation, assumptions, and Stage-2 design.</li>
+<li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 reported separately.</li>
+<li><a href="irregularities.html">Irregularities</a> — provenance, format, uniqueness, and legacy-code corrections.</li>
 </ul>
 
 </main>
 <footer><div class="wrap">
-<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
-evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
-independently verifiable here. Organizer-verified = none; no score on this site has been
-confirmed by DrivenData.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

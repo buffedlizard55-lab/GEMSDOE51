@@ -1,10 +1,10 @@
 {
- "generated_utc": "20261006T222055Z",
+ "generated_utc": "20261006T222111Z",
  "arm": "H_D",
  "ratio": 3.47,
  "g_hidden_estimate": 12700,
- "stage1_q": 20.0,
- "gate_mode": "hard",
+ "stage1_q": 70.0,
+ "gate_mode": "soft",
  "gate_weight": 0.1,
  "tile_px": 100,
  "nms_radius": 2.4,
@@ -17,11 +17,11 @@
   "detelev_facecoh21"
  ],
  "stage1": {
-  "approved_px": 4136518,
-  "approved_share_of_footprint": 0.8005069500498609,
-  "emitted_share_inside_approved": 1.0,
-  "lift_over_area": 1.2492083921791226,
-  "threshold": -0.339622641509434,
+  "approved_px": 1552597,
+  "approved_share_of_footprint": 0.30046156915709393,
+  "emitted_share_inside_approved": 0.2030679162222878,
+  "lift_over_area": 0.6758532107516064,
+  "threshold": 0.15780445969125212,
   "fault_median_II_nanostrain": 0.0,
   "obs_median_II_nanostrain": 21.016352256722218,
   "kostrov_meta": {
@@ -38,12 +38,12 @@
   }
  },
  "primary": {
-  "file": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
-  "zip": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z.zip",
-  "nan_twin": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif",
-  "sha256": "93d1a77e8d90e4a60dd68e2785b4a1b5cf8b34bfad80109c79354cae74c61c06",
+  "file": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+  "zip": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip",
+  "nan_twin": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+  "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
   "submission_name": "GEMSDOE51 H_D two-stage",
-  "note": "GEMSDOE51 two-stage: H_D detector with the 10 km Kostrov strain-budget deficit as a hard tile gate, top 80% of tiles; 44,069 dots at 2.4 px spacing, none within 200 m of the catalogue; both stages holdout-scored separately. UNSCORED",
+  "note": "GEMSDOE51 two-stage: H_D detector with the 10 km Kostrov strain-budget deficit as a soft multiplicative prior w=0.1; 44,069 dots at 2.4 px spacing, none within 200 m of the catalogue; both stages holdout-scored separately. UNSCORED",
   "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
   "checks": {
    "single_band": true,
@@ -122,27 +122,29 @@
   "portal_legal": true
  },
  "uniqueness": {
-  "candidate": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
-  "sha256": "93d1a77e8d90e4a60dd68e2785b4a1b5cf8b34bfad80109c79354cae74c61c06",
+  "candidate": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+  "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
   "byte_duplicate_of": [],
   "support_jaccard": {
-   "g25_dotted_02600": 0.013975,
-   "g32_anchor_02708": 0.013975,
-   "g32_h33b2_02778": 0.015092
+   "g25_dotted_prior": 0.015317,
+   "g32_anchor_prior": 0.015317,
+   "g32_h33b2_prior": 0.016544
   },
   "support_containment": {
-   "g25_dotted_02600": 0.02757,
-   "g32_anchor_02708": 0.02757,
-   "g32_h33b2_02778": 0.02757
+   "g25_dotted_prior": 0.03018,
+   "g32_anchor_prior": 0.03018,
+   "g32_h33b2_prior": 0.03018
   },
   "stage1_dominance": {
-   "approved_area_share_of_footprint": 0.8005069500498609,
-   "emitted_pixels_inside_approved": 44069,
+   "approved_area_share_of_footprint": 0.30046156915709393,
+   "emitted_pixels_inside_approved": 8949,
    "emitted_pixels_total": 44069,
-   "emitted_share_inside_approved": 1.0,
-   "lift_over_area_share": 1.2492083921791226
+   "emitted_share_inside_approved": 0.2030679162222878,
+   "lift_over_area_share": 0.6758532107516064
   },
   "verdict": "PASS",
-  "notes": []
+  "notes": [
+   "emission is under-represented inside the Stage 1 approved tiles (lift 0.68): the fine-scale model is placing points by its own criteria, so Stage 1 does not dominate -- but note the two stages are mildly anti-correlated at the point level"
+  ]
  }
 }

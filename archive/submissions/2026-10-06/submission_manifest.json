@@ -35,14 +35,14 @@
     "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
     "byte_duplicate_of": [],
     "support_jaccard": {
-     "g25_dotted_02600": 0.015317,
-     "g32_anchor_02708": 0.015317,
-     "g32_h33b2_02778": 0.016544
+     "g25_dotted_prior": 0.015317,
+     "g32_anchor_prior": 0.015317,
+     "g32_h33b2_prior": 0.016544
     },
     "support_containment": {
-     "g25_dotted_02600": 0.03018,
-     "g32_anchor_02708": 0.03018,
-     "g32_h33b2_02778": 0.03018
+     "g25_dotted_prior": 0.03018,
+     "g32_anchor_prior": 0.03018,
+     "g32_h33b2_prior": 0.03018
     },
     "stage1_dominance": {
      "approved_area_share_of_footprint": 0.8005069500498609,
@@ -139,14 +139,14 @@
     "sha256": "93d1a77e8d90e4a60dd68e2785b4a1b5cf8b34bfad80109c79354cae74c61c06",
     "byte_duplicate_of": [],
     "support_jaccard": {
-     "g25_dotted_02600": 0.013975,
-     "g32_anchor_02708": 0.013975,
-     "g32_h33b2_02778": 0.015092
+     "g25_dotted_prior": 0.013975,
+     "g32_anchor_prior": 0.013975,
+     "g32_h33b2_prior": 0.015092
     },
     "support_containment": {
-     "g25_dotted_02600": 0.02757,
-     "g32_anchor_02708": 0.02757,
-     "g32_h33b2_02778": 0.02757
+     "g25_dotted_prior": 0.02757,
+     "g32_anchor_prior": 0.02757,
+     "g32_h33b2_prior": 0.02757
     },
     "stage1_dominance": {
      "approved_area_share_of_footprint": 0.8005069500498609,
@@ -201,14 +201,14 @@
    "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
    "byte_duplicate_of": [],
    "support_jaccard": {
-    "g25_dotted_02600": 0.015317,
-    "g32_anchor_02708": 0.015317,
-    "g32_h33b2_02778": 0.016544
+    "g25_dotted_prior": 0.015317,
+    "g32_anchor_prior": 0.015317,
+    "g32_h33b2_prior": 0.016544
    },
    "support_containment": {
-    "g25_dotted_02600": 0.03018,
-    "g32_anchor_02708": 0.03018,
-    "g32_h33b2_02778": 0.03018
+    "g25_dotted_prior": 0.03018,
+    "g32_anchor_prior": 0.03018,
+    "g32_h33b2_prior": 0.03018
    },
    "stage1_dominance": {
     "approved_area_share_of_footprint": 0.8005069500498609,

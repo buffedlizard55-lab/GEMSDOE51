@@ -19,44 +19,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy scipy scikit-learn pandas rasterio pytest
-      - name: Format contract of the shipped raster (no dataset needed)
-        run: python scripts/check_submission.py docs/downloads/gemsdoe51-strainbudget-s1-v1.tif
-      - name: Independent format contract of every shipped artifact
-        run: |
-          python scripts/verify_submission.py docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif
-          python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif
-          python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif
-          python scripts/verify_submission.py docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif
-          python scripts/verify_submission.py docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif
-      - name: Uniqueness gate on the shipped artifact (no dataset needed)
-        run: |
-          python scripts/run_uniqueness_gate.py \
-            --candidate docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif \
-            --refs data/prior/*.tif \
-                   docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif \
-                   docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif \
-            --out /tmp/uniqueness_gate_ci.json
-      - name: Uniqueness gate on the stream-B two-stage artifact (no dataset needed)
-        run: |
-          python scripts/run_uniqueness_gate.py \
-            --candidate docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif \
-            --refs data/prior/*.tif \
-                   docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif \
-                   docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif \
-                   docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif \
-            --out /tmp/uniqueness_gate_ci_stream_b.json
-      - name: Repository health (API drift, per-module imports, dead site links)
-        # IR-51-09: a whole PR#1/#2-lineage subtree imported cleanly and raised
-        # AttributeError at runtime. This check fails the build if that recurs, and
-        # also if any docs/ page links to a file that is not on disk.
-        run: python scripts/check_repo_health.py
+      - name: Compile current Python sources
+        run: python -m compileall -q scripts src tests
       - name: Unit tests
-        # The pinned 557 MB dataset is intentionally not in the repository; tests that need it skip
-        # themselves (tests/conftest.py). Everything else, including the brute-force metric check and
-        # the shipped-raster digest check, runs here.
         run: pytest tests -q
-      - name: Regenerate the site from the registries (fails if templates break)
+      - name: Regenerate current site
         run: python scripts/build_site.py
+      - name: Check links and current download state
+        run: python scripts/check_site.py
       - name: Fail if the committed site is stale
         run: |
           if ! git diff --quiet -- docs; then
