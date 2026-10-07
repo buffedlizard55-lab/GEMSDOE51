@@ -1,0 +1,23 @@
+name: Official fault source audit
+on:
+  workflow_dispatch:
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch official INGENIOUS v2 archive and geodetic metadata
+        run: |
+          mkdir -p official
+          curl --fail --location --retry 3 --max-time 300 https://gdr.openei.org/files/1391/qfaults_ingenious_nad83conus117_2023-06-27.zip -o official/qfaults.zip
+          curl --fail --location --retry 3 --max-time 300 https://gdr.openei.org/files/1391/geodetics_INGENIOUS_regional_data.zip -o official/geodetics.zip
+          sha256sum official/*.zip > official/SHA256SUMS
+          unzip -l official/qfaults.zip > official/qfaults_inventory.txt
+          unzip -l official/geodetics.zip > official/geodetics_inventory.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-source-audit
+          path: official/
+          retention-days: 30
