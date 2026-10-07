@@ -15,9 +15,7 @@ import numpy as np
 from scipy import ndimage as ndi
 
 from .grid import GRID
-from .stack import _nc_deriv, lineament_bank
-from .intersections import axial_intersection_score
-from .features import COMPETITION_BANDS
+from .stack import lineament_bank
 
 H, W = GRID.shape
 
@@ -31,6 +29,53 @@ def _edge_bank(field: np.ndarray, mask: np.ndarray, label: str, scales=(1.5, 4.0
         out[f"{label}_s{t:02d}_crest"] = crest
         out[f"{label}_s{t:02d}_lin"] = lin
     return out
+
+
+def cross_physics_edge_features(magnetic: np.ndarray, gravity: np.ndarray,
+                                mask: np.ndarray, sigma: float = 2.0) -> dict[str, np.ndarray]:
+    """Return edge-normal agreement and joint edge strength for two scalar fields.
+
+    The normals are unoriented, so reversing the sign of one anomaly does not
+    change its geological edge direction.  ``coedge`` is the geometric mean of
+    robustly scaled gradient magnitudes multiplied by |cos(theta)|.  The scale
+    denominators are the 95th percentiles of deterministic, evenly subsampled
+    valid pixels; no labels or holdout truths enter the transform.
+    """
+    mask = np.asarray(mask, dtype=bool)
+    mag = np.asarray(magnetic, dtype=np.float32)
+    grav = np.asarray(gravity, dtype=np.float32)
+    valid = mask & np.isfinite(mag) & np.isfinite(grav)
+    gx_m = _ncd(mag, valid, sigma, [0, 1])
+    gy_m = _ncd(mag, valid, sigma, [1, 0])
+    gx_g = _ncd(grav, valid, sigma, [0, 1])
+    gy_g = _ncd(grav, valid, sigma, [1, 0])
+    norm_m = np.hypot(gx_m, gy_m)
+    norm_g = np.hypot(gx_g, gy_g)
+    denom = np.maximum(norm_m * norm_g, 1e-12)
+    alignment = np.clip(np.abs(gx_m * gx_g + gy_m * gy_g) / denom, 0.0, 1.0)
+    alignment[(norm_m <= 1e-8) | (norm_g <= 1e-8)] = 0.0
+
+    def robust_p95(v):
+        ok = valid & np.isfinite(v)
+        vals = v[ok]
+        if vals.size == 0:
+            return 0.0
+        stride = max(1, int(np.ceil(vals.size / 200_000)))
+        return float(np.quantile(vals[::stride], 0.95))
+
+    scale_m = robust_p95(norm_m)
+    scale_g = robust_p95(norm_g)
+    if scale_m <= 1e-12 or scale_g <= 1e-12:
+        coedge = np.zeros(mag.shape, dtype=np.float32)
+    else:
+        em = np.clip(norm_m / scale_m, 0.0, 1.0)
+        eg = np.clip(norm_g / scale_g, 0.0, 1.0)
+        coedge = np.sqrt(em * eg) * alignment
+    alignment = alignment.astype(np.float32)
+    coedge = coedge.astype(np.float32)
+    alignment[~valid] = np.nan
+    coedge[~valid] = np.nan
+    return {"alignment": alignment, "coedge": coedge}
 
 
 def build_static(stack, footprint: np.ndarray) -> dict:
@@ -75,6 +120,23 @@ def build_static(stack, footprint: np.ndarray) -> dict:
     coh[~(m.astype(bool))] = np.nan
     g["base_step_coh09"] = coh.astype(np.float32)
 
+    # ---------------------------------------------------------------- H-X1
+    # Cross-physics edge-normal concordance.  A buried fault/contact can produce
+    # a magnetic edge and a density/gravity edge even where relief is weak.  The
+    # *new* signal is not either edge magnitude by itself (both are already in
+    # the base stack), but the local agreement of their unoriented edge normals.
+    # Derivatives are computed from the rank-normalised competition bands so
+    # feature scale is comparable and robust to the source units.  Two scales
+    # (200 m and 500 m) are preregistered in knowledge/preregistration-2026-10-07.md.
+    mag = get("comp_tmi")
+    grav = get("comp_iso_grav_anom")
+    common = footprint & np.isfinite(mag) & np.isfinite(grav)
+    for sigma in (2.0, 5.0):
+        feats = cross_physics_edge_features(mag, grav, common, sigma=sigma)
+        suffix = f"s{int(sigma * 10):02d}"
+        g[f"mg_alignment_{suffix}"] = feats["alignment"]
+        g[f"mg_coedge_{suffix}"] = feats["coedge"]
+
     # ---------------------------------------------------------------- H-D
     # Scarp-facing coherence.  A through-going range-front fault has one facing
     # direction for kilometres; noise, drainages and dune fields do not.  We
@@ -108,60 +170,59 @@ def build_static(stack, footprint: np.ndarray) -> dict:
         coh21[~m] = np.nan
         g[f"{lab}_facecoh21"] = coh21.astype(np.float32)
 
+    # ---------------------------------------------------------------- H-51-M
+    # Cross-scale crest coincidence (session 2026-10-07, knowledge/02 §3 rank 2)
+    _build_xscale(g, get, footprint)
+
     return g
 
 
-def build_magnetic_gravity_intersections(stack, footprint: np.ndarray,
-                                         scales=(4.0, 8.0)) -> dict:
-    """High-angle co-located edges in TMI and isostatic gravity.
-
-    The two source surfaces are robustly standardized competition bands, read
-    from the prepared mirror. At each Gaussian scale, axial orientation
-    discordance is weighted by both edge magnitudes (each scaled by its
-    footprint 95th percentile). The returned operator is therefore high only
-    where *both* independent potential-field surfaces have strong, nearly
-    orthogonal boundaries. 100 m pixels make the scales 400 m and 800 m.
-
-    No catalogue or holdout labels enter this transform. The feature is a
-    prospectivity/structure proxy, not evidence that an edge is a fault.
-    """
-    from pathlib import Path
-
-    names = [b[0] for b in COMPETITION_BANDS]
-    shape = (len(names), *GRID.shape)
-    z = np.memmap(Path(stack.dir) / "comp_z.dat", dtype=np.float32,
-                  mode="r", shape=shape)
-    tmi = z[names.index("tmi")]
-    gravity = z[names.index("iso_grav_anom")]
-    mt = np.isfinite(tmi) & footprint
-    mg = np.isfinite(gravity) & footprint
-    out = {}
-
-    for sigma in scales:
-        tx = _nc_deriv(tmi, mt, sigma, [0, 1])
-        ty = _nc_deriv(tmi, mt, sigma, [1, 0])
-        gx = _nc_deriv(gravity, mg, sigma, [0, 1])
-        gy = _nc_deriv(gravity, mg, sigma, [1, 0])
-        tm = np.hypot(tx, ty)
-        gm = np.hypot(gx, gy)
-        valid = (footprint & np.isfinite(tx) & np.isfinite(ty)
-                 & np.isfinite(gx) & np.isfinite(gy) & np.isfinite(tm)
-                 & np.isfinite(gm))
-        if not valid.any():
-            raise ValueError(f"no valid TMI/gravity gradients at sigma={sigma}")
-        tscale = float(np.percentile(tm[valid], 95))
-        gscale = float(np.percentile(gm[valid], 95))
-        _, score = axial_intersection_score(tx, ty, gx, gy, tscale, gscale)
-        score[~valid] = np.nan
-        score[~footprint] = np.nan
-        out[f"tmi_grav_xing_s{int(sigma * 100):03d}"] = score
-        del tx, ty, gx, gy, tm, gm, valid, score
-
-    del z
+def _rank_over(a: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    """Percentile rank in [0, 1] over ``valid`` (monotone, 0 where invalid)."""
+    v = a[valid]
+    out = np.zeros(a.shape, np.float32)
+    if v.size == 0:
+        return out
+    order = np.argsort(np.argsort(v, kind="stable"), kind="stable")
+    out[valid] = (order.astype(np.float64) / max(1, v.size - 1)).astype(np.float32)
     return out
 
 
+def _build_xscale(g: dict, get, footprint: np.ndarray) -> None:
+    """H-51-M — cross-scale crest coincidence (session 2026-10-07).
+
+    A fine crest (sigma 1.5 px) that sits exactly on the axis of the coarse
+    crest (sigma 4 px) marks the trace of a through-going structure; an
+    asymmetric scarp displaces the single-scale response off-axis, so the
+    positional agreement of the two scales is a localisation signal no shipped
+    feature carries.  Implemented as Q(fine crest) * exp(-d/1.5) where d is the
+    distance to the top-2% coarse-crest set, plus the symmetric rank-min
+    agreement min(Q_fine, Q_coarse).
+    """
+    det = get("comp_det_elev")
+    m = np.isfinite(det) & footprint
+    _e, crest15, _l = lineament_bank(det, m, 1.5)
+    _e, crest40, _l2 = lineament_bank(det, m, 4.0)
+    m15 = m & np.isfinite(crest15)
+    m40 = m & np.isfinite(crest40)
+    thr = np.nanpercentile(crest40[m40], 98.0)
+    d40 = ndi.distance_transform_edt(~(m40 & (crest40 >= thr))).astype(np.float32)
+    q15 = _rank_over(crest15, m15)
+    q40 = _rank_over(crest40, m40)
+    near = np.exp(-d40 / 1.5).astype(np.float32)
+    g["xscale_coincide_det"] = (q15 * near).astype(np.float32)
+    g["xscale_minrank_det"] = np.minimum(q15, q40).astype(np.float32)
+
+    lid = get("lid_relief")
+    ml = np.isfinite(lid) & footprint
+    _e, lcrest15, _l3 = lineament_bank(lid, ml, 1.5)
+    ml15 = ml & np.isfinite(lcrest15)
+    ql15 = _rank_over(lcrest15, ml15)
+    g["xscale_coincide_lid"] = (ql15 * near).astype(np.float32)
+
+
 def _ncd(a, mask, sigma, order):
+    from .stack import _nc_deriv
     return _nc_deriv(a, mask, sigma, order)
 
 

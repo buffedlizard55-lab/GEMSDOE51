@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Build the static GitHub Pages site in docs/ from the artefacts in data/.
+"""Build the static project site in docs/ from current artifacts and source notes.
 
-Everything the site states is read from a JSON artifact produced by the
-pipeline; nothing is typed in by hand.  If an artifact is missing the page says
-so rather than inventing a number.
+Measured values are loaded from the versioned data/ and registry/ records; explanatory
+text is maintained here and in site_src/. The build fails on malformed inputs rather
+than inventing or silently substituting result values.
 """
 from __future__ import annotations
 
@@ -24,14 +24,28 @@ NAV = [("index.html", "Executive summary"),
        ("hypotheses.html", "Hypotheses"),
        ("holdout.html", "Holdout"),
        ("analysis.html", "Analysis"),
+       ("claims.html", "Claims"),
        ("sources.html", "Sources"),
        ("leaderboard.html", "Leaderboard"),
-       ("irregularities.html", "Irregularities"),
-       ("claims.html", "Claims")]
+       ("irregularities.html", "Irregularities")]
 
 
 def load(rel, default=None):
     p = ROOT / "data" / rel
+    if not p.exists():
+        return default
+    return json.loads(p.read_text())
+
+
+def load_registry(rel, default=None):
+    p = ROOT / "registry" / rel
+    if not p.exists():
+        return default
+    return json.loads(p.read_text())
+
+
+def load_evidence(rel, default=None):
+    p = ROOT / "evidence" / rel
     if not p.exists():
         return default
     return json.loads(p.read_text())
@@ -58,10 +72,7 @@ def page(title, body, active="index.html"):
 {body}
 </main>
 <footer><div class="wrap">
-<p>Evidence is labelled throughout. Public leaderboard rows are organizer-posted observations
-of participant scores, but the board does not identify submission files. No GEMSDOE51 TIFF has an
-organizer-verified score; all local holdout values are proxy diagnostics against the visible
-catalogue.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>
 """
@@ -82,29 +93,38 @@ def tbl(headers, rows, cls=""):
 
 
 
-def artifact_table(arts):
+def artifact_table(arts, s1stats):
+    if not arts:
+        return ("<p class='warn'><b>No current submission artifact is eligible.</b> "
+                "The research-only H-G+H-D TIFF is linked separately above and is not a submission recommendation. "
+                "Within the current preregistered H-D gate sweep, the soft-w=0.20 proposal failed source-aware "
+                "uniqueness before writing. The archived PR #6 maps are not being reissued.</p>")
+
+    def link(name):
+        if not name:
+            return ""
+        safe_name = html.escape(Path(name).name)
+        if not (DOCS / "downloads" / safe_name).is_file():
+            return f'<span class="missing">missing: {safe_name}</span>'
+        return f'<a href="downloads/{safe_name}">{safe_name}</a>'
+
     rows = []
     for a in arts:
         u = a.get("uniqueness", {})
-        fresh = u.get("fresh_public_artifact_audit", {})
-        j = ({"fresh public TIFF corpus": fresh["max_support_jaccard"]}
-             if fresh.get("max_support_jaccard") is not None
-             else u.get("support_jaccard", {}))
-        delta = float(a.get("holdout_cost_vs_ungated", 0.0))
-        hnote = html.escape(a.get("holdout_cost_note", ""))
+        j = u.get("support_jaccard", {})
+        supplements = [label + ": " + link(a.get(key, ""))
+                       for key, label in (("zip", "zip"), ("nan_twin", "NaN twin"))
+                       if a.get(key)]
         rows.append([a["role"],
-                     f'<a href="downloads/{html.escape(a["file"])}">{html.escape(a["file"])}</a>'
-                     f'<br><span class="ev">zip: <a href="downloads/{html.escape(a.get("zip",""))}">'
-                     f'{html.escape(a.get("zip",""))}</a>'
-                     f' &middot; nan twin: <a href="downloads/{html.escape(a.get("nan_twin",""))}">'
-                     f'{html.escape(a.get("nan_twin",""))}</a></span>',
-                     a.get("gate_mode", ""),
+                     link(a.get("file", "")) + ("<br><span class='ev'>" +
+                     " &middot; ".join(supplements) + "</span>" if supplements else ""),
+                     html.escape(a.get("gate_mode", "")),
                      html.escape(a.get("description", "")),
-                     f'{delta:+.5f}<br><span class="ev">{hnote}</span>',
+                     f'{a.get("holdout_cost_vs_ungated", 0):+.4f}',
                      f'{max(j.values()):.3f}' if j else "n/a",
                      html.escape(u.get("verdict", ""))])
-    return tbl(["role", "file", "gate", "what it is", "paired proxy ΔDTI vs ungated",
-                "max Jaccard in available audit (scoped)", "uniqueness"], rows)
+    return tbl(["role", "file", "gate", "what it is", "holdout cost vs ungated",
+                "max Jaccard vs prior submissions", "uniqueness"], rows)
 
 
 def gate_table():
@@ -135,29 +155,51 @@ def gate_table():
                rows)
 
 
-def stage1_table():
-    p = ROOT / "evidence" / "stage1_formula_audit.json"
-    if not p.exists():
-        return "<p class='missing'>stage-1 formula sensitivity audit not generated</p>"
-    d = json.loads(p.read_text())
+def current_hypothesis_table():
+    slate = load_evidence("hypothesis_slate_20261007.json", {})
     rows = []
-    for r in d.get("scenarios", []):
+    for h in slate.get("ranked_hypotheses", []):
+        layers = h.get("target_layers", [])
+        benefit = h.get("expected_benefit_before_test", h.get("expected_benefit", ""))
+        status = h.get("promotion_status", h.get("status", ""))
         rows.append([
-            html.escape(r["scenario"]),
-            f"{r['spearman_deficit']['mean']:+.3f} / {r['spearman_geodetic_only']['mean']:+.3f}",
-            f"{r['deficit_q50']['lift']['mean']:.3f} / {r['geodetic_only_q50']['lift']['mean']:.3f}",
-            f"{r['deficit_q50']['random_dot_proxy_dti']['mean']:.4f} / {r['geodetic_only_q50']['random_dot_proxy_dti']['mean']:.4f}",
+            esc(h.get("id", "")), esc(h.get("name", "")), esc(layers),
+            esc(h.get("signature_operator", "")),
+            esc(h.get("geological_rationale", "")),
+            esc(h.get("difference_from_prior_work", "")),
+            esc(benefit), esc(h.get("implementation_cost", "")),
+            esc(status)
         ])
-    return (tbl(["rate/sense assumption", "Spearman: deficit / geodetic-only",
-                 "q50 lift: deficit / geodetic-only",
-                 "q50 single-draw proxy DTI: deficit / geodetic-only"], rows)
-            + "<p class='ev'>Five trace-level splits, not spatial blocks. The deficit underperforms "
-            + "raw geodetic ranking on deterministic Spearman and q50 lift in all four scenarios. "
-            + "Each DTI is a single seeded random-dot realization per field/split and is not paired "
-            + "across masks; small DTI differences are descriptive/noisy. The 44,069-dot budget uses "
-            + "a 12,700-pixel planning proxy, not a measured hidden truth size. Full formula, local source "
-            + "field caveats and per-split results: <a href='downloads/stage1_formula_audit.json'>"
-            + "stage1_formula_audit.json</a>.</p>")
+    if not rows:
+        return "<p class='missing'>current hypothesis slate not available</p>"
+    return tbl(["id", "hypothesis", "target layers", "signature / operator",
+                "geological rationale", "specific prior-art difference",
+                "expected benefit", "cost", "status / result"], rows)
+
+
+def stage1_table():
+    d = load("stage1_trace_holdout.json")
+    if not d:
+        return "<p class='missing'>stage-1 trace holdout not run</p>"
+    s = d["summary"]
+    rows = []
+    for q in ("50", "70", "80"):
+        for nm in ("deficit", "geodetic_only"):
+            if f"{nm}_lift_q{q}" in s:
+                rows.append([nm, f"top {100 - float(q):.0f}% of tiles",
+                             f"{s[f'{nm}_area_q{q}']['mean']:.3f}",
+                             f"{s[f'{nm}_recall_q{q}']['mean']:.3f}",
+                             f"{s[f'{nm}_lift_q{q}']['mean']:.3f}",
+                             f"{s[f'{nm}_dti_q{q}']['mean']:.4f}"])
+    rows.append(["no gate", "whole footprint", "1.000", "1.000", "1.000",
+                 f"{s['uniform_dti']['mean']:.4f}"])
+    rho = {k: s[k]["mean"] for k in s if k.startswith("spearman_")}
+    return (tbl(["prior", "approved", "area share", "truth recall", "lift = recall/area",
+                 "proxy DTI (uniform random dots)"], rows)
+            + "<p class='ev'>Spearman rank correlation between each tile field and the density of "
+            + "held-out faults: "
+            + ", ".join(f"{k.replace('spearman_', '')} = {v:+.3f}" for k, v in rho.items())
+            + "</p>")
 
 
 def emission_table():
@@ -180,108 +222,165 @@ ANALYSIS_BODY = (pathlib.Path(__file__).resolve().parent.parent / "site_src" / "
 
 def build():
     DOCS.mkdir(parents=True, exist_ok=True)
-    (DOCS / "downloads").mkdir(exist_ok=True)
-    for evidence_name in (
-        "stage1_formula_audit.json",
-        "submission_manifest_reconciliation.json",
-        "score_attribution_audit.json",
-        "uniqueness_gate_H_D_soft_20261007.json",
+    downloads = DOCS / "downloads"
+    downloads.mkdir(exist_ok=True)
+    subm = load("submission_manifest.json", {})
+    sub = subm.get("primary") or {}
+    arts = subm.get("artifacts", [])
+    research = subm.get("research_only_artifacts", [])
+    research_comparisons = subm.get("research_comparisons", {})
+    s1stats = subm.get("stage1_stats", {})
+
+    # The download directory is public. Keep only files explicitly named by the
+    # current manifest; stale or archived submissions must not remain linkable.
+    expected_downloads = set()
+    for record in ([sub] if sub else []) + list(arts) + list(research):
+        for key in ("file", "zip", "nan_twin", "checks_file", "format_receipt"):
+            value = record.get(key)
+            if value and Path(value).name == value:
+                expected_downloads.add(value)
+    supporting_files = (
         "experimental_H_G_plus_H_D_artifact.json",
         "uniqueness_gate_H_G_HD_experimental_20261007.json",
-    ):
-        source = ROOT / "evidence" / evidence_name
-        if source.exists():
-            shutil.copyfile(source, DOCS / "downloads" / evidence_name)
-    manifest_source = ROOT / "data" / "submission_manifest.json"
-    if manifest_source.exists():
-        shutil.copyfile(manifest_source, DOCS / "downloads" / "submission_manifest.json")
-    subm = load("submission_manifest.json", {})
-    sub = subm.get("primary", {})
-    arts = subm.get("artifacts", [])
+        "uniqueness_gate_H_M_soft_20261007.json",
+        "uniqueness_gate_STE_HD_20261007.json",
+        "score_attribution_audit.json",
+        "stage1_formula_audit.json",
+        "stage1_reconciliation_20261007.json",
+        "hypothesis_slate_20261007.json",
+        "sibling_prior_art_audit_20261007.json",
+        "stage1_trace_holdout.json",
+        "two_stage_results.json",
+        "holdout_archive_review.json",
+        "gate_sweep.json",
+        "preregistration-2026-10-07.md",
+        "02_gemsdoe32_study_and_candidates_2026-10-07.md",
+    )
+    expected_downloads.update(supporting_files)
+    for item in downloads.iterdir():
+        if item.is_file() and item.name not in expected_downloads:
+            item.unlink()
+        elif item.is_dir():
+            shutil.rmtree(item)
+    for name in supporting_files:
+        if name in {"stage1_trace_holdout.json", "two_stage_results.json",
+                    "holdout_archive_review.json", "gate_sweep.json"}:
+            source = ROOT / "data" / name
+        elif name.endswith(".md"):
+            source = ROOT / "knowledge" / name
+        else:
+            source = ROOT / "evidence" / name
+        if source.is_file():
+            shutil.copyfile(source, downloads / name)
+    for name in ("format_check_H_G_HD_nan.json",):
+        source = ROOT / "evidence" / name
+        if source.is_file():
+            shutil.copyfile(source, downloads / name)
     hold = {a: load(f"holdout_{a}.json") for a in
-            ("base", "H_E", "H_D", "H_C", "H_ALL")}
-    lb = load("leaderboard.json", {})
+            ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1")}
+    two = load("two_stage_results.json")
+    archive_review = load("holdout_archive_review.json", {})
+    archive_s2 = archive_review.get("stage2_emission_geometry", {})
+    archive_s1 = archive_review.get("stage1_prior", {})
+    archive_hm = archive_review.get("secondary_h_m", {})
 
     # ------------------------------------------------------------ index
     dl = sub
     if dl:
         name = dl.get("file", "")
-        slot_status = dl.get("slot_status", "")
-        slot_warning = (f'<p class="warn"><b>Upload decision:</b> {html.escape(slot_status)}</p>'
-                        if slot_status else "")
+        if (not name or Path(name).name != name
+                or not (DOCS / "downloads" / name).is_file()):
+            raise SystemExit("eligible manifest names a missing/unsafe primary download")
+        zip_name = dl.get("zip", "")
+        if zip_name and (Path(zip_name).name != zip_name
+                         or not (DOCS / "downloads" / zip_name).is_file()):
+            raise SystemExit("eligible manifest names a missing/unsafe ZIP download")
+        zip_note = (f'<p class="zip">or the <a href="downloads/{html.escape(zip_name)}">'
+                    "ZIP containing the same single GeoTIFF</a></p>" if zip_name else "")
         card = f"""
 <section class="download">
-<h2>⬇ One-click research GeoTIFF (portal-format; not upload-authorized)</h2>
-{slot_warning}
+<h2>⬇ One-click submission file</h2>
 <p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download {html.escape(name)}</a></p>
-<p class="zip">or the <a href="downloads/{html.escape(dl.get('zip',''))}">.zip containing the same single GeoTIFF</a></p>
+{zip_note}
 <dl class="kv">
-<dt>Research label (not an upload recommendation)</dt><dd><code>{html.escape(dl.get('submission_name',''))}</code></dd>
-<dt>Suggested note (do not paste for a submission)</dt><dd><code>{html.escape(dl.get('note',''))}</code></dd>
+<dt>Unique submission name to paste</dt><dd><code>{html.escape(dl.get('submission_name',''))}</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>{html.escape(dl.get('note',''))}</code></dd>
 <dt>Format</dt><dd>{html.escape(dl.get('format',''))}</dd>
 <dt>sha256</dt><dd><code>{html.escape(dl.get('sha256',''))}</code></dd>
 </dl>
 <p class="ev">{html.escape(dl.get('evidence',''))}</p>
 </section>"""
     else:
-        card = """<section class="download missing">
-<h2>⬇ Research TIFF</h2>
-<p>The TIFF has not been built yet in this checkout. Run
-<code>python3 scripts/build_submission.py</code> to produce it; this card is then filled from
-the resulting <code>data/submission_manifest.json</code>.</p></section>"""
+        d = subm.get("decision", {})
+        x1 = d.get("h51_x1", {})
+        soft = d.get("h_d_soft_w020", {})
+        card = f"""<section class="download missing">
+<h2>⬇ No upload-eligible submission file</h2>
+<p><b>No competition slot is recommended.</b> The narrowed H51-X1 implementation failed its
+six-fold promotion test (mean proxy DTI {x1.get('mean_proxy_dti', float('nan')):.4f}, versus
+{x1.get('incumbent_h_d_mean_proxy_dti', float('nan')):.4f} for H-D); its broader preregistered
+layer family was not fully tested. The H-D soft w=0.20 proposal passed the numeric screen but
+failed source-aware uniqueness (Jaccard
+{soft.get('uniqueness', {}).get('max_jaccard', float('nan')):.3f}; limit 0.50).
+A separate H-G+H-D TIFF is available below for research only; it loses the matched holdout and
+must not be uploaded.</p>
+<p>This card remains intentionally empty until a candidate passes format, scoped uniqueness,
+q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.</p></section>"""
 
-    experimental_card = ""
-    exp_path = ROOT / "evidence" / "experimental_H_G_plus_H_D_artifact.json"
-    if exp_path.exists():
-        exp = json.loads(exp_path.read_text())
-        ea = exp["artifact"]
-        uniqueness_path = ROOT / "evidence" / "uniqueness_gate_H_G_HD_experimental_20261007.json"
-        unique_metrics = ""
-        if uniqueness_path.exists():
-            unique = json.loads(uniqueness_path.read_text())
-            unique_status = unique.get("verdict", "INCOMPLETE")
-            unique_summary = (
-                f"scoped public docs/downloads and submissions inventory "
-                f"({unique.get('audit', {}).get('inventory_repositories', 0)} repositories): "
-                f"{unique.get('audit', {}).get('downloaded_and_sha_verified', 0)} SHA-verified "
-                f"payloads; {unique.get('n_compared', 0)} comparisons; "
-                f"{len(unique.get('matches', []))} flagged matches.")
-            wi = unique.get("worst", {}).get("iou", {})
-            wc = unique.get("worst", {}).get("containment", {})
-            if wi and wc and unique.get("worst", {}).get("cosine", {}).get("cosine") is not None:
-                unique_metrics = (
-                    f"Max support Jaccard {wi.get('iou', 0):.4f} (limit 0.50); max cosine "
-                    f"{unique['worst']['cosine'].get('cosine', 0):.4f} (limit 0.90); maximum "
-                    f"containment {wc.get('containment', 0):.4f} at {wc.get('containment_lift', 0):.2f}× "
-                    "random-emission lift (containment is flagged only above 3× lift).")
-        else:
-            unique_status, unique_summary = "PENDING", "Fresh public-artifact audit not yet run."
-        s1 = exp.get("stage1_dominance_q70", {})
-        stage1_summary = (f"{s1.get('interpretation', 'Stage-1 diagnostic unavailable')} "
-                          f"Approved area {s1.get('approved_area_share', 0) * 100:.3f}%; "
-                          f"emissions inside {s1.get('emitted_share_inside_approved', 0) * 100:.3f}%; "
-                          f"lift {s1.get('lift', 0):.3f}.")
-        hr = exp.get("holdout_result", {})
-        experimental_card = f"""
+    research_cards = []
+    for record in research:
+        name = Path(record.get("file", "")).name
+        zip_name = Path(record.get("zip", "")).name if record.get("zip") else ""
+        if not name or name != record.get("file") or not (downloads / name).is_file():
+            raise SystemExit("research-only manifest names a missing/unsafe TIFF")
+        if zip_name and (zip_name != record.get("zip") or not (downloads / zip_name).is_file()):
+            raise SystemExit("research-only manifest names a missing/unsafe ZIP")
+        fmt = record.get("format", {})
+        checks = fmt.get("checks", {})
+        holdout = record.get("holdout", {})
+        unique = record.get("uniqueness", {})
+        s1 = record.get("stage1_dominance_q70", {})
+        audit_name = Path(unique.get("evidence", "")).name
+        format_receipt = Path(record.get("format_receipt", "")).name
+        zip_link = (f'<p class="zip">or <a href="downloads/{html.escape(zip_name)}">download the one-TIFF ZIP</a></p>'
+                    if zip_name else "")
+        research_cards.append(f"""
 <section class="download missing">
-<h2>Experimental H-G + H-D TIFF — NOT SLOT-ELIGIBLE</h2>
-<p class="warn"><b>Do not upload.</b> Matched Stage-2 holdout mean proxy DTI delta was
-{hr.get('paired_delta', float('nan')):+.6f} vs H-D ({hr.get('folds_higher', 0)}/{hr.get('folds_total', 0)} folds higher).
-The result is against the visible catalogue only; it did not pass the locked incumbent gate.</p>
-<p class="big"><a class="btn alt" href="downloads/{html.escape(ea['file'])}">Download experimental TIFF</a></p>
-<p class="zip">or <a href="downloads/{html.escape(ea['zip'])}">download its one-TIFF ZIP</a></p>
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
+visible-catalogue proxy DTI is {holdout.get('mean', float('nan')):.6f} versus
+{holdout.get('incumbent_H_D_mean', float('nan')):.6f} for H-D
+(Δ {holdout.get('paired_delta', float('nan')):+.6f};
+{holdout.get('folds_higher', 0)}/{holdout.get('folds_total', 0)} folds higher).</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download research TIFF</a></p>
+{zip_link}
 <dl class="kv">
-<dt>Research label (not an upload recommendation)</dt><dd><code>{html.escape(ea.get('submission_name',''))}</code></dd>
-<dt>Suggested note (explicitly experimental)</dt><dd><code>{html.escape(ea.get('note',''))}</code></dd>
-<dt>Format check</dt><dd>{html.escape(ea.get('format',{}).get('checks',{}).get('portal_legal',False).__str__())}; SHA-256 <code>{html.escape(ea.get('sha256',''))}</code></dd>
-<dt>Fresh public uniqueness audit</dt><dd>{html.escape(unique_status)} — {html.escape(unique_summary)} {html.escape(unique_metrics)}</dd>
-<dt>Stage-1 dominance diagnostic (q70/top-30%)</dt><dd>{html.escape(stage1_summary)}</dd>
+<dt>Research label (not a submission name)</dt><dd><code>{html.escape(record.get('submission_name', ''))}</code></dd>
+<dt>Short note</dt><dd><code>{html.escape(record.get('note', ''))}</code></dd>
+<dt>Measured format</dt><dd>{'PASS' if checks.get('format_valid') else 'FAIL'} — one-band {html.escape(fmt.get('dtype', ''))},
+EPSG:{html.escape(str(fmt.get('crs_epsg', '')))}, shape {html.escape(str(fmt.get('shape', '')))},
+inside values [{checks.get('min_value', float('nan')):.1f}, {checks.get('max_value', float('nan')):.1f}],
+NaN outside with NaN NoData tag.</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(record.get('sha256', ''))}</code></dd>
+<dt>Scoped uniqueness</dt><dd>{html.escape(unique.get('verdict', 'INCOMPLETE'))} —
+{unique.get('references_sha_verified', 0)} SHA-verified payloads,
+{unique.get('pixel_comparisons', 0)} comparisons, {unique.get('matches', 0)} matches;
+max Jaccard {unique.get('max_support_jaccard', float('nan')):.4f}, cosine
+{unique.get('max_cosine', float('nan')):.4f}.</dd>
+<dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
+{s1.get('approved_area_share', float('nan')) * 100:.3f}%; emissions inside
+{s1.get('emitted_share_inside_approved', float('nan')) * 100:.3f}%; lift
+{s1.get('lift_over_area_share', float('nan')):.3f} — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
 </dl>
-<p class="ev">This experimental full-raster build materializes H-G+H-D after its matched spatial holdout; it is not promoted. Full recipe and checks: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact record</a>.</p>
-</section>"""
+<p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
+Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
+<a href="downloads/{html.escape(audit_name)}">scoped uniqueness audit</a>;
+<a href="downloads/{html.escape(format_receipt)}">independent format receipt</a>.</p>
+</section>""")
+    research_card = "\n".join(research_cards)
 
     rows = []
-    for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
+    for a in ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1"):
         h = hold.get(a)
         if not h:
             rows.append([a, "not run", "", ""])
@@ -290,36 +389,52 @@ The result is against the visible catalogue only; it did not pass the locked inc
         rows.append([a, f"{s['auc_mean']:.4f}",
                      " / ".join(f"r{r}: {s[f'dti_r{r}']['mean']:.4f}" for r in s["ratios"]),
                      f"{len(s['auc_per_fold'])}"])
-    _ART = artifact_table(arts)
+    _ART = artifact_table(arts, s1stats)
     _STAGE1 = stage1_table()
     _GATE = gate_table()
-    _EMIS = emission_table()
-    body = card + experimental_card + f"""
+    hm_result = research_comparisons.get("H_M_cross_scale_crest", {})
+    ste_result = research_comparisons.get("STE_L9_w035_s24", {})
+    body = card + research_card + f"""
+<p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
+The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
+proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
+{ste_result.get('comparator_iso_nms_r24_mean', float('nan')):.6f} for isotropic NMS
+(Δ {ste_result.get('paired_delta', float('nan')):+.6f};
+{ste_result.get('folds_higher', 0)}/{ste_result.get('folds_total', 0)} folds; approximate paired 95% t interval
+[{ste_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[0]:+.5f},
+{ste_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[1]:+.5f}]).
+H-M recorded {hm_result.get('mean_proxy_dti', float('nan')):.6f} versus
+{hm_result.get('incumbent_H_D_mean', float('nan')):.6f} for H-D
+(Δ {hm_result.get('paired_delta', float('nan')):+.6f};
+{hm_result.get('folds_higher', 0)}/{hm_result.get('folds_total', 0)} folds; approximate paired 95% t interval
+[{hm_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[0]:+.5f},
+{hm_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[1]:+.5f}]).
+Both are visible-catalogue proxy scores. Refreshed full-corpus audits fail for packaged H-M and
+STE because same-prediction NaN twins are present; H-M also exceeds the Jaccard limit against its
+hard-q20 variant. A current q70 Stage-1 map diagnostic has not been rerun for either arm.
+They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a>,
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
+<a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
 {_ART}
-<p class="ev">The current primary's full-corpus audit is a FAIL, not a uniqueness pass. It includes
-this TIFF's NaN-format twin and the same-repository hard-q20 alternate; the exact SHA-verified
-corpus, skipped shape-mismatched fixture, and pairwise results are in
-<a href="downloads/uniqueness_gate_H_D_soft_20261007.json">the public uniqueness audit</a>.</p>
-<p class="warn"><b>Largest validation limitation.</b> The local <code>labels.tif</code> is byte-identical
-to the known-fault raster and to the derived catalogue (IR-51-08). The competition's real training
-labels have not been authenticated in this checkout. Local classifier and DTI values are therefore
-proxy diagnostics against visible faults; they cannot demonstrate discovery of the hidden expert
-labels or predict a leaderboard score. No GEMSDOE51 TIFF has an organizer-verified score.</p>
-<p class="warn"><b>A Phase 1 entry has downstream consequences.</b> The organizer has stated that Phase 2
-will use a test set updated by expert review of Phase 1 submissions. A Phase 1 upload is therefore
-not a free experiment. The current primary is available for inspection, but the H-D soft-prior
-delta is small and inconclusive, and H-G failed its matched add-on comparison (mean proxy DTI
-0.281056 vs 0.281663 for H-D; 3/6 folds higher). <b>Do not spend a slot unless a candidate beats
-the incumbent blocked holdout.</b>
-<a href="https://community.drivendata.org/t/how-were-the-new-test-faults-identified-data-sources-and-fault-types/11527">Organizer statement</a>.</p>
+<p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
+training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
+expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
+<code>existing_faults.tif</code> are byte-identical, consistent with that description. Our blocked
+holdouts therefore hide and recover known faults as a <b>proxy</b>; they do not validate localization
+of genuinely new faults or predict an organizer score. Local source rasters are hash-pinned public
+mirrors, not organizer-authenticated.</p>
+<p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
+by experts for the expanded label set. Any future emission should therefore be geologically
+justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
 <h2>What this is</h2>
-<p>GEMSDOE51 explores fault geometries in the GeoDAWN region that are not in the USGS/INGENIOUS
-catalogue and writes a competition-format GeoTIFF. Stage 1 is the requested 10 km geodetic
-strain-budget deficit, retained only as a low-confidence <b>broad-tile prior</b>; it does not hard
-restrict fine-scale point placement in the primary soft-prior artifact. Stage 2 ranks and places
-the points. Stage 1's trace-level holdout and Stage 2's spatially blocked holdout are reported
-separately; neither is a hidden-label score.</p>
+<p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
+a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
+fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 proxy receipts
+suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
+rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
+must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
+proxy holdouts. No current artifact clears all promotion and uniqueness checks.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -328,385 +443,272 @@ corresponding to known USGS/INGENIOUS faults are excluded from evaluation, in bo
 rounds. <a href="https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516">source</a></li>
 <li><b>"New fault" includes new geometry of an existing system.</b> Continuations, splays and
 parallel strands count. <a href="https://community.drivendata.org/t/where-do-you-draw-the-line/11536">source</a></li>
-<li><b>The metric trades weighted credit against weighted error.</b> From the published definitions,
-<code>DTI = TP / (0.2·(TP+FP) + 0.8·|G|)</code>, where TP and FP are distance-weighted and
-<code>TP+FP</code> is not simply the raw emitted-pixel count. For a proposed increment changing TP
-by <code>c</code> and FP by <code>f</code>, improvement requires
-<code>c·(1 − 0.2·DTI) &gt; 0.2·DTI·f</code>.</li>
+<li><b>The metric is a budget.</b> From the published definitions,
+<code>DTI = TP_w / (0.2·(TP_w+FP_w) + 0.8·|G|)</code>. The hidden truth size |G| is fixed for an organizer evaluation but undisclosed locally, so a
+submission stands or falls on credit earned per unit of emitted mass. The break-even bar for a
+marginal pixel is <code>c = 0.2·DTI</code>.</li>
 </ol>
 
 <h2>Holdout at a glance</h2>
 {tbl(['arm', 'in-block AUC', 'proxy DTI by mass ratio M/|G|', 'folds'], rows)}
-<p class="ev">Proxy DTI uses six spatially held-out blocks, with emissions and scoring restricted to
-each block and the pixel-count ratio matched to M/|G|=3.47. The local truth is the visible
-catalogue, not the hidden expert labels; matching the ratio does not make these proxy numbers
-numerically interchangeable with leaderboard scores. They are <b>not</b> scores.</p>
+<p class="ev">Proxy DTI is measured with emission and scoring restricted to the held-out block and
+the mass set as a fixed multiple of that block's truth size, which is what makes it comparable
+to a live DTI. It is <b>not</b> a score.</p>
 
 <h2>Read next</h2>
 <ul>
-<li><a href="how-to-submit.html">How to submit, step by step</a> — including the fix for the
-<code>"Predicted values must be in range [0, 1]"</code> portal error.</li>
-<li><a href="method.html">Method</a> — the Kostrov strain budget, the detector, the emission rule.</li>
-<li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 scored separately.</li>
-<li><a href="irregularities.html">Irregularities</a> — including one in a sibling repository's own
-reporting that we could not reproduce.</li>
+<li><a href="how-to-submit.html">Submission status and instructions</a> — including the required generative-AI narrative disclosure.</li>
+<li><a href="analysis.html">GEMSDOE32 case study</a> — what the owner-reported projection does and does not establish.</li>
+<li><a href="hypotheses.html">Ranked geological hypotheses</a> — features, physical signatures, expected costs, and data needs.</li>
+<li><a href="method.html">Method and formula</a> — exact Stage-1 equation, assumptions, and Stage-2 design.</li>
+<li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 reported separately.</li>
+<li><a href="irregularities.html">Irregularities</a> — provenance, format, uniqueness, and legacy-code corrections.</li>
 </ul>
 """
     (DOCS / "index.html").write_text(page("GEMSDOE51 — DOE GEMS Prize", body, "index.html"))
 
     # ------------------------------------------------------------ how to submit
-    body = f"""
-<h2>Submission workflow — only for a future promoted candidate</h2>
-<p class="warn"><b>Current decision: do not submit any file offered on this site.</b> The H-D soft TIFF
-fails the fresh uniqueness gate and its blocked-holdout gain is inconclusive. Experimental H-G+H-D
-passes the scoped uniqueness gate but loses to H-D on the matched holdout. Neither is slot-eligible.
-The steps below describe the portal workflow only; wait until a candidate is explicitly promoted in
-the <a href="index.html">executive summary</a>.</p>
+    body = """
+<h2>Submission guide — current status first</h2>
+<p class="warn"><b>There is no eligible file to upload today.</b> A NaN-outside H-G+H-D GeoTIFF is linked on
+the executive summary for research review only; its matched blocked holdout is below H-D, so it is
+<b>not for submission</b>. Do not use archived zero-outside files: they fail the current local
+null/NaN-outside format contract. The H-D w=0.20 proposal passed its numeric screen but failed
+uniqueness before a file was written. No weekly slot is recommended.</p>
+<h3>When a candidate is cleared</h3>
 <ol class="steps">
-<li><b>Wait for promotion.</b> A future candidate must beat the incumbent on the locked spatially
-blocked holdout, pass the scoped uniqueness and portal-format checks, and have a refreshed manifest
-marking it slot-eligible. The site currently has no approved upload file.</li>
-<li><b>Download the promoted GeoTIFF.</b> Use the download button for that promoted file in the
-executive summary. Do not use the H-D or experimental download cards currently displayed.</li>
-<li><b>Open the submission page.</b>
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">competition submission page</a>
-(requires login) → <b>New submission</b>.</li>
-<li><b>Choose the file.</b> Under <b>File to submit → Choose File</b>, select the promoted single-band
-<code>.tif</code> (or its ZIP only if it contains exactly that TIFF).</li>
-<li><b>Record the run.</b> Copy the distinctive submission name and short note from the promoted
-manifest. Names and notes shown on the current research cards are for research identification only,
-not authorization to upload.</li>
-<li><b>Submit only after all gates pass.</b> The result appears on the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a>
-once the validator finishes. Do not infer a score-to-file link unless the organizer provides it.</li>
+<li>Return to the <a href="index.html">executive summary</a> and download only the GeoTIFF linked in
+the current eligibility card; check its SHA-256 against the receipt shown there.</li>
+<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
+(requires the participant's own login).</li>
+<li>Choose the single-band <code>.tif</code> file, or the linked <code>.zip</code> containing exactly
+that one GeoTIFF.</li>
+<li>Paste the unique submission name and short note displayed on the executive summary. Do not
+reuse names or notes from archived candidates.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure (template below). Read
+the official rules before submitting and select one final file for both prize rounds by the deadline.</li>
 </ol>
 
-<h2>Why you previously saw <code>"Predicted values must be in range [0, 1]"</code></h2>
-<p>Two different failures produce that one message, and both are measured on the written bytes of
-every file offered here:</p>
-<dl class="kv">
-<dt>Mechanism 1 — the float32 sentinel</dt>
-<dd><code>training_features.tif</code> uses <code>-3.4028234663852886e+38</code> as nodata.
-Writing those bytes through unchanged puts values far outside [0,&nbsp;1].</dd>
-<dt>Mechanism 2 — a NaN nodata tag</dt>
-<dd>A raster tagged <code>nodata=NaN</code> is a legitimate reading of the competition format,
-but it is one validator change away from the same rejection.</dd>
-</dl>
-<p><b>The fix:</b> the primary download is written <b>all-finite with no nodata tag</b> — every one
-of the 12,279,160 cells is finite, the minimum is 0.0 and the maximum is 1.0. This is verified by
-re-opening the file from disk after writing, not from memory. An official NaN-outside twin is
-offered alongside it.</p>
+<h3>Official format checklist</h3>
+<p>DrivenData specifies EPSG:32611, 100 m, matching bounds, one float32 band, values in [0,1], and
+null/NaN outside the bounds. The repository writer now emits NaN outside and verifies the written
+bytes. This local check does not prove acceptance by the portal. If the validator reports an error,
+retain the exact rejected file and message for diagnosis; do not assume an unverified root cause.</p>
 
-<h2>What the validator checks</h2>
-{tbl(['requirement', 'this file'],
-     [[r, v] for r, v in dl.get('format_table', [])] or [["(built after build_submission.py)", ""]])}
+<h3>Generative-AI narrative disclosure</h3>
+<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">September 2026 GEMS Prize Rules</a>
+requires a narrative, outside the word count, that states the extent to which generative AI was used
+and how it contributed to the submission elements. Adapt this text to the actual final process and
+verify every statement before submission:</p>
+<pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source material, generate and rank hypotheses, edit and debug code, and draft project documentation. The geospatial predictions are produced by the documented feature-engineering and machine-learning pipeline, not by a generative model. The person submitting is responsible for checking the data provenance, code, scientific claims, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted artifact.</pre>
+<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include all
+actual AI use across the eventual submission materials.</p>
 
-<h2>Rules and deadlines</h2>
-<p>Read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">competition rules</a>
-and the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">prize rules PDF (NLR 96647)</a>
-before submitting. You must choose a <b>single</b> submission for scoring across both prize rounds
-before the deadline, without knowing your private-test performance.</p>
+<h3>Leaderboard and Terms of Use</h3>
+<p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
+<a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit automated monitoring/copying
+and manual monitoring/copying without prior written consent. No such consent is on record.</p>
 """
     (DOCS / "how-to-submit.html").write_text(page("How to submit", body, "how-to-submit.html"))
 
-    # Retire the pre-audit page in place: old links must not advertise its stale upload file,
-    # 211-reference uniqueness result, or unverified score attribution.
-    legacy_body = """
-<h2>Archived executive-summary page — current status has superseded it</h2>
-<p class="warn"><b>Do not upload the legacy Hridge TIFF or any current research artifact.</b>
-The old page advertised a historic Hridge artifact, a 211-reference uniqueness PASS, and a
-0.8229 blocked AUC. Those claims do not describe the current H-D soft TIFF and are not a
-current submission recommendation. A fresh audit finds H-D soft FAIL; the experimental H-G+H-D
-TIFF passes the scoped uniqueness audit but loses its matched holdout. No slot is authorized.</p>
-<p>The official public leaderboard's displayed 0.3774 row belongs to participant
-<code>xiaofanhu</code>, but it identifies no TIFF or method. The 0.2778 row belongs to
-<code>extradr19</code>; the claimed GEMSDOE32 H33-2-B2 link is unsupported and contradicted by
-that repository's own UNSCORED label and 0.2747 modelled projection.</p>
-<ul>
-<li><a href="index.html">Current executive summary and research downloads</a></li>
-<li><a href="analysis.html">Measured evidence and public-score attribution</a></li>
-<li><a href="holdout.html">Separate Stage-1 and Stage-2 holdout results</a></li>
-<li><a href="hypotheses.html">Hypotheses and prior-art comparisons</a></li>
-<li><a href="how-to-submit.html">Submission workflow (only after promotion)</a></li>
-<li><a href="irregularities.html">Audit irregularities and current artifact status</a></li>
-</ul>
-"""
-    (DOCS / "executive-summary.html").write_text(
-        page("Archived executive summary — current status", legacy_body, "index.html"))
-
     # ------------------------------------------------------------ method
     body = """
-<h2>Method</h2>
-<h3>Stage 1 — strain-budget deficit (coarse-tile prior only)</h3>
-<p>The fault-accommodated horizontal strain-rate tensor uses the published moment-tensor sum in
-Kreemer et al. (2000), Eq. 3, <i>Earth, Planets and Space</i> 52, 765–770
-(<a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">paper PDF</a>):</p>
-<pre>eps_dot_ij = (1 / (2 A_tile)) · sum_k [ L_k · u_dot_k / sin(delta_k) ] · m_ij^k
-m_ij^k = s_i^k n_j^k + s_j^k n_i^k</pre>
-<p>Here <code>L</code> is mapped trace length represented in the tile, <code>u_dot</code> is the
-slip-rate component supplied by the source table, <code>delta</code> is dip, and <code>m</code> is
-the unit moment tensor from fault orientation and unit slip. Under the code's pure-mode assumptions,
-the horizontal components are:</p>
-<pre>normal fault, if rate is vertical displacement u_v:  L · u_v · cot(delta) / A_tile
-normal fault, if rate is total fault-plane slip u_p: L · u_p · cos(delta) / A_tile
-vertical strike-slip plane, total along-strike rate: L · u / (2 A_tile), sign from RL/LL</pre>
-<p>The local GDR/INGENIOUS-derived CSV has 1,126 traces; the <code>slip_rate</code> values are
-numeric and the USGS REST alias says “Slip Rate (mm/year)”. But the local field is string-typed in
-the USGS service, and neither the metadata fetched here nor the unread GDR field-definition text
-establish whether the decimal values represent vertical displacement, total fault-plane slip, or
-another component. Both first two interpretations are therefore tested assumptions, not
-measurements. The local table has 95 missing <code>slip_sense</code> values; sensitivity runs either
-assume unknown sense is normal or exclude those contributions. <code>dip_direct</code> is a direction,
-not a numeric dip angle. The code assumes 60° normal-fault dip and 90° strike-slip dip; it uses
-nearest-centroid transfer from the table and catalogue-derived local strike. See
-<a href="https://gdr.openei.org/submissions/1391">GDR submission 1391</a> and the
-<a href="https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=pjson">USGS
-QFaults layer metadata</a>.</p>
-<p>Tile prior = quantile-rank(geodetic second invariant) minus quantile-rank(fault-accommodated
-second invariant). Because the exact tensor invariant convention of the supplied geodetic bands is
-not recoverable (IR-51-02), Stage 1 is not an absolute strain calibration. It is kept as a
-<b>low-confidence broad-tile ranking prior</b>; it never places fine-scale points. The configured
-15 km seismogenic thickness appears only in a scalar moment-rate proxy, not in the strain tensor
-components or the Stage-1 rank.</p>
-<p><b>Stage-1 result:</b> in five trace-level splits the deficit loses to raw geodetic-only ranking
-on mean Spearman and q50 recall/area lift under all four rate/sense assumptions. This is not a
-spatially blocked holdout. DTI values are single-draw random-dot diagnostics, not paired across
-masks; the <a href="holdout.html">separate Stage-1 table</a> and
-<a href="downloads/stage1_formula_audit.json">full formula/sensitivity audit</a> record the
-limitations.</p>
+<h2>Method, with Stage 1 and Stage 2 kept separate</h2>
+<h3>Stage 1 — geodetic strain-budget deficit (coarse prior only)</h3>
+<p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
+<pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
+m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
+<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code> supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault normal/slip direction. A total fault-plane rate for pure normal slip yields <code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields <code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are unresolved: the implementation makes vertical versus total-plane rates explicit, defaults provisionally to vertical, assumes 60-degree normal dip and converts mm/yr provisionally. See <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a> and <code>src/gems51/strain_budget.py</code>.</p>
+<p>The implementation is approximate, not a full inversion: it rasterizes local trace directions,
+assigns slip rates by nearest trace centroid, simplifies slip-sense/dip categories, and lacks
+per-segment rake. Partial tiles use actual footprint support area. The local slip-rate column is
+provisionally interpreted as mm/yr; the NBMG <a href="https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson">layer schema</a>
+lists numeric <code>SLIPRTNUM</code> but not its units, and the linked GDR field-definition text was
+not audited locally. Absolute strain values are not source-validated. The quantile comparison is
+invariant to a uniform rescaling, but not to mixed units or record-specific errors. The competition
+geodetic layers have no recoverable exact invariant identity, so the Stage-1 prior is built in quantile space,
+<code>Q(observed second-invariant layer) - Q(fault tensor invariant)</code>. Do not subtract raw
+scalar dilation/shear from the fault tensor invariant as if their units and conventions matched.</p>
+<p class="warn"><b>Stage-1 holdout reconciliation:</b> a current-formula, leakage-controlled rerun is unavailable. The historical trace-split receipt records deficit Spearman 0.03916 and q50 lift 1.08290, below the geodetic-only 0.09930 and 1.23864; it used a pre-audit unsigned/implicit-rate formula. The separate four-scenario formula audit is not a valid holdout because its runner retained held-out trace rows in the catalogue-derived budget. Stage-1-only and q50-gate DTI results are also tied to the prior field. These are historical proxy diagnostics, not validation of the current implementation. See <a href="downloads/stage1_trace_holdout.json">historical trace receipt</a>, <a href="downloads/stage1_formula_audit.json">formula audit caveat</a>, and <a href="downloads/stage1_reconciliation_20261007.json">full reconciliation</a>. Stage 1 remains a coarse prior only.</p>
 
-<h3>Stage 2 — fine-scale detector</h3>
-<p>Histogram gradient boosting over 58 physical layers: the 19 competition bands (rank
-transformed), ten 1&nbsp;m-DEM-derived scarp layers, four radiometric layers, the USGS SGMC fault
-raster, and multiscale derivatives. H-G separately adds two edge-weighted magnetic–gravity
-crossing features; its matched six-block comparison with the incumbent scored −0.000606 mean proxy
-DTI delta (3/6 folds higher) and was not promoted. Missing values in
-smoothing windows are handled by normalized convolution, not zero-fill.</p>
-<p class="warn"><b>Leak control (IR-51-LEAK-01).</b> Any feature derived from the catalogue is a
-perfect training leak in a blocked holdout, because every positive has distance-to-catalogue
-exactly 0. Measured: in-block AUC collapsed to 0.500 with those columns present and recovered to
-0.667 without them. Catalogue-derived quantities are excluded from the model and used only at
-emission time.</p>
-
-<h3>Emission</h3>
-<p>The current candidate uses greedy non-maximum suppression at a 2.4&nbsp;px radius and keeps all
-points at least 200&nbsp;m from catalogued fault pixels. Sparse spacing reduces redundant coverage:
-each truth pixel receives only its best nearby prediction credit, while off-target prediction mass
-incurs false-positive cost.</p>
-<p>For a proposed increment with change <code>c</code> in weighted true-positive credit and change
-<code>f</code> in weighted false-positive cost, the exact local improvement condition is
-<code>c·(1 − 0.2·DTI) &gt; 0.2·DTI·f</code>. A simpler <code>c &gt; 0.2·DTI</code> threshold is
-valid only when that increment adds one unit to <code>TP+FP</code>; it is not universal.
-See the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric">official metric definition</a>.</p>
-<p class="warn"><b>Stage 1's actual role in each artifact.</b> The <b>primary</b> applies a soft
-multiplicative rank prior: <code>score = detector_field · (1 + 0.10·z)</code>, with standardized
-tile deficit <code>z</code> clipped to ±4. It does <b>not</b> hard-mask emissions. Its primary
-diagnostic is q70 (top 30% of deficit values): 30.05% of the footprint is approved, while the
-original build-time check places 20.31% of emissions inside; a current-formula rerun places 19.56%
-inside. Both are under-representation, not dominance. q20 is the hard secondary's top-80%
-threshold; do not substitute its 80.05% area / 78.09% emission numbers for the primary's q70
-check. The <a href="downloads/submission_manifest.json">reconciled manifest</a> preserves both.
-The six-fold pre-revision soft-prior holdout delta is +0.000367 (4/6 folds), small and inconclusive,
-not a demonstrated win; the hard q20 gate loses about 0.0025 on the same sweep.</p>
+<h3>Stage 2 — fine-scale detector and sparse emission</h3>
+<p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
+features. A 3x3 spatial holdout removes a 1.2 km boundary band from training; each fold's Stage-2
+field is scored against held-out known-fault labels at matched mass ratio <code>M/|G|=3.47</code>.
+H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183. These are measurements on the visible
+known-fault proxy, not organizer scores.</p>
+<p>Distance-to-catalogue is not used as a predictive shortcut because it directly encodes the
+known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression at
+2.4 pixels. The official metric gives a marginal-pixel credit bar near <code>0.2*DTI</code>; this
+motivates sparse dots, but does not prove any individual prediction is a real fault.</p>
+<p><b>Historical Stage-1 weight sweep:</b> a prior soft multiplicative adjustment <code>field * (1 + w*z)</code> gave <code>w=0.20</code> a small proxy gain (+0.000483 paired mean, 4/6 folds), but these numbers use an archived prior field and have not been reproduced against the current formula. Its support also duplicated the existing soft-0.10 candidate (Jaccard 0.86130, over the 0.50 uniqueness limit), so the writer stopped before producing that TIFF. No current Stage-1 weight is authorized.</p>
+<p class="warn"><b>Leading new feature result:</b> the narrowed H51-X1 magnetic/gravity edge-normal
+implementation used rank-normalized total-magnetic and isostatic-gravity bands as new-transform
+inputs; the planned derivative bands remained in the common baseline stack but were not used by this
+transform. It scored mean proxy DTI 0.2796713, below H-D by 0.0019913, and was positive in only 3/6
+folds. It failed the frozen promotion rule. The broader preregistered layer-family hypothesis was
+not fully tested. Do not describe this implementation as a win or submit it.</p>
 """
     (DOCS / "method.html").write_text(page("Method", body, "method.html"))
 
     # ------------------------------------------------------------ hypotheses
     hy = load("hypotheses.json", [])
-    rows = [[esc(h["id"]), esc(h.get("name", "")), esc(h.get("layers", "")),
-             esc(h.get("signature", "")), esc(h.get("why_new_faults", "")),
-             esc(h.get("differs_from", "")), esc(h.get("expected_dti", "")),
-             esc(h.get("cost", "")), esc(h.get("outcome", "not run")),
-             esc(h.get("measured_auc", "")), esc(h.get("measured_dti_r3_47", "")),
-             esc(h.get("delta_vs_base", ""))]
-            for h in hy]
-    slate_path = ROOT / "evidence" / "hypothesis_slate_20261007.json"
-    slate_rows = []
-    if slate_path.exists():
-        slate = json.loads(slate_path.read_text())
-        for h in slate.get("ranked_hypotheses", []):
-            result = h.get("baseline_arm_result", {})
-            matched = h.get("matched_incumbent_result", {})
-            if matched:
-                outcome = (f"matched add-on DTI={matched['proxy_dti_mean_r3_47']:.5f}; "
-                           f"Δ vs H-D={matched['paired_mean_proxy_dti_delta_vs_H_D']:+.5f}; "
-                           f"{matched['folds_higher_than_H_D']}/{matched['folds_total']} folds above; "
-                           + h.get("promotion_status", ""))
-                if result:
-                    outcome += (f" Initial replacement arm: {result['proxy_dti_mean_r3_47']:.5f}; "
-                                f"Δ={result['paired_mean_proxy_dti_delta_vs_H_D']:+.5f}, "
-                                f"{result['folds_higher_than_H_D']}/{result['folds_total']} folds above.")
-            elif result:
-                outcome = (f"initial arm DTI={result['proxy_dti_mean_r3_47']:.5f}; "
-                           f"vs H-D Δ={result['paired_mean_proxy_dti_delta_vs_H_D']:+.5f}; "
-                           f"{result['folds_higher_than_H_D']}/{result['folds_total']} folds above; "
-                           + h.get("promotion_status", ""))
-            else:
-                outcome = h.get("status", "not run") + " " + h.get("promotion_status", "")
-            slate_rows.append([
-                esc(h.get("id", "")), esc(h.get("name", "")),
-                esc(h.get("target_layers", [])), esc(h.get("signature_operator", "")),
-                esc(h.get("geological_rationale", "")),
-                esc(h.get("difference_from_prior_work", "")),
-                esc(h.get("expected_benefit_before_test", h.get("expected_benefit", ""))),
-                esc(h.get("implementation_cost", "")), esc(outcome),
-            ])
-        shutil.copyfile(slate_path, DOCS / "downloads" / slate_path.name)
+    rows = []
+    for h in hy:
+        layers = esc(h.get("layers", ""))
+        measured = h.get("measured_transform_layers")
+        if measured:
+            layers += ("<br><b>New-transform inputs evaluated:</b> "
+                       + esc(measured) + "; other listed derivative bands remained in the common baseline stack.")
+        rows.append([esc(h["id"]), esc(h.get("name", "")), layers,
+                     esc(h.get("signature", "")), esc(h.get("why_new_faults", "")),
+                     esc(h.get("differs_from", "")), esc(h.get("expected_dti", "")),
+                     esc(h.get("cost", "")), esc(h.get("external_data_needed", "")),
+                     esc(h.get("outcome", "not run")), esc(h.get("measured_auc", "")),
+                     esc(h.get("measured_dti_r3_47", "")), esc(h.get("delta_vs_base", ""))])
     body = f"""
-<h2>Prior hypotheses recorded for this project</h2>
-<p>The table below is the earlier GEMSDOE51 slate and its measured outcomes; it is retained as
-history, not as evidence that a family is globally novel. See the current, date-stamped slate
-below for specific operators and sibling prior-art comparisons.</p>
-{tbl(['id','name','layers','physical signature','why it catches a missing fault','differs from','expected benefit','cost','historic outcome','AUC','proxy DTI at M/|G| = 3.47','Δ vs base'], rows) if rows else '<p class="missing">hypotheses.json not generated</p>'}
-
-<h2>2026-10-07 specific hypothesis slate and test</h2>
-<p>Four candidates were ranked. H-G was the strongest low-cost screen and its matched H-D add-on
-holdout is complete but negative; H-H–H-J remain proposals, not results. Broad families have
-substantial sibling prior art. A keyword
-hit proves documentation, not implementation or performance; no global novelty claim is made.
-H53's default branch contained only a one-line README and no method to compare.</p>
-{tbl(['ID','candidate','target layers','specific signature/operator','geological rationale','difference from inspected prior art','expected benefit (pre-test)','cost','holdout/status'], slate_rows) if slate_rows else '<p class="missing">2026-10-07 slate not available</p>'}
-<p>Regional rationale sources: <a href="https://pangea.stanford.edu/ERE/db/WGC/papers/WGC/2015/11100.pdf">Faulds &amp; Hinz, Great Basin structural settings</a> and
-<a href="https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and">USGS integrated geologic/geophysical play-fairway report</a>. These support why fault intersections, terminations and coincident geophysical evidence may be relevant; they do not validate any raster operator or local holdout result.
-<a href="downloads/hypothesis_slate_20261007.json">Download the full slate and evidence notes.</a></p>
+<h2>Current geological slate — exact operator comparisons</h2>
+<p>The latest four-item slate includes the completed H-G test and three proposals. It does not call broad thermal, river-profile, relay, edge-orientation, or cross-physics families untried. Owner documentation shows substantial sibling prior art; a concept mention is not evidence of implementation or success. See the <a href="downloads/hypothesis_slate_20261007.json">operator-level slate</a> and <a href="downloads/sibling_prior_art_audit_20261007.json">summary-only prior-art audit</a>.</p>
+{current_hypothesis_table()}
+<h2>Earlier frozen H51-X1–X4 preregistration (historical)</h2>
+<p>The following table is the original preregistered screen. The narrowed X1 implementation failed; X2–X4 were not all tested. It is distinct from the newer H-G–H-J slate above, and does not establish broad-family novelty or falsification.</p>
+{tbl(['rank / id','hypothesis','layers','physical signature','why it may find an uncatalogued fault','novelty here','expected benefit','cost','external-data needs','outcome','AUC','proxy DTI at M/|G|=3.47','Δ vs H-D'], rows) if rows else '<p class="missing">hypotheses.json not generated</p>'}
 """
     (DOCS / "hypotheses.html").write_text(page("Hypotheses", body, "hypotheses.html"))
 
     # ------------------------------------------------------------ holdout
     def arm_rows():
         out = []
-        for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
-            h = hold.get(a)
+        for arm in ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1"):
+            h = hold.get(arm)
             if not h:
                 continue
-            s = h["summary"]
-            out.append([a, f"{s['auc_mean']:.4f}"] +
-                       [f"{s[f'dti_r{r}']['mean']:.4f}" for r in s["ratios"]])
+            summary = h["summary"]
+            out.append([arm, f"{summary['auc_mean']:.4f}"] +
+                       [f"{summary[f'dti_r{ratio}']['mean']:.4f}"
+                        for ratio in summary["ratios"]])
         return out
 
     ratios = []
-    for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
-        if hold.get(a):
-            ratios = hold[a]["summary"]["ratios"]
+    for arm in ("H_D", "H_X1", "base", "H_E", "H_C", "H_ALL"):
+        if hold.get(arm):
+            ratios = hold[arm]["summary"]["ratios"]
             break
-    # The old two_stage_results.json was built with the pre-revision prior and a
-    # spatial-block design that zeroes the catalogue-derived strain term in each
-    # held-out block. It is deliberately not presented as the current Stage-1 test.
-    h_g_path = ROOT / "evidence" / "holdout_H_G.json"
-    h_g_match_path = ROOT / "evidence" / "holdout_H_G_plus_H_D.json"
-    h_g_section = "<p class='missing'>H-G blocked holdout not available.</p>"
-    if h_g_path.exists():
-        hg = json.loads(h_g_path.read_text())
-        hd = hold.get("H_D")
-        hgs = hg.get("summary", {})
-        hgd = hgs.get("dti_r3.47", {}).get("mean")
-        hga = hgs.get("auc_mean")
-        hd_d = hd["summary"]["dti_r3.47"]["mean"] if hd else None
-        hd_a = hd["summary"]["auc_mean"] if hd else None
-        delta = hgd - hd_d if hgd is not None and hd_d is not None else None
-        rows_hg = [["H-G, replaces H-D extras", f"{hga:.4f}", f"{hgd:.5f}",
-                    f"{delta:+.5f}" if delta is not None else "n/a",
-                    f"{sum(x > y for x,y in zip(hgs['dti_r3.47']['per_fold'], hd['summary']['dti_r3.47']['per_fold']))}/6" if hd else "n/a"]]
-        if hd:
-            rows_hg.append(["H-D incumbent", f"{hd_a:.4f}", f"{hd_d:.5f}", "reference", "reference"])
-        if h_g_match_path.exists():
-            hgm = json.loads(h_g_match_path.read_text())
-            ms = hgm.get("summary", {})
-            md = ms.get("dti_r3.47", {}).get("mean")
-            ma = ms.get("auc_mean")
-            dd = md - hd_d if md is not None and hd_d is not None else None
-            wins = sum(x > y for x,y in zip(ms["dti_r3.47"]["per_fold"], hd["summary"]["dti_r3.47"]["per_fold"])) if hd else 0
-            rows_hg.append(["H-G added to H-D (matched)", f"{ma:.4f}", f"{md:.5f}",
-                            f"{dd:+.5f}" if dd is not None else "n/a", f"{wins}/6"])
-            shutil.copyfile(h_g_match_path, DOCS / "downloads" / h_g_match_path.name)
-        else:
-            rows_hg.append(["H-G added to H-D (matched)", "running", "pending", "pending", "pending"])
-        shutil.copyfile(h_g_path, DOCS / "downloads" / h_g_path.name)
-        h_g_section = tbl(["arm", "in-block AUC", "proxy DTI, ratio 3.47", "paired Δ vs H-D", "folds above H-D"], rows_hg)
-        h_g_section += ("<p class='ev'>H-G's first run replaced H-D's four LiDAR-coherence channels with two crossing channels, "
-                        "so only the matched add-on row is a promotion-grade comparison. Six spatial blocks; "
-                        "visible-catalogue proxy, not organizer score.</p>")
-
+    s1rows = []
+    if two:
+        summary = two["summary"]
+        for key in ("s1_dti_q50.0_r3.47", "s1_dti_q70.0_r3.47",
+                    "s1_dti_uniform_r3.47", "s2_ungated_r3.47",
+                    "s2_gated_q50.0_r3.47", "s2_gated_q70.0_r3.47"):
+            if key in summary:
+                s1rows.append([html.escape(key), f"{summary[key]['mean']:.4f}"])
     body = f"""
-<h2>Holdout: both stages, scored separately</h2>
-<h3>Design</h3>
-<p>The footprint is cut into 3&times;3 contiguous blocks. Each block is held out in turn; the
-detector never sees it; a 1.2&nbsp;km buffer around it is removed from the training pool.
-Emission and scoring are both restricted to the block, and the number of emitted dots is a fixed
-multiple of that block's own truth size to standardize the emission budget. Matching M/|G| does
-not make visible-catalogue proxy scores numerically interchangeable with live leaderboard scores.</p>
+<h2>Spatial holdout — proxy evidence, not a competition score</h2>
+<p>The detector holdout uses a 3×3 spatial blocking design, removes a 1.2 km boundary band from
+training, and scores each held-out region at matched emitted-mass ratio. Its labels are the existing
+known-fault catalogue; the official test target is expert-identified new faults. This measures
+recoverability of the known-fault proxy only.</p>
+<h3>Stage 2 — fine-scale models</h3>
+{tbl(['arm','mean AUC'] + [f'proxy DTI at M/|G|={ratio}' for ratio in ratios], arm_rows())}
+<p>H-D is the current isotropic baseline at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
+implementation (total magnetic + isostatic gravity as new-transform inputs) scores 0.2796713
+(delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
+preregistered derivative-band family was not fully tested; these remain proxy results.</p>
 
-<h3>Stage 2 — fine-scale arms</h3>
-{tbl(['arm','in-block AUC'] + [f'DTI at M/|G|={r}' for r in ratios], arm_rows())}
+<h3>H-G + H-D experimental matched add-on</h3>
+<p>The six-fold matched comparison averaged proxy DTI 0.2810564 for H-G added to H-D versus
+0.2816627 for H-D (paired Δ −0.0006063; 3/6 folds higher); mean AUC was 0.669619 versus 0.672618.
+This loses the incumbent and is <b>not promoted</b>. On the archived Stage-1 field used for this
+artifact, the historical q70 diagnostic has an area share of 30.046%, emissions inside of 19.728%,
+and lift 0.657 (non-dominant for that field). The signed/rate-selectable current Stage-1 map was not
+regenerated, so this is not a current-formula dominance check. It passes the scoped public-corpus
+uniqueness audit (365 SHA-verified payloads, 364 comparisons, zero matches); no organizer score is
+claimed. See the
+<a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a> and
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">uniqueness evidence</a>.</p>
 
-<h3>Stage 1 — broad-tile prior, evaluated separately</h3>
-<p>A spatial block cannot directly test the catalogue-derived fault-budget term: removing all
-catalogue traces from a held-out block makes the fault term zero there, reducing the deficit to the
-raw geodetic field. Stage 1 is therefore reported on five <b>trace-level</b> splits, not the Stage-2
-spatial blocks. A random fifth of mapped traces is withheld and the remaining traces supply the
-budget. No model is fitted. This is an association diagnostic against visible catalogue faults,
-not hidden-label performance.</p>
-""" + _STAGE1 + f"""
-<p><b>Result: the deficit is not a validated locator.</b> Under all four rate/sense assumptions,
-its mean Spearman correlation and q50 recall/area lift are below the raw geodetic-only field. That
-is a measured association result, not proof of a causal mechanism. The mapped-fault budget term may
-remove spatial information that also predicts additional mapped-style structures; the source-rate
-and dip assumptions are uncertain. Keep Stage 1 as a low-confidence broad-tile prior only.</p>
+<h3>H-M and strike-coherent emission (STE) — higher means, inconclusive</h3>
+<p>H-M cross-scale crest coincidence averaged {hm_result.get('mean_proxy_dti', float('nan')):.6f}
+versus H-D {hm_result.get('incumbent_H_D_mean', float('nan')):.6f}
+(Δ {hm_result.get('paired_delta', float('nan')):+.6f}; {hm_result.get('folds_higher', 0)}/6 folds;
+approximate paired 95% t interval {hm_result.get('approx_95pct_t_interval', [])}).
+STE L9 (w=0.35, r=2.4) averaged {ste_result.get('mean_proxy_dti', float('nan')):.6f}
+versus isotropic NMS {ste_result.get('comparator_iso_nms_r24_mean', float('nan')):.6f}
+(Δ {ste_result.get('paired_delta', float('nan')):+.6f}; {ste_result.get('folds_higher', 0)}/6 folds;
+approximate paired 95% t interval {ste_result.get('approx_95pct_t_interval', [])}).
+Both intervals include zero. Fresh public-corpus uniqueness audits fail on same-prediction NaN twins;
+H-M also overlaps its hard-q20 variant above the Jaccard threshold. Current q70 Stage-1 map
+checks are unavailable for these two candidates, so neither is slot-eligible. See the
+<a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a> and
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>. These are repository-local
+visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
-<h3>Gate sweep: hard gate versus soft prior</h3>
-""" + _GATE + f"""
-<p>The older six-fold gate sweep shows the hard gate losing on all folds (q20/top-80% mean delta
-about −0.00250). The soft w=0.10 setting's raw mean delta is <b>+0.000367</b>, positive in 4/6
-folds; this is small and inconclusive, not a demonstrated win. These gate-sweep numbers and the
-existing soft TIFF predate the signed strike-slip correction in the current strain-budget code.
-The soft primary does not restrict emissions to approved tiles; the hard secondary does. Do not
-interpret q20/top-80% statistics as the soft primary's q70/top-30% diagnostic.</p>
+<h3>Stage 1 — trace-held-out prior test, reported separately</h3>
+<p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before
+building the mapped-fault budget; this historical receipt predates the current signed-shear and
+selectable-rate formula. The separate four-scenario formula audit did not exclude held-out rows and
+is not a valid holdout. A current-formula, leakage-controlled rerun is unavailable because source
+rasters and prepared arrays are missing. See the <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
+These proxy comparisons are not tests against hidden expert labels.</p>
+{_STAGE1}
 
-<h3>H-G: spatially blocked screen and incumbent comparison</h3>
-""" + h_g_section + f"""
-<p>The matched H-G + H-D arm averaged 0.281056 proxy DTI versus 0.281663 for H-D (paired
-Δ −0.000606; 3/6 folds higher) and averaged AUC 0.669619 versus 0.672618. H-G is not promoted and
-no competition slot is authorized. All local scores are visible-catalogue proxies only; the true
-labels remain unavailable.</p>
+<h3>Historical Stage 1 alone and hard-gate effect on Stage 2</h3>
+<p>The archived Stage-1-only dots were randomized in approved tiles. This standalone DTI control uses the
+provisional g_hidden=12,700 full-map mass assumption (not an organizer count); the trace-rank
+correlations and lifts above do not depend on that count. Hard-gated Stage 2 is evaluated on the
+same spatial folds and mass ratio; it is not conflated with the soft-prior result.</p>
+{tbl(['quantity','mean over six folds'], s1rows)}
 
-<h3>Emission geometry</h3>
-""" + _EMIS + f"""
+<h3>Gate sweep and promotion decision</h3>
+{_GATE}
+<p>The hard gates sharply reduce fine-scale score; Stage 1 remains a weak, broad-tile prior. Soft
+weights are marginal. H-D soft w=0.20 narrowly cleared the numeric holdout rule, but its in-memory
+support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; threshold 0.50;
+containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
+See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
 
-<h3>Known biases of this instrument</h3>
-<ul>
-<li>its truth is the visible catalogue, so it can only reward rediscovering the <i>kind</i> of fault
-that is already mapped, never a genuinely new style;</li>
-<li>truth density inside a block is several times the regional average, so absolute proxy DTI is
-optimistic;</li>
-<li>the block is treated as unmapped territory, whereas in reality known faults are interleaved
-with the hidden ones and their neighbourhoods are excluded from emission.</li>
-</ul>
-<p>A pass on this instrument licenses packaging a candidate. It is never a score.</p>
+<h3>Interpretation limit</h3>
+<p>These proxy holdouts can compare candidate methods for known-fault recovery. They cannot establish
+that a geological signature finds uncatalogued faults, and they cannot predict a public or private
+competition score. Any external-data hypothesis also requires provenance, licensing, units, and
+spatial alignment checks before it can enter the holdout.</p>
 """
     (DOCS / "holdout.html").write_text(page("Holdout", body, "holdout.html"))
 
     # ------------------------------------------------------------ analysis
-    observed = [r for r in lb.get("rows", []) if r.get("rank") in (1, 7, 13)]
-    score_rows = [[str(r["rank"]), html.escape(r["team"]), f"{r['score']:.4f}",
-                   "Not identified by the public leaderboard"] for r in observed]
-    score_table = tbl(["rank", "participant", "public DTI", "artifact/method identity"], score_rows)
-    analysis_html = ANALYSIS_BODY.read_text().replace("{score_table}", score_table)
-    (DOCS / "analysis.html").write_text(page("Analysis", analysis_html, "analysis.html"))
-    retired_strategy = """
-<h2>Legacy strategy page retired</h2>
-<p>This URL is preserved for old links, but the former strategy narrative is not current evidence.
-It incorrectly attributed a public score of 0.2778 to GEMSDOE32 H33-2-B2 and used that unverified
-file identity in downstream arithmetic. The attribution has been withdrawn: the 2026-10-07 public
-leaderboard displayed 0.2778 for participant <code>extradr19</code> and 0.3774 for
-<code>xiaofanhu</code>, but neither row identifies a TIFF or method. GEMSDOE32's own report labels
-H33-2-B2 UNSCORED with a modelled projection of 0.2747.</p>
-<p>Use the current <a href="analysis.html">score analysis</a>,
-<a href="holdout.html">separate Stage-1/Stage-2 holdout report</a>,
-<a href="hypotheses.html">hypothesis slate</a>, and
-<a href="irregularities.html">irregularity register</a>. No public score is attributed to a local
-artifact, and no local proxy result is a leaderboard score.</p>
+    analysis = ANALYSIS_BODY.read_text()
+    (DOCS / "analysis.html").write_text(page("Analysis", analysis, "analysis.html"))
+
+    # ------------------------------------------------------------ claims ledger
+    claim_doc = load_registry("claims.json", {})
+    claim_rows = []
+    for claim in claim_doc.get("claims", []):
+        evidence_parts = []
+        for part in str(claim.get("evidence", "")).split(";"):
+            text = part.strip()
+            candidate = text.split()[0] if text else ""
+            local_path = ROOT / candidate
+            if candidate and local_path.is_file() and not candidate.startswith("http"):
+                evidence_parts.append(
+                    f'<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/{html.escape(candidate)}">{html.escape(text)}</a>')
+            else:
+                evidence_parts.append(html.escape(text))
+        source = claim.get("source", "")
+        source_html = (f'<a href="{html.escape(source)}">source</a>'
+                       if str(source).startswith("https://") else html.escape(str(source)))
+        claim_rows.append([html.escape(str(claim.get("id", ""))),
+                           html.escape(str(claim.get("class", ""))),
+                           html.escape(str(claim.get("claim", ""))),
+                           "<br>".join(evidence_parts), source_html])
+    body = f"""
+<h2>Current claims ledger</h2>
+<p>{html.escape(str(claim_doc.get("note", "")))}</p>
+<p>Each claim links to a source and local evidence where available. The machine-readable record is
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/registry/claims.json"><code>registry/claims.json</code></a>. Proxy measurements are not
+competition scores; owner-reported results are not organizer verification.</p>
+{tbl(['id','class','claim','local evidence','source'], claim_rows)}
 """
-    (DOCS / "strategy.html").write_text(page("Retired strategy analysis", retired_strategy, "analysis.html"))
+    (DOCS / "claims.html").write_text(page("Claims ledger", body, "claims.html"))
 
     # ------------------------------------------------------------ sources
     src = load("sources.json", [])
@@ -723,17 +725,19 @@ credentials from this repository.</p>
     (DOCS / "sources.html").write_text(page("Sources", body, "sources.html"))
 
     # ------------------------------------------------------------ leaderboard
-    rows = [[r["rank"], html.escape(r["team"]), r["score"], html.escape(r.get("when", ""))]
-            for r in lb.get("rows", [])]
-    body = f"""
-<h2>Public leaderboard</h2>
-<p class="ev">Read {html.escape(lb.get('read_at', 'n/a'))} from the official page. These are
-organizer-verified public scores and are the only scores on this site that are.</p>
-{tbl(['rank','team','public DW-Tversky','when'], rows)}
-<p>Our own submission's score, once it exists, will be recorded here with its evidence class and
-will be labelled a <b>claim</b> until the organizer confirms it.</p>
+    body = """
+<h2>Official leaderboard source — standings are not mirrored here</h2>
+<p><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Open the official DrivenData leaderboard</a>.
+This project stores no standings, rankings, or copied leaderboard values.</p>
+<p>DrivenData's <a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit using
+automated means to monitor or copy website material and prohibit manual monitoring or copying
+without prior written consent. No such consent is on record. Accordingly, this repository runs no
+scraper, scheduled monitor, or manual-copy workflow.</p>
+<p>No organizer score is claimed for any GEMSDOE51 file. Holdout DTI and AUC values on this site
+are local proxy measurements against the known-fault catalogue and must not be read as competition
+scores.</p>
 """
-    (DOCS / "leaderboard.html").write_text(page("Leaderboard", body, "leaderboard.html"))
+    (DOCS / "leaderboard.html").write_text(page("Leaderboard policy", body, "leaderboard.html"))
 
     # ------------------------------------------------------------ irregularities
     ir = load("irregularities.json", [])
@@ -748,29 +752,24 @@ and anything a reader should check by hand before trusting. Nothing here is hidd
 """
     (DOCS / "irregularities.html").write_text(page("Irregularities", body, "irregularities.html"))
 
-    # ------------------------------------------------------------ claims
-    claims_path = ROOT / "registry" / "claims.json"
-    claim_rows = []
-    if claims_path.exists():
-        claims_doc = json.loads(claims_path.read_text())
-        for c in claims_doc.get("claims", []):
-            source = c.get("source", "")
-            source_cell = (f'<a href="{html.escape(source, quote=True)}">external source</a>'
-                           if source.startswith(("http://", "https://")) else "")
-            claim_rows.append([
-                html.escape(c.get("id", "")),
-                html.escape(c.get("class", "")),
-                html.escape(c.get("claim", "")),
-                html.escape(c.get("evidence", "")),
-                source_cell,
-            ])
-    claims_body = """
-<h2>Claim and evidence ledger</h2>
-<p>Claim classes are not interchangeable: recomputed measurements, proxy diagnostics, public-board
-observations, and owner-reported/unverified values are labelled separately. Public scores do not
-identify a TIFF unless an authenticated receipt links the exact file or hash to the row.</p>
-""" + tbl(["ID", "evidence class", "claim", "local evidence", "external source"], claim_rows)
-    (DOCS / "claims.html").write_text(page("Claims", claims_body, "claims.html"))
+    # Keep historical URLs from older site builds, but point them at current pages
+    # instead of leaving stale score/download instructions publicly accessible.
+    def redirect_page(title, target, note):
+        safe_target = html.escape(target)
+        return f"""<!doctype html><html lang=\"en\"><head>
+<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">
+<title>{html.escape(title)} — GEMSDOE51</title>
+<meta http-equiv=\"refresh\" content=\"0; url={safe_target}\">
+<link rel=\"canonical\" href=\"{safe_target}\"></head><body>
+<p>{html.escape(note)} <a href=\"{safe_target}\">Continue</a>.</p>
+<script>location.replace({json.dumps(target)});</script></body></html>"""
+
+    (DOCS / "executive-summary.html").write_text(redirect_page(
+        "Executive summary", "index.html",
+        "This legacy URL now forwards to the current submission status and executive summary."))
+    (DOCS / "strategy.html").write_text(redirect_page(
+        "Strategy", "analysis.html",
+        "This legacy URL now forwards to the source-linked case study and current analysis."))
 
     (DOCS / "style.css").write_text(CSS)
     print("site written to", DOCS)

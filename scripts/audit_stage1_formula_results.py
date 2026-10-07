@@ -78,6 +78,10 @@ def main() -> int:
             },
             "uniform_random_dot_proxy_dti": metric(record, "uniform_dti"),
             "input": INPUTS[key],
+            "heldout_budget_rows_excluded": all(
+                "n_budget_trace_rows" in split and "frac_budget_rows_excluded" in split
+                for split in record.get("per_split", [])),
+            "input_interpretation_warning": record.get("interpretation_warning"),
         }
         rows.append(row)
         comparisons[key] = {
@@ -92,10 +96,19 @@ def main() -> int:
                 s["spearman_geodetic_only"]["per_split"]),
         }
 
+    exclusion_verified = all(r["heldout_budget_rows_excluded"] for r in rows)
     stage1 = {
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "schema_version": 1,
+        "schema_version": 2,
         "evaluation": {
+            "interpretation_status": ("FORMULA_SENSITIVITY_WITH_HELDOUT_ROW_EXCLUSION"
+                                       if exclusion_verified else
+                                       "FORMULA_SENSITIVITY_ONLY_NOT_LEAKAGE_CONTROLLED_HOLDOUT"),
+            "runner_integrity": {
+                "heldout_budget_row_exclusion_verified_from_inputs": exclusion_verified,
+                "limitation": (None if exclusion_verified else
+                               "Input records do not show that held-out trace attribute rows were excluded from the catalogue-derived budget; do not treat results as holdout validation or a promotion gate."),
+            },
             "stage": "Stage 1 only; no Stage-2 detector or learned point ranking",
             "design": "five random trace-level splits; the same five held-out trace groups are reused in all four formula scenarios",
             "tile_size": "100 x 100 pixels = 10 x 10 km at the 100 m grid",
@@ -108,6 +121,7 @@ def main() -> int:
                 "The score is a catalogue-proxy diagnostic, not an organizer score and not a test of hidden-fault discovery.",
                 "Each approved-area random-dot DTI is one seeded realization per split. These DTI draws are not paired across different masks/scenarios; do not read small DTI differences as a precise effect. Area, recall, lift, and Spearman comparisons are deterministic on the same held-out trace splits.",
                 "The five split results are a small sample and were not used to tune a new Stage-1 model.",
+                ("Held-out trace-row exclusion is not verifiable from the input records; because the fault-budget term is catalogue-derived, the four scenarios are formula-sensitivity diagnostics only." if not exclusion_verified else "Held-out trace-row exclusion fields are present in every split; independently review the runner and input provenance before treating these as holdout results."),
             ],
         },
         "formula": {
@@ -157,9 +171,9 @@ def main() -> int:
         "scenarios": rows,
         "paired_deterministic_comparisons": comparisons,
         "interpretation": {
-            "bottom_line": "Changing the total-slip versus vertical-slip convention and the unknown-sense fallback moves the deficit's measured quantile-space performance only modestly; none of the four settings makes the deficit outperform the raw geodetic-only ranking on mean Spearman correlation or q50/q70 recall-per-area lift.",
+            "bottom_line": ("Changing rate convention and the unknown-sense fallback is a formula-sensitivity question; these records do not support a performance ranking because held-out trace-row exclusion is not verified." if not exclusion_verified else "Changing rate convention and the unknown-sense fallback can be compared only within the verified leakage-controlled trace splits; local truth remains a known-catalogue proxy."),
             "physical_caution": "Subtracting mapped-fault strain is not guaranteed to isolate uncatalogued faulting: mapped faults can spatially covary with unmapped faults, and uncertainty in the slip table, dip, rake, assignments, and geodetic tensor convention is large relative to this coarse residual.",
-            "usage_decision": "Keep the deficit as a low-confidence broad-tile prior/diagnostic only; do not use it as a fine-scale point placer or hard Stage-2 gate. Report Stage 1 separately from the Stage-2 blocked holdout.",
+            "usage_decision": "Keep the deficit as a low-confidence broad-tile prior/diagnostic only; do not use it as a fine-scale point placer or hard Stage-2 gate. Rerun with held-out row exclusion and current formula before using any Stage-1 performance numbers; report Stage 1 separately from Stage 2.",
         },
     }
     out = ROOT / "evidence" / "stage1_formula_audit.json"
@@ -167,6 +181,8 @@ def main() -> int:
     out.write_text(json.dumps(stage1, indent=2) + "\n")
     print(json.dumps({
         "output": str(out),
+        "heldout_budget_row_exclusion_verified": exclusion_verified,
+        "interpretation_status": stage1["evaluation"]["interpretation_status"],
         "scenarios": [{
             "scenario": r["scenario"],
             "spearman_deficit": r["spearman_deficit"]["mean"],

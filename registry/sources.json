@@ -2,139 +2,97 @@
  {
   "id": "problem",
   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-  "what": "Problem description, performance metric, submission format",
-  "status": "verified 2026-10-06 - metric equations and the worked example (TP=3.00, FP=1.89, FN=2.00 -> 0.60) fetched verbatim"
- },
- {
-  "id": "overview",
-  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
-  "what": "Competition overview",
-  "status": "listed"
- },
- {
-  "id": "about",
-  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/",
-  "what": "Additional resources",
-  "status": "listed, not fetched"
- },
- {
-  "id": "data_page",
-  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
-  "what": "training_features.tif, labels.tif, sample_submission.tif, 1m_DEM_links.csv",
-  "status": "login-walled; never contacted with credentials. All rasters restored from hash-pinned public GitHub mirrors instead (registry/data_manifest.json)"
- },
- {
-  "id": "leaderboard",
-  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-  "what": "Public leaderboard",
-  "status": "Fetched manually on 2026-10-07: rank 1 xiaofanhu 0.3774, rank 13 extradr19 0.2778; rows identify participant/score only and do not identify a TIFF or method. See registry/leaderboard_reads.json."
+  "what": "Official task description, hidden-new-fault target, metric, data description, and GeoTIFF format",
+  "status": "Fetched 2026-10-07. The page states that expert-identified faults absent from the existing USGS database form the initial test set; format requires EPSG:32611, 100 m, matching bounds, one float32 band in [0,1], null/NaN outside."
  },
  {
   "id": "rules_pdf",
   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-  "what": "Prize rules PDF (NLR document 96647)",
-  "status": "listed; not fetched in this session"
+  "what": "Official GEMS Prize Rules, September 2026",
+  "status": "Fetched 2026-10-07; \u00a73.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
+ },
+ {
+  "id": "terms_of_use",
+  "url": "https://www.drivendata.org/termsofuse/",
+  "what": "DrivenData Terms of Use",
+  "status": "Fetched 2026-10-07; terms prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No leaderboard snapshot or monitoring feed is maintained here."
+ },
+ {
+  "id": "official_leaderboard",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "what": "Official leaderboard source link only",
+  "status": "Not mirrored or monitored; consult the official page subject to DrivenData Terms of Use. No standings are stored in this repository."
+ },
+ {
+  "id": "data_page",
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+  "what": "Organizer data-download page for training features, labels, sample submission, and DEM links",
+  "status": "Login-walled in this environment. Local rasters are restored from hash-pinned public GitHub mirrors and are not organizer-authenticated."
  },
  {
   "id": "reference_solution",
   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
   "what": "Official reference solution",
-  "status": "listed"
+  "status": "Listed as an official implementation resource; not used to claim a score."
  },
  {
   "id": "masking_clarification",
   "url": "https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516",
-  "what": "Organizer: known fault pixels are masked from evaluation in both rounds",
-  "status": "verified 2026-10-06 - chrisk-dd, 2026-09-16"
+  "what": "Organizer response on known-fault masking",
+  "status": "Previously fetched; moderator chrisk-dd, 2026-09-16. Preserved as context; re-check before relying on it for a future submission."
  },
  {
   "id": "new_fault_definition",
   "url": "https://community.drivendata.org/t/where-do-you-draw-the-line/11536",
-  "what": "Organizer: new fault = any fault pixel not already captured, including newly mapped geometry of an existing system",
-  "status": "verified 2026-10-06 - chrisk-dd, 2026-09-23"
+  "what": "Organizer response defining newly mapped geometry of an existing fault system",
+  "status": "Previously fetched; moderator chrisk-dd, 2026-09-23. Preserved as context; re-check before relying on it for a future submission."
  },
  {
-  "id": "how_test_faults_identified",
+  "id": "hidden_test_sources",
   "url": "https://community.drivendata.org/t/how-were-the-new-test-faults-identified-data-sources-and-fault-types/11527",
-  "what": "Organizer answer to requests for the data sources, fault types and coverage behind the hidden labels",
-  "status": "verified 2026-10-06 - chrisk-dd, post 7, 2026-09-23, verbatim: \"We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.\" Same post: \"the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1.\""
+  "what": "Organizer response on hidden-test source disclosure and expert review of submissions",
+  "status": "Previously fetched; moderator chrisk-dd, post 7, 2026-09-23. Organizer declined to share the test faults' sources, types, or coverage beyond the problem page and said Phase 2 labels are updated after expert review of submissions."
  },
  {
   "id": "geodawn",
   "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
-  "what": "GeoDAWN airborne magnetic and radiometric surveys",
-  "status": "listed"
- },
- {
-  "id": "geodawn_area",
-  "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
-  "what": "GeoDAWN study-area map item",
-  "status": "listed"
- },
- {
-  "id": "ingenious",
-  "url": "https://gbcge.org/current-projects/ingenious/",
-  "what": "Great Basin Center for Geothermal Energy INGENIOUS project (label source)",
-  "status": "listed"
+  "what": "USGS GeoDAWN magnetic and radiometric data release",
+  "status": "Official source; used to motivate subsurface geophysical edge hypotheses."
  },
  {
   "id": "gdr_1391",
   "url": "https://gdr.openei.org/submissions/1391",
-  "what": "Geothermal Data Repository submission 1391 - Nevada geothermal data, source of the QFaults trace table with slip rates",
-  "status": "GDR landing page checked 2026-10-07: INGENIOUS/QFaults v2 supersedes v1 and includes a field-definition text file; the archive definitions were not extracted in this audit, so exact slip_rate component semantics remain unresolved. Local CSV observations do not authenticate them."
+  "what": "INGENIOUS Great Basin Regional Dataset Compilation, DOI 10.15121/1881483",
+  "status": "Official repository record; local tables are owner-mirrored and not authenticated against the organizer download. GDR lists a Quaternary Faults v2 archive with field definitions, but that companion text was not locally audited for the unit of the copied slip-rate field."
  },
  {
-  "id": "ucertf3",
-  "url": "https://doi.org/10.1785/0120130164",
-  "what": "Field et al. 2014, UCERF3 time-independent model, BSSA 104(3) 1122-1180 - precedent for balancing geodetic and geologic deformation",
-  "status": "cited by the brief; not fetched (paywalled)"
+  "id": "siler_2022",
+  "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+  "what": "USGS Siler slip-/dilation-tendency release, DOI 10.5066/P9YL58W6",
+  "status": "Archive record reviewed; downloadable shapefile and field units were not validated locally. H51-X4 remains blocked pending acquisition and inspection."
  },
  {
-  "id": "kostrov_1974",
-  "url": "https://ui.adsabs.harvard.edu/abs/1974IzPhE..10..541K/abstract",
-  "what": "Kostrov 1974 is foundational moment-tensor context; the explicit implemented strain formula is cited to Kreemer et al. (2000), Eq. 3.",
-  "status": "historical source; do not cite as the exact line-by-line implementation formula without a checked equation."
- },
- {
-  "id": "codeload",
-  "url": "https://codeload.github.com/",
-  "what": "Transport used to restore the hash-pinned raster mirrors",
-  "status": "reachable from this sandbox (HTTP 301/200)"
- },
- {
-  "id": "labels_vs_existing_faults",
-  "url": "https://github.com/buffedlizard55-lab/GEMSDOE24",
-  "what": "Pinned mirror of labels.tif and existing_faults.tif (the only obtainable copy; the DrivenData data page is login-walled)",
-  "status": "verified 2026-10-06 - both pins resolve to the SAME sha256 7ba308cc... and the rasters are element-wise identical. See IR-51-08."
- },
- {
-  "id": "kreemer_2000_eq3",
+  "id": "kreemer_2000",
   "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
-  "what": "Kreemer et al. (2000), Eq. 3, published fault-slip-based horizontal strain-rate summation used as Stage-1 formula source.",
-  "status": "full-text checked; equation transcribed to src/gems51/strain_budget.py and evidence/stage1_formula_audit.json; rate-component and dip assumptions remain explicit."
+  "what": "Kreemer et al. (2000), On the determination of a global strain rate model, Eq. 3",
+  "status": "Public PDF reviewed for the tensor formula used in Stage 1; implementation limitations are recorded in the research note."
  },
  {
-  "id": "usgs_qfaults_rest_layer21",
-  "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=pjson",
-  "what": "USGS QFaults REST layer metadata for the trace/attribute layer.",
-  "status": "checked 2026-10-07: slip_rate is string-typed with alias 'Slip Rate(mm/year)' and no coded-value domain; does not resolve local numeric values' physical component semantics."
+  "id": "gemsdoe32_index",
+  "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
+  "what": "Sibling-project owner page describing H33-2-B2 artifact and its status",
+  "status": "Fetched 2026-10-07. Owner page calls the 0.2747 value projected and the artifact UNSCORED; not organizer verification."
  },
  {
-  "id": "usgs_blind_geothermal_playfairway_2019",
-  "url": "https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and",
-  "what": "USGS report on Great Basin blind geothermal play-fairway mapping; describes collocated/terminating potential-field gradients and other independent evidence in case studies.",
-  "status": "abstract/summary checked for hypothesis rationale only; does not validate this project's raster operator."
+  "id": "gemsdoe32_research",
+  "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/research.html",
+  "what": "Sibling-project owner research and limitations",
+  "status": "Fetched 2026-10-07; claims are attributed to the owner and not treated as organizer results."
  },
  {
-  "id": "faulds_hinz_2015",
-  "url": "https://pangea.stanford.edu/ERE/db/WGC/papers/WGC/2015/11100.pdf",
-  "what": "Faulds & Hinz (2015), favorable Great Basin geothermal structural settings and proxies for blind systems.",
-  "status": "paper abstract/content checked; broad geologic rationale for stepovers, terminations, and intersections only."
- },
- {
-  "id": "gemsdoe32_readme_attribution_check",
-  "url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md",
-  "what": "Sibling repository's own score/status report for H33-2-B2.",
-  "status": "checked 2026-10-07: labels H33-2-B2 UNSCORED with modelled projection 0.2747; does not link the artifact to the public 0.2778 row under extradr19."
+  "id": "nbmg_qfaults_ingenious",
+  "url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
+  "what": "NBMG QFaults INGENIOUS ArcGIS layer schema and field names",
+  "status": "Fetched 2026-10-06. Layer metadata lists the numeric SLIPRTNUM field but exposes no unit; do not treat the local slip_rate-to-mm/yr interpretation as source-validated until the GDR v2 field-definition text is checked."
  }
 ]

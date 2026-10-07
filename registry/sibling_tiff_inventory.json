@@ -3759,6 +3759,36 @@
           "sha": "47fd816a86b2dbcd2873a7f09edea0e2a920529f"
         },
         {
+          "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+          "size": 367218,
+          "sha": "ce98bf8c94810489dc639cf6f924f20cea6fd930"
+        },
+        {
+          "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+          "size": 223192,
+          "sha": "5ee3426d0f05c0d2aea024f86ee05bae570f157f"
+        },
+        {
+          "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+          "size": 378062,
+          "sha": "8f2726df916fc8d4c4e83444aac69a8b289685b9"
+        },
+        {
+          "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+          "size": 232804,
+          "sha": "6943da78dabe33aa98f457e80ff80a5d8c18343c"
+        },
+        {
+          "path": "docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
+          "size": 382210,
+          "sha": "a9a5c1e2633aa0fc6c8da8c364371dbd3a7358f8"
+        },
+        {
+          "path": "docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+          "size": 237016,
+          "sha": "081fd4e16105f165f910c5c7bd18597dbcb1aab7"
+        },
+        {
           "path": "docs/downloads/gemsdoe51-strainbudget-s1-v1.tif",
           "size": 390791,
           "sha": "23ff31cf7832f25616bc47d435eaec9fe796d3bb"
@@ -3767,6 +3797,16 @@
           "path": "submissions/gems51-sbd-hridge-44090-20261006.tif",
           "size": 753085,
           "sha": "50b86b69c33e16f837519aa91d85e75c4c0978d5"
+        },
+        {
+          "path": "submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+          "size": 223192,
+          "sha": "5ee3426d0f05c0d2aea024f86ee05bae570f157f"
+        },
+        {
+          "path": "submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+          "size": 232804,
+          "sha": "6943da78dabe33aa98f457e80ff80a5d8c18343c"
         }
       ],
       "error": null

@@ -15,8 +15,11 @@
       "Trace-level holdout is intentionally not a contiguous spatial block: withholding a whole spatial block would erase the catalogue-derived budget term in that block and reduce the deficit to the raw geodetic field.",
       "The score is a catalogue-proxy diagnostic, not an organizer score and not a test of hidden-fault discovery.",
       "Each approved-area random-dot DTI is one seeded realization per split. These DTI draws are not paired across different masks/scenarios; do not read small DTI differences as a precise effect. Area, recall, lift, and Spearman comparisons are deterministic on the same held-out trace splits.",
-      "The five split results are a small sample and were not used to tune a new Stage-1 model."
-    ]
+      "The five split results are a small sample and were not used to tune a new Stage-1 model.",
+      "Post-branch code review found that the runner used for these four scenarios passed the full slip-rate table to every trace split; it did not remove held-out trace attribute rows before constructing the fault-budget term. Treat all scenario scores/ranks as leakage-risk diagnostics, not holdout validation or a promotion gate."
+    ],
+    "interpretation_status": "INVALID_AS_LEAKAGE_CONTROLLED_HOLDOUT; FORMULA-SENSITIVITY RECORD ONLY",
+    "reproduction_status": "NOT_RERUN_AFTER_LEAKAGE_FIX: source data and prepared arrays are absent from the current checkout."
   },
   "formula": {
     "source": "Kreemer et al. (2000), On the determination of a global strain rate model, Earth, Planets and Space 52, 765-770, Eq. (3)",
@@ -1070,8 +1073,9 @@
     }
   },
   "interpretation": {
-    "bottom_line": "Changing the total-slip versus vertical-slip convention and the unknown-sense fallback moves the deficit's measured quantile-space performance only modestly; none of the four settings makes the deficit outperform the raw geodetic-only ranking on mean Spearman correlation or q50/q70 recall-per-area lift.",
+    "bottom_line": "These scenario values do not support a performance comparison because their runner did not exclude held-out trace rows from the catalogue-derived fault-budget term. Use only as formula-sensitivity history; no claim is made that the deficit beats raw geodetic-only.",
     "physical_caution": "Subtracting mapped-fault strain is not guaranteed to isolate uncatalogued faulting: mapped faults can spatially covary with unmapped faults, and uncertainty in the slip table, dip, rake, assignments, and geodetic tensor convention is large relative to this coarse residual.",
-    "usage_decision": "Keep the deficit as a low-confidence broad-tile prior/diagnostic only; do not use it as a fine-scale point placer or hard Stage-2 gate. Report Stage 1 separately from the Stage-2 blocked holdout."
-  }
+    "usage_decision": "Keep the geodetic strain-budget deficit as a low-confidence broad-tile prior only; do not use it as a fine-scale point placer or hard Stage-2 gate. Re-run the trace holdout with held-row exclusion, current signed shear/rate conventions, and restored inputs before using any Stage-1 performance numbers."
+  },
+  "reconciliation_record": "evidence/stage1_reconciliation_20261007.json"
 }

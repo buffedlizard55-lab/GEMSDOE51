@@ -14,74 +14,86 @@
   <a class="" href="hypotheses.html">Hypotheses</a>
   <a class="active" href="holdout.html">Holdout</a>
   <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
   <a class="" href="sources.html">Sources</a>
   <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
-  <a class="" href="claims.html">Claims</a>
 </nav>
 </div></header>
 <main class="wrap">
 
-<h2>Holdout: both stages, scored separately</h2>
-<h3>Design</h3>
-<p>The footprint is cut into 3&times;3 contiguous blocks. Each block is held out in turn; the
-detector never sees it; a 1.2&nbsp;km buffer around it is removed from the training pool.
-Emission and scoring are both restricted to the block, and the number of emitted dots is a fixed
-multiple of that block's own truth size to standardize the emission budget. Matching M/|G| does
-not make visible-catalogue proxy scores numerically interchangeable with live leaderboard scores.</p>
+<h2>Spatial holdout — proxy evidence, not a competition score</h2>
+<p>The detector holdout uses a 3×3 spatial blocking design, removes a 1.2 km boundary band from
+training, and scores each held-out region at matched emitted-mass ratio. Its labels are the existing
+known-fault catalogue; the official test target is expert-identified new faults. This measures
+recoverability of the known-fault proxy only.</p>
+<h3>Stage 2 — fine-scale models</h3>
+<table class=''><thead><tr><th>arm</th><th>mean AUC</th><th>proxy DTI at M/|G|=2.0</th><th>proxy DTI at M/|G|=3.47</th><th>proxy DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2736</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr><tr><td>H_X1</td><td>0.6667</td><td>0.2797</td></tr></tbody></table>
+<p>H-D is the current isotropic baseline at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
+implementation (total magnetic + isostatic gravity as new-transform inputs) scores 0.2796713
+(delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
+preregistered derivative-band family was not fully tested; these remain proxy results.</p>
 
-<h3>Stage 2 — fine-scale arms</h3>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>DTI at M/|G|=2.0</th><th>DTI at M/|G|=3.47</th><th>DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2781</td><td>0.2625</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr></tbody></table>
+<h3>H-G + H-D experimental matched add-on</h3>
+<p>The six-fold matched comparison averaged proxy DTI 0.2810564 for H-G added to H-D versus
+0.2816627 for H-D (paired Δ −0.0006063; 3/6 folds higher); mean AUC was 0.669619 versus 0.672618.
+This loses the incumbent and is <b>not promoted</b>. On the archived Stage-1 field used for this
+artifact, the historical q70 diagnostic has an area share of 30.046%, emissions inside of 19.728%,
+and lift 0.657 (non-dominant for that field). The signed/rate-selectable current Stage-1 map was not
+regenerated, so this is not a current-formula dominance check. It passes the scoped public-corpus
+uniqueness audit (365 SHA-verified payloads, 364 comparisons, zero matches); no organizer score is
+claimed. See the
+<a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a> and
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">uniqueness evidence</a>.</p>
 
-<h3>Stage 1 — broad-tile prior, evaluated separately</h3>
-<p>A spatial block cannot directly test the catalogue-derived fault-budget term: removing all
-catalogue traces from a held-out block makes the fault term zero there, reducing the deficit to the
-raw geodetic field. Stage 1 is therefore reported on five <b>trace-level</b> splits, not the Stage-2
-spatial blocks. A random fifth of mapped traces is withheld and the remaining traces supply the
-budget. No model is fitted. This is an association diagnostic against visible catalogue faults,
-not hidden-label performance.</p>
-<table class=''><thead><tr><th>rate/sense assumption</th><th>Spearman: deficit / geodetic-only</th><th>q50 lift: deficit / geodetic-only</th><th>q50 single-draw proxy DTI: deficit / geodetic-only</th></tr></thead><tbody><tr><td>vertical_unknown_normal</td><td>+0.032 / +0.099</td><td>1.099 / 1.239</td><td>0.0497 / 0.0563</td></tr><tr><td>fault_plane_unknown_normal</td><td>+0.031 / +0.099</td><td>1.097 / 1.239</td><td>0.0502 / 0.0560</td></tr><tr><td>vertical_known_sense_only</td><td>+0.027 / +0.099</td><td>1.101 / 1.239</td><td>0.0506 / 0.0554</td></tr><tr><td>fault_plane_known_sense_only</td><td>+0.027 / +0.099</td><td>1.104 / 1.239</td><td>0.0519 / 0.0557</td></tr></tbody></table><p class='ev'>Five trace-level splits, not spatial blocks. The deficit underperforms raw geodetic ranking on deterministic Spearman and q50 lift in all four scenarios. Each DTI is a single seeded random-dot realization per field/split and is not paired across masks; small DTI differences are descriptive/noisy. The 44,069-dot budget uses a 12,700-pixel planning proxy, not a measured hidden truth size. Full formula, local source field caveats and per-split results: <a href='downloads/stage1_formula_audit.json'>stage1_formula_audit.json</a>.</p>
-<p><b>Result: the deficit is not a validated locator.</b> Under all four rate/sense assumptions,
-its mean Spearman correlation and q50 recall/area lift are below the raw geodetic-only field. That
-is a measured association result, not proof of a causal mechanism. The mapped-fault budget term may
-remove spatial information that also predicts additional mapped-style structures; the source-rate
-and dip assumptions are uncertain. Keep Stage 1 as a low-confidence broad-tile prior only.</p>
+<h3>H-M and strike-coherent emission (STE) — higher means, inconclusive</h3>
+<p>H-M cross-scale crest coincidence averaged 0.282603
+versus H-D 0.281663
+(Δ +0.000940; 3/6 folds;
+approximate paired 95% t interval [-0.0022464, 0.0041272]).
+STE L9 (w=0.35, r=2.4) averaged 0.283603
+versus isotropic NMS 0.281639
+(Δ +0.001963; 4/6 folds;
+approximate paired 95% t interval [-0.00166, 0.00559]).
+Both intervals include zero. Fresh public-corpus uniqueness audits fail on same-prediction NaN twins;
+H-M also overlaps its hard-q20 variant above the Jaccard threshold. Current q70 Stage-1 map
+checks are unavailable for these two candidates, so neither is slot-eligible. See the
+<a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a> and
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>. These are repository-local
+visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
-<h3>Gate sweep: hard gate versus soft prior</h3>
-<table class=''><thead><tr><th>gate</th><th>setting</th><th>mean proxy DTI</th><th>paired Δ</th><th>folds better</th><th>per fold</th></tr></thead><tbody><tr><td>soft prior</td><td>w = 0.0</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>soft prior</td><td>w = 0.05</td><td>0.2818</td><td>+0.0001</td><td>3/6</td><td>0.275, 0.269, 0.284, 0.249, 0.307, 0.307</td></tr><tr><td>soft prior</td><td>w = 0.1</td><td>0.2820</td><td>+0.0004</td><td>4/6</td><td>0.274, 0.269, 0.285, 0.249, 0.307, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.2</td><td>0.2818</td><td>+0.0002</td><td>4/6</td><td>0.273, 0.268, 0.285, 0.249, 0.308, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.4</td><td>0.2810</td><td>-0.0007</td><td>2/6</td><td>0.272, 0.266, 0.283, 0.248, 0.308, 0.310</td></tr><tr><td>hard gate</td><td>all tiles (no gate)</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 90% of tiles</td><td>0.2803</td><td>-0.0013</td><td>0/6</td><td>0.275, 0.263, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 80% of tiles</td><td>0.2791</td><td>-0.0025</td><td>0/6</td><td>0.275, 0.256, 0.283, 0.248, 0.307, 0.306</td></tr><tr><td>hard gate</td><td>top 70% of tiles</td><td>0.2779</td><td>-0.0038</td><td>0/6</td><td>0.275, 0.253, 0.283, 0.248, 0.304, 0.303</td></tr><tr><td>hard gate</td><td>top 60% of tiles</td><td>0.2721</td><td>-0.0095</td><td>0/6</td><td>0.272, 0.252, 0.264, 0.245, 0.296, 0.303</td></tr><tr><td>hard gate</td><td>top 30% of tiles</td><td>0.2055</td><td>-0.0762</td><td>0/6</td><td>0.260, 0.120, 0.021, 0.246, 0.295, 0.291</td></tr><tr><td>hard gate</td><td>top 10% of tiles</td><td>0.1372</td><td>-0.1445</td><td>0/6</td><td>0.142, 0.000, 0.000, 0.248, 0.188, 0.245</td></tr></tbody></table>
-<p>The older six-fold gate sweep shows the hard gate losing on all folds (q20/top-80% mean delta
-about −0.00250). The soft w=0.10 setting's raw mean delta is <b>+0.000367</b>, positive in 4/6
-folds; this is small and inconclusive, not a demonstrated win. These gate-sweep numbers and the
-existing soft TIFF predate the signed strike-slip correction in the current strain-budget code.
-The soft primary does not restrict emissions to approved tiles; the hard secondary does. Do not
-interpret q20/top-80% statistics as the soft primary's q70/top-30% diagnostic.</p>
+<h3>Stage 1 — trace-held-out prior test, reported separately</h3>
+<p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before
+building the mapped-fault budget; this historical receipt predates the current signed-shear and
+selectable-rate formula. The separate four-scenario formula audit did not exclude held-out rows and
+is not a valid holdout. A current-formula, leakage-controlled rerun is unavailable because source
+rasters and prepared arrays are missing. See the <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
+These proxy comparisons are not tests against hidden expert labels.</p>
+<table class=''><thead><tr><th>prior</th><th>approved</th><th>area share</th><th>truth recall</th><th>lift = recall/area</th><th>proxy DTI (uniform random dots)</th></tr></thead><tbody><tr><td>deficit</td><td>top 50% of tiles</td><td>0.501</td><td>0.543</td><td>1.083</td><td>0.0508</td></tr><tr><td>geodetic_only</td><td>top 50% of tiles</td><td>0.500</td><td>0.620</td><td>1.239</td><td>0.0554</td></tr><tr><td>deficit</td><td>top 30% of tiles</td><td>0.302</td><td>0.329</td><td>1.093</td><td>0.0468</td></tr><tr><td>geodetic_only</td><td>top 30% of tiles</td><td>0.301</td><td>0.375</td><td>1.247</td><td>0.0534</td></tr><tr><td>deficit</td><td>top 20% of tiles</td><td>0.201</td><td>0.241</td><td>1.196</td><td>0.0464</td></tr><tr><td>geodetic_only</td><td>top 20% of tiles</td><td>0.201</td><td>0.256</td><td>1.273</td><td>0.0487</td></tr><tr><td>no gate</td><td>whole footprint</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.0478</td></tr></tbody></table><p class='ev'>Spearman rank correlation between each tile field and the density of held-out faults: deficit = +0.039, geodetic_only = +0.099, dilatation_only = +0.053, shear_only = +0.092</p>
 
-<h3>H-G: spatially blocked screen and incumbent comparison</h3>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI, ratio 3.47</th><th>paired Δ vs H-D</th><th>folds above H-D</th></tr></thead><tbody><tr><td>H-G, replaces H-D extras</td><td>0.6636</td><td>0.27678</td><td>-0.00488</td><td>1/6</td></tr><tr><td>H-D incumbent</td><td>0.6726</td><td>0.28166</td><td>reference</td><td>reference</td></tr><tr><td>H-G added to H-D (matched)</td><td>0.6696</td><td>0.28106</td><td>-0.00061</td><td>3/6</td></tr></tbody></table><p class='ev'>H-G's first run replaced H-D's four LiDAR-coherence channels with two crossing channels, so only the matched add-on row is a promotion-grade comparison. Six spatial blocks; visible-catalogue proxy, not organizer score.</p>
-<p>The matched H-G + H-D arm averaged 0.281056 proxy DTI versus 0.281663 for H-D (paired
-Δ −0.000606; 3/6 folds higher) and averaged AUC 0.669619 versus 0.672618. H-G is not promoted and
-no competition slot is authorized. All local scores are visible-catalogue proxies only; the true
-labels remain unavailable.</p>
+<h3>Historical Stage 1 alone and hard-gate effect on Stage 2</h3>
+<p>The archived Stage-1-only dots were randomized in approved tiles. This standalone DTI control uses the
+provisional g_hidden=12,700 full-map mass assumption (not an organizer count); the trace-rank
+correlations and lifts above do not depend on that count. Hard-gated Stage 2 is evaluated on the
+same spatial folds and mass ratio; it is not conflated with the soft-prior result.</p>
+<table class=''><thead><tr><th>quantity</th><th>mean over six folds</th></tr></thead><tbody><tr><td>s1_dti_q50.0_r3.47</td><td>0.1481</td></tr><tr><td>s1_dti_q70.0_r3.47</td><td>0.1234</td></tr><tr><td>s1_dti_uniform_r3.47</td><td>0.1861</td></tr><tr><td>s2_ungated_r3.47</td><td>0.2816</td></tr><tr><td>s2_gated_q50.0_r3.47</td><td>0.1815</td></tr><tr><td>s2_gated_q70.0_r3.47</td><td>0.1462</td></tr></tbody></table>
 
-<h3>Emission geometry</h3>
-<table class=''><thead><tr><th>spacing (px)</th><th>M/|G| = 1.5</th><th>M/|G| = 2.5</th><th>M/|G| = 3.47</th><th>M/|G| = 5</th><th>M/|G| = 7</th><th>M/|G| = 10</th></tr></thead><tbody><tr><td>1.5</td><td>0.2258</td><td>0.2478</td><td>0.2541</td><td>0.2518</td><td>0.2408</td><td>0.2182</td></tr><tr><td>2.4</td><td>0.2497</td><td>0.2743</td><td>0.2816</td><td>0.2736</td><td>0.2539</td><td>0.2443</td></tr><tr><td>3.5</td><td>0.2477</td><td>0.2678</td><td>0.2724</td><td>0.2684</td><td>0.2588</td><td>0.2562</td></tr><tr><td>5</td><td>0.1799</td><td>0.2000</td><td>0.2082</td><td>0.2130</td><td>0.2112</td><td>0.2110</td></tr><tr><td>7</td><td>0.1269</td><td>0.1405</td><td>0.1470</td><td>0.1518</td><td>0.1530</td><td>0.1533</td></tr></tbody></table><p class='ev'>Best cell: spacing 2.4 px, M/|G| = 3.47, mean proxy DTI 0.2816.</p>
+<h3>Gate sweep and promotion decision</h3>
+<table class=''><thead><tr><th>gate</th><th>setting</th><th>mean proxy DTI</th><th>paired Δ</th><th>folds better</th><th>per fold</th></tr></thead><tbody><tr><td>soft prior</td><td>w = 0.0</td><td>0.2816</td><td>+0.0000</td><td>0/6</td><td>0.275, 0.269, 0.284, 0.248, 0.307, 0.306</td></tr><tr><td>soft prior</td><td>w = 0.05</td><td>0.2818</td><td>+0.0002</td><td>3/6</td><td>0.275, 0.269, 0.284, 0.249, 0.307, 0.307</td></tr><tr><td>soft prior</td><td>w = 0.1</td><td>0.2821</td><td>+0.0005</td><td>3/6</td><td>0.274, 0.269, 0.284, 0.251, 0.307, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.2</td><td>0.2821</td><td>+0.0005</td><td>4/6</td><td>0.273, 0.269, 0.285, 0.251, 0.308, 0.308</td></tr><tr><td>soft prior</td><td>w = 0.4</td><td>0.2809</td><td>-0.0007</td><td>3/6</td><td>0.271, 0.266, 0.283, 0.249, 0.308, 0.309</td></tr><tr><td>soft prior</td><td>w = 0.8</td><td>0.2781</td><td>-0.0035</td><td>2/6</td><td>0.270, 0.253, 0.282, 0.248, 0.307, 0.309</td></tr><tr><td>hard gate</td><td>top 30% of tiles</td><td>0.2015</td><td>+0.0000</td><td>0/6</td><td>0.258, 0.118, 0.003, 0.251, 0.298, 0.281</td></tr><tr><td>hard gate</td><td>top 10% of tiles</td><td>0.1365</td><td>-0.0650</td><td>0/6</td><td>0.138, 0.000, 0.000, 0.248, 0.188, 0.245</td></tr></tbody></table>
+<p>The hard gates sharply reduce fine-scale score; Stage 1 remains a weak, broad-tile prior. Soft
+weights are marginal. H-D soft w=0.20 narrowly cleared the numeric holdout rule, but its in-memory
+support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; threshold 0.50;
+containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
+See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
 
-<h3>Known biases of this instrument</h3>
-<ul>
-<li>its truth is the visible catalogue, so it can only reward rediscovering the <i>kind</i> of fault
-that is already mapped, never a genuinely new style;</li>
-<li>truth density inside a block is several times the regional average, so absolute proxy DTI is
-optimistic;</li>
-<li>the block is treated as unmapped territory, whereas in reality known faults are interleaved
-with the hidden ones and their neighbourhoods are excluded from emission.</li>
-</ul>
-<p>A pass on this instrument licenses packaging a candidate. It is never a score.</p>
+<h3>Interpretation limit</h3>
+<p>These proxy holdouts can compare candidate methods for known-fault recovery. They cannot establish
+that a geological signature finds uncatalogued faults, and they cannot predict a public or private
+competition score. Any external-data hypothesis also requires provenance, licensing, units, and
+spatial alignment checks before it can enter the holdout.</p>
 
 </main>
 <footer><div class="wrap">
-<p>Evidence is labelled throughout. Public leaderboard rows are organizer-posted observations
-of participant scores, but the board does not identify submission files. No GEMSDOE51 TIFF has an
-organizer-verified score; all local holdout values are proxy diagnostics against the visible
-catalogue.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

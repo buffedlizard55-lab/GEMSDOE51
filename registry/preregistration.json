@@ -1,29 +1,81 @@
 {
- "schema_version": 1,
- "written_utc": "2026-10-06T21:11:52Z",
- "purpose": "Rules fixed before the shipped emission was built, so that no result can be reverse-engineered into a rule after the fact. Amended twice, with the amendments recorded below rather than edited away.",
- "rules": {
-  "slot_rule": "Nothing is shipped unless it beats the incumbent on a pre-declared instrument: for an emission rule, mean paired DTI > 0 AND >=3/4 folds positive; for a belief field, mean paired DTI > 0 AND >=3/4 folds positive at matched mass.",
-  "fold_rule": "2x2 spatial blocks of the 3730x3292 grid with a 600 m (6 px) boundary band removed from BOTH training and scoring, implemented as distance-from-block-interior > 6 px.",
-  "stage_a_rule": "The coarse gate is adopted only if a candidate tile statistic beats a matched-mass control on an instrument independent of the visible catalogue. Instruments: (i) lidar scarp intensity, (ii) off-catalogue SGMC fault density. A split decision is reported as a split, not as a pass.",
-  "mass_rule": "Emission size is chosen from the measured mass sweep, never from a model's self-predicted DTI (the packer's dti_pred was measured to be badly calibrated: ~0.49 predicted vs ~0.27 realised).",
-  "uniqueness_rule": "Maximum Jaccard <= 0.25 against every scored sibling submission on disk, with no subset or superset relation.",
-  "range_rule": "float32, EPSG:32611, 100 m, same bounds, all-finite, values in [0,1], no nodata tag (the portal rejects the -3.4028e38 sentinel).",
-  "off_catalogue_rule": "Every shipped dot is >= 2 px (200 m) from every visible-catalogue pixel, inside an approved Stage-A tile, and inside the data footprint."
+ "schema_version": 2,
+ "id": "H51-2026-10-07",
+ "written_date": "2026-10-07",
+ "status": "OUTCOME_RECORDED_NO_CANDIDATE_ELIGIBLE",
+ "purpose": "Preregister the leading geological Stage-2 candidate, define a spatially blocked promotion rule, and preserve its outcome without changing the rule after scoring.",
+ "target_limit": "Local labels are byte-identical to the existing-known-fault raster. These holdouts assess known-fault recovery only and cannot validate truly unmapped-fault detection or predict an organizer score.",
+ "incumbent": {
+  "arm": "H-D",
+  "mean_proxy_dti_at_ratio_3_47": 0.2816626603034904,
+  "mean_auc": 0.6726183,
+  "folds": 6,
+  "evidence": "data/holdout_H_D.json"
  },
- "amendments": [
-  {
-   "id": "A1",
-   "what": "Stage-A rule: the brief's literal deficit was replaced by geodetic strain magnitude.",
-   "when": "before the emission was built",
-   "why": "The deficit failed the pre-registered stage_a_rule on all three instruments available (lift 0.949/1/4 folds; rho -0.048 lidar; rho -0.228 SGMC). The replacement passes the lidar instrument (+0.376, lift 1.393) and fails the SGMC instrument (-0.166); the split is recorded as IR-51-04 and H51-3 remains in the hypothesis ledger as a refuted hypothesis."
-  },
-  {
-   "id": "A2",
-   "what": "Emission rule: a coverage lattice was trialled and then reverted.",
-   "when": "after the emission was built once, and BEFORE any submission",
-   "why": "The lattice won a sweep whose truth was a subsample of the visible catalogue (+0.0286 mean, 4/4 folds) and lost the faithful off-catalogue A/B instrument (-0.0104 mean, 1/4 folds). Under the pre-registered slot rule it is not promoted; the incumbent thin-dot rule ships. Evidence: evidence/offcat_holdout.json, evidence/emission_promotion.json. Recorded as IR-51-05."
+ "holdout_protocol": {
+  "design": "3x3 contiguous spatial blocks; 1.2 km boundary band removed from training; score within held-out blocks only",
+  "mass_ratio": "M/|G|=3.47 using each fold's observed held-out truth mass",
+  "truth": "visible known-fault catalogue proxy"
+ },
+ "promotion_rule": {
+  "paired_mean_delta_vs_H_D": "strictly positive",
+  "minimum_positive_folds": "4 of 6",
+  "minimum_candidate_mean_proxy_dti": 0.2817,
+  "additional_gates": [
+   "Stage 1 remains a weak broad-tile prior and does not dominate fine-scale placement",
+   "official local GeoTIFF format verification passes",
+   "support uniqueness passes against all available local prior artifacts",
+   "no competition slot is spent unless all gates pass"
+  ]
+ },
+ "leading_candidate": {
+  "id": "H51-X1",
+  "name": "Cross-physics magnetic/gravity edge-normal concordance",
+  "layers": [
+   "rtp",
+   "tmi_hg",
+   "tmi_vg",
+   "iso_grav_anom",
+   "iso_grav_anom_hg",
+   "iso_grav_anom_vg"
+  ],
+  "physical_signature": "At matched 200 m and 500 m scales, normalize edge strength and compare magnetic/gravity edge-normal orientation; retain coincident, similarly oriented edges.",
+  "rationale": "Magnetic susceptibility and density contrasts may persist under cover. This is a geological mechanism hypothesis, not evidence of hidden-fault performance.",
+  "novelty": "Existing features include single-field lineament transforms and H-E multi-physics coincidence; no tested feature combined magnetic/gravity edge-normal orientation at matched scales.",
+  "expected_benefit": "Qualitative moderate but uncertain upside; no numerical forecast preregistered.",
+  "implementation_cost": "Medium; competition layers only.",
+  "external_data_needs": "No new download; hash-pinned competition feature layers. Hidden expert labels remain unavailable locally.",
+  "outcome": {
+   "status": "FAIL_PROMOTION_PARTIAL_IMPLEMENTATION",
+   "mean_proxy_dti": 0.2796713344095349,
+   "incumbent_mean_proxy_dti": 0.2816626603034904,
+   "paired_mean_delta": -0.0019913258939555,
+   "positive_folds": 3,
+   "folds": 6,
+   "mean_auc": 0.6666622379857224,
+   "evidence": "data/holdout_H_X1.json",
+   "decision": "Not eligible for submission build or slot.",
+   "implementation_note": "The frozen layer-family plan listed RTP, TMI horizontal/vertical derivatives, and gravity horizontal/vertical derivatives. The measured builder used only rank-normalized comp_tmi and comp_iso_grav_anom as inputs to the new transform at 200 m and 500 m scales. The derivative bands remained in the common baseline stack but were not inputs to the new transform. This is a partial/narrow test and does not falsify every version of the broader hypothesis.",
+   "implementation_layers": [
+    "comp_tmi",
+    "comp_iso_grav_anom"
+   ]
   }
- ],
- "not_registered_disclosure": "The A/B off-catalogue instrument itself was invented after the lattice sweep, i.e. after seeing a result on a weaker instrument. It was built because the weaker instrument could not see the failure mode that matters (a halo emission around known faults), and it is reported with its known bias: B faults come from the same compilation as A and are interleaved with it, so a halo rule looks better there than it deserves. The halo control in evidence/offcat_holdout.json quantifies that effect and shows the halo rule scoring ~0.001-0.023, i.e. the instrument does penalise halos."
+ },
+ "separate_stage1_result": {
+  "role": "weak broad-tile prior only; not a fine-scale locator or hard gate",
+  "deficit_spearman": 0.03916,
+  "geodetic_only_spearman": 0.0993,
+  "deficit_top_50_percent_lift": 1.0829,
+  "geodetic_only_top_50_percent_lift": 1.23864,
+  "evidence": "data/stage1_trace_holdout.json",
+  "randomized_dti_mass_assumption": "The stage-1-only randomized DTI control uses provisional g_hidden=12,700; this is inherited local working value, not an organizer count. It does not alter the rank-correlation/lift analysis."
+ },
+ "decision": "No new GeoTIFF was written. The separate H-D soft-w=0.20 proposal passed the numeric screen but failed uniqueness (support Jaccard 0.861297; containment 0.925480); do not rerun it unchanged. No submission slot was used.",
+ "sources": [
+  "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+  "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+  "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+  "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+ ]
 }

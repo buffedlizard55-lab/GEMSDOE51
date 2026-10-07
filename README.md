@@ -1,547 +1,146 @@
-# GEMSDOE51 — DOE GEMS Prize (DrivenData #306): two-stage fault discovery
+# GEMSDOE51 — DOE GEMS Prize Challenge
 
-> **Read this first, every session.** It is the project brief, kept verbatim so the
-> aim never drifts. Everything below the brief is current state; the brief is the
-> target.
+> **Start every project session here.** This README is the persistent project brief, current evidence ledger, and handoff. Keep the values **Maximize P(Win)** and **Own the Outcome** focal: choose experiments for expected value rather than slot volume, and own the full chain from scientific claim through format verification.
 
----
+## Persistent project brief
 
-> **Time-sensitive correction (2026-10-07):** The owner brief below is preserved verbatim, including
-> its historical “0.3195 is the highest” target. The official public leaderboard now shows 0.3774
-> at rank 1 and 0.3195 at rank 7. The 0.2778 row is `extradr19` at rank 13; no verified link ties
-> it to GEMSDOE32 H33-2-B2, which that repository labels UNSCORED with a 0.2747 modelled projection.
-> The historical habitat-style score values in the owner brief are owner-reported and not
-> independently authenticated to files. See the evidence and status section below; do not use old
-> score attributions as fact.
+Build an auditable, scientifically grounded fault-discovery workflow for DrivenData's DOE GEMS Prize (#306). Review the competition brief and repository before making changes. Rank **3–5 distinct geological hypotheses** before implementation; for each, record the layer(s), physical signature, why it could indicate an uncatalogued fault, novelty versus this repository, expected benefit/cost, and external-data requirements. Preregister the leading candidate and test it on a spatially blocked holdout before any competition entry. Separate coarse Stage 1 evidence from fine-scale Stage 2 evidence. Stage 1 may only be a broad-tile prior; it must not dominate or hard-gate fine-scale placement unless holdout evidence warrants it.
 
-## 0. Project brief (verbatim from the owner)
+Create a **new, unique** competition-format GeoTIFF only when all of these are true: it passes the official format verifier, a source-aware uniqueness check, a Stage-1 dominance check, and a preregistered spatial holdout promotion rule against the current best. Do not spend a weekly submission slot on an unpromoted candidate. Never copy a previous submission to satisfy the file requirement. If no candidate passes, say so and withhold the file rather than relabeling an old artifact. When a candidate is eligible, make its download obvious, state a unique submission name and short note, and include a concise upload guide.
 
-Review the repo.
+Maintain source-linked research records, verify claims against official or trusted sources, flag irregularities, explain external-data access needs, and state limitations candidly. Do not claim a competition score unless the organizer returned it for the submitted artifact. Run at least three review passes: implement/verify; audit/fix; re-check the original requirements and improve. Update this brief as project decisions change.
 
-**THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!**
+### Operating constraints
 
-MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. DO NOT COPY A PREVIOUS
-SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION. BUT WE MUST GENERATE A UNIQUE
-TIF SUBMISSION.
+- The official [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/) says not to use automated tools to access, monitor, or copy website material, and not to use a manual process to monitor or copy it without prior written consent. **This repository therefore does not scrape, mirror, or manually transcribe leaderboard standings.** The official leaderboard may be linked as a source; no standings are stored here. No written consent is on record.
+- GEMS Prize rules require a narrative disclosure of whether and how generative AI was used. Any eventual submission narrative must include an accurate disclosure (template below); local testing is not a competition score.
+- Competition files restored from public owner mirrors are hash-checked but are **not organizer-authenticated**. Keep this provenance limitation visible.
 
-There should be an easy to download submission tif file as described by the
-prompt. Read the entire prompt.
+## Executive summary — current status
 
-**Geodetic strain-budget deficit, used strictly as a coarse first stage.**
-Hypothesis: where the geodetic strain rate exceeds what the mapped faults' slip
-rates can accommodate, the catalogue is likelier to be missing structures.
-Precedent for balancing geodetic and geologic deformation exists in the UCERF3
-deformation models (Field et al., *Bulletin of the Seismological Society of
-America* 104(3), 1122–1180, 2014, doi:10.1785/0120130164). Three of those models
-invert geodetic and geologic data together, and UCERF3 also models off-fault
-strain explicitly. A related USGS-listed paper ("A fault-based model for crustal
-deformation, fault slip-rates and off-fault strain rate in California") estimates
-off-fault moment rates separately. Convert each mapped fault's slip rate (the
-INGENIOUS compilation is reported to hold slip rates; confirm in the shapefile
-attributes) and trace length into an equivalent tile strain rate using a
-documented moment-tensor summation. State the exact formula and cite its source,
-because I haven't verified one. Subtract that from the dilatation and shear
-strain-rate layers, and keep the residual only as a prior over broad tiles.
-Strain rates are coarse, and the deficit can be distributed off-fault, aseismic
-or caused by wrong catalogue slip rates. Habitat-style statements scored worst in
-this project (0.0041, 0.1223, 0.1352), so a second, separately holdout-scored
-fine-scale model must place points only inside approved tiles. Report both
-stages' holdout results separately. Normalize, write the GeoTIFF, run the
-uniqueness gate, and confirm the submission isn't dominated by stage one's
-footprint.
+**No competition slot is authorized.** The guarded H-D `w=0.20` build stopped before writing because its support was too similar to the existing soft-`w=0.10` raster: Jaccard **0.8613** and candidate containment **0.9255** (limits 0.50 and 0.60). The narrowed H51-X1 magnetic/gravity edge-normal concordance test also lost to the frozen H-D blocked holdout; its two-input implementation did not exhaust the broader preregistered layer family.
 
-The following sites should serve as a starting point for understanding how to
-generate TIF submissions… *(full list of GEMSDOE1–54 sites and their scored
-submissions is kept in `registry/scored_submissions.json`; the current public
-leaderboard is mirrored in `registry/leaderboard.json`)*.
+A distinct H-G+H-D **research-only** GeoTIFF is available for inspection: [`gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif`](docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif) (one-file ZIP also available). The underlying predictions pass the refreshed, finite public-corpus uniqueness audit but lose their matched six-fold proxy holdout (0.281056 vs H-D 0.281663; paired Δ −0.000606; 3/6 folds higher). Its final NaN-outside format re-encoding passes the local CLI checker: one-band float32, 3730×3292, EPSG:32611, in-footprint predictions in [0,1], and NaN outside the footprint. It exactly preserves all in-footprint predictions; this is **not** an authorized submission. The site's download label is research-only; do not upload it.
 
-We need to study, analyze, and understand the highest score from the GEMSDOE
-site where the submission TIF is downloaded from. Why and how did this get the
-highest score and are we able to generate a submission that scores higher? Answer
-using PhD level experience, knowledge, and judgement. Then use the answer to
-generate a unique TIF submission into the competition. Must be unique submission
-unlike any within the GEMSDOE sites above. Verify working line by line no
-hallucinations.
+H-M and strike-coherent STE provide higher mean point estimates, not a robust win: both have noisy six-fold differences, both fail the refreshed broad uniqueness gate because packaged same-prediction NaN twins are present, and their required fresh q70 Stage-1 checks are not available in this checkout. No candidate currently clears every promotion gate.
 
-**Before implementing, generate 3–5 candidate geological hypotheses we haven't
-tried yet**, each naming: the specific layer(s) involved, the physical signature
-being targeted (e.g., an edge-detection or curvature transform), why it should
-catch a fault missing from the USGS/INGENIOUS catalogue rather than one already
-in it, and how it differs from anything already implemented in this repo. Rank
-them by expected DTI improvement and implementation cost. **Validate the top
-candidate on our spatially-blocked holdout set before touching a weekly
-submission slot** — do not spend a submission slot on an idea that hasn't beaten
-the current holdout best. If a candidate can't be validated without new external
-data, name the specific free, official source needed and check it's obtainable
-before proposing the idea as viable.
+### Evidence summary — keep Stage 1 and Stage 2 separate
 
-Work line by line verifying from official verified trusted sources, provide links
-for manual review. There should be no manual input, work on your own to complete
-tasks. Flag any irregularities for review. No hallucinations.
+**Stage 1: geodetic strain-budget deficit, used only as a coarse prior.** The exact fault-slip tensor summation cited by the implementation is Kreemer et al. (2000), Eq. 3:
 
-**The goal of this project is to get a full list that follow our requirements.
-No hallucinations. Verify line by line.**
+\[
+\dot{\varepsilon}_{ij}=\frac{1}{2}\sum_k\frac{L_k\dot{u}_k}{A\sin\delta_k}\,m_{ij}^{k},\qquad
+m_{ij}^{k}=n_i^k s_j^k+n_j^k s_i^k.
+\]
 
-We have a good understanding of how our hypothesis, methodology, calculations,
-analysis are done so we should be able to figure out a way to score higher on the
-leaderboard using previous results and scoring that we have across the sites
-listed above. We need to come up with distinct and unique strategies to score
-higher in this competition leaderboard. We need to start doing heavy and deep
-research into the part of the project that matters the most, which is the
-scientific discovery of geothermal vents. We should store all of our information
-and knowledge that we can gather from official verified sources. This will serve
-as a starting point for other projects as well. We need to think outside the box
-but still be grounded in proper scientific research, we are ultimately aiming for
-a top prize that many others are competing for. So it's important to be
-contrarian but be smart about it. We need to find sources of data that others are
-over looking or areas of the project when it comes to geothermal vents. We need
-to do deep research and critical thinking and come up with new hypothesis to test.
+Here `L_k` is trace-segment length, `u_dot_k` the slip-rate component, `A` tile support area, `delta_k` dip, and `n,s` unit fault-normal and slip vectors. Under a pure normal-fault assumption, a **total fault-plane** rate yields the horizontal coefficient `L*u_plane*cos(delta)/A`; if the source value is **vertical displacement** rate, the coefficient is `L*u_vertical*cot(delta)/A`. Vertical strike slip yields `L*u/(2A)`, with RL and LL signs opposite. The source component convention and exact dip are unresolved here; the code exposes both rate conventions, defaults to the explicitly provisional vertical interpretation, uses a 60-degree normal-fault dip, and applies a provisional mm/yr conversion. See [`src/gems51/strain_budget.py`](src/gems51/strain_budget.py), the focused tests, and the [public UNR paper](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf).
 
-0.3195 is the highest score right now so we need to design a new strategy,
-research, testing, analyzing, and generating submission system than the current
-website. It should be unique, take unique approaches to generating a submission
-that can score higher than 0.3195.
+This is an approximate horizontal tensor budget, not a full geodetic inversion: trace geometry is raster-derived, slip rates are assigned from the nearest trace centroid, the table does not provide per-segment rake, slip-sense categories are simplified, and the geodetic second-invariant convention cannot be recovered exactly from the supplied dilatation/shear layers. The copied slip-rate field is provisionally interpreted as mm/yr, but the NBMG service schema does not declare the `SLIPRTNUM` units and the linked GDR field-definition text was not audited locally; absolute strain values are not source-validated. The implementation compares quantile-ranked tile fields rather than making an absolute unit claim. Do **not** subtract observed scalar dilation or shear from the tensor invariant as though their definitions and units were interchangeable.
 
-Put this prompt into the repo readme and read it everytime we work on the project
-as a starting point to make sure we are building what we are aiming for and have
-a strong base to continue building and improving on making something useful for
-everyday use. It should solve the problem of having to manually check everything
-ourselves and having an up to date current feed.
+The latest formula audit changed the implementation to make the slip-rate component convention selectable and RL/LL shear signs opposite. **A current-formula, leakage-controlled Stage-1 rerun is not available in this checkout.** The table is the historical mainline trace-split receipt: its runner removed held-out trace rows, but its old code used an implicit unsigned/total-slip approximation. Keep these numbers as context only, not validation of the current implementation. The separate four-scenario formula audit in [`evidence/stage1_formula_audit.json`](evidence/stage1_formula_audit.json) is not a valid holdout: its runner passed held-out trace attributes into the catalogue-derived budget term. Full reconciliation is in [`evidence/stage1_reconciliation_20261007.json`](evidence/stage1_reconciliation_20261007.json).
 
-**Core Values (from the Arena AI team)**
+| Historical Stage-1 check (known-catalogue proxy) | Result | Interpretation |
+|---|---:|---|
+| Trace-held-out deficit Spearman vs held-out fault density | 0.0392 | Weak association; old formula |
+| Raw geodetic-only Spearman | 0.0993 | Higher than deficit in the historical test |
+| Deficit top-50% lift | 1.0829 | Small enrichment; not a strong locator |
+| Raw geodetic-only top-50% lift | 1.2386 | Higher than deficit |
+| Stage-1-only randomized DTI | 0.1481 vs 0.1862 uniform | Historical setting; uses provisional g_hidden=12,700, not an organizer count |
+| Stage-2 DTI with hard q50 gate | 0.1815 vs 0.2816 ungated | Historical setting; hard gating substantially harms Stage 2 |
 
-* **Maximize P(Win)** — "Maximize the Probability of Winning": our decision making
-  framework. In every decision, we weigh tradeoffs, assess risk, and choose the
-  path that maximizes the probability that Arena succeeds. We set aside our
-  emotions and make tough decisions in order to maximize P(Win). "Maximize P(Win)"
-  frees us from constraints and clarifies that we must put Arena first.
-* **Own the Outcome** — We own results end to end — not just our individual slice
-  of the work. When problems arise and we have the means to act, we do so without
-  waiting for permission or assignment. We treat failure and success as signals
-  and use them to improve. At Arena, we stay accountable to the final outcome.
+The archived H-D soft-prior gate sweep is also tied to the old Stage-1 field: `w=0.10` gives mean proxy DTI 0.28213 and is positive in 3/6 folds; `w=0.20` gives 0.28212 and is positive in 4/6, for paired mean gain about +0.00048. The w=0.20 artifact failed uniqueness, and neither weight has been reproduced against the current formula. Stage 1 remains a coarse prior only—not a validated fine-scale locator or hard gate. Restore the raw inputs and rerun Stage 1 before applying it operationally.
 
-Work line by line verifying from official verified trusted sources, provide links
-for manual review. There should be no manual input, work on your own to complete
-tasks. Flag any irregularities for review. No hallucinations.
+**Stage 2: fine-scale detector.** The current H-D baseline has six-fold mean proxy DTI **0.2816627** at `M/|G|=3.47` and mean AUC **0.6726183**. The narrowed H51-X1 test (rank-normalized `comp_tmi` + `comp_iso_grav_anom` edge-normal agreement at 200 m and 500 m; the planned RTP/HG/VG derivative products were not used by the new transform, though they remained in the common baseline stack) has mean proxy DTI **0.2796713**, AUC **0.6666622**, and beats H-D on only 3/6 folds: it fails promotion by −0.0019913 mean DTI. This does not falsify every version of the broader preregistered layer-family hypothesis. All these numbers use a visible known-fault raster as holdout truth; they are **proxy measurements**, not hidden-test predictions or competition scores.
 
-**We need to focus on being able to generate a submission into the competition.**
+The six-fold gate sweep is in [`data/gate_sweep.json`](data/gate_sweep.json); Stage-1 trace holdout and separate two-stage results are in [`data/stage1_trace_holdout.json`](data/stage1_trace_holdout.json) and [`data/two_stage_results.json`](data/two_stage_results.json). The frozen hypothesis screen and outcome are in [`knowledge/preregistration-2026-10-07.md`](knowledge/preregistration-2026-10-07.md).
 
-The site should be able to generate a TIF file that is required for submission.
-It should be as easy as download to click a File to submit into the competition.
-This needs to be in the executive summary or the very beginning of the site. It
-should be obvious when you visit the site.
+**Post-branch candidate audit (separate from the preregistered geology hypotheses):** the mainline six-fold emission sweep's best mean was STE `ste_L9_w0.35_s2.4_nothin`: proxy DTI **0.2836026** versus **0.2816394** for its isotropic `r=2.4` comparator (paired Δ +0.0019632; 4/6 folds higher; paired SD ≈0.003454). The small-sample paired t interval is approximately [−0.00166, +0.00559], so the point estimate is not a robust win. H-M cross-scale crest coincidence scored **0.2826030** vs H-D **0.2816627** (paired Δ +0.0009404; 3/6 folds higher; paired SD 0.003036; approximate 95% t interval [−0.00225, +0.00413]); its soft-prior increment over ungated H-M was only +0.0000077. These are visible-catalogue proxy measurements, not organizer scores.
 
-I tried to submit the document that I downloaded from the site but it returned
-this error on the submission form:
+Fresh full-corpus uniqueness audits cover the refreshed 54-repository inventory. The H-G+H-D research TIFF **passes**: 365 payloads SHA-verified, 364 comparable, one unrelated 32×48 fixture skipped, zero download errors/matches; maximum Jaccard 0.3216, cosine 0.4867, and containment 0.9933 (2.36× random-emission lift, below the 3× flag). On the archived Stage-1 field used to create the artifact, its q70 diagnostic approves 30.046% of footprint area and contains 19.728% of emissions (lift 0.657), so that historical field does not dominate. The current signed/rate-selectable Stage-1 map was not regenerated, so this is not a current-formula dominance check; the negative matched holdout independently blocks promotion. H-M **fails** uniqueness on its same-prediction NaN twin (Jaccard/cosine 1.0) and its hard-q20 alternate (Jaccard 0.634); STE **fails** on its NaN twin (Jaccard/cosine 1.0). No refreshed q70 Stage-1 dominance result is available for the H-M or STE full maps. H-D soft also remains a uniqueness failure (hard-q20 Jaccard 0.631; NaN twin 1.0). Evidence: [`evidence/uniqueness_gate_H_G_HD_experimental_20261007.json`](evidence/uniqueness_gate_H_G_HD_experimental_20261007.json), [`evidence/uniqueness_gate_H_M_soft_20261007.json`](evidence/uniqueness_gate_H_M_soft_20261007.json), and [`evidence/uniqueness_gate_STE_HD_20261007.json`](evidence/uniqueness_gate_STE_HD_20261007.json). These finite-repository checks are not global uniqueness proofs.
 
-> "Predicted values must be in range [0, 1]"
+## GEMSDOE32 case study — what the reported result does and does not show
 
-Also we need to give it a unique name and A short comment to help you or your
-team tell submissions apart later e.g. clustering with k=25
+The GEMSDOE32 owner page presents H33-2-B2 with **37,654 dots**, a claimed 200 m catalogue-flank prune, and a **projected 0.2747** result. The page itself labels the artifact **UNSCORED** and explicitly says no organizer score exists for that artifact. Its reported `+0.00487` over a `0.2708` base is an owner-reported live-mirror/model comparison, not an organizer-returned score linked to those bytes. A previously proposed attribution of the public `0.2778` row to H33-2-B2 is **unsupported and contradicted by the sibling's own UNSCORED label and 0.2747 projection**; no artifact-to-score mapping has been verified. Because of the official Terms of Use, this repository does not store leaderboard standings.
 
-Here is the submission page when i click submit file
+There is **no scientifically attributable GEMSDOE competition score** for H33-2-B2 in the evidence reviewed: its owner page labels it unscored, and the proposed 0.2778-to-H33-2-B2 link is unsupported and contradicted by that status and the 0.2747 projection. The official metric is `DTI = TP_w / (TP_w + 0.2*FP_w + 0.8*FN_w)`; for binary predictions, `FN_w = |G| - TP_w`, so this is `TP_w / (0.2*(TP_w + FP_w) + 0.8*|G|)`. Its 300 m triangular distance-credit kernel makes false-positive cost depend on proximity to truth. A catalogue-flank prune could raise credit per emitted unit if removed pixels are unlikely to receive hidden-fault credit, and the competition's test set comprises expert-identified faults absent from the existing public database. But neither the metric nor this plausible mechanism establishes that the prune caused a result: H33-2-B2 is unscored, 0.2747 is a modelled projection rather than an observation, and no organizer-controlled comparison is linked to the file. The only defensible interpretation is a falsifiable sparsification hypothesis—not a causal explanation or transferable score.
 
-**New submission**
+Source trail: [GEMSDOE32 index / artifact status](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html), [GEMSDOE32 research](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/research.html), [its ranked hypotheses](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/hypotheses.html), and [its irregularity register](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/irregularities.html). These are owner-published pages, not organizer verification.
 
-File to submit *No file chosen*
+## Current geological hypothesis slate (specific operators, not novelty claims)
 
-You can submit a single-band GeoTIFF (.tif) file, or a .zip file containing a
-single GeoTIFF, with your predictions. It must match the submission format's CRS,
-shape, and geotransform. You may wish to review the competition rules first.
+The four-item slate and results are recorded in [`evidence/hypothesis_slate_20261007.json`](evidence/hypothesis_slate_20261007.json). This is a literature- and owner-documentation-bounded prior-art comparison, not a claim of global novelty. The broad thermal/geothermal-expression, river-profile, geophysical edge-orientation, cross-physics co-location, step-over, and relay families all have substantial sibling prior art; exact source links and caveats are in [`evidence/sibling_prior_art_audit_20261007.json`](evidence/sibling_prior_art_audit_20261007.json). A documented concept is not evidence that it was implemented successfully.
 
-Note (optional) — A short comment to help you or your team tell submissions apart
-later e.g. clustering with k=25
+1. **H-G — high-angle TMI–gravity boundary crossings (tested; rejected).** **Layers/signature:** `tmi` and `iso_grav_anom`; normalized-convolution gradients at 400/800 m, edge-magnitude-weighted axial discordance, with negligible edges suppressed. **Rationale:** independently oriented magnetic and gravity boundaries may mark a structural intersection or transfer zone, but are not themselves proof of a fault. **Prior work/difference:** magnetic–gravity edge-orientation agreement is already documented in sibling projects; H-G is only the exact high-angle, magnitude-weighted, two-scale operator, not a new family. **Expected benefit/cost:** low-to-moderate, uncertain benefit; low–medium cost using existing bands. **Result:** matched H-G+H-D mean proxy DTI 0.281056 vs H-D 0.281663 (Δ −0.000606; 3/6 folds higher); do not promote or spend a slot.
+2. **H-H — paired potential-field edge terminations with a conductive relay bridge (next to preregister, not yet tested).** **Layers/signature:** `tmi_hg` or `iso_grav_anom_hg`, `depth_to_base_surf`, `cond_surf`, and lidar step/coherence as an independent surface check; pair aligned, offset finite edge endpoints 0.3–2 km apart only when a conductivity anomaly bridges them. **Rationale:** buried strands can terminate or transfer beneath basin fill; relay zones may localize fractured rock, while conductivity is non-unique. **Prior work/difference:** stepovers, fault-tip continuation, and local co-location are established sibling concepts; this proposal is the specific endpoint-pair plus independent bridge operator, not an untried relay family. **Expected benefit/cost:** potentially moderate localization if the multi-layer bridge is selective; uncertain. Medium–high implementation cost for edge thinning, graph construction, pairing, scale controls, and leakage-safe ablation. Uses existing bands.
+3. **H-I — directional conductivity contrast across an independent structural edge (proposed; lower priority).** **Layers/signature:** `cond_surf`, `depth_to_base_surf`, `iso_grav_anom_hg`, and `tmi_hg`; compare along-edge versus cross-edge conductivity at 150–800 m and multiple scales. **Rationale:** an elongated conductor adjoining a basement/potential-field step may be more compatible with a fault corridor than broad basin conductivity, but clay and lithology are confounders. **Prior work/difference:** H-E already screened broad co-location and cross-physics edge agreement has sibling prior art; H-I tests directional anisotropy and offset response instead of magnitude or co-location. **Expected benefit/cost:** low-to-moderate and uncertain; medium cost, no new data.
+4. **H-J — earthquake-density modulation of independent structural edges (blocked on metadata check).** **Layers/signature:** `ieq_n100a15`/`deq_n100a15` conditioned on `tmi_hg`, `iso_grav_anom_hg`, and `depth_to_base_surf`; retain an edge only when it coincides with a local earthquake-density ridge, compared to edge-only and seismicity-only controls. **Rationale:** local seismicity may indicate active uncatalogued structures, while geophysical edges constrain geometry; completeness gradients and diffuse seismicity can mislead. **Prior work/difference:** seismicity-lineament research is already documented; this is the specific conditional interaction, not a claim that either input family is new. **Expected benefit/cost:** modest at best, uncertain; low–medium after verifying source-band semantics, coordinate support, and spatial scale.
 
-**Create a executive summary subpage that explains exactly how to make a
-submission into the contest.**
+**Next experiment:** H-H is the highest-priority untested proposal after H-G's negative matched test. Preregister its finite endpoint/bridge operator and edge-only controls, evaluate on the same blocked holdouts against H-D, and require a promotion-rule pass before producing any candidate artifact. Stage 1 remains a coarse-tile prior only. Literature context: [USGS integrated Great Basin blind geothermal play-fairway study](https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and) and [Faulds & Hinz on Great Basin structural settings](https://pangea.stanford.edu/ERE/db/WGC/papers/WGC/2015/11100.pdf); neither validates any raster operator above.
 
-Work on the next steps from the previous sessions first.
+The earlier frozen **H51-X1–X4** screen is retained in [`knowledge/preregistration-2026-10-07.md`](knowledge/preregistration-2026-10-07.md) as a historical preregistration: its narrowed X1 test lost, and X2–X4 were not all implemented. Do not conflate it with the newer H-G–H-J slate or describe the broader X1 family as disproven.
+## Outstanding work and limitations
 
-The goal of this project is to place top of the leaderboard in this competition.
-The competition: <https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>
-We need to create a project that can compete and place top of the leaderboard. We
-need to understand the problem, collect all the data and organize it into a clean
-easily auditable table with official verified links for manual verification.
+- Restore the official training-feature raster, prepared footprint/catalogue arrays, and the QFaults slip-rate table (absent from this checkout). Then rerun the current signed/rate-selectable Stage-1 trace holdout while excluding every held-out trace row from the budget, and independently rerun the archived PR #6 Stage-2 emission sweep. Until then, keep Stage 1 as a broad prior only and treat `0.2836026` as a provisional Stage-2 lead, not a promoted incumbent; only a fresh, guarded build from a best holdout-cleared configuration can be considered for a slot.
+- Before any future build, fetch the commit-pinned prior-family TIFF references with `scripts/fetch_gate_refs.sh` for support comparison only (never as candidate pixels). The guarded builder scans `data/refs/`, `data/prior/`, current downloads, and archived submissions; a missing reference set is a limitation to report, not a reason to loosen the gate.
+- The full H51-X1 preregistered band-family transform was not implemented; the tested two-input transform failed promotion. If revisited, define the aggregation of RTP/TMI/gravity derivative channels before running a new blocked holdout, and treat it as a new/expanded preregistered experiment.
+- H51-X2 (paired scarp-face asymmetry) and H51-X3 (well/spring-to-lineament alignment) remain untested; validate owner-mirror provenance, units, duplicates, and coordinate transformations before feature use.
+- H51-X4 is blocked until the official USGS Siler shapefile can be obtained and its fields/units, geometry, and spatial join are verified locally.
+- The available spatial holdout reuses the public known-fault labels; it cannot validate recall of genuinely new expert faults. Hidden test labels, hidden truth size, and any organizer score are unavailable locally. A participant must use the official competition account to upload a future eligible file and obtain organizer feedback.
+- No leaderboard standings are mirrored or monitored. The official DrivenData Terms of Use prohibits automated monitoring/copying and manual monitoring/copying without prior written consent; no such consent is on record.
 
-This is the guidelines we need to follow: <https://www.drivendata.org/competitions/306/competition-doe-gems/>
+## Submission status and guide
 
-Get familiar with the problem through the overview and problem description,
-<https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/>.
-You might also want to reference additional resources available on the about
-page, <https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/>.
+There is currently **no upload-eligible GeoTIFF**. For scientific review only, the site links the distinctive H-G+H-D experimental TIFF above; it is not a competition recommendation because its matched holdout is below H-D, and it must not be uploaded. The current guarded H-D `w=0.20` proposal stops at its pre-write support-uniqueness check. Future builds must satisfy the current official-format verifier, source-aware uniqueness, q70 Stage-1 non-dominance, and the frozen spatial-holdout promotion rule before any file is shown as eligible.
 
-Download the data from the data tab,
-<https://www.drivendata.org/competitions/306/competition-doe-gems/data/>.
+When a future candidate passes, the executive-summary card will display the `.tif`, unique submission name, short note, checksum, and exact format receipt. Upload steps will be: download that eligible `.tif` (or its single-file `.zip`), open the official [DrivenData submission page](https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/), choose the file, enter the displayed name and note, and include the narrative disclosure. Do not upload an archived file just because it is locally format-valid.
 
-Create and train your own model. This reference solution
-<https://github.com/drivendataorg/gems-prize-reference-solution> implements a
-simple approach.
+**Narrative disclosure to adapt accurately if/when submitting:**
 
-Use your model to generate predictions that match the submission format.
+> Generative AI was used as a coding and research assistant to inspect this repository, propose and rank hypotheses, draft and revise code and documentation, and help debug and test the workflow. The competition-format output, if submitted, is produced by the documented geospatial feature and machine-learning pipeline. The team reviewed the scientific claims and is responsible for the data provenance, code, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted file.
 
-Tell me what are you limitations and what you need access to during this project.
-We will need to find free publicly available sources and data from official and
-verified sources if we are to use 3rd party or external data.
+The exact disclosure must describe the actual tools and their use in the final submission elements; see Section 3.2 of the [September 2026 official rules](https://docs.nlr.gov/docs/fy26osti/96647.pdf). This repository's narrative is only a template and must be checked against the eventual submission.
 
-this pdf outlines how submissions must be entered into the competition:
-<https://docs.nlr.gov/docs/fy26osti/96647.pdf>
+## Repository map
 
-You must be able to do your own research, deep research, scientific literature
-research and organize the knowledge so that we can critically think through the
-problem and generate a solution through scientific and free publicly available
-information. this must be done autonomously and must be constantly reviewed and
-improved upon. Provide suggestions and improvements and implement them.
-
-❌ No DrivenData auth → cannot auto-download `training_features.tif`, `labels.tif`,
-`sample_submission.tif`, `1m_DEM_links.csv` from the data tab (verified redirect
-to login).
-
-See below for links from the above site. See attached files for links from the
-above site.
-
-* <https://gdr.openei.org/submissions/1391>
-* Download competition data from the data tab (requires login) to `data/`
-* [GEMS_96647.pdf](https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&st=wz4kofki&dl=0)
-* [example_submission.tif](https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&st=8junzdyw&dl=0)
-* [existing_faults.tif](https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&st=rnino7ya&dl=0)
-* [gems-geodawn-numerical-features.tif](https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&st=zj1lag1r&dl=0)
-* [Digital-elevation-model-links-JSON.pdf](https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&st=srhhir10&dl=0)
-
-**Site creation**
-
-Create a github page for this repo that has clean ui, user friendly, simple and
-easy to use. It should be organized and clean. It should include all relevant
-information in an easy to read format with official verified links as sources for
-review. Work line by line verify everything no hallucinations.
-
-The single remaining blocker to training is data placement: run
-`bash scripts/download_competition_data.sh` on any unrestricted machine into
-`data/`, then `python scripts/prepare_data.py` — after that the full
-train→inference→validate pipeline is ready to run (GPU needed for training;
-metric/losses/validation all verified working here on CPU).
-
-**Run this task through multiple passes.**
-
-Pass 1: Implement the task completely and verify the result.
-Pass 2: Review your work for bugs, missing requirements, incorrect assumptions,
-and edge cases. Fix everything you find.
-Pass 3: Re-check the entire implementation against the original request. Improve
-accuracy, reliability, completeness, and code quality. Fix any remaining issues.
-
-Do not stop after the first pass. Each pass must build on the previous one.
-Before finishing, verify that the final result fully satisfies the original
-request. Work line by line verify everything no hallucinations.
-
-Go ahead and create a pull request and then merge the pull request onto the main.
-Make suggestions for what work still needs to be done and any limitations that is
-in the way of a successful project. It should be worked on in this next session
-or the next session. Work line by line verify everything no hallucinations.
-
----
-
-## 1. The competition, in one page
-
-| | |
-|---|---|
-| Aim | Predict **all** faults in the GeoDAWN region (NW Great Basin, Nevada) as a pixel-wise probability raster |
-| Grid | EPSG:32611, 100 m, **3730 × 3292** (12,279,160 cells), footprint = 5,167,373 cells |
-| Output | single-band **float32** GeoTIFF, values in **[0, 1]**, outside-footprint null or NaN |
-| Metric | distance-weighted Tversky index, **α = 0.2, β = 0.8**, triangular kernel, **R = 300 m = 3 px** |
-| Truth | faults identified by experts that are **not** in the USGS/INGENIOUS catalogue |
-| Known-fault handling | known fault pixels are **masked out of the scoring entirely** (organizer confirmation) |
-| "New fault" definition | **any** fault pixel not already captured, *including* newly mapped geometry (continuations, splays, parallel strands) of an existing fault system |
-
-Official sources:
-[problem description & metric](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/) ·
-[about](https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/) ·
-[leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) ·
-[rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf) ·
-[reference solution](https://github.com/drivendataorg/gems-prize-reference-solution) ·
-[GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and) ·
-[INGENIOUS](https://gbcge.org/current-projects/ingenious/) ·
-[GDR 1391](https://gdr.openei.org/submissions/1391) ·
-[masking clarification](https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516) ·
-["new fault" definition](https://community.drivendata.org/t/where-do-you-draw-the-line/11536)
-
-### The one identity that drives every design decision
-
-From the published definitions, `FN_w = |G| − TP_w`, so
-
-```
-DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)
-    = TP_w / ( 0.2·(TP_w + FP_w) + 0.8·|G| )
+```text
+src/gems51/       metric, grid, feature stack, detector, strain_budget, submission verifier
+scripts/          experiments, blocked holdouts, safe submission builder, static-site builder
+knowledge/        preregistration, case study, source-linked research records
+registry/         source/data manifests, irregularities, prior-submission references
+ data/            manifests and measured results; raw training features/prepared arrays are absent from this checkout
+ docs/             GitHub Pages site; only manifest-listed files are exposed, with research-only files visibly marked
+ archive/          prior submission files and old site receipts retained for audit, not download
+ tests/            metric, strain-budget, feature, submission, and legacy-guard tests
 ```
 
-Here `TP_w` and `FP_w` are distance-weighted terms. `|G|` is fixed by the hidden truth; the metric
-trades weighted true-positive credit against weighted error and a fixed truth-size term. The sum
-`TP_w + FP_w` is not the raw number of emitted pixels.
+The old scalar prototypes `strain.py` and `stage1_strain.py` are quarantined under `attic/legacy-api/src/gems51/` and are not part of the active evidence path; report functions in the archived `strain.py` fail closed. Current Stage 1 is `src/gems51/strain_budget.py`. Legacy `run_all.py`, `run_pipeline.py`, `rebuild_submission.py`, the earlier holdout runners, the old uniqueness checker, and the README-results generator are retired to prevent stale evidence or ungated files. Use only the dedicated current scripts listed above; the historical receipts remain under `archive/`.
 
-`TP + FP` is the metric's effective weighted cost, not the raw number of emitted pixels. For an
-increment with weighted changes `ΔTP = c` and `ΔFP = f`, the exact local improvement condition is
-
-```
-c · (1 − 0.2·DTI) > 0.2·DTI·f
-```
-
-The familiar `c > 0.2·DTI` is only the special case `c + f = 1`; it is not a universal per-pixel
-threshold. The identities and the general/special-case tests are in `tests/test_metric.py`.
-
-## 2. Repository layout
-
-```
-registry/     hash-pinned data manifest, source register, irregularity register
-src/gems51/   metric, grid, features, stack, detector, emission, holdout,
-              strain_budget (Stage 1), extras (candidate hypotheses), submission, uniqueness
-scripts/      restore_data, prepare_data, run_experiments, run_two_stage, build_submission, build_site
-tests/        metric identity tests (run: python -m pytest tests -q)
-docs/         GitHub Pages site (executive summary, one-click download)
-data/         raw + prepared rasters (gitignored; restored by scripts/restore_data.py)
-```
-
-## 3. Reproduce
+## Reproduce and verify
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-python3 scripts/restore_data.py --group all     # hash-verified mirrors via `gh api`
-python3 scripts/prepare_data.py                 # -> data/prepared/
-python3 -c "import sys; sys.path.insert(0,'src'); import gems51.stack as s; s.build()"
-python3 scripts/build_extras.py                 # candidate-hypothesis feature groups
-python3 scripts/run_experiments.py --arm base   # spatially blocked holdout
-python3 scripts/run_two_stage.py                # Stage 1 / Stage 2, scored separately
-PYTHONPATH=src python -m pytest tests -q
+./.venv/bin/python scripts/run_experiments.py --arm H_D --ratios 2,3.47,4.5,6 --save-fields
+./.venv/bin/python scripts/run_experiments.py --arm H_X1 --ratios 3.47
+./.venv/bin/python scripts/run_stage1_trace_holdout.py --n-splits 5 --tile-px 100 \
+  --thresholds 40,50,60,70,80 --ratio 3.47 --g-hidden 12700 --seed 3 --min-heldout 2000
+./.venv/bin/python scripts/run_two_stage.py --fields 'data/prepared/field_H_D_fold{}.npy'
+./.venv/bin/python scripts/sweep_gate.py --arm H_D --folds 6 --tile-px 100 \
+  --ratios 3.47 --nms-radius 2.4 --excl-radius 2.0 \
+  --weights 0,0.05,0.1,0.2,0.4,0.8 --hard-q 70,90
+./.venv/bin/python -m pytest tests -q
 ```
 
-## 4. Known irregularities — see `registry/irregularities.json`
+Within the preregistered isotropic H-D gate sweep, the soft Stage-1 weight `0.20`, ratio `3.47`, NMS `2.4 px`, and exclusion `2 px` is the only gate setting to clear that numeric screen, but it is **not promotion-cleared**: it fails source-aware uniqueness. This does not supersede the separate, provisional PR #6 emission-geometry result above. Do not rerun that unchanged candidate, bypass the guard, or copy an archived TIFF to make a submission. A substantively distinct candidate needs its own preregistration, blocked holdout evidence, and complete gate pass.
 
-* **IR-51-01** GEMSDOE32's index page labels `gems32-probe-S1-ANCHOR-identical-to-live-02600.tif`
-  as the "0.2708 anchor", but that repository's own audit JSON for the same
-  digest (`4dc4cc54…`) calls it the **0.2600** reference anchor, and its mask is
-  byte-identical to the GEMSDOE25 file scored 0.2600. The 0.2708 label is not
-  reproducible from the artifacts; we treat the file as the 0.2600 anchor.
-* **IR-51-02** The three geodetic layers satisfy no exact algebraic identity
-  (`sqrt(dil²+shear²)`, `sqrt((dil²+shear²)/2)`, `|dil|+|shear|` all miss by
-  >30 % locally; best r = 0.993), so the invariant convention behind
-  `geod_2ndinv` is **not recoverable** from the shipped data. Stage 1 is
-  therefore stated in quantile space, which is invariant to it.
-* **IR-51-LEAK-01** Any feature derived from the catalogue is a *perfect* training
-  leak in a blocked holdout (every positive has `d_cat = 0`). Measured: in-block
-  AUC collapsed to exactly 0.500. Catalogue-derived columns are excluded from the
-  model and used only at emission time.
-* **IR-51-03** The DrivenData data page is login-walled and this sandbox's egress
-  is allow-listed (PyPI + github.com + api.github.com only). All rasters are
-  therefore re-fetched as hash-pinned public GitHub blobs; provenance is
-  owner-mirror, **not** organizer-authenticated.
+The hidden test-set mass \(|G|\) is not published. The fixed `g_hidden=12,700` value used only for an illustrative full-map dot budget is an inherited, provisional local working assumption; its calibration is not independently validated here and it is not an organizer label count. Holdout model comparisons use each held-out block's observed truth mass at the same ratio; that does not validate the full-map count. Re-check sensitivity to this assumption before any future build or slot.
 
+## Trusted source links
 
-## 5. Current evidence and decision (2026-10-07)
-
-### Executive decision
-
-The existing H-D soft research TIFF is
-`docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif`.
-It is a one-band float32 GeoTIFF on the competition grid, EPSG:32611, 100 m, 3730×3292,
-with every cell finite and values in [0, 1]; 44,069 positive pixels, SHA-256
-`5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b`. Its format is verified,
-but its fresh full-corpus uniqueness audit **fails**: it overlaps the current repository's hard-q20
-alternate at Jaccard 0.631 and has a same-prediction NaN-format twin at Jaccard 1.000. Do not use it
-as a unique submission. Its suggested identifier is `GEMSDOE51-HD-SOFT-W010`; its note is only a
-label, not permission to upload.
-
-To produce a distinct research artifact without spending a competition slot, the matched H-G+H-D
-feature recipe was materialized as
-`docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif`.
-It is a single-band float32 GeoTIFF, EPSG:32611, 3730×3292, all finite in [0,1], 44,069 positive
-pixels, SHA-256 `c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9`. Its fresh
-public-artifact uniqueness audit **passes**: 359 TIFF payloads were fetched and SHA-verified, 358
-were pixel-comparable, zero download errors, one unrelated 32×48 format-test fixture skipped, zero
-matches, maximum support Jaccard 0.3216 (limit 0.50), maximum cosine 0.4867 (limit 0.90). Stage-1
-q70 diagnostics show 30.046% of footprint approved and 19.728% of emissions inside (lift 0.657),
-so Stage 1 does not dominate.
-
-**Do not spend a competition slot or upload this experimental TIFF.** The matched six-block H-G+H-D
-holdout averaged 0.281056 proxy DTI vs H-D 0.281663 (paired Δ −0.000606; 3/6 folds higher) and lower
-mean AUC. The separate H-D soft-prior gain is +0.000367 (4/6 folds), small/inconclusive, not a
-win. Thus one artifact passes the scoped uniqueness gate, but it fails the locked incumbent holdout;
-no candidate has passed both promotion and uniqueness gates. The portal-formatted research TIFF is
-not a leaderboard claim and is not authorized for Phase 1 upload. Full records:
-`evidence/experimental_H_G_plus_H_D_artifact.json`,
-`evidence/uniqueness_gate_H_G_HD_experimental_20261007.json`, and
-`evidence/holdout_H_G_plus_H_D.json`.
-
-### Public leaderboard and score attribution
-
-A manual fetch of the official board on 2026-10-07 shows the highest public row as 0.3774 at rank 1
-for participant `xiaofanhu`; 0.2778 appears at rank 13 for `extradr19`. These are leaderboard
-observations, not identified TIFFs. The board identifies participants and scores, not TIFF hashes or
-methods. The earlier claim linking 0.2778 to GEMSDOE32 H33-2-B2 is
-**unsupported and contradicted by GEMSDOE32's own reporting**: its README/site labels H33-2-B2
-UNSCORED, with a modelled projection of 0.2747. There is no verified file-to-score link. We cannot
-scientifically explain the 0.2778 row beyond the metric mechanics without the scored file, its
-positions, and the hidden labels. See `evidence/score_attribution_audit.json` and
-`registry/scored_submissions.json`.
-
-Scientifically, the public score can only be interpreted through the published metric—not as a
-geological success rate or a known model result. With the 300 m triangular distance kernel, each
-truth pixel contributes at most its best nearby prediction credit; off-target prediction mass adds
-weighted false-positive cost. The score 0.3774 is not 37.74% recall, accuracy, or trace coverage. The
-effective `TP_w + FP_w` term is not raw emission count. For a proposed increment with weighted
-changes `c=ΔTP_w` and `f=ΔFP_w`, the exact local improvement condition is
-`c·(1−0.2·DTI) > 0.2·DTI·f`; `c > 0.2·DTI` is only a special case. Local holdouts below are
-catalogue proxies and are not directly comparable to public scores.
-
-### Stage 1 — exact formula, rate sensitivity, and limitation
-
-Kreemer et al. (2000), Eq. 3, gives the fault-slip-based horizontal strain-rate sum:
-
-```
-epsilon_dot_ij = 1/(2 A_tile) * sum_k [L_k * u_dot_k / sin(delta_k)] * m_ij^k
-m_ij^k = s_i^k*n_j^k + s_j^k*n_i^k
-```
-
-For pure normal motion the horizontal component is `L*u_vertical*cot(dip)/A` if the table rate is
-vertical displacement, or `L*u_fault_plane*cos(dip)/A` if it is total fault-plane slip. For a pure
-vertical-plane strike-slip fault it is `L*u/(2A)`, with opposite signs for right- and left-lateral
-motion. Source: [Kreemer et al. (2000), Eq. 3](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf).
-
-The local table has 1,126 rows and 49 distinct numeric `slip_rate` values. The USGS QFaults REST
-alias labels the string field “Slip Rate (mm/year)”, but exact component semantics are not
-authenticated here: the GDR v2 archive's field-definition text could not be read. `dip_direct` is
-direction metadata, not numeric dip. The code assumes 60° normal-fault dip and 90° strike-slip
-dip; unknown slip sense is either assumed normal or excluded in sensitivity runs. Stage 1 is
-quantile-space tile ranking only, a low-confidence broad prior—not a fine-scale point placer.
-
-Five trace-level splits (not spatial blocks) show that the deficit is worse than raw geodetic-only
-on mean Spearman and q50 recall/area lift under all four formula/sense cases. The random-dot
-comparison uses 44,069 dots from `3.47 × 12,700`; 12,700 is a planning proxy only, not a measured
-hidden-truth size or a deduction from a public leaderboard row:
-
-| rate/sense case | Spearman: deficit / geodetic-only | q50 lift: deficit / geodetic-only | single-draw q50 proxy DTI: deficit / geodetic-only |
-|---|---:|---:|---:|
-| vertical-rate assumption, unknown sense→normal | 0.0318 / 0.0993 | 1.099 / 1.239 | 0.04972 / 0.05629 |
-| fault-plane-rate assumption, unknown sense→normal | 0.0313 / 0.0993 | 1.097 / 1.239 | 0.05020 / 0.05598 |
-| vertical rate, known senses only | 0.0273 / 0.0993 | 1.101 / 1.239 | 0.05063 / 0.05537 |
-| fault-plane rate, known senses only | 0.0269 / 0.0993 | 1.104 / 1.239 | 0.05187 / 0.05567 |
-
-DTI is one seeded random-dot draw per field/split and not paired across masks; treat its small
-changes as descriptive noise. Complete formula, input-field caveats, and split-level values:
-`evidence/stage1_formula_audit.json`.
-
-### Stage-1 dominance audit for the soft primary
-
-The soft primary's configured diagnostic is **q70** (approve the top 30% of deficit values), not
-q20. Its original build-time check reports 30.046% of footprint approved and 20.307% of emitted
-pixels inside that area (lift 0.676). A current-code rerun reports 30.046% area, 19.560% inside
-(lift 0.651). Both are below the area share, so neither indicates Stage-1 dominance. The existing
-TIFF predates the signed strike-slip code revision; both records are preserved rather than
-conflated. The old q20/top-80% figures (80.051% area, 78.091% emitted) belong to the hard secondary
-threshold and are retained only as a comparator. See `evidence/submission_manifest_reconciliation.json`.
-
-### Stage 2 — spatially blocked proxy holdout
-
-| arm | in-block AUC | proxy DTI at M/|G|=3.47 | evidence |
-|---|---:|---:|---|
-| H-D incumbent | 0.67262 | 0.28166 | `data/holdout_H_D.json` |
-| H-G high-angle TMI–gravity crossings, replacing H-D extras (not matched) | 0.66358 | 0.27678 | `evidence/holdout_H_G.json` |
-| H-G crossings added to H-D (matched) | 0.66962 | 0.28106 | `evidence/holdout_H_G_plus_H_D.json` |
-
-The first H-G arm replaced H-D's four coherence features and lost by 0.004879 mean proxy DTI
-(1/6 folds higher); it was not an add-on comparison. The matched H-G + H-D add-on was then evaluated
-on the same six blocks, truth counts, block sizes, negative-sample plan, and M/|G|=3.47. It scored
-0.281056 versus H-D 0.281663 (paired delta −0.000606; 3/6 folds higher); mean AUC was 0.669619
-versus 0.672618. H-G is not promoted. Stage 2 is six contiguous spatial blocks with a 1.2 km
-training buffer, fixed negative-sample seed per fold, and emissions/scoring inside the held-out
-blocks. All local results use the visible catalogue as proxy truth; none establishes hidden-fault
-or geothermal resource discovery.
-
-### Hypotheses and prior art
-
-The four-candidate date-stamped slate (target layers/signatures, rationale, exact difference from
-inspected prior work, expected benefit, engineering cost, and both the initial and matched H-G
-results) is
-`evidence/hypothesis_slate_20261007.json`. Prior-art review covers 582 keyword-selected public
-documents from 54 sibling repositories and makes no global novelty claim. Broad river-profile,
-hydrothermal-expression, radiometric, relay/stepover, and magnetic–gravity orientation families
-have substantial sibling prior art. H53's default branch had only an 11-byte README with its title.
-The H-G high-angle operator is a specific variant of an already documented edge-orientation family,
-not an untried family.
-
-### Known limitations that change decisions
-
-1. **IR-51-08:** the obtainable `labels.tif` is byte-identical to the known-fault raster/catalogue;
-   the real competition training labels are not authenticated. This is the largest blocker.
-2. **IR-51-05:** the organizer does not disclose hidden-label provenance; the hidden fault style may
-   differ from the visible catalogue.
-3. **Stage 1:** rate component, slip sense fallbacks, assumed dip, and geodetic invariant convention
-   remain uncertain; the deficit loses as a locator and stays a broad prior only.
-4. **Score attribution:** public participant rows do not identify artifacts; no local organizer
-   score is claimed.
-5. **Uniqueness:** the H-D soft TIFF fails the fresh audit (hard-q20 Jaccard 0.631; its NaN twin
-   Jaccard 1.000). A newly materialized H-G+H-D experiment passes the scoped corpus gate (359
-   SHA-verified TIFF payloads; 358 comparable; zero matches; one format-test shape skip), but its
-   matched holdout is negative, so it is not slot-eligible. Neither result substitutes for the
-   historic 211-reference Hridge PASS; that input corpus is absent. See both
-   `evidence/uniqueness_gate_H_D_soft_20261007.json` and
-   `evidence/uniqueness_gate_H_G_HD_experimental_20261007.json`.
-6. **Provenance:** rasters come from hash-pinned owner mirrors, not an authenticated organizer
-   download.
-
-### Reproduction
-
-```bash
-PYTHONPATH=src .venv/bin/python scripts/audit_stage1_formula_results.py
-PYTHONPATH=src .venv/bin/python scripts/reconcile_submission_manifest.py
-PYTHONPATH=src .venv/bin/python scripts/run_public_uniqueness_audit.py \
-  --candidate docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif
-# Optional research build only; H-G+H-D failed its matched holdout and must not be uploaded.
-PYTHONPATH=src .venv/bin/python scripts/build_experimental_hg_hd_tiff.py \
-  --basename gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z
-PYTHONPATH=src .venv/bin/python scripts/run_public_uniqueness_audit.py \
-  --candidate docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif \
-  --out evidence/uniqueness_gate_H_G_HD_experimental_20261007.json
-.venv/bin/python scripts/build_site.py
-PYTHONPATH=src .venv/bin/python -m pytest -q
-```
-
-### Repository history: two independent implementations
-
-PR #1/#2 (an earlier session on a different branch) and this session each built the same library
-from scratch in parallel, so 27 paths conflicted add/add at the same names. This session's versions
-were kept for the shared code and site paths because they are what produced the shipped artifacts.
-Nothing was lost at that merge: every conflicting PR #1/#2 file is preserved verbatim under
-`attic/pr1-2/`, while the 74 non-conflicting files were retained. This follow-up now regenerates
-`docs/claims.html` from `registry/claims.json` and replaces the obsolete `docs/strategy.html`
-narrative with a score-attribution correction notice; original merge handling remains recorded as
-**IR-51-07**.
-
-### Limitations, in the order they matter
-
-1. **IR-51-08 — target labels are not authenticated.** The obtainable `labels.tif` is byte-identical
-   to the known-fault raster/catalogue. All local holdouts therefore test recovery of visible
-   catalogue structure, not the hidden target distribution.
-2. **No artifact-to-score mapping.** The highest public row in the 2026-10-07 fetch is 0.3774
-   (`xiaofanhu`); it reveals no TIFF or method. The 0.2778 row belongs to `extradr19` in that
-   snapshot, and must not be attributed to GEMSDOE32 H33-2-B2, which the sibling reports as
-   UNSCORED with a 0.2747 modelled projection.
-3. **Stage 1 is not a locator.** Its deficit ranks below raw geodetic-only on the audited trace-level
-   splits under all four rate/sense cases. It is retained only as a low-confidence broad-tile prior;
-   slip-rate component semantics, unknown-sense handling, dip assumptions and geodetic invariant
-   conventions remain uncertain.
-4. **No hypothesis has passed the promotion gate.** H-D soft's +0.000367 mean delta is small and
-   inconclusive; the matched H-G add-on is −0.000606 and only 3/6 folds higher. No slot is authorized.
-5. **Uniqueness scope is finite.** The fresh audit covers indexed TIFFs under public sibling
-   `docs/downloads/` and `submissions/` paths in the pinned inventory; it is not proof of global
-   uniqueness or a complete source-code/data-history search.
-6. **No organizer-authenticated raster bytes.** The available inputs are hash-pinned owner mirrors;
-   hashes establish consistency with those mirrors, not organizer provenance.
-
-### Next actions
-
-* Finish the fresh uniqueness audit for the current candidate and report its exact corpus scope,
-  Jaccard/containment results, and Stage-1 dominance check separately.
-* Rebuild and inspect the generated site, then run the full tests and Python syntax checks.
-* Keep H-G rejected unless new, preregistered evidence changes its paired result. Any H-H/H-I/H-J
-  implementation must be tested on the locked spatial blocks before any slot is considered.
-* Obtain organizer-authenticated training labels if access becomes available, then rerun all holdouts;
-  until then, all local DTI/AUC figures remain visible-catalogue proxies.
-* Do not infer the winning model's layers, mass, fault styles, or point placement from a participant
-  score alone. No local leaderboard score or geothermal discovery is claimed.
+- [Official competition problem, metric, and GeoTIFF format](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [Official GEMS Prize Rules, September 2026](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
+- [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/)
+- [Kreemer et al. (2000), Eq. 3 — public UNR PDF](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf)
+- [USGS GeoDAWN release](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
+- [INGENIOUS / GDR submission 1391, DOI 10.15121/1881483](https://gdr.openei.org/submissions/1391)
+- [NBMG QFaults INGENIOUS layer schema](https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson) — `SLIPRTNUM` is listed without a declared unit; see IR-51-12.
+- [USGS Siler slip-/dilation-tendency release, DOI 10.5066/P9YL58W6](https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d)
+- [GEMSDOE32 owner-published case study](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html)

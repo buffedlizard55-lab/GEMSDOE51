@@ -3,7 +3,7 @@
   "date": "2026-10-07",
   "target": "Fault geometry absent from the supplied USGS/INGENIOUS catalogue, not geothermal vents or generic prospectivity. All local scores are visible-catalogue proxies; hidden-label performance is unavailable.",
   "prior_art_method": {
-    "inventory": "evidence/sibling_prior_art_audit_20261007.json",
+    "inventory": "evidence/sibling_prior_art_audit_20261007.json (summary only; raw third-party page copies and copied leaderboard values removed)",
     "scope": "582 public documents across 54 owner repositories; documents were keyword-selected, not a complete code/branch/literature audit.",
     "novelty_rule": "No hypothesis below is called a globally untried family. Differences describe the exact operator relative to this repository and the inspected sibling documents; term hits establish documented prior art, not implementation or performance.",
     "gemsdoe53_check": "The GEMSDOE53 default branch has one 11-byte README containing only '# GEMSDOE53'; GitHub API reports no other branch or file. No substantive H53 method was available to compare."
@@ -25,9 +25,9 @@
       ],
       "signature_operator": "Normalized-convolution gradients at sigma=4 and 8 pixels (400 m, 800 m). At each scale, score axial discordance 1-|dot(g_TMI,g_gravity)|/(|g_TMI||g_gravity|), weighted by both edge magnitudes after robust scaling; suppress negligible edges. The score is a structural proxy, not a mapped fault.",
       "geological_rationale": "Great Basin geothermal systems commonly occur in fault intersections, terminations and transfer structures where permeability can be enhanced. Independent magnetic and gravity boundaries crossing at a high angle may flag a structure intersection that is not expressed as a single continuous surface scarp.",
-      "difference_from_prior_work": "This repository's incumbent H-D uses LiDAR scarp-facing coherence; H-E uses co-located basement/conductivity/gravity derivatives. The new operator is high-angle, edge-weighted TMI\u2013gravity discordance at two scales. It is NOT a new family: GEMSDOE26 H26-XEDGE and GEMSDOE27 H28-1 document gradient-orientation agreement; GEMSDOE49 documents magnetic\u2013gravity orientation work. H53 contributed no substantive method.",
+      "difference_from_prior_work": "This repository's incumbent H-D uses LiDAR scarp-facing coherence; H-E uses co-located basement/conductivity/gravity derivatives. The new operator is high-angle, edge-weighted TMI–gravity discordance at two scales. It is NOT a new family: GEMSDOE26 H26-XEDGE and GEMSDOE27 H28-1 document gradient-orientation agreement; GEMSDOE49 documents magnetic–gravity orientation work. H53 contributed no substantive method.",
       "expected_benefit_before_test": "Low-to-moderate and uncertain; independent geophysical boundaries may identify intersections, but regional structures are not necessarily faults or geothermal conduits. No numeric uplift was preregistered; this was an exploratory screen.",
-      "implementation_cost": "Low\u2013medium: two existing rasters, two static derived channels, about 9 minutes for the six-fold baseline-arm run on this sandbox; matched-incumbent run costs another several minutes.",
+      "implementation_cost": "Low–medium: two existing rasters, two static derived channels, about 9 minutes for the six-fold baseline-arm run on this sandbox; matched-incumbent run costs another several minutes.",
       "external_data": "None; uses the mirrored competition geophysical rasters.",
       "baseline_arm_result": {
         "evidence": "evidence/holdout_H_G.json",
@@ -60,15 +60,18 @@
         ],
         "folds_higher_than_H_D": 3,
         "folds_total": 6,
-        "comparability_note": "Matched six-fold comparison: same fold IDs, held-out truth counts, block sizes, 250,000-negative seed plan, M/|G|=3.47, NMS/exclusion settings, and incumbent H-D feature set; H-G adds two TMI\u2013gravity crossing channels. Mean proxy DTI is lower, with 3/6 folds higher; AUC is also lower. No promotion."
+        "comparability_note": "Matched six-fold comparison: same fold IDs, held-out truth counts, block sizes, 250,000-negative seed plan, M/|G|=3.47, NMS/exclusion settings, and incumbent H-D feature set; H-G adds two TMI–gravity crossing channels. Mean proxy DTI is lower, with 3/6 folds higher; AUC is also lower. No promotion."
       },
       "full_raster_experimental_artifact": {
         "record": "evidence/experimental_H_G_plus_H_D_artifact.json",
-        "file": "docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-        "sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
-        "portal_legal": true,
-        "uniqueness": "PASS against scoped public 54-repository corpus; evidence/uniqueness_gate_H_G_HD_experimental_20261007.json",
-        "decision": "NOT SLOT-ELIGIBLE because the matched H-G+H-D holdout is below H-D."
+        "file": "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+        "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+        "local_format_valid": true,
+        "format_receipt": "evidence/format_check_H_G_HD_nan.json",
+        "uniqueness": "PASS against the scoped 54-repository payload corpus using the audited source predictions; the NaN re-encoding is exactly equal in-footprint and normalization maps NaN outside to zero. See evidence/uniqueness_gate_H_G_HD_experimental_20261007.json.",
+        "stage1_q70": "Historical archived-field diagnostic: 30.046% of footprint approved, 19.728% emissions inside, lift 0.657. Non-dominant for that field; the current signed/rate-selectable Stage-1 map was not recomputed, so no current-formula q70 check is claimed.",
+        "holdout": "FAIL promotion: matched mean proxy DTI 0.2810564 vs H-D 0.2816627, paired delta -0.0006063, 3/6 folds higher.",
+        "decision": "RESEARCH ONLY; NOT SLOT-ELIGIBLE because the matched H-G+H-D holdout is below H-D. Local format validity is not portal acceptance."
       }
     },
     {
@@ -81,11 +84,11 @@
         "cond_surf",
         "lidar step_max/coh100 as an independent surface check"
       ],
-      "signature_operator": "Extract finite edge segments and endpoints from potential-field and basement-depth gradient ridges; identify spatially offset, approximately aligned terminations separated by 0.3\u20132 km, with a conductivity anomaly in the intervening bridge. Score only connected, multi-layer-consistent pairs; do not reward a generic edge-crossing or a single high-gradient pixel.",
+      "signature_operator": "Extract finite edge segments and endpoints from potential-field and basement-depth gradient ridges; identify spatially offset, approximately aligned terminations separated by 0.3–2 km, with a conductivity anomaly in the intervening bridge. Score only connected, multi-layer-consistent pairs; do not reward a generic edge-crossing or a single high-gradient pixel.",
       "geological_rationale": "Buried fault strands can terminate or transfer displacement beneath basin fill. Relay/transfer zones can host dense fracture networks; a conductive bridge between independently imaged structural terminations could be consistent with fractured or altered material. Conductivity is non-unique (clay, basin fill and lithology are alternatives), so this is a testable proxy, not proof of permeability.",
       "difference_from_prior_work": "H-E in this repository scores local co-location of basement, conductivity and gravity derivatives; H-G scores local high-angle edge crossings. H-H would represent finite edge endpoints and an offset bridge, i.e. segment topology rather than local co-location. Sibling work already explores relays/stepovers, fault tips and geophysical edge agreement (including GEMSDOE32 H33-5); therefore only this exact joint endpoint/bridge operator is a candidate variant, not an untried family.",
       "expected_benefit": "Qualitative, pre-test expectation: potentially moderate localization benefit over single-edge/co-location scores if paired terminations and a conductive relay bridge selectively mark fault-transfer corridors. No numeric DTI uplift is claimed; endpoint pairing and conductivity non-uniqueness make the sign uncertain.",
-      "implementation_cost": "Medium\u2013high: edge thinning, graph construction, endpoint pairing, scale/offset controls and leakage-safe blocked ablation.",
+      "implementation_cost": "Medium–high: edge thinning, graph construction, endpoint pairing, scale/offset controls and leakage-safe blocked ablation.",
       "external_data": "None; all candidate bands are present. USGS 2019 play-fairway reporting describes coincident/terminating gravity and magnetic gradients, low resistivity, temperature and structural settings as evidence in blind-system assessments; it does not validate this raster operator.",
       "literature": [
         "https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and",
@@ -103,9 +106,9 @@
         "iso_grav_anom_hg",
         "tmi_hg"
       ],
-      "signature_operator": "For independently detected basement/gravity/magnetic edge axes, measure robust conductivity contrast parallel to the axis versus across it at 150\u2013800 m offsets and two smoothing scales. Rank an elongated along-edge conductor with a cross-edge basement/potential-field step above a broad isotropic conductive basin background.",
+      "signature_operator": "For independently detected basement/gravity/magnetic edge axes, measure robust conductivity contrast parallel to the axis versus across it at 150–800 m offsets and two smoothing scales. Rank an elongated along-edge conductor with a cross-edge basement/potential-field step above a broad isotropic conductive basin background.",
       "geological_rationale": "Fault damage zones and hydrothermal alteration can change electrical properties, while gravity/magnetic/basement contrasts locate structural boundaries. A directionally constrained conductor adjoining an independently observed boundary is more consistent with a fault corridor than conductivity magnitude alone, though clay-rich fill and lithologic contacts remain major confounders.",
-      "difference_from_prior_work": "H-E already tested broad co-location of the three basin-edge layers and did not improve its matched holdout. This proposal tests anisotropy/offset of the conductivity response across a structural edge, not raw conductivity, edge magnitude or simple coincidence. The broader conductivity\u2013structure and geophysical cross-gradient families have substantial sibling prior art; exact operator novelty is inspection-bounded only.",
+      "difference_from_prior_work": "H-E already tested broad co-location of the three basin-edge layers and did not improve its matched holdout. This proposal tests anisotropy/offset of the conductivity response across a structural edge, not raw conductivity, edge magnitude or simple coincidence. The broader conductivity–structure and geophysical cross-gradient families have substantial sibling prior art; exact operator novelty is inspection-bounded only.",
       "expected_benefit": "Qualitative, pre-test expectation: low-to-moderate localization gain if an elongated conductivity response is directionally aligned with an independently observed basement/potential-field edge. Clay-rich fill and lithologic contacts may erase or reverse the signal; no numeric uplift is claimed.",
       "implementation_cost": "Medium: masked directional filters, careful multiscale normalization, then matched blocked holdout; no new raster acquisition.",
       "external_data": "None; requires only existing layers.",
@@ -126,10 +129,10 @@
       "geological_rationale": "Recent earthquakes can indicate active structures not yet represented in a surface-fault inventory, while geophysical edges constrain where a subsurface boundary lies. The intersection could narrow a broad seismicity signal to a mappable fault corridor.",
       "difference_from_prior_work": "The supplied stack includes earthquake-distance/intensity products as ordinary features, and the sibling audit finds broad seismicity-lineament work. This candidate is the specific conditional interaction with an independently derived edge, not a claim that seismicity or lineaments are new.",
       "expected_benefit": "Qualitative, pre-test expectation: modest gain only if local seismicity concentrates on a structural edge; diffuse seismicity or catalog completeness gradients can create false associations. No numeric uplift is claimed, and viability is blocked pending source-band semantics.",
-      "implementation_cost": "Low\u2013medium after band definitions are authenticated; otherwise blocked.",
-      "external_data": "No new acquisition proposed. The local competition band descriptions call these earthquake distance/intensity products, but the precise N=100 km/A=15\u00b0 operator semantics should be checked against official band metadata before use.",
+      "implementation_cost": "Low–medium after band definitions are authenticated; otherwise blocked.",
+      "external_data": "No new acquisition proposed. The local competition band descriptions call these earthquake distance/intensity products, but the precise N=100 km/A=15° operator semantics should be checked against official band metadata before use.",
       "promotion_status": "NOT YET VIABLE; first verify source metadata and spatial support, then compare the interaction against matched edge-only and seismicity-only controls."
     }
   ],
-  "post_test_decision": "The strongest low-cost hypothesis H-G's matched add-on test is complete. H-G added to H-D averaged 0.281056398 proxy DTI versus H-D 0.281662660, paired delta -0.000606262, and was higher in 3/6 folds. Its mean AUC was also lower (0.66962 vs 0.67262). It is not promoted and no competition slot is authorized. H-H\u2013H-J remain lower-priority proposals; do not spend a slot unless a future candidate beats the locked H-D comparator."
+  "post_test_decision": "The strongest low-cost hypothesis H-G's matched add-on test is complete. H-G added to H-D averaged 0.281056398 proxy DTI versus H-D 0.281662660, paired delta -0.000606262, and was higher in 3/6 folds. Its mean AUC was also lower (0.66962 vs 0.67262). It is not promoted and no competition slot is authorized. H-H–H-J remain lower-priority proposals; do not spend a slot unless a future candidate beats the locked H-D comparator."
 }

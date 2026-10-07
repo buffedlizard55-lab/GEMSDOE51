@@ -1335,5 +1335,11 @@
     0.050042360005893016
    ]
   }
+ },
+ "interpretation_warning": {
+  "status": "FORMULA_SENSITIVITY_ONLY_NOT_LEAKAGE_CONTROLLED_HOLDOUT",
+  "detail": "These branch-era formula scenarios used the revised sign/rate-convention code, but the corresponding runner passed the full slip-rate table into each split instead of excluding attribute rows associated with held-out traces. Because the target traces contribute to the fault-budget term, the scenarios may leak held-out trace attributes and must not be interpreted as valid holdout evidence.",
+  "current_source": "src/gems51/strain_budget.py",
+  "reproduction_blocker": "Raw training-feature rasters, prepared footprint/catalogue arrays, and the local slip-rate CSV are not present in this checkout."
  }
 }

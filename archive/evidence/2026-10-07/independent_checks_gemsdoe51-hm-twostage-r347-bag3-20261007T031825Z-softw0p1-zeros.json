@@ -1,0 +1,22 @@
+{
+ "sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+ "single_band": true,
+ "float32": true,
+ "epsg_32611": true,
+ "shape_3730x3292": true,
+ "transform_matches": true,
+ "nodata_tag_none": true,
+ "all_finite": true,
+ "min_ge_0": true,
+ "max_le_1": true,
+ "n_cells": 12279160,
+ "positive_px": 44069,
+ "total_mass": 44069.0,
+ "all_supported_inside_footprint": true,
+ "min_distance_to_catalogue_px": 2.23606797749979,
+ "frac_supported_within_2px_of_catalogue": 0.0,
+ "outside_footprint_all_zero": true,
+ "n_connected_components": 44069,
+ "frac_singleton_dots": 1.0,
+ "portal_legal": true
+}

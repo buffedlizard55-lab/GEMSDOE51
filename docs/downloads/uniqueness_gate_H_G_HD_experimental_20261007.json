@@ -1,9 +1,9 @@
 {
-  "candidate": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-  "candidate_sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+  "candidate": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+  "candidate_sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
   "candidate_support_px": 44069,
   "candidate_mass": 44069.0,
-  "n_references": 359,
+  "n_references": 365,
   "limits": {
     "iou": 0.5,
     "cosine": 0.9,
@@ -62,26 +62,26 @@
     }
   ],
   "verdict": "PASS",
-  "n_containment_informative": 347,
-  "n_compared": 358,
+  "n_containment_informative": 353,
+  "n_compared": 364,
   "rule": "PASS iff (1) no sha256 equals any reference AND (2) max support IoU <= 0.50 AND (3) max cosine <= 0.90 AND (4) no sparse reference has containment > 0.98 with a lift > 3x over the random-emission null.  Continuous/lattice references are excluded from test (4) because their dilated support covers the map and the test would be vacuous.  Two artifacts anchored on the same mapped-fault network will ALWAYS show high mutual containment; that is a consequence of the metric's free-mass structure, not of copying, and tests (2) and (3) are what separate a re-emission from a copy.",
   "checker_verdict": "PASS",
   "audit": {
-    "generated_utc": "2026-10-07T03:48:39+00:00",
-    "candidate_path": "docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-    "candidate_git_blob_sha": "1f6c67153d079092b82e6bf7fa03e5da92538aca",
+    "generated_utc": "2026-10-07T04:23:03+00:00",
+    "candidate_path": "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+    "candidate_git_blob_sha": "d2efe6cbfdc98ce96d63b340001fab79c4378859",
     "historical_gate_note": "The historical n=211 input directory from docs/uniqueness_gate.json is absent; this is an independently rebuilt public-artifact corpus, not a bit-for-bit replay of that missing list.",
     "inventory": "registry/sibling_tiff_inventory.json",
     "inventory_repositories": 54,
     "selection": "All unique-by-Git-blob `.tif`/`.tiff` payloads indexed under docs/downloads/ and submissions/ across the public 54-repository inventory. Non-submission TIFs elsewhere in those repos are out of scope.",
-    "indexed_path_count": 409,
-    "unique_payload_count_before_candidate_exclusion": 359,
-    "candidate_exact_path_excluded": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-    "unique_payload_count_after_exclusion": 359,
-    "downloaded_and_sha_verified": 359,
+    "indexed_path_count": 417,
+    "unique_payload_count_before_candidate_exclusion": 365,
+    "candidate_exact_path_excluded": null,
+    "unique_payload_count_after_exclusion": 365,
+    "downloaded_and_sha_verified": 365,
     "download_errors": [],
     "checker_returncode": 0,
-    "checker_stdout": "[uniqueness gate] PASS  (358 references compared, 1 skipped, 0 matches)\n  worst IoU         0.3216  vs 0347-de2b519042d5.tif\n  worst cosine      0.4867  vs 0347-de2b519042d5.tif\n  worst containment 0.9933  vs 0010-81c802618e6d.tif  (over 347 sparse references)\n  wrote /tmp/gemsdoe51-public-tifs-7r_b5zhf/checker.json\n",
+    "checker_stdout": "[uniqueness gate] PASS  (364 references compared, 1 skipped, 0 matches)\n  worst IoU         0.3216  vs 0347-de2b519042d5.tif\n  worst cosine      0.4867  vs 0347-de2b519042d5.tif\n  worst containment 0.9933  vs 0010-81c802618e6d.tif  (over 353 sparse references)\n  wrote /tmp/gemsdoe51-public-tifs-h2tyj8_t/checker.json\n",
     "checker_stderr": "",
     "reference_manifest": [
       {
@@ -3276,6 +3276,62 @@
         ]
       },
       {
+        "git_blob_sha": "ce98bf8c94810489dc639cf6f924f20cea6fd930",
+        "bytes": 367218,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif"
+        ]
+      },
+      {
+        "git_blob_sha": "5ee3426d0f05c0d2aea024f86ee05bae570f157f",
+        "bytes": 223192,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+          "GEMSDOE51:submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif"
+        ]
+      },
+      {
+        "git_blob_sha": "8f2726df916fc8d4c4e83444aac69a8b289685b9",
+        "bytes": 378062,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif"
+        ]
+      },
+      {
+        "git_blob_sha": "6943da78dabe33aa98f457e80ff80a5d8c18343c",
+        "bytes": 232804,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+          "GEMSDOE51:submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif"
+        ]
+      },
+      {
+        "git_blob_sha": "a9a5c1e2633aa0fc6c8da8c364371dbd3a7358f8",
+        "bytes": 382210,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif"
+        ]
+      },
+      {
+        "git_blob_sha": "081fd4e16105f165f910c5c7bd18597dbcb1aab7",
+        "bytes": 237016,
+        "representative": "GEMSDOE51:docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+        "source_url": "https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+        "aliases": [
+          "GEMSDOE51:docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif"
+        ]
+      },
+      {
         "git_blob_sha": "23ff31cf7832f25616bc47d435eaec9fe796d3bb",
         "bytes": 390791,
         "representative": "GEMSDOE51:docs/downloads/gemsdoe51-strainbudget-s1-v1.tif",
@@ -3365,6 +3421,18 @@
           "GEMSDOE9:docs/downloads/gemsdoe9-PLACEHOLDER-2314b599.tif"
         ]
       }
-    ]
+    ],
+    "candidate_exclusion_note": "Final NaN-outside TIFF was created after the SHA-pinned main-branch corpus audit; it did not exist in the reference inventory and therefore had no corpus alias to exclude.",
+    "format_reencoding_equivalence": {
+      "source_candidate": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+      "source_candidate_sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+      "source_candidate_git_blob_sha": "1f6c67153d079092b82e6bf7fa03e5da92538aca",
+      "final_candidate": "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+      "final_sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+      "inside_footprint_pixelwise_identical": true,
+      "equality_test": "np.array_equal(final[finite(sample_submission)], zero_variant[finite(sample_submission)]) == True",
+      "audit_normalization": "The audited checker maps non-finite values to 0 and clips to [0,1] before deriving support, cosine, and containment; the zero-outside source and NaN-outside final therefore produce identical checker vectors.",
+      "limitation": "Full 365-payload remote download/comparison was run on the zero-outside source variant at the recorded generated_utc; this final report reuses that pixel-comparison result based on exact in-footprint equivalence rather than downloading the corpus again."
+    }
   }
 }

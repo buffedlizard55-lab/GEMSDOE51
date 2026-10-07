@@ -1,0 +1,80 @@
+{
+  "candidate": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+  "candidate_sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+  "candidate_support_px": 44069,
+  "candidate_mass": 44069.0,
+  "n_references": 33,
+  "limits": {
+    "iou": 0.5,
+    "cosine": 0.9,
+    "containment": 0.98
+  },
+  "worst": {
+    "iou": {
+      "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+      "iou": 0.29769284000058893,
+      "cosine": 0.4588032364845276,
+      "containment": 0.9392770528793335,
+      "byte_identical": false,
+      "mass": 44069.0,
+      "support_px": 44069,
+      "ref_support_fraction": 0.0035889262783447727,
+      "containment_null": 0.06533354073079918,
+      "containment_lift": 14.376643946935891,
+      "containment_informative": true
+    },
+    "cosine": {
+      "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+      "iou": 0.29769284000058893,
+      "cosine": 0.4588032364845276,
+      "containment": 0.9392770528793335,
+      "byte_identical": false,
+      "mass": 44069.0,
+      "support_px": 44069,
+      "ref_support_fraction": 0.0035889262783447727,
+      "containment_null": 0.06533354073079918,
+      "containment_lift": 14.376643946935891,
+      "containment_informative": true
+    },
+    "containment": {
+      "path": "/home/user/GEMSDOE51/data/refs/13gems-r13-lattice-nan.tif",
+      "iou": 0.007507206114960617,
+      "cosine": 0.019583938643336296,
+      "containment": 0.9933286309242249,
+      "byte_identical": false,
+      "mass": 206895.0,
+      "support_px": 206895,
+      "ref_support_fraction": 0.016849279592415115,
+      "containment_null": 0.42095167747630946,
+      "containment_lift": 2.359721279362589,
+      "containment_informative": true
+    }
+  },
+  "matches": [],
+  "skipped": [
+    {
+      "path": "/home/user/GEMSDOE51/submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+      "reason": "same build stamp 20261007T031825Z as candidate"
+    },
+    {
+      "path": "/home/user/GEMSDOE51/submissions/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+      "reason": "same build stamp 20261007T031825Z as candidate"
+    },
+    {
+      "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+      "reason": "same build stamp 20261007T031825Z as candidate"
+    },
+    {
+      "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+      "reason": "same build stamp 20261007T031825Z as candidate"
+    },
+    {
+      "path": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+      "reason": "same build stamp 20261007T031825Z as candidate"
+    }
+  ],
+  "verdict": "PASS",
+  "n_containment_informative": 33,
+  "n_compared": 33,
+  "rule": "PASS iff (1) no sha256 equals any reference AND (2) max support IoU <= 0.50 AND (3) max cosine <= 0.90 AND (4) no sparse reference has containment > 0.98 with a lift > 3x over the random-emission null.  Continuous/lattice references are excluded from test (4) because their dilated support covers the map and the test would be vacuous.  Two artifacts anchored on the same mapped-fault network will ALWAYS show high mutual containment; that is a consequence of the metric's free-mass structure, not of copying, and tests (2) and (3) are what separate a re-emission from a copy."
+}

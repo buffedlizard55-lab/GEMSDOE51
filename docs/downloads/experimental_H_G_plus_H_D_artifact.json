@@ -45,16 +45,16 @@
     "catalogue_exclusion_radius_px": 2.0
   },
   "artifact": {
-    "file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-    "zip": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z.zip",
-    "sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
-    "bytes": 233392,
-    "submission_name": "GEMSDOE51-HG-HD-XING-EXPERIMENT",
-    "note": "H-G TMI-gravity crossings + H-D; experimental only, matched holdout below H-D; NOT SLOT-ELIGIBLE.",
+    "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+    "zip": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.zip",
+    "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+    "bytes": 378630,
+    "submission_name": "GEMSDOE51-HG-HD-XING-R347-EXP-20261007",
+    "note": "Research-only H-G magnetic-gravity crossing add-on to H-D; matched blocked proxy DTI is below H-D; NOT SLOT-ELIGIBLE; no organizer score claimed.",
     "format": {
-      "file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
-      "bytes": 233392,
-      "sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+      "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+      "bytes": 378630,
+      "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
       "crs": "EPSG:32611",
       "crs_epsg": 32611,
       "transform": [
@@ -71,24 +71,27 @@
       ],
       "count": 1,
       "dtype": "float32",
-      "nodata": null,
+      "nodata": "NaN",
       "checks": {
         "single_band": true,
         "dtype_float32": true,
         "crs_epsg_32611": true,
         "transform_matches_template": true,
         "shape_matches_template": true,
-        "all_cells_finite": true,
-        "nan_cells": 0,
+        "inside_footprint_finite": true,
+        "outside_footprint_nan": true,
+        "nan_cells": 7111787,
         "values_outside_0_1": 0,
         "min_value": 0.0,
         "max_value": 1.0,
-        "nodata_tag_is_none": true,
-        "positive_px": 44069,
+        "nodata_tag_is_nan": true,
+        "predicted_px": 44069,
         "total_mass": 44069.0,
-        "portal_legal": true
+        "format_valid": true
       }
-    }
+    },
+    "superseded_zero_outside_file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+    "superseded_zero_outside_sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9"
   },
   "stage1_dominance_q70": {
     "threshold": 0.15608919382504288,
@@ -98,17 +101,19 @@
     "emitted_pixels": 44069,
     "emitted_share_inside_approved": 0.19728153577344618,
     "lift": 0.6565949060536893,
-    "interpretation": "No Stage-1 dominance: the top-30% tile area is 30.046% of the footprint, while only 19.728% of emitted points fall inside; the soft prior does not hard-mask emissions."
+    "interpretation": "Historical diagnostic only: on the archived Stage-1 prior field used to build this experimental raster, top-30% tile area is 30.046% of the footprint and contains 19.728% of emitted points; this does not dominate. The current signed/rate-selectable Stage-1 map was not regenerated, so no current-formula q70 check is claimed.",
+    "current_formula_check_available": false,
+    "prior_field_status": "ARCHIVED_PRE_SIGNED_RATE_CONVENTION_AUDIT"
   },
   "caveat": "All local holdout results use the visible catalogue as proxy truth, not authenticated competition labels.",
   "uniqueness": {
     "evidence": "evidence/uniqueness_gate_H_G_HD_experimental_20261007.json",
     "verdict": "PASS",
     "inventory_repositories": 54,
-    "indexed_paths": 409,
-    "sha_verified_payloads": 359,
+    "indexed_paths": 417,
+    "sha_verified_payloads": 365,
     "download_errors": 0,
-    "pixel_comparisons": 358,
+    "pixel_comparisons": 364,
     "skipped_shape_mismatch": 1,
     "matches": 0,
     "max_support_jaccard": 0.3216272548696187,
@@ -118,6 +123,16 @@
       "cosine": 0.9,
       "containment": 0.98
     },
-    "scope": "Indexed TIFFs under docs/downloads/ and submissions/ in the pinned public 54-repository inventory; non-submission TIFFs elsewhere and global uniqueness are out of scope."
+    "scope": "Indexed TIFFs under docs/downloads/ and submissions/ in the SHA-pinned public 54-repository inventory as fetched at the recorded time; not a global uniqueness proof.",
+    "max_containment": 0.9933286309242249,
+    "max_containment_random_emission_lift": 2.359721279362589,
+    "format_reencoding_equivalence": "Final NaN-outside TIFF has exactly the same in-footprint predictions as the fully audited zero-outside source; the checker normalization yields an identical candidate vector. See evidence/uniqueness_gate_H_G_HD_experimental_zero_format_20261007.json for the original full audit output."
+  },
+  "format_reencoding": {
+    "source_file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+    "source_sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+    "prediction_change": "none inside the valid footprint",
+    "reason": "Re-encode outside-footprint cells as NaN with the competition NoData tag to satisfy the current local official-format contract.",
+    "verified": true
   }
 }

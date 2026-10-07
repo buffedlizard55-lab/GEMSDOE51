@@ -1,9 +1,9 @@
 [
   {
     "id": "IR-51-01",
-    "summary": "GEMSDOE32's index page labels gems32-probe-S1-ANCHOR-identical-to-live-02600.tif as a 0.2708 anchor, but its own audit calls the same digest the 0.2600 reference anchor, and the mask is byte-identical to the GEMSDOE25 0.2600 artifact.",
-    "evidence": "sha256 4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3; checks-gems32-probe-S1-ANCHOR-identical-to-live-02600.tif.json says in_footprint_values_bit_identical_to_anchor:true and positive_px 44090; gem mask equality with gems25-dotted-h19-5-d2-8-...-zeros.tif measured True in this repo.",
-    "status": "OPEN - the 0.2708 artifact label remains unreproducible. The previously claimed 0.2600-to-0.2778 natural experiment is withdrawn: the public 0.2778 row is extradr19 and has no verified file link (IR-51-09)."
+    "summary": "GEMSDOE32 owner pages attach different numeric labels to the same anchor file: the index labels it 0.2708, while an audit record calls the same SHA-256 the 0.2600 reference anchor. The byte/mask identity is reproducible locally, but neither numeric label establishes an organizer score.",
+    "evidence": "SHA-256 4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3; sibling audit record says in_footprint_values_bit_identical_to_anchor=true and positive_px 44090; mask equality with a prior GEMSDOE25 artifact measured true here. Numeric labels are owner-published only.",
+    "status": "OPEN AS A PROVENANCE/LABELING DISCREPANCY - do not treat 0.2600 or 0.2708 as an organizer-returned score. The file identity does not establish performance or a causal effect."
   },
   {
     "id": "IR-51-02",
@@ -37,68 +37,68 @@
   },
   {
     "id": "IR-51-06",
-    "summary": "The footprint contains 3,073 cells where at least one of the 19 competition bands is the sentinel, so a pixel classifier cannot score them.",
-    "evidence": "measured in prepare_data.py: footprint 5,167,373, analysable 5,164,300.",
-    "status": "CLOSED - those cells are excluded from emission; the submission still writes a finite value there (0.0) so the portal range check passes."
+    "summary": "The legacy primary TIFFs encoded cells outside the competition footprint as zero, but the official format specifies null/NaN outside the bounds.",
+    "evidence": "Re-read with src/gems51/submission.py: the 2026-10-06 zero-outside H-D soft/hard TIFFs and older strainbudget TIFF are format_valid=false; their NaN-outside twins pass the local structural checks. The builder now writes NaN outside and verifies on-disk bytes. No portal acceptance is claimed.",
+    "status": "CLOSED FOR THE WRITER; legacy zero-outside artifacts are archived and must not be submitted or linked as current downloads."
   },
   {
     "id": "IR-51-07",
-    "summary": "Two independent implementations of the same library occupy the same paths in this repository's history (PR #1/#2 from an earlier session, and this session's). They were developed in parallel on separate branches and are not API-compatible.",
-    "evidence": "27 paths conflicted add/add on merge: src/gems51/{__init__,detector,emission,features,grid,holdout,metric,submission}.py, scripts/{build_site,prepare_data,run_holdout}.py, tests/test_metric.py, registry/{data_manifest,hypotheses,irregularities,sources}.json, docs/*.html, README.md, .gitignore, data/restore_receipt.json.",
-    "status": "RESOLVED NON-DESTRUCTIVELY - this session's versions were kept for the shared code and site paths, because they are what produced the shipped artifacts. Every conflicting file from PR #1/#2 is preserved verbatim under attic/pr1-2/, and all 74 non-conflicting files (evidence/*.json, docs/claims.html, docs/strategy.html, docs/executive-summary.html, docs/assets/, .github/workflows/, data/labels.tif, data/existing_faults.tif, data/sample_submission.tif, index.html, pyproject.toml, requirements.txt) are carried through untouched."
+    "summary": "Two independent implementations of the same library occupied the same paths in the repository history (PR #1/#2 and this session) and are not API-compatible.",
+    "evidence": "27 paths conflicted add/add across source, scripts, tests, registries, generated pages, README, .gitignore, and the restore receipt. The active tree keeps this session's current implementation; selected prior source files and tests remain under attic/pr1-2 for code-history review.",
+    "status": "RESOLVED - old generated site pages and prior copied standings/monitoring records were removed from the current tree. The old code snapshot is non-active; use the top-level README and current scripts/data/knowledge."
   },
   {
     "id": "IR-51-08",
-    "summary": "The file this project has been calling the training labels is byte-identical to the known-fault raster. The competition's true training labels have therefore never been available to any GEMSDOE session, and every model here is trained against the visible catalogue as a proxy.",
-    "evidence": "data/labels.tif and data/existing_faults.tif both have sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093 and 425,830 bytes; np.array_equal on the rasters is True. Their positive mask (60,988 px) is also identical to this session's independently derived catalogue (data/prepared/catalogue.npy). The upstream pin is the same for both: buffedlizard55-lab/GEMSDOE24 @ 07345ea0604953d7e, data/labels.tif and data/existing_faults.tif.",
-    "status": "OPEN - and it is the single biggest cap on achievable score. Either the upstream mirror saved the same blob under both names, or the two really are the same file; neither can be distinguished without authenticated access to the DrivenData data page. Consequence: no model in this repository has ever seen a single example of the target distribution. Next session's first action should be to obtain the real labels.tif and re-run the blocked holdout against it; if the mirror is simply mislabelled, everything measured here is measuring the wrong target."
+    "summary": "The local labels raster equals the existing-known-fault raster, consistent with the official task description and reference solution; this is expected training-label construction, not evidence the mirror is broken.",
+    "evidence": "Official problem page says training labels are known USGS/INGENIOUS faults and the initial hidden test set contains expert-identified faults absent from that database. Local data/labels.tif and data/existing_faults.tif have the same SHA-256 and element-wise values; the local catalogue mask matches them. Therefore local hide-and-recover holdouts measure known-fault recovery only, not performance on the hidden new-fault target.",
+    "status": "RESOLVED as a mirror-integrity issue. OPEN scientific limitation: hidden expert evaluation faults are unavailable, so every local holdout is a visible-known-fault proxy."
   },
   {
     "id": "IR-51-09",
-    "summary": "The 0.2778 score was locally attributed to GEMSDOE32 H33-2-B2 without a verified artifact-to-score link.",
-    "evidence": "The 2026-10-07 official leaderboard shows 0.2778 at rank 13 under extradr19 and gives no TIFF identity. GEMSDOE32 README/site labels H33-2-B2 UNSCORED with a modelled projection of 0.2747. See evidence/score_attribution_audit.json and registry/scored_submissions.json.",
-    "status": "RESOLVED FOR REPORTING - do not attribute 0.2778 to H33-2-B2 or any local artifact absent an authenticated hash-to-score receipt. The old natural-experiment score attribution is withdrawn."
+    "summary": "The H-D soft-prior proposal that passed the numeric holdout screen was rejected by the source-aware local uniqueness gate before any GeoTIFF was written.",
+    "evidence": "In-memory H-D soft w=0.20 support: Jaccard 0.861297 and candidate containment 0.925480 versus the existing soft w=0.10 artifact; limits are 0.50 and 0.60. The top-half Stage-1 lift was 0.985919. scripts/build_submission.py stopped before creating a TIFF.",
+    "status": "CLOSED - no new TIF was generated and no competition slot was used. Do not rerun the unchanged candidate. The marginal holdout gain does not justify a near-duplicate map."
   },
   {
     "id": "IR-51-10",
-    "summary": "The soft primary's manifest contained q20/top-80% Stage-1 dominance values copied from the hard secondary, while its build-time check uses q70/top-30%.",
-    "evidence": "Original soft check: q70, 30.046% approved area, 20.307% of emissions inside. Independent current-code q70 rerun: 30.046% area, 19.560% inside. Current q20 comparator: 80.051% area, 78.091% inside. See evidence/submission_manifest_reconciliation.json and the updated matching data/docs manifests.",
-    "status": "RESOLVED - primary manifests now report q70 and preserve original build-time plus current-formula metrics separately. Both q70 checks show no Stage-1 dominance; q20 remains explicitly a comparator."
+    "summary": "Historical repository files contained copied leaderboard standings and an automated/manual monitoring plan inconsistent with the current DrivenData Terms of Use.",
+    "evidence": "DrivenData Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No written consent is on record. Snapshot/feed JSONs, stale pages, and monitoring instructions were removed from the current tree; only the official source link and policy statement remain.",
+    "status": "CLOSED IN CURRENT TREE - no scraper, scheduled monitor, standings mirror, or manual-copy workflow is implemented. Earlier commits in Git history were not rewritten; this change removes those materials from the current branch contents."
   },
   {
     "id": "IR-51-11",
-    "summary": "Primary holdout delta appeared as +0.0004 in the artifact record but 0.0 in the primary summary.",
-    "evidence": "Paired gate_sweep values give 0.2820067829577351 minus 0.2816394101508010 = +0.000367372806934214, positive in 4/6 folds. Four-decimal rounding gives +0.0004; the primary-level 0.0 represented a decision-level 'no demonstrated gain'. See evidence/submission_manifest_reconciliation.json.",
-    "status": "RESOLVED - both manifests now store the exact raw delta and explicitly label it small/inconclusive, not a win. The sweep predates the signed strike-slip formula revision."
+    "summary": "Legacy scalar Stage-1 modules and pre-reconciliation runner scripts could emit obsolete evidence or ungated submission files.",
+    "evidence": "attic/legacy-api/src/gems51/strain.py used a scalar reduction and nominal tile rectangles; attic/legacy-api/src/gems51/stage1_strain.py is not imported by active runners; old run_all.py and run_pipeline.py called obsolete model/writer APIs, while prior format/uniqueness scripts used superseded checks.",
+    "status": "CLOSED - Stage-1 report functions in the archived strain.py fail closed; stage1_strain.py is not used by the current runner; run_all.py, run_pipeline.py, rebuild_submission.py, build_submission_v2.py, old holdout runners, old uniqueness checker, and README-results generator are disabled. Current results come from strain_budget.py and the dedicated current holdout scripts."
   },
   {
     "id": "IR-51-12",
-    "summary": "The local GDR/QFaults slip_rate field's physical component semantics remain unresolved.",
-    "evidence": "The local CSV has 1,126 numeric slip_rate rows, 49 distinct values, 95 missing slip_sense values, and 255 missing dip_direct values. USGS layer 21 exposes slip_rate as a string with an mm/year alias but no coded-value domain. GDR 1391 says QFaults v2 includes a field-definition text file; that archive document was not extracted here.",
-    "status": "OPEN - do not state the values are confirmed vertical rates, total fault-plane rates, category midpoints, or authenticated slip estimates. Stage 1 reports both rate conventions and unknown-sense fallbacks as assumptions."
+    "summary": "The working Stage-1 conversion treats the owner-mirrored QFaults slip_rate values as mm/yr, but the NBMG layer schema does not state the SLIPRTNUM units and the linked GDR field-definition text was not locally audited.",
+    "evidence": "src/gems51/strain_budget.py load_slip_rates; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious; https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
+    "status": "OPEN - absolute nanostrain/yr values are not source-validated. The current rank-based Stage-1 comparison is invariant to a uniform rescaling, but not to mixed units, categorical encodings, or record-specific errors. Audit the official GDR v2 field-definition document before using absolute strain claims."
   },
   {
     "id": "IR-51-13",
-    "summary": "Historic uniqueness PASS is for an earlier Hridge TIFF and its 211-reference corpus is unavailable in this checkout.",
-    "evidence": "evidence/uniqueness_gate_H_D_soft_20261007.json; inventory registry/sibling_tiff_inventory.json. Exact limits: IoU 0.50, cosine 0.90, sparse-reference containment 0.98 with >3x random-emission lift. Current file is portal-format, but not cleared as a unique submission; no slot is authorized.",
-    "status": "COMPLETED \u2014 current soft TIFF fails the fresh 54-repository public-artifact uniqueness gate. 358 payloads fetched and SHA-verified, 357 pixel comparisons, zero download errors, one shape-mismatched format-test skipped, three flagged matches. The candidate overlaps the GEMSDOE51 hard-q20 alternate at Jaccard 0.631; its own NaN-format twin is Jaccard 1.000. No uniqueness PASS is claimed; historic Hridge n=211 PASS is unrelated."
-  },
-  {
-    "id": "IR-51-14",
-    "summary": "Earlier metric notes overgeneralized c > 0.2\u00b7DTI as a universal marginal-pixel rule and described TP+FP as raw emitted mass.",
-    "evidence": "The official weighted definition gives the general condition c\u00b7(1\u22120.2\u00b7DTI) > 0.2\u00b7DTI\u00b7f for weighted changes c=\u0394TP and f=\u0394FP. The simpler c>0.2\u00b7DTI applies only when c+f=1. See src/gems51/metric.py and tests/test_metric.py.",
-    "status": "RESOLVED - metric documentation, tests, README and the generated site now state the exact condition and distinguish weighted cost from raw pixel count."
-  },
-  {
-    "id": "IR-51-15",
-    "summary": "H-G's first spatial holdout is not a matched addition comparison with the H-D incumbent.",
-    "evidence": "The first H-G arm used 60 features, replacing H-D's four coherence features (62 total), so it was not promotion-grade (0.276783 vs 0.281663, 1/6 folds higher). The matched addition keeps H-D and adds two intersection channels: evidence/holdout_H_G_plus_H_D.json vs data/holdout_H_D.json; same six block truth counts and sizes. Matched proxy DTI delta -0.000606262, 3/6 folds higher; AUC delta -0.002999393. Visible-catalogue proxy only.",
-    "status": "RESOLVED - the required matched six-block H-G+H-D add-on holdout is complete: mean proxy DTI 0.281056 versus H-D 0.281663 (paired delta -0.000606; 3/6 folds higher); mean AUC 0.669619 versus 0.672618. H-G is not promoted; no slot is authorized."
+    "summary": "Merged PR #6 introduced H-D trace-emission, H-M and STE candidate TIFFs plus a builder. Fresh local reviews now have broad uniqueness results, but neither H-M nor STE is promotion-ready.",
+    "evidence": "The six-fold STE mean proxy DTI is 0.283603 vs isotropic NMS 0.281639 (4/6 folds; approximate paired 95% t interval includes zero). H-M averages 0.282603 vs H-D 0.281663 (3/6 folds; approximate paired 95% t interval includes zero). Refreshed uniqueness audits fail on same-prediction NaN twins; H-M also overlaps its hard-q20 variant above the Jaccard limit. No current q70 full-map Stage-1 checks exist for these two candidates. See evidence/emission_geometry.json and evidence/uniqueness_gate_H_M_soft_20261007.json / evidence/uniqueness_gate_STE_HD_20261007.json.",
+    "status": "OPEN — treat both as research-only leads. The packaged outputs fail the refreshed scoped uniqueness check; neither has a current q70 Stage-1 dominance pass or promotion-grade robust holdout. No slot is authorized."
   },
   {
     "id": "IR-51-16",
-    "summary": "The experimentally materialized H-G+H-D full-raster TIFF passes the scoped uniqueness gate but does not beat the H-D spatial-blocked holdout.",
-    "evidence": "Portal format measured: one-band float32 EPSG:32611 3730x3292, finite [0,1], 44,069 positives. Scoped public inventory: 359 TIFF payloads downloaded and SHA-verified, 358 comparisons, zero matches, one 32x48 format-test skipped; max Jaccard 0.3216, max cosine 0.4867. Matched six-block holdout: 0.281056 vs H-D 0.281663, paired delta -0.000606, 3/6 folds higher; mean AUC also lower. See experimental_H_G_plus_H_D_artifact.json and uniqueness_gate_H_G_HD_experimental_20261007.json.",
-    "status": "CLOSED FOR DECISION \u2014 the TIFF is uniquely named and passes the defined corpus gate, but it is explicitly experimental and NOT SLOT-ELIGIBLE. Do not upload until a candidate beats H-D on the locked holdout."
+    "summary": "The experimental H-G+H-D research TIFF passes the refreshed scoped public-corpus uniqueness audit and its historical q70 Stage-1 diagnostic is non-dominant, but it loses its matched H-D holdout; the q70 field predates the current strain-formula reconciliation.",
+    "evidence": "NaN-outside format re-encoding is one-band float32 EPSG:32611 3730x3292, locally format-valid; in-footprint predictions exactly match the audited source. Public-corpus audit: 365 SHA-verified payloads, 364 comparisons, zero matches, one unrelated shape skip; max Jaccard 0.3216, cosine 0.4867, containment 0.9933 at 2.36x null lift. Historical q70 field: 30.046% area approved, 19.728% emissions inside, lift 0.657. The current signed/rate-selectable Stage-1 field was not regenerated, so the q70 result is not current-formula evidence. Matched proxy DTI 0.281056 vs H-D 0.281663 (delta -0.000606; 3/6 higher). See evidence/experimental_H_G_plus_H_D_artifact.json and evidence/stage1_reconciliation_20261007.json.",
+    "status": "OPEN — research-only and NOT SLOT-ELIGIBLE because matched holdout is below H-D. Uniqueness passes; historical archived-field q70 diagnostic is non-dominant, but current-formula q70 is unavailable. No organizer score or portal acceptance is claimed."
+  },
+  {
+    "id": "IR-51-17",
+    "summary": "H-M and STE have positive six-fold mean point estimates but no robust upload-ready win.",
+    "evidence": "H-M vs H-D: mean 0.282603 vs 0.281663, paired delta +0.000940, 3/6 higher, paired SD 0.003036, approximate 95% t interval [-0.002246, +0.004127]. STE vs isotropic NMS: 0.283603 vs 0.281639, delta +0.001963, 4/6 higher, paired SD about 0.003454, approximate 95% t interval [-0.00166, +0.00559]. Full public-corpus audits fail on same-prediction NaN twins; H-M also has hard-q20 support Jaccard 0.6336. No refreshed q70 Stage-1 check for either full map. See evidence/uniqueness_gate_H_M_soft_20261007.json and evidence/uniqueness_gate_STE_HD_20261007.json.",
+    "status": "OPEN — research-only noisy leads, not promoted. All local scores are visible-catalogue proxies; no competition slot is authorized."
+  },
+  {
+    "id": "IR-51-18",
+    "summary": "The Stage-1 formula reconciliation exposed incompatible historical holdout receipts: the mainline five-split receipt used a pre-audit unsigned/implicit formula, while the branch formula-sensitivity runner did not exclude held-out trace rows from the catalogue-derived budget. No current-formula, leakage-controlled Stage-1 rerun is available.",
+    "evidence": "evidence/stage1_reconciliation_20261007.json; data/stage1_trace_holdout.json; evidence/stage1_formula_audit.json. The current source has explicit vertical versus fault-plane rate conventions, signed RL/LL shear, and optional unknown-sense handling. Raw training-feature rasters, prepared arrays, and QFaults CSV are absent, preventing a rerun.",
+    "status": "OPEN — retain geodetic deficit as a coarse prior only. Do not cite historical Stage-1 scores as validation of the current formula or use them to authorize a fine-scale gate."
   }
 ]

@@ -14,76 +14,36 @@
   <a class="" href="hypotheses.html">Hypotheses</a>
   <a class="" href="holdout.html">Holdout</a>
   <a class="active" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
   <a class="" href="sources.html">Sources</a>
   <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
-  <a class="" href="claims.html">Claims</a>
 </nav>
 </div></header>
 <main class="wrap">
-<h2>What the best public result does—and does not—tell us</h2>
-<p>The official public leaderboard fetched <b>2026-10-07</b> shows the highest displayed score as
-<b>0.3774</b> at rank 1 for participant <code>xiaofanhu</code>. The page reports a participant and
-score; it does not identify a GeoTIFF, file hash, feature stack, or method. This is a dated public
-leaderboard observation, not an artifact-level scientific record. See the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official leaderboard</a>.</p>
-<div class="warn"><b>Score attribution correction.</b> The 0.2778 row is rank 13 for <code>extradr19</code>,
-not a verified GEMSDOE32 H33-2-B2 score. GEMSDOE32's own
-<a href="https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md">README</a>
-and <a href="https://buffedlizard55-lab.github.io/GEMSDOE32/">site</a> label H33-2-B2
-<b>UNSCORED</b> and give a modelled projection of 0.2747. No authenticated file-to-score link was
-found. The earlier attribution is unsupported and contradicted by the sibling's reporting.</div>
-
-<h3>Scientific interpretation: weighted spatial agreement, not a geological mechanism</h3>
-<p>The competition's distance-weighted Tversky index uses a triangular kernel
-<code>k(d)=max(1-d/3,0)</code>, where distance is in 100 m pixels and the radius is 300 m. For each
-truth pixel, the best nearby prediction contributes credit no greater than one. Each prediction
-contributes false-positive cost according to its distance from the nearest truth. With
-<code>K=|G|</code> and <code>TP<sub>w</sub>, FP<sub>w</sub></code> denoting the competition's
-weighted terms:</p>
-<pre>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)
-FN_w = K − TP_w
-DTI = TP_w / (0.2·(TP_w + FP_w) + 0.8·K)</pre>
-<p>Thus 0.3774 is <b>not</b> 37.74% recall, accuracy, or trace coverage. It is a scalar trade-off
-between distance-weighted credit and weighted error. Since neither the scored file and its
-positions nor the hidden truth size and labels are public, this score cannot establish which
-geological layers, fault styles, mass budget, spacing, or placement strategy produced it. Nor can it
-show that a particular geological mechanism was discovered.</p>
-<p>For an incremental prediction with changes <code>c=ΔTP_w</code> and <code>f=ΔFP_w</code>, the
-exact local improvement condition is <code>c·(1 − 0.2·DTI) &gt; 0.2·DTI·f</code>. The often-quoted
-<code>c &gt; 0.2·DTI</code> applies only to the special case <code>c+f=1</code>; it is not a universal
-per-pixel threshold. <code>TP_w+FP_w</code> is an effective weighted cost, not raw emission count.
-The official definitions and our tested implementation are linked from the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric">competition metric page</a>.</p>
-
-<h3>Leaderboard context and local validation are different evidence</h3>
-<table class=''><thead><tr><th>rank</th><th>participant</th><th>public DTI</th><th>artifact/method identity</th></tr></thead><tbody><tr><td>1</td><td>xiaofanhu</td><td>0.3774</td><td>Not identified by the public leaderboard</td></tr><tr><td>7</td><td>DARD</td><td>0.3195</td><td>Not identified by the public leaderboard</td></tr><tr><td>13</td><td>extradr19</td><td>0.2778</td><td>Not identified by the public leaderboard</td></tr></tbody></table>
-<p>The highest public row was 0.3774. Another public row, 0.2778, belongs to <code>extradr19</code> at
-rank 13 in this snapshot. Neither is a GEMSDOE51 result. Our H-D incumbent's six-block spatial
-holdout mean is <b>0.28166</b> proxy DTI at <code>M/|G|=3.47</code>; the current H-D soft artifact's
-six-fold gate-sweep mean is <b>0.28201</b>. These use the visible catalogue as proxy truth and are
-not leaderboard scores or directly comparable to public results. The matched H-G add-on to H-D
-scored 0.281056 versus 0.281663 (paired delta −0.000606, higher in 3/6 folds) and mean AUC 0.669619
-versus 0.672618. H-G is not promoted, and no competition slot is authorized.</p>
-
-<h3>What remains unknown</h3>
+<h2>GEMSDOE32 result review — attribution kept within the evidence</h2>
+<p>The GEMSDOE32 owner page presents H33-2-B2 with a <b>modelled projection of 0.2747</b> and explicitly labels it <b>UNSCORED</b>; it says no organizer score exists for that artifact. A prior draft linked a public 0.2778 result to H33-2-B2, but that attribution is <b>unsupported and contradicted</b> by the sibling's own status. No verified file-to-score mapping exists. Because of the official Terms of Use, this repository does not store or monitor leaderboard standings.</p>
 <ul>
-<li>which TIFF or model produced the top 0.3774 public score;</li>
-<li>the winning model's geology, transformations, point spacing, catalogue buffer, and emitted mass;</li>
-<li>its true-positive credit, false-positive cost, or error distribution;</li>
-<li>whether the score corresponds to a particular geological discovery mechanism or generalizes to
-  Phase 2.</li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32 executive summary and artifact status</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/research.html">GEMSDOE32 research, metric, and instrument limitations</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/hypotheses.html">GEMSDOE32 ranked hypotheses</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/irregularities.html">GEMSDOE32 irregularities and provenance ledger</a></li>
 </ul>
-<p class="ev">Evidence ledger: <a href="downloads/score_attribution_audit.json">score attribution audit</a>,
-<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/registry/scored_submissions.json">scored-submission ledger</a>,
-and the <a href="leaderboard.html">dated leaderboard snapshot</a>. The board may change. No local
-artifact has an organizer-verified score.</p>
+<p>The official metric is the distance-weighted Tversky index:
+<code>DTI = TP_w / (0.2*(TP_w + FP_w) + 0.8*|G|)</code>, with a triangular 300 m distance-credit kernel. That equation explains how an authenticated prediction would be scored; it does not reveal which raster or geology produced an unauthenticated participant row. Without the exact scored TIFF, hidden fault geometry, and weighted TP/FP terms, the geological cause of a public score cannot be identified.</p>
+<p><b>What can be hypothesized:</b> under the official metric, emitted mass has false-positive cost. Removing dots near mapped faults could improve credit per emitted unit if those dots are less likely to receive hidden-fault credit. The official problem defines the initial hidden test set as expert-identified faults not present in the existing public database. This motivates a falsifiable catalogue-flank-pruning experiment, but it does not show that such a mechanism caused H33-2-B2's projection or any organizer result.</p>
+<p><b>What cannot be claimed:</b> H33-2-B2 has no organizer-returned score, no independently reproduced hidden-label result, and no controlled official comparison linked to the exact file. Do not call 0.2747 a leaderboard result, do not attribute 0.2778 to H33-2-B2, and do not claim a causal gain from the reported prune. The artifact documents a design idea, not performance proof.</p>
+
+<h2>GEMSDOE51 evidence — Stage 1 and Stage 2 reported separately</h2>
+<p><b>Stage 1:</b> the Kreemer et al. (2000) Eq. 3 fault-slip tensor is intended only as a coarse tile prior. The historical five-split trace receipt recorded deficit Spearman 0.03916 and top-half lift 1.08290, below geodetic-only 0.09930 and 1.23864; it predates the current signed-shear and selectable-rate implementation. A separate four-scenario formula audit did not exclude held-out trace rows from the catalogue-derived budget and is not a valid holdout. No current-formula, leakage-controlled Stage-1 rerun is available because raw rasters and prepared arrays are absent. The prior remains a research question, not a validated fine-scale locator or hard gate. See the <a href="method.html">method and formula page</a> and <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.</p>
+<p><b>Stage 2:</b> H-D has mean proxy DTI 0.2816627 and mean AUC 0.6726183 across six blocked folds at M/|G|=3.47. The narrowed H51-X1 implementation (rank-normalized total magnetic and isostatic-gravity bands only; planned RTP/HG/VG derivatives were not inputs to the new transform) returned 0.2796713 mean proxy DTI, delta -0.0019913, and won 3/6 folds; it failed promotion. This partial test does not falsify every version of the broader preregistered family.</p>
+<p>The H-G+H-D experiment has a research-only NaN-outside GeoTIFF linked on the <a href="index.html">executive summary</a>. The in-footprint predictions are a format re-encoding, not a new model run. The matched proxy DTI is 0.2810564 vs H-D 0.2816627 (paired delta -0.0006063; 3/6 folds higher). It passes a scoped uniqueness audit and a historical q70 non-dominance diagnostic on the archived Stage-1 field used to create it; the current-formula map was not rerun. It loses the incumbent holdout and is <b>NOT FOR SUBMISSION</b>. H-M and STE have higher mean points but inconclusive intervals, fail packaged-artifact uniqueness, and lack current q70 Stage-1 checks. No slot is authorized.</p>
+
+<h2>Bottom line</h2>
+<p>The defensible lesson from the GEMSDOE32 page is to test sparse, credit-efficient emissions and explain their mechanism—not to assign an unscored projection a cause. GEMSDOE51 has no upload-eligible file and makes no organizer-score claim. Local spatial holdouts are visible-catalogue proxies, not hidden-label validation. See the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and metric page</a> and <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>. This site does not copy or monitor leaderboard standings.</p>
 
 </main>
 <footer><div class="wrap">
-<p>Evidence is labelled throughout. Public leaderboard rows are organizer-posted observations
-of participant scores, but the board does not identify submission files. No GEMSDOE51 TIFF has an
-organizer-verified score; all local holdout values are proxy diagnostics against the visible
-catalogue.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

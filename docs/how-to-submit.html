@@ -14,69 +14,56 @@
   <a class="" href="hypotheses.html">Hypotheses</a>
   <a class="" href="holdout.html">Holdout</a>
   <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
   <a class="" href="sources.html">Sources</a>
   <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
-  <a class="" href="claims.html">Claims</a>
 </nav>
 </div></header>
 <main class="wrap">
 
-<h2>Submission workflow — only for a future promoted candidate</h2>
-<p class="warn"><b>Current decision: do not submit any file offered on this site.</b> The H-D soft TIFF
-fails the fresh uniqueness gate and its blocked-holdout gain is inconclusive. Experimental H-G+H-D
-passes the scoped uniqueness gate but loses to H-D on the matched holdout. Neither is slot-eligible.
-The steps below describe the portal workflow only; wait until a candidate is explicitly promoted in
-the <a href="index.html">executive summary</a>.</p>
+<h2>Submission guide — current status first</h2>
+<p class="warn"><b>There is no eligible file to upload today.</b> A NaN-outside H-G+H-D GeoTIFF is linked on
+the executive summary for research review only; its matched blocked holdout is below H-D, so it is
+<b>not for submission</b>. Do not use archived zero-outside files: they fail the current local
+null/NaN-outside format contract. The H-D w=0.20 proposal passed its numeric screen but failed
+uniqueness before a file was written. No weekly slot is recommended.</p>
+<h3>When a candidate is cleared</h3>
 <ol class="steps">
-<li><b>Wait for promotion.</b> A future candidate must beat the incumbent on the locked spatially
-blocked holdout, pass the scoped uniqueness and portal-format checks, and have a refreshed manifest
-marking it slot-eligible. The site currently has no approved upload file.</li>
-<li><b>Download the promoted GeoTIFF.</b> Use the download button for that promoted file in the
-executive summary. Do not use the H-D or experimental download cards currently displayed.</li>
-<li><b>Open the submission page.</b>
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">competition submission page</a>
-(requires login) → <b>New submission</b>.</li>
-<li><b>Choose the file.</b> Under <b>File to submit → Choose File</b>, select the promoted single-band
-<code>.tif</code> (or its ZIP only if it contains exactly that TIFF).</li>
-<li><b>Record the run.</b> Copy the distinctive submission name and short note from the promoted
-manifest. Names and notes shown on the current research cards are for research identification only,
-not authorization to upload.</li>
-<li><b>Submit only after all gates pass.</b> The result appears on the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a>
-once the validator finishes. Do not infer a score-to-file link unless the organizer provides it.</li>
+<li>Return to the <a href="index.html">executive summary</a> and download only the GeoTIFF linked in
+the current eligibility card; check its SHA-256 against the receipt shown there.</li>
+<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
+(requires the participant's own login).</li>
+<li>Choose the single-band <code>.tif</code> file, or the linked <code>.zip</code> containing exactly
+that one GeoTIFF.</li>
+<li>Paste the unique submission name and short note displayed on the executive summary. Do not
+reuse names or notes from archived candidates.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure (template below). Read
+the official rules before submitting and select one final file for both prize rounds by the deadline.</li>
 </ol>
 
-<h2>Why you previously saw <code>"Predicted values must be in range [0, 1]"</code></h2>
-<p>Two different failures produce that one message, and both are measured on the written bytes of
-every file offered here:</p>
-<dl class="kv">
-<dt>Mechanism 1 — the float32 sentinel</dt>
-<dd><code>training_features.tif</code> uses <code>-3.4028234663852886e+38</code> as nodata.
-Writing those bytes through unchanged puts values far outside [0,&nbsp;1].</dd>
-<dt>Mechanism 2 — a NaN nodata tag</dt>
-<dd>A raster tagged <code>nodata=NaN</code> is a legitimate reading of the competition format,
-but it is one validator change away from the same rejection.</dd>
-</dl>
-<p><b>The fix:</b> the primary download is written <b>all-finite with no nodata tag</b> — every one
-of the 12,279,160 cells is finite, the minimum is 0.0 and the maximum is 1.0. This is verified by
-re-opening the file from disk after writing, not from memory. An official NaN-outside twin is
-offered alongside it.</p>
+<h3>Official format checklist</h3>
+<p>DrivenData specifies EPSG:32611, 100 m, matching bounds, one float32 band, values in [0,1], and
+null/NaN outside the bounds. The repository writer now emits NaN outside and verifies the written
+bytes. This local check does not prove acceptance by the portal. If the validator reports an error,
+retain the exact rejected file and message for diagnosis; do not assume an unverified root cause.</p>
 
-<h2>What the validator checks</h2>
-<table class=''><thead><tr><th>requirement</th><th>this file</th></tr></thead><tbody><tr><td>single band</td><td>True</td></tr><tr><td>dtype float32</td><td>True</td></tr><tr><td>CRS EPSG:32611</td><td>True</td></tr><tr><td>geotransform matches template</td><td>True</td></tr><tr><td>3730 x 3292</td><td>True</td></tr><tr><td>all 12,279,160 cells finite</td><td>True</td></tr><tr><td>values inside [0, 1]</td><td>True</td></tr><tr><td>nodata tag absent</td><td>True</td></tr><tr><td>positive pixels</td><td>44,069</td></tr><tr><td>total emitted mass</td><td>44,069</td></tr></tbody></table>
+<h3>Generative-AI narrative disclosure</h3>
+<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">September 2026 GEMS Prize Rules</a>
+requires a narrative, outside the word count, that states the extent to which generative AI was used
+and how it contributed to the submission elements. Adapt this text to the actual final process and
+verify every statement before submission:</p>
+<pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source material, generate and rank hypotheses, edit and debug code, and draft project documentation. The geospatial predictions are produced by the documented feature-engineering and machine-learning pipeline, not by a generative model. The person submitting is responsible for checking the data provenance, code, scientific claims, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted artifact.</pre>
+<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include all
+actual AI use across the eventual submission materials.</p>
 
-<h2>Rules and deadlines</h2>
-<p>Read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">competition rules</a>
-and the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">prize rules PDF (NLR 96647)</a>
-before submitting. You must choose a <b>single</b> submission for scoring across both prize rounds
-before the deadline, without knowing your private-test performance.</p>
+<h3>Leaderboard and Terms of Use</h3>
+<p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
+<a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit automated monitoring/copying
+and manual monitoring/copying without prior written consent. No such consent is on record.</p>
 
 </main>
 <footer><div class="wrap">
-<p>Evidence is labelled throughout. Public leaderboard rows are organizer-posted observations
-of participant scores, but the board does not identify submission files. No GEMSDOE51 TIFF has an
-organizer-verified score; all local holdout values are proxy diagnostics against the visible
-catalogue.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

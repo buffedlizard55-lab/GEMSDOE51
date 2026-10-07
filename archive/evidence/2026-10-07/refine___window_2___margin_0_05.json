@@ -1,0 +1,226 @@
+{
+ "config": {
+  "window": 2,
+  "margin": 0.05,
+  "suppress_radius": 4.0,
+  "ratio": 3.47,
+  "nms_radius": 2.4,
+  "excl_radius": 2.0,
+  "grid": 3,
+  "buffer": 12,
+  "min_truth": 500
+ },
+ "rule": "promote iff mean dist improves in >=5/6 folds and mean DTI does not fall by >0.0005",
+ "rule_passed": false,
+ "per_fold": [
+  {
+   "fold": 0,
+   "n_truth": 12803,
+   "n_dots": 44426,
+   "base": {
+    "mean_dist_px": 26.138748095476725,
+    "median_dist_px": 18.027756377319946,
+    "frac_within_1px": 0.05746634853464188,
+    "frac_within_3px": 0.13156710034664384,
+    "dti": 0.27519669803435787,
+    "coverage": 0.42214408341029674
+   },
+   "refined": {
+    "mean_dist_px": 26.212697727708672,
+    "median_dist_px": 18.027756377319946,
+    "frac_within_1px": 0.05746634853464188,
+    "frac_within_3px": 0.11427992616936028,
+    "dti": 0.27179057259278416,
+    "coverage": 0.4172127073162295
+   },
+   "move_stats": {
+    "n_moved": 16537,
+    "n_kept": 44426,
+    "n_dropped": 0,
+    "mean_move_px": 1.9129548877782583,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.3722369783460136
+   },
+   "delta": {
+    "mean_dist_px": 0.0739496322319475,
+    "dti": -0.003406125441573704
+   }
+  },
+  {
+   "fold": 1,
+   "n_truth": 10426,
+   "n_dots": 36178,
+   "base": {
+    "mean_dist_px": 31.56003584500557,
+    "median_dist_px": 19.924858845171276,
+    "frac_within_1px": 0.05754878655536514,
+    "frac_within_3px": 0.13132290342196914,
+    "dti": 0.2691376633994276,
+    "coverage": 0.41228708120480917
+   },
+   "refined": {
+    "mean_dist_px": 31.6377858547875,
+    "median_dist_px": 20.0,
+    "frac_within_1px": 0.05754878655536514,
+    "frac_within_3px": 0.11446182763005142,
+    "dti": 0.2662937713812609,
+    "coverage": 0.40829486541700005
+   },
+   "move_stats": {
+    "n_moved": 14105,
+    "n_kept": 36178,
+    "n_dropped": 0,
+    "mean_move_px": 1.858281745054339,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.3898778263032782
+   },
+   "delta": {
+    "mean_dist_px": 0.07775000978192992,
+    "dti": -0.0028438920181666494
+   }
+  },
+  {
+   "fold": 2,
+   "n_truth": 7096,
+   "n_dots": 24623,
+   "base": {
+    "mean_dist_px": 27.847212092029178,
+    "median_dist_px": 19.209372712298546,
+    "frac_within_1px": 0.059862729967916174,
+    "frac_within_3px": 0.13678268285749096,
+    "dti": 0.284329773704403,
+    "coverage": 0.4362865635610515
+   },
+   "refined": {
+    "mean_dist_px": 27.921447601452474,
+    "median_dist_px": 19.209372712298546,
+    "frac_within_1px": 0.059862729967916174,
+    "frac_within_3px": 0.11716687649758356,
+    "dti": 0.27910571472064105,
+    "coverage": 0.4285828104973972
+   },
+   "move_stats": {
+    "n_moved": 10172,
+    "n_kept": 24623,
+    "n_dropped": 0,
+    "mean_move_px": 2.0003020615619196,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.41310969418836047
+   },
+   "delta": {
+    "mean_dist_px": 0.07423550942329626,
+    "dti": -0.005224058983761937
+   }
+  },
+  {
+   "fold": 3,
+   "n_truth": 5630,
+   "n_dots": 19536,
+   "base": {
+    "mean_dist_px": 23.430910523890876,
+    "median_dist_px": 17.88854381999832,
+    "frac_within_1px": 0.049959049959049956,
+    "frac_within_3px": 0.11691236691236691,
+    "dti": 0.24848312770230557,
+    "coverage": 0.38039650523429563
+   },
+   "refined": {
+    "mean_dist_px": 23.495263950509994,
+    "median_dist_px": 17.88854381999832,
+    "frac_within_1px": 0.049959049959049956,
+    "frac_within_3px": 0.0987919737919738,
+    "dti": 0.24434525729516365,
+    "coverage": 0.37431610948238636
+   },
+   "move_stats": {
+    "n_moved": 7686,
+    "n_kept": 19536,
+    "n_dropped": 0,
+    "mean_move_px": 1.8339368473111097,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.39342751842751844
+   },
+   "delta": {
+    "mean_dist_px": 0.06435342661911747,
+    "dti": -0.004137870407141919
+   }
+  },
+  {
+   "fold": 4,
+   "n_truth": 13348,
+   "n_dots": 46318,
+   "base": {
+    "mean_dist_px": 20.20772179529463,
+    "median_dist_px": 14.142135623730951,
+    "frac_within_1px": 0.06390604084805043,
+    "frac_within_3px": 0.14743728140247853,
+    "dti": 0.30695942078484534,
+    "coverage": 0.4723489385111433
+   },
+   "refined": {
+    "mean_dist_px": 20.275335923304382,
+    "median_dist_px": 14.142135623730951,
+    "frac_within_1px": 0.06390604084805043,
+    "frac_within_3px": 0.13167666997711472,
+    "dti": 0.3048663755211366,
+    "coverage": 0.46950262477404225
+   },
+   "move_stats": {
+    "n_moved": 15876,
+    "n_kept": 46318,
+    "n_dropped": 0,
+    "mean_move_px": 1.7744687176706782,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.3427609136836651
+   },
+   "delta": {
+    "mean_dist_px": 0.06761412800975108,
+    "dti": -0.002093045263708737
+   }
+  },
+  {
+   "fold": 5,
+   "n_truth": 11398,
+   "n_dots": 39551,
+   "base": {
+    "mean_dist_px": 35.515300876979296,
+    "median_dist_px": 22.090722034374522,
+    "frac_within_1px": 0.061869484968774494,
+    "frac_within_3px": 0.1343834542742282,
+    "dti": 0.3057297772794664,
+    "coverage": 0.4712944200340794
+   },
+   "refined": {
+    "mean_dist_px": 35.568217696964496,
+    "median_dist_px": 22.02271554554524,
+    "frac_within_1px": 0.061869484968774494,
+    "frac_within_3px": 0.1226517660741827,
+    "dti": 0.303729993381894,
+    "coverage": 0.46844412265258817
+   },
+   "move_stats": {
+    "n_moved": 14824,
+    "n_kept": 39551,
+    "n_dropped": 0,
+    "mean_move_px": 1.8100764026608307,
+    "max_move_px": 2.8284271247461903,
+    "moved_fraction": 0.3748072109428333
+   },
+   "delta": {
+    "mean_dist_px": 0.05291681998519948,
+    "dti": -0.0019997838975723825
+   }
+  }
+ ],
+ "summary": {
+  "n_folds": 6,
+  "folds_mean_dist_improved": 0,
+  "mean_delta_dti": -0.003284129335320888,
+  "mean_base_dti": 0.281639410150801,
+  "mean_refined_dti": 0.27835528081548006,
+  "mean_base_dist": 27.449988204779377,
+  "mean_refined_dist": 27.51845812578792,
+  "total_moved": 79200,
+  "total_dots": 210632
+ }
+}

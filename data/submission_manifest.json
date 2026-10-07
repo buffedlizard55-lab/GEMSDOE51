@@ -1,395 +1,220 @@
 {
- "generated_utc": "2026-10-06T22:21:00Z",
- "artifacts": [
-  {
-   "role": "PRIMARY",
-   "gate_mode": "soft",
-   "description": "H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10)",
-   "holdout_cost_vs_ungated": 0.000367372806934214,
-   "file": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
-   "zip": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip",
-   "nan_twin": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
-   "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
-   "bytes": 233040,
-   "submission_name": "GEMSDOE51-HD-SOFT-W010",
-   "note": "GEMSDOE51 | H-D soft w=0.10; 44,069 dots, 200 m catalogue buffer; proxy \u0394 +0.00037 vs ungated (4/6; inconclusive); NOT SLOT-ELIGIBLE; UNSCORED.",
-   "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
-   "checks": {
-    "single_band": true,
-    "dtype_float32": true,
-    "crs_epsg_32611": true,
-    "transform_matches_template": true,
-    "shape_matches_template": true,
-    "all_cells_finite": true,
-    "nan_cells": 0,
-    "values_outside_0_1": 0,
-    "min_value": 0.0,
-    "max_value": 1.0,
-    "nodata_tag_is_none": true,
-    "positive_px": 44069,
-    "total_mass": 44069.0,
-    "portal_legal": true
-   },
-   "uniqueness": {
-    "candidate": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
-    "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
-    "byte_duplicate_of": [],
-    "support_jaccard": {
-     "g25_dotted_02600": 0.015317,
-     "g32_anchor_02708": 0.015317,
-     "g32_h33b2_02778": 0.016544
+  "schema_version": 2,
+  "status": "NO_ELIGIBLE_CANDIDATE",
+  "generated_utc": "2026-10-07",
+  "primary": null,
+  "artifacts": [],
+  "decision": {
+    "h51_x1": {
+      "mean_proxy_dti": 0.2796713344095349,
+      "incumbent_h_d_mean_proxy_dti": 0.2816626603034904,
+      "paired_mean_delta": -0.0019913258939555,
+      "positive_folds": 3,
+      "folds": 6,
+      "promotion": "FAIL",
+      "implementation_scope": {
+        "status": "NARROWED_PARTIAL_TEST",
+        "new_transform_layers": [
+          "comp_tmi",
+          "comp_iso_grav_anom"
+        ],
+        "new_transform_features": [
+          "mg_alignment_s20",
+          "mg_coedge_s20",
+          "mg_alignment_s50",
+          "mg_coedge_s50"
+        ],
+        "planned_derivative_layers_used_by_new_transform": false,
+        "derivatives_remain_in_common_baseline_stack": true,
+        "interpretation": "The measured feature family failed promotion; this does not falsify every version of the broader preregistered layer-family hypothesis."
+      }
     },
-    "support_containment": {
-     "g25_dotted_02600": 0.03018,
-     "g32_anchor_02708": 0.03018,
-     "g32_h33b2_02778": 0.03018
+    "h_d_soft_w020": {
+      "mean_proxy_dti": 0.2821226671828702,
+      "incumbent_h_d_mean_proxy_dti": 0.2816626603034904,
+      "paired_mean_delta": 0.00048325703206926013,
+      "positive_folds": 4,
+      "folds": 6,
+      "stage1_top_half_area_share": 0.5015368544132579,
+      "emitted_share_inside_stage1_top_half": 0.49447457396355715,
+      "stage1_lift_over_area_share": 0.9859187208526025,
+      "uniqueness": {
+        "max_jaccard": 0.8612970667117184,
+        "jaccard_prior": "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+        "candidate_containment": 0.9254804964941342,
+        "containment_prior": "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+        "limits": {
+          "jaccard": 0.5,
+          "containment": 0.6
+        },
+        "promotion": "FAIL_UNIQUENESS"
+      },
+      "config": {
+        "arm": "H_D",
+        "gate_mode": "soft",
+        "gate_weight": 0.2,
+        "ratio": 3.47,
+        "g_hidden_estimate": 12700,
+        "stage1_q": 50.0,
+        "tile_px": 100,
+        "nms_radius": 2.4,
+        "excl_radius": 2.0
+      }
     },
-    "stage1_dominance": {
-     "q_percentile": 70,
-     "interpretation": "approved tiles are the top 30% of current-code deficit values",
-     "deficit_threshold": 0.15608919382504288,
-     "approved_pixels": 1552597,
-     "footprint_pixels": 5167373,
-     "approved_area_share_of_footprint": 0.30046156915709393,
-     "emitted_pixels_inside_approved": 8620,
-     "emitted_pixels_total": 44069,
-     "emitted_share_inside_approved": 0.1956023508588804,
-     "lift_over_area_share": 0.6510062215531174,
-     "formula_revision": "current signed-moment-tensor code; see evidence/stage1_formula_audit.json"
+    "submission_slot_used": false,
+    "new_tif_written": false,
+    "reason": "The guarded H-D w=0.20 proposal failed source-aware uniqueness before writing. A distinct H-G+H-D research-only TIFF is available and passes the refreshed scoped public-corpus gate and the historical q70 non-dominance diagnostic for its archived prior field, but its matched six-block proxy holdout is below H-D; therefore no slot is authorized. H-M and STE are noisy positive point estimates but fail packaged-artifact uniqueness and lack a fresh q70 map check."
+  },
+  "legacy_artifacts": {
+    "zero_outside_files": "Retired. They violate the official null/NaN-outside footprint requirement and must not be submitted.",
+    "nan_outside_soft_w010": {
+      "file": "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+      "sha256": "69d7cdbb1337b07278dd73f4e605cd35c185e8f9cfef18614d4c9c071800a8cf",
+      "local_format_valid": true,
+      "status": "ARCHIVE_ONLY_NOT_PROMOTED"
     },
-    "verdict": "FAIL",
-    "notes": [
-     "The original check used q70; current manifests now report the primary's q70 threshold. The independent current-code rerun and original build-time q70 check both show no Stage-1 dominance. The old q20 metrics were the hard secondary's top-80% diagnostic."
-    ],
-    "stage1_dominance_build_time_q70": {
-     "approved_area_share_of_footprint": 0.30046156915709393,
-     "emitted_pixels_inside_approved": 8949,
-     "emitted_pixels_total": 44069,
-     "emitted_share_inside_approved": 0.2030679162222878,
-     "lift_over_area_share": 0.6758532107516064
-    },
-    "stage1_dominance_q20_current_formula": {
-     "q_percentile": 20,
-     "interpretation": "approved tiles are the top 80% of current-code deficit values",
-     "deficit_threshold": -0.3379073756432247,
-     "approved_pixels": 4136518,
-     "footprint_pixels": 5167373,
-     "approved_area_share_of_footprint": 0.8005069500498609,
-     "emitted_pixels_inside_approved": 34414,
-     "emitted_pixels_total": 44069,
-     "emitted_share_inside_approved": 0.7809117520252331,
-     "lift_over_area_share": 0.9755215141812231
-    },
-    "fresh_public_artifact_audit": {
-     "evidence": "evidence/uniqueness_gate_H_D_soft_20261007.json",
-     "verdict": "FAIL",
-     "checker_verdict": "FAIL",
-     "downloaded_sha_verified": 358,
-     "download_errors": 0,
-     "pixel_comparisons": 357,
-     "skipped": 1,
-     "matches": 3,
-     "max_support_jaccard": 1.0,
-     "max_cosine": 1.0,
-     "hardq20_support_jaccard": 0.6311279726103451,
-     "nan_twin_support_jaccard": 1.0
+    "nan_outside_hard_q20": {
+      "file": "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif",
+      "local_format_valid": true,
+      "status": "ARCHIVE_ONLY_HARD_GATE_HOLDOUT_HARM"
     }
-   },
-   "content": {
-    "positive_px": 44069,
-    "n_connected_components": 44069,
-    "min_distance_to_catalogue_px": 2.23606797749979,
-    "supported_inside_footprint": true
-   },
-   "format_table": [
-    [
-     "single band",
-     "True"
-    ],
-    [
-     "dtype float32",
-     "True"
-    ],
-    [
-     "CRS EPSG:32611",
-     "True"
-    ],
-    [
-     "geotransform matches template",
-     "True"
-    ],
-    [
-     "3730 x 3292",
-     "True"
-    ],
-    [
-     "all 12,279,160 cells finite",
-     "True"
-    ],
-    [
-     "values inside [0, 1]",
-     "True"
-    ],
-    [
-     "nodata tag absent",
-     "True"
-    ],
-    [
-     "positive pixels",
-     "44,069"
-    ],
-    [
-     "total emitted mass",
-     "44,069"
-    ]
-   ],
-   "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified",
-   "holdout_cost_note": "Paired over 6 spatial folds: ungated 0.281639410 to w=0.10 0.282006783, raw mean \u0394DTI +0.000367373 (4/6 folds positive; paired-delta sample SD 0.000979). Small/inconclusive; do not treat as a demonstrated win.",
-   "holdout_interpretation": "INCONCLUSIVE_SMALL_DELTA_NOT_A_WIN",
-   "slot_status": "NOT SLOT-ELIGIBLE: H-D soft delta is inconclusive; fresh uniqueness gate failed against the hard-q20 alternate and same-prediction NaN twin.",
-   "mass_budget": {
-    "ratio": 3.47,
-    "truth_mass_proxy": 12700,
-    "emitted_pixels": 44069,
-    "caveat": "12,700 is a planning truth-mass proxy used to set the emitted count at M/|G|=3.47; the actual hidden |G| is unknown, and the proxy is not inferred from a verified leaderboard artifact."
-   }
   },
-  {
-   "role": "SECONDARY",
-   "gate_mode": "hard",
-   "description": "H_D detector x 3-bag ensemble, emitted only inside the top 80% of tiles by the strain-budget deficit - the brief's literal 'points only inside approved tiles' design",
-   "holdout_cost_vs_ungated": -0.0025,
-   "file": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
-   "zip": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z.zip",
-   "nan_twin": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif",
-   "sha256": "93d1a77e8d90e4a60dd68e2785b4a1b5cf8b34bfad80109c79354cae74c61c06",
-   "bytes": 223096,
-   "submission_name": "GEMSDOE51-HD-HARD-Q20",
-   "note": "GEMSDOE51 two-stage | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag bagged GBDT) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit (hard gate, top 80% of tiles) | 44069 dots at 2.4 px spacing, none within 200 m of the catalogue | proxy DTI 0.2820 / gate cost -0.0025 on the blocked holdout | UNSCORED",
-   "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
-   "checks": {
-    "single_band": true,
-    "dtype_float32": true,
-    "crs_epsg_32611": true,
-    "transform_matches_template": true,
-    "shape_matches_template": true,
-    "all_cells_finite": true,
-    "nan_cells": 0,
-    "values_outside_0_1": 0,
-    "min_value": 0.0,
-    "max_value": 1.0,
-    "nodata_tag_is_none": true,
-    "positive_px": 44069,
-    "total_mass": 44069.0,
-    "portal_legal": true
-   },
-   "uniqueness": {
-    "candidate": "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
-    "sha256": "93d1a77e8d90e4a60dd68e2785b4a1b5cf8b34bfad80109c79354cae74c61c06",
-    "byte_duplicate_of": [],
-    "support_jaccard": {
-     "g25_dotted_02600": 0.013975,
-     "g32_anchor_02708": 0.013975,
-     "g32_h33b2_02778": 0.015092
-    },
-    "support_containment": {
-     "g25_dotted_02600": 0.02757,
-     "g32_anchor_02708": 0.02757,
-     "g32_h33b2_02778": 0.02757
-    },
-    "stage1_dominance": {
-     "approved_area_share_of_footprint": 0.8005069500498609,
-     "emitted_pixels_inside_approved": 44069,
-     "emitted_pixels_total": 44069,
-     "emitted_share_inside_approved": 1.0,
-     "lift_over_area_share": 1.2492083921791226
-    },
-    "verdict": "PASS",
-    "notes": []
-   },
-   "content": {
-    "positive_px": 44069,
-    "n_connected_components": 44069,
-    "min_distance_to_catalogue_px": 2.23606797749979,
-    "supported_inside_footprint": true
-   },
-   "holdout_cost_note": "paired over 6 blocked folds against the same detector ungated (0.2816 -> 0.2791); it lost in 6 of 6 folds."
-  }
- ],
- "primary": {
-  "role": "PRIMARY",
-  "gate_mode": "soft",
-  "description": "H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10)",
-  "holdout_cost_vs_ungated": 0.000367372806934214,
-  "file": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
-  "zip": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z.zip",
-  "nan_twin": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
-  "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
-  "bytes": 233040,
-  "submission_name": "GEMSDOE51-HD-SOFT-W010",
-  "note": "GEMSDOE51 | H-D soft w=0.10; 44,069 dots, 200 m catalogue buffer; proxy \u0394 +0.00037 vs ungated (4/6; inconclusive); NOT SLOT-ELIGIBLE; UNSCORED.",
-  "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
-  "checks": {
-   "single_band": true,
-   "dtype_float32": true,
-   "crs_epsg_32611": true,
-   "transform_matches_template": true,
-   "shape_matches_template": true,
-   "all_cells_finite": true,
-   "nan_cells": 0,
-   "values_outside_0_1": 0,
-   "min_value": 0.0,
-   "max_value": 1.0,
-   "nodata_tag_is_none": true,
-   "positive_px": 44069,
-   "total_mass": 44069.0,
-   "portal_legal": true
+  "notice": "No organizer score, portal acceptance, or upload eligibility is claimed. primary remains null; research-only links must be visibly labeled NOT FOR SUBMISSION.",
+  "post_sync_review": {
+    "status": "PROVISIONAL_HOLDOUT_LEAD_PENDING_REPRODUCTION",
+    "record": "data/holdout_archive_review.json",
+    "stage2_only_best_recorded_mean_proxy_dti": 0.28360257965744917,
+    "stage2_only_rule": "ste_L9_w0.35_s2.4_nothin",
+    "stage2_reproduced_in_this_review": false,
+    "stage1_weighted_packaged_artifacts_promoted": false,
+    "archived_artifacts_reused_or_reissued": false,
+    "new_tif_written_this_review": false,
+    "portal_or_slot_status_verified": false,
+    "research_only_artifact_available": true,
+    "research_only_artifact": "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+    "research_artifact_reason": "Passes scoped uniqueness; its q70 diagnostic is non-dominant on the archived Stage-1 field, but the current formula map was not rerun. It loses the matched blocked holdout and is not authorized.",
+    "new_model_prediction_generated_this_review": false,
+    "new_format_reencoding_written_this_review": true,
+    "format_reencoding_note": "The research TIFF is a NaN-outside format re-encoding of the previously audited H-G+H-D experiment; no new model run or prediction field was generated."
   },
-  "uniqueness": {
-   "candidate": "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
-   "sha256": "5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b",
-   "byte_duplicate_of": [],
-   "support_jaccard": {
-    "g25_dotted_02600": 0.015317,
-    "g32_anchor_02708": 0.015317,
-    "g32_h33b2_02778": 0.016544
-   },
-   "support_containment": {
-    "g25_dotted_02600": 0.03018,
-    "g32_anchor_02708": 0.03018,
-    "g32_h33b2_02778": 0.03018
-   },
-   "stage1_dominance": {
-    "q_percentile": 70,
-    "interpretation": "approved tiles are the top 30% of current-code deficit values",
-    "deficit_threshold": 0.15608919382504288,
-    "approved_pixels": 1552597,
-    "footprint_pixels": 5167373,
-    "approved_area_share_of_footprint": 0.30046156915709393,
-    "emitted_pixels_inside_approved": 8620,
-    "emitted_pixels_total": 44069,
-    "emitted_share_inside_approved": 0.1956023508588804,
-    "lift_over_area_share": 0.6510062215531174,
-    "formula_revision": "current signed-moment-tensor code; see evidence/stage1_formula_audit.json"
-   },
-   "verdict": "FAIL",
-   "notes": [
-    "The original check used q70; current manifests now report the primary's q70 threshold. The independent current-code rerun and original build-time q70 check both show no Stage-1 dominance. The old q20 metrics were the hard secondary's top-80% diagnostic."
-   ],
-   "stage1_dominance_build_time_q70": {
-    "approved_area_share_of_footprint": 0.30046156915709393,
-    "emitted_pixels_inside_approved": 8949,
-    "emitted_pixels_total": 44069,
-    "emitted_share_inside_approved": 0.2030679162222878,
-    "lift_over_area_share": 0.6758532107516064
-   },
-   "stage1_dominance_q20_current_formula": {
-    "q_percentile": 20,
-    "interpretation": "approved tiles are the top 80% of current-code deficit values",
-    "deficit_threshold": -0.3379073756432247,
-    "approved_pixels": 4136518,
-    "footprint_pixels": 5167373,
-    "approved_area_share_of_footprint": 0.8005069500498609,
-    "emitted_pixels_inside_approved": 34414,
-    "emitted_pixels_total": 44069,
-    "emitted_share_inside_approved": 0.7809117520252331,
-    "lift_over_area_share": 0.9755215141812231
-   },
-   "fresh_public_artifact_audit": {
-    "evidence": "evidence/uniqueness_gate_H_D_soft_20261007.json",
-    "verdict": "FAIL",
-    "checker_verdict": "FAIL",
-    "downloaded_sha_verified": 358,
-    "download_errors": 0,
-    "pixel_comparisons": 357,
-    "skipped": 1,
-    "matches": 3,
-    "max_support_jaccard": 1.0,
-    "max_cosine": 1.0,
-    "hardq20_support_jaccard": 0.6311279726103451,
-    "nan_twin_support_jaccard": 1.0
-   }
-  },
-  "content": {
-   "positive_px": 44069,
-   "n_connected_components": 44069,
-   "min_distance_to_catalogue_px": 2.23606797749979,
-   "supported_inside_footprint": true
-  },
-  "format_table": [
-   [
-    "single band",
-    "True"
-   ],
-   [
-    "dtype float32",
-    "True"
-   ],
-   [
-    "CRS EPSG:32611",
-    "True"
-   ],
-   [
-    "geotransform matches template",
-    "True"
-   ],
-   [
-    "3730 x 3292",
-    "True"
-   ],
-   [
-    "all 12,279,160 cells finite",
-    "True"
-   ],
-   [
-    "values inside [0, 1]",
-    "True"
-   ],
-   [
-    "nodata tag absent",
-    "True"
-   ],
-   [
-    "positive pixels",
-    "44,069"
-   ],
-   [
-    "total emitted mass",
-    "44,069"
-   ]
+  "research_only_artifacts": [
+    {
+      "id": "H_G_PLUS_H_D_RESEARCH_ONLY",
+      "status": "NOT_SLOT_ELIGIBLE_NEGATIVE_BLOCKED_HOLDOUT",
+      "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+      "zip": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.zip",
+      "submission_name": "GEMSDOE51-HG-HD-XING-R347-EXP-20261007",
+      "note": "Research-only H-G magnetic-gravity crossing add-on to H-D; matched blocked proxy DTI is below H-D; NOT SLOT-ELIGIBLE; no organizer score claimed.",
+      "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+      "bytes": 378630,
+      "format": {
+        "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+        "bytes": 378630,
+        "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+        "crs": "EPSG:32611",
+        "crs_epsg": 32611,
+        "transform": [
+          100.0,
+          0.0,
+          243350.0,
+          0.0,
+          -100.0,
+          4508550.0
+        ],
+        "shape": [
+          3730,
+          3292
+        ],
+        "count": 1,
+        "dtype": "float32",
+        "nodata": "NaN",
+        "checks": {
+          "single_band": true,
+          "dtype_float32": true,
+          "crs_epsg_32611": true,
+          "transform_matches_template": true,
+          "shape_matches_template": true,
+          "inside_footprint_finite": true,
+          "outside_footprint_nan": true,
+          "nan_cells": 7111787,
+          "values_outside_0_1": 0,
+          "min_value": 0.0,
+          "max_value": 1.0,
+          "nodata_tag_is_nan": true,
+          "predicted_px": 44069,
+          "total_mass": 44069.0,
+          "format_valid": true
+        }
+      },
+      "holdout": {
+        "metric": "visible-catalogue proxy DTI at M/|G|=3.47 over six spatial blocks",
+        "mean": 0.28105639793372034,
+        "incumbent_H_D_mean": 0.2816626603034904,
+        "paired_delta": -0.000606262369770072,
+        "folds_higher": 3,
+        "folds_total": 6,
+        "AUC_mean": 0.669618890762553,
+        "incumbent_H_D_AUC_mean": 0.6726182834034514,
+        "decision": "FAIL_PROMOTION"
+      },
+      "uniqueness": {
+        "verdict": "PASS",
+        "evidence": "evidence/uniqueness_gate_H_G_HD_experimental_20261007.json",
+        "references_sha_verified": 365,
+        "pixel_comparisons": 364,
+        "matches": 0,
+        "skipped_shape_mismatch": 1,
+        "max_support_jaccard": 0.3216272548696187,
+        "max_cosine": 0.4867140054702759,
+        "max_containment": 0.9933286309242249,
+        "max_containment_lift": 2.359721279362589,
+        "caveat": "Scoped finite public inventory; final NaN-outside format re-encoding preserves the audited in-footprint vector exactly."
+      },
+      "stage1_dominance_q70": {
+        "approved_area_share": 0.30046156915709393,
+        "emitted_share_inside_approved": 0.19728153577344618,
+        "lift_over_area_share": 0.6565949060536893,
+        "result": "PASS_NO_DOMINANCE_ON_ARCHIVED_PRIOR_FIELD; CURRENT_FORMULA_NOT_RERUN",
+        "formula_status": "Historical q70 map used to create this experimental artifact; the current signed/rate-selectable Stage-1 source was not used to regenerate this map.",
+        "current_formula_check_available": false
+      },
+      "caveats": [
+        "Research-only; do not submit or spend a slot.",
+        "Negative holdout against incumbent.",
+        "All blocked-holdout truth is the visible known-fault catalogue, not hidden evaluation faults.",
+        "No organizer score or portal acceptance is claimed."
+      ],
+      "format_receipt": "format_check_H_G_HD_nan.json"
+    }
   ],
-  "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified",
-  "holdout_cost_note": "Paired over 6 spatial folds: ungated 0.281639410 to w=0.10 0.282006783, raw mean \u0394DTI +0.000367373 (4/6 folds positive; paired-delta sample SD 0.000979). Small/inconclusive; do not treat as a demonstrated win.",
-  "holdout_interpretation": "INCONCLUSIVE_SMALL_DELTA_NOT_A_WIN",
-  "slot_status": "NOT SLOT-ELIGIBLE: H-D soft delta is inconclusive; fresh uniqueness gate failed against the hard-q20 alternate and same-prediction NaN twin.",
-  "mass_budget": {
-   "ratio": 3.47,
-   "truth_mass_proxy": 12700,
-   "emitted_pixels": 44069,
-   "caveat": "12,700 is a planning truth-mass proxy used to set the emitted count at M/|G|=3.47; the actual hidden |G| is unknown, and the proxy is not inferred from a verified leaderboard artifact."
+  "research_comparisons": {
+    "H_M_cross_scale_crest": {
+      "mean_proxy_dti": 0.2826030480152771,
+      "incumbent_H_D_mean": 0.2816626603034904,
+      "paired_delta": 0.0009403877117867,
+      "folds_higher": 3,
+      "folds_total": 6,
+      "paired_sd": 0.0030361555,
+      "approx_95pct_t_interval": [
+        -0.0022464,
+        0.0041272
+      ],
+      "full_corpus_uniqueness": "FAIL: NaN twin IoU/cosine 1.0; hard-q20 alternate Jaccard 0.6335768; see evidence/uniqueness_gate_H_M_soft_20261007.json",
+      "stage1_q70": "NOT_RUN_IN_CURRENT_CHECKOUT"
+    },
+    "STE_L9_w035_s24": {
+      "mean_proxy_dti": 0.28360257965744917,
+      "comparator_iso_nms_r24_mean": 0.281639410150801,
+      "paired_delta": 0.001963169506648247,
+      "folds_higher": 4,
+      "folds_total": 6,
+      "paired_sd_approx": 0.00345439,
+      "approx_95pct_t_interval": [
+        -0.00166,
+        0.00559
+      ],
+      "full_corpus_uniqueness": "FAIL: same-prediction NaN twin Jaccard/cosine 1.0; see evidence/uniqueness_gate_STE_HD_20261007.json",
+      "stage1_q70": "NOT_RUN_IN_CURRENT_CHECKOUT"
+    }
   }
- },
- "stage1_stats": {
-  "fault_II_median_nanostrain_tiles_with_trace": 5.280391639762229,
-  "fault_II_median_nanostrain_all_tiles": 0.0,
-  "observed_II_median_nanostrain": 21.016352256722218,
-  "approved_share_at_q20": 0.8005069500498609,
-  "kostrov_meta": {
-   "tile_px": 100,
-   "tile_shape": [
-    38,
-    33
-   ],
-   "h_seis_m": 15000.0,
-   "median_centroid_distance_px": 36.345563690772494,
-   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
-   "regional_median_slip_rate_mm_yr": 0.1,
-   "total_mapped_trace_km": 6821.350197517395
-  },
-  "approved_share_at_primary_q70_current_formula": 0.30046156915709393,
-  "primary_q_percentile": 70,
-  "primary_prior_is_soft_not_a_hard_emission_mask": true,
-  "formula_audit": "evidence/stage1_formula_audit.json",
-  "manifest_reconciliation": "evidence/submission_manifest_reconciliation.json"
- }
 }

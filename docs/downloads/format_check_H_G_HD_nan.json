@@ -1,0 +1,39 @@
+{
+  "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+  "bytes": 378630,
+  "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f",
+  "crs": "EPSG:32611",
+  "crs_epsg": 32611,
+  "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+  ],
+  "shape": [
+    3730,
+    3292
+  ],
+  "count": 1,
+  "dtype": "float32",
+  "nodata": "NaN",
+  "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "shape_matches_template": true,
+    "inside_footprint_finite": true,
+    "outside_footprint_nan": true,
+    "nan_cells": 7111787,
+    "values_outside_0_1": 0,
+    "min_value": 0.0,
+    "max_value": 1.0,
+    "nodata_tag_is_nan": true,
+    "predicted_px": 44069,
+    "total_mass": 44069.0,
+    "format_valid": true
+  }
+}
