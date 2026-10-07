@@ -22,7 +22,7 @@ jobs:
       - name: Compile current Python sources
         run: python -m compileall -q scripts src tests
       - name: Unit tests
-        run: pytest tests -q
+        run: python -m pytest tests -q
       - name: Regenerate current site
         run: python scripts/build_site.py
       - name: Check links and current download state
