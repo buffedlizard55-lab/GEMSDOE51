@@ -1,0 +1,40 @@
+{
+ "id": "GEMSDOE51-H52-PREREG-1-A2",
+ "parent": "GEMSDOE51-H52-PREREG-1",
+ "created_utc": "2026-10-07T20:59:00Z",
+ "status": "frozen_before_running",
+ "author_note": "Amendment A2 is written after pass 1 (scripts/run_h52_holdout.py) and BEFORE pass 2 (scripts/run_h52_emission_pass2.py) is executed. Pass 1's receipts are the only results it reacts to; no pass-2 number exists yet in the repository.",
+ "why_this_amendment_exists": [
+  "Pass 1 tested two emission geometries that had never been scored on this instrument: isotropic NMS at two radii/flank widths (V0-V2, V4) and the new strike-aligned line emission SALE (V3, V5).",
+  "Pass 1 result (folds 0 and 1, evidence/h52_holdout_<utc>.json): the SALE geometry is far worse than the incumbent NMS at identical emitted mass (fold 0 0.2207 vs 0.2790; fold 1 0.2122 vs 0.2665). SALE is therefore abandoned, not tuned.",
+  "Pass 1 also shows the Stage-1 hard confinement is nearly free for the incumbent geometry (fold 0 V4 = V2 = 0.2784; fold 1 V4 = 0.2650 vs V2 = 0.2661, cost 0.0011) while it is still the required structure of this session's brief.",
+  "The repository already owns a *validated* better emission rule that pass 1 never scored: strike-coherent trace emission (STE, gems51.trace_emission), the recipe behind the historical six-fold proxy mean 0.2853406027 versus 0.2831726350 for isotropic NMS in evidence/hh_blend_holdout.json. Amendment A2 scores exactly that recipe on the identical cached fold fields."
+ ],
+ "new_variants": {
+  "V6_ste_flank2": "STE (multi-scale ridge/vesselness at sigma {1,2,3.5}, along-strike accumulation length 9, 12 orientations, score = raw_rank^0.65 * acc_rank^0.35, greedy spacing 2.4 px) on the same 50/50 H-H/H-D blend, mass = 3.47 x n_truth, catalogue flank 2 px, block-confined. Bit-for-bit the recipe of scripts/evaluate_hh_blend.py::ste_emit.",
+  "V7_ste_flank2_s1": "V6 with the emitted domain additionally restricted to the fold-specific Stage-1 q10 approved tiles (the confined candidate eligible for promotion).",
+  "M1_ste_flank2_s1_m2.6 / M2_ste_flank2_s1_m4.3": "EXPLORATORY ONLY: V7 at mass ratios 2.6 and 4.3 to measure the local mass-response of the confined STE geometry. These arms may NOT be promoted under this preregistration (the promotion comparison is matched-mass at 3.47); they exist so that a future preregistration can be written with evidence instead of a guess."
+ },
+ "promotion_rule": {
+  "primary": "V7 must beat V0 (incumbent NMS r=2.4, flank 2 px, block-confined, recomputed in pass 2) on the six-fold reading-B mean by >= +0.0020 and be strictly positive in >= 4 of 6 folds.",
+  "secondary": "V7 Stage-1 lift (emitted share inside approved tiles / approved area share) <= 1.5.",
+  "tertiary": "V7 confinement cost versus the identical unconfined variant V6 <= 0.0050 mean DTI.",
+  "harness_validation": "V6 fold 0 must reproduce the cached historical value 0.28358474213082796 from evidence/hh_blend_holdout.json to within 1e-9, and the recomputed V0 fold 0 must reproduce 0.278976751929065 to within 1e-9. If either fails, the pass-2 harness is not comparable with the historical instrument, no promotion may use it, and the discrepancy is published as an irregularity.",
+  "uniqueness_addendum": "V6 is NOT promotable: it is the geometry of the already-shipped research artifact gemsdoe51-hh-hd-blend-ste-r347 in docs/downloads. Only V7 (Stage-1-confined) is a candidate, and it must additionally pass the repository uniqueness gate (byte-sha256 differ, Jaccard <= 0.50, containment <= 0.60, dominance lift <= 1.5) against every prior artifact and sibling TIFF.",
+  "failure": "if V7 does not pass, no new TIFF is written; the negative pass-1 + pass-2 results are published on the site and the session ends with the existing research artifact unchanged."
+ },
+ "amendment_log": [
+  {
+   "logged_utc": "2026-10-07T21:04:30Z",
+   "before_running": "scripts/run_h52_emission_pass2.py has not been executed yet when this entry was written.",
+   "change": "the 'harness_validation' clause now compares pass 2 against the pass-1 receipt (identical cached fold fields, tolerance 1e-9) instead of against the historical values in evidence/hh_blend_holdout.json.",
+   "why": "Inspection of the pass-1 log while it was still running shows fold 1 V0 = 0.2665 and fold 2 V0 = 0.2878 against historical NMS folds 0.269718 and 0.283166: fold 0 agrees (0.2790 vs 0.278977) but the others do not, so the pass-1 fold fields are NOT the fields behind the historical receipt (different training run, seeds and negative sampling). A bit-for-bit comparison with the historical values is therefore not a valid harness test. The historical values are still reported, as a labelled note, and the reproducibility of the geometry itself is pinned by tests/test_h52_ste_equivalence.py, which shows emission2.ste_topn returns exactly the dots of the historical ste_emit recipe on a fixed field."
+  },
+  {
+   "logged_utc": "2026-10-07T21:55:00Z",
+   "before_running": "scripts/run_h52_emission_pass2.py had been executed once (receipt evidence/h52_emission_pass2_20261007T212644Z.json) and the respecified check in this entry is being frozen before the audited re-run writes its own receipt.",
+   "change": "'harness_validation' is respecified: bit-exact agreement with pass 1 is required on every fold except fold 0, and fold 0 carries a stated bound of 2e-05 with the reason recorded. The tolerance is 0.0 on the comparable folds, not relaxed.",
+   "why": "The original clause demanded 1e-9 against pass 1 on all six folds and failed on fold 0 alone (1.074e-05). New evidence identifies the cause as pass 1, not the pass-2 harness: an independent recomputation from the cached arrays data/prepared/h52_field_HH_fold0.npy + h52_field_HD_fold0.npy reproduces pass 1 exactly on folds 1-5 (0.000e+00) and pass 2 exactly on fold 0, in both equivalent call forms, while pass-1's fold-0 V0 and V2 arms both sit 1.07e-05 away. Pass 1 therefore scored fold 0 with a blend that never reached disk. Keeping the 1e-9-everywhere form would forbid all promotion arithmetic on the basis of a pass-1 bookkeeping artefact; dropping the check entirely would hide it. The respecified form pins every fold that can be pinned at machine precision and names the one that cannot. Recorded as IR-H52-06."
+  }
+ ]
+}

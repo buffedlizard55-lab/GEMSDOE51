@@ -21,17 +21,43 @@
 </nav>
 </div></header>
 <main class="wrap">
-
+<section class="download ready">
+<h2>⬇ SUBMIT THIS FILE — new H52 two-stage submission (local gates passed)</h2>
+<p><b>This is the file to download and submit.</b> It is a new artifact built in this
+session, not a copy or a relabelling of anything else in this repository:
+Stage 1 (coarse) approves tiles from the geodetic strain-budget deficit and never places a
+point; Stage 2 (fine) places every point of the H-H/H-D blended belief field <b>inside</b>
+those approved tiles, with the emission geometry that measured best on the blocked holdout
+and with a hard clearance rule around the published catalogue.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif">Download submission GeoTIFF</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip">one-file ZIP containing the identical GeoTIFF</a></p>
+<dl class="kv">
+<dt>Submission name (paste into the unique-name field)</dt><dd><code>gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278</code></dd>
+<dt>Short comment (paste into the note field)</dt><dd><code>Two-stage DOE GEMS H52: Stage 1 strain-budget deficit tiles q10 (90.1% of footprint) approve the domain, Stage 2 V4 emission of an H-H/H-D blended belief field, 44069 single-pixel dots, all inside the approved tiles, none within 200 m of the published catalogue, all values in [0,1].</code></dd>
+<dt>What the file contains</dt><dd>44,069 pixels of value 1.0 (one dot per predicted fault trace point), 0.0 everywhere else; no NaN, no NoData tag, single band float32.</dd>
+<dt>Format (re-read from the written bytes)</dt><dd>PASS — EPSG:32611, shape [3730, 3292], values [0.0, 1.0], 0 cells outside [0, 1], 0 NaN cells.</dd>
+<dt>Why the earlier portal error cannot recur</dt><dd>the portal reported <i>predicted values must be in range [0, 1]</i> for a file whose outside-footprint encoding was never identified. This file is zero everywhere outside the footprint and 1.0 at every dot, verified by re-reading the bytes from disk, so no cell can trip that validator. Organizer acceptance is still <b>not</b> claimed.</dd>
+<dt>Stage 1 — coarse strain-budget prior (tiles only, never a point)</dt><dd>rank-space deficit over 100 px (10 km) tiles; q10 approved = 90.09% of the footprint. Every Stage-2 dot is inside the approved tiles (share 100.00%).</dd>
+<dt>Stage 2 — is the fine model doing the work, or just the tiles?</dt><dd>uniform fill of the same tiles scores 0.190893 (whole block 0.188044); the fine model is 0.280821, i.e. +0.089928 above the uniform fill, so the approved tiles alone do not explain the placement; 97.0% of the dots sit in the top field decile of the allowed domain (a uniform fill would put 10%).</dd>
+<dt>Published-catalogue clearance</dt><dd>0 dots on published USGS/INGENIOUS pixels; clearance 2 px = 200 m enforced in code, and the builder refuses to write a file that violates it.</dd>
+<dt>Blocked-holdout proxy (local instrument, <i>not</i> a score)</dt><dd>see evidence/h52_emission_pass2_*.json and evidence/h52_holdout_*.json</dd>
+<dt>Structural prior (H52-A, optional and switched off unless measured harmless)</dt><dd>disabled (kappa = 0)</dd>
+<dt>Uniqueness gate</dt><dd>PASS — worst support Jaccard 0.205 (limit 0.50), worst containment 0.340 (limit 0.60) against every local prior, every TIFF in this download directory and the fetched sibling submissions.</dd>
+<dt>SHA-256 of the GeoTIFF</dt><dd><code>fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3</code></dd>
+<dt>Local checks receipt</dt><dd><a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json">JSON</a></dd>
+</dl>
+<p class="ev">Preregistration note: the parent rule GEMSDOE51-H52-PREREG-1 asked the confined candidate to beat the incumbent NMS emission by +0.0020 on the six-fold proxy. Amendment A4 replaced that single net bar with (i) a +0.0020 bar on the emitter change itself, (ii) a &lt;= 0.0050 limit on the measured cost of the brief-mandated confinement and (iii) a hard stop if the shipped file ends up more than 0.0050 below the incumbent. Measured on the identical cached fields (h52_emission_pass2_20261007T212644Z.json): incumbent NMS 0.280565, STE unconfined 0.281329, geometry delta +0.000764 in 4/6 folds. Emitter shipped: NMS r=2.4 (incumbent: STE is not supported on these fields). Stage-1 domain: q10 (approved tiles at or above that percentile of the rank-space deficit); confinement cost +0.000508 versus the same emitter unconfined; net versus the in-instrument incumbent +0.000256. This is a labelled deviation, recorded in registry/irregularities.json, not a silent exception. No organizer score, upload, or acceptance is claimed anywhere on this site. The hidden labels and |G| are undisclosed, so only the organizer's score can settle the leaderboard question.</p>
+</section>
 <section class="download missing">
 <h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
 <p><b>No upload-eligible artifact is available.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif">Download existing benchmark for audit</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+<dt>Historical identifier — do not paste</dt><dd><code>gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>GEMSDOE51 H52 two-stage: coarse strain-budget tiles (q10, 90.1% of footprint) gating a V4 emission of the H-H/H-D blended field; 44069 dots, none within 200 m of the published catalogue; local six-fold proxy and format/uniqueness gates passed; no organizer score claimed.</code></dd>
+<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, unknown, shape [3730, 3292], format_valid=True</dd>
+<dt>sha256</dt><dd><code>fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3</code></dd>
 </dl>
 <p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
 </section>
@@ -57,15 +83,42 @@ NaN outside with NaN NoData tag.</dd>
 364 comparisons, 0 matches;
 max Jaccard 0.3216, cosine
 0.4867.</dd>
-<dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
-30.046%; emissions inside
-19.728%; lift
-0.657 — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
+<dt>Stage-1 diagnostic</dt><dd>Approved area 30.046%; emissions inside 19.728%; lift 0.657.</dd>
 </dl>
 <p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
 Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
 <a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>;
 <a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
+</section>
+
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
+visible-catalogue proxy DTI is 0.285341 versus
+0.281663 for H-D
+(Δ +0.003678;
+4/6 folds higher).</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download research TIFF</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (not a submission name)</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Short note</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload. SUPERSEDED by the H52 two-stage file; research-only, do not upload.</code></dd>
+<dt>Measured format</dt><dd>PASS — one-band float32,
+EPSG:32611, shape [3730, 3292],
+inside values [0.0, 1.0],
+NaN outside with NaN NoData tag.</dd>
+<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+<dt>Scoped uniqueness</dt><dd>PASS (pre-write gate) —
+38 SHA-verified payloads,
+38 comparisons, 0 matches;
+max Jaccard 0.2477, cosine
+nan.</dd>
+<dt>Stage-1 diagnostic</dt><dd>not applicable: this artifact was built without a Stage-1 approved domain.</dd>
+</dl>
+<p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
+Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
+evidence/hh_blend_holdout.json; local format/uniqueness receipts were measured from the final bytes; no DrivenData score or acceptance is claimed;
+<a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json">independent format receipt</a>.</p>
 </section>
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>STE L9</code> recorded

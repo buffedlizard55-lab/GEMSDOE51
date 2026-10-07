@@ -1,0 +1,73 @@
+{
+ "created_utc": "20261007T212240Z",
+ "instrument": "structural-inheritance prior painted from fold.train_pos (mapped pixels >= 12 px outside the held-out block), diagonal-free corridor 40 px, half width 2 px, tau 12 px, relay bridges <= 40 px",
+ "rows": [
+  {
+   "fold": 0,
+   "n_truth": 12803,
+   "n_tips": 2975,
+   "n_bridges": 1348,
+   "prior_share_block": 0.00023814377406442837,
+   "truth_share_in_corridor": 0.0010934937124111536,
+   "prior_lift": 4.591737561509021,
+   "truth_px_in_corridor": 14,
+   "truth_px_expected_under_uniform": 3.05
+  },
+  {
+   "fold": 1,
+   "n_truth": 10426,
+   "n_tips": 3201,
+   "n_bridges": 1452,
+   "prior_share_block": 0.00023215788132368393,
+   "truth_share_in_corridor": 0.0009591406100134279,
+   "prior_lift": 4.1314152444222,
+   "truth_px_in_corridor": 10,
+   "truth_px_expected_under_uniform": 2.42
+  },
+  {
+   "fold": 2,
+   "n_truth": 7096,
+   "n_tips": 3457,
+   "n_bridges": 1628,
+   "prior_share_block": 4.1324021653787344e-05,
+   "truth_share_in_corridor": 0.00014092446448703494,
+   "prior_lift": 3.410231116121759,
+   "truth_px_in_corridor": 1,
+   "truth_px_expected_under_uniform": 0.29
+  },
+  {
+   "fold": 3,
+   "n_truth": 5630,
+   "n_tips": 3455,
+   "n_bridges": 1650,
+   "prior_share_block": 0.00046848696642360634,
+   "truth_share_in_corridor": 0.0010657193605683837,
+   "prior_lift": 2.2748111195152423,
+   "truth_px_in_corridor": 6,
+   "truth_px_expected_under_uniform": 2.64
+  },
+  {
+   "fold": 4,
+   "n_truth": 13348,
+   "n_tips": 3039,
+   "n_bridges": 1423,
+   "prior_share_block": 0.00047375510856412245,
+   "truth_share_in_corridor": 0.0020227749475576866,
+   "prior_lift": 4.269663610991765,
+   "truth_px_in_corridor": 27,
+   "truth_px_expected_under_uniform": 6.32
+  },
+  {
+   "fold": 5,
+   "n_truth": 11398,
+   "n_tips": 3219,
+   "n_bridges": 1394,
+   "prior_share_block": 0.00026717303559396473,
+   "truth_share_in_corridor": 0.0016669591156343218,
+   "prior_lift": 6.239249076645882,
+   "truth_px_in_corridor": 19,
+   "truth_px_expected_under_uniform": 3.05
+  }
+ ],
+ "note": "The instrument can only see corridors entering the held-out block from outside, because the block\u2019s own catalogue is hidden by construction. The prior is statistically informative on the pixels it covers and geometrically negligible in coverage, so the blocked holdout cannot validate or refute hypothesis H52-A."
+}

@@ -92,12 +92,26 @@ class UniquenessReport:
 def run_gate(candidate_path: Path, prior_paths: dict, candidate_support: np.ndarray,
              truth_footprint: np.ndarray, stage1_approved: np.ndarray | None = None,
              max_jaccard: float = 0.50, max_containment: float = 0.60,
-             max_stage1_lift: float = 1.5) -> UniquenessReport:
+             max_stage1_lift: float = 1.5, hard_confined: bool = False,
+             uniform_control: dict | None = None,
+             uniform_margin: float = 0.0020) -> UniquenessReport:
     """Run every uniqueness check.
 
     ``candidate_support`` : bool grid of emitted pixels.
     ``truth_footprint``   : bool grid of the scored domain.
     ``stage1_approved``   : bool grid of Stage 1's approved tiles (may be None).
+    ``hard_confined``     : True when the emission is *by construction* restricted to
+        the approved tiles.  The lift test is then degenerate -- the emitted share is
+        exactly 1.0 and the lift is exactly 1/area_share -- so it cannot distinguish
+        "Stage 1 forced every dot" from "the fine model prefers those tiles".  The
+        dominance question is then answered by the ``uniform_control`` comparison
+        instead of by the lift (the fraction of emitted mass inside the approved
+        tiles carries the same number of degrees of freedom as the area share).
+    ``uniform_control``   : dict with ``candidate_mean`` and ``uniform_mean`` proxy
+        DTIs of the confined candidate and of uniformly random dots placed in the
+        same approved tiles at the same mass.  The fine model must beat the uniform
+        fill by at least ``uniform_margin``, otherwise the tiles, not the model, are
+        doing the work.
     """
     sha = sha256_file(candidate_path)
     rep = UniquenessReport(candidate=str(candidate_path.name), sha256=sha)
@@ -148,7 +162,24 @@ def run_gate(candidate_path: Path, prior_paths: dict, candidate_support: np.ndar
             lift_over_area_share=(inside / max(total, 1)) / max(area_share, 1e-9),
         )
         lift = rep.stage1_dominance["lift_over_area_share"]
-        if lift > 1.5:
+        rep.stage1_dominance["hard_confined"] = bool(hard_confined)
+        if uniform_control:
+            cand_mean = float(uniform_control.get("candidate_mean", float("nan")))
+            uni_mean = float(uniform_control.get("uniform_mean", float("nan")))
+            rep.stage1_dominance["uniform_control"] = dict(
+                uniform_control, margin=float(uniform_margin),
+                excess=cand_mean - uni_mean,
+                passed=bool(cand_mean - uni_mean >= uniform_margin))
+        if hard_confined:
+            # the lift is identically 1/area_share here; it is reported, not tested
+            uc = rep.stage1_dominance.get("uniform_control")
+            if uc is not None and not uc["passed"]:
+                rep.notes.append(
+                    f"hard confinement: the confined candidate beats a uniform fill of "
+                    f"the same tiles by only {uc['excess']:+.4f} proxy DTI "
+                    f"(margin {uniform_margin}) -- the tiles, not the fine model, may be "
+                    "doing the work")
+        elif lift > 1.5:
             rep.notes.append(
                 f"emission is {lift:.2f}x over-represented inside the Stage 1 approved "
                 "tiles relative to their area share -- the coarse prior is driving the "
@@ -175,7 +206,13 @@ def run_gate(candidate_path: Path, prior_paths: dict, candidate_support: np.ndar
     # The meaningful quantity is the lift -- how much more the emission favours the
     # approved tiles than their own area share does.  A lift near 1 means Stage 1
     # is not steering the placement at all.
-    if rep.stage1_dominance.get("lift_over_area_share", 0.0) > max_stage1_lift:
+    if hard_confined:
+        uc = rep.stage1_dominance.get("uniform_control")
+        if uc is not None and not uc["passed"]:
+            fails.append("Stage 1 dominance test failed under hard confinement: the "
+                         f"confined candidate beats a uniform fill of the same tiles by "
+                         f"only {uc['excess']:+.4f} proxy DTI (margin {uniform_margin})")
+    elif rep.stage1_dominance.get("lift_over_area_share", 0.0) > max_stage1_lift:
         fails.append(f"emission dominated by Stage 1 footprint "
                      f"(lift {rep.stage1_dominance['lift_over_area_share']:.2f})")
     rep.verdict = "FAIL: " + "; ".join(fails) if fails else "PASS"

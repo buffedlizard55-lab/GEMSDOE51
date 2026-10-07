@@ -1,0 +1,61 @@
+{
+  "id": "GEMSDOE51-H52-PREREG-1",
+  "created_utc": "2026-10-07T00:00:00Z",
+  "status": "frozen_before_running",
+  "author_note": "This file is written BEFORE the H52 holdout is executed. It fixes the instrument, the comparison, the promotion rule and the failure conditions so that no result can be re-interpreted after the fact. Times are UTC; the exact execution receipt is evidence/h52_holdout_<utc>.json written by scripts/run_h52_holdout.py.",
+  "question": "Does a strike-aligned line emission (SALE) of the repository's best belief field, confined to a broad Stage-1 strain-budget approved domain, beat the incumbent point-emission geometry at identical emitted mass, without the Stage-1 mask dominating the placement?",
+  "instrument": {
+    "design": "six contiguous 3x3 spatial blocks of the visible USGS+INGENIOUS catalogue, 12 px (1.2 km) training buffer, 250,000 background negatives per fold, fixed seeds",
+    "truth": "visible catalogue inside the held-out block (proxy for hidden new faults)",
+    "known": "visible catalogue outside the block (the scorer's masked domain)",
+    "budget": "emitted dots = 3.47 x n_truth of the fold (matched mass across all variants)",
+    "readings": "both scoring conventions of gems51.live_metric are reported (A: on-catalogue mass deleted; B: counted as FP)",
+    "known_bias": "the block boundary is unmasked, so the local instrument cannot measure the value of the catalogue-flank rule; that parameter is set from the live-anchored sibling evidence recorded in gems51.live_metric and only checked here",
+    "not_a_score": "the proxy truth is the visible catalogue. A pass licenses packaging, never a leaderboard claim."
+  },
+  "field": {
+    "arm_HH": "base 58-feature stack + extras matching 'facecoh' and 'hh_' (H-H edge-termination / conductive-relay)",
+    "arm_HD": "base 58-feature stack + extras matching 'facecoh' (H-D scarp-facing coherence)",
+    "blend": "arithmetic mean of the two arms' folded predicted probabilities (fixed 50/50, the repository's historical local benchmark recipe)",
+    "leakage_control": "d_cat / cat_dens columns are excluded from the model by gems51.detector.Stack; catalogue-dependent features are never passed"
+  },
+  "stage1": {
+    "definition": "quantile-10 broad approved domain of the fold-specific strain-budget deficit (observed geodetic 2nd-invariant tile rank minus mapped-trace Kostrov tile rank), recomputed per fold with the held-out trace rows removed",
+    "confinement": "every Stage-2 dot must lie inside the approved domain (hard mask, enforced in emission)",
+    "non_dominance_limit": 1.5,
+    "cost_limit": "the confined variant may lose at most 0.0050 proxy DTI versus the same variant unconfined"
+  },
+  "variants": {
+    "V0": "incumbent: NMS r=2.4, catalogue flank 2 px, block-confined",
+    "V1": "NMS r=2.8, catalogue flank 2 px, block-confined",
+    "V2": "NMS r=2.8, catalogue flank 3 px, block-confined",
+    "V3": "SALE lines (half-length 5 px, spacing 2.4 px, seed separation 6 px) with catalogue flank 3 px, block-confined",
+    "V4": "V2 inside the Stage-1 approved domain",
+    "V5": "V3 inside the Stage-1 approved domain"
+  },
+  "promotion_rule": {
+    "primary": "the confined candidate (V4 or V5, whichever has the higher six-fold mean DTI under reading B) must beat V0 on the six-fold mean by >= +0.0020 and be positive in >= 4 of 6 folds",
+    "secondary": "its Stage-1 lift (emitted share inside approved tiles / approved area share) must be <= 1.5",
+    "tertiary": "its Stage-1 confinement cost versus the identical unconfined variant must be <= 0.0050 mean DTI",
+    "format": "all cells finite in [0,1], single-band float32, EPSG:32611, exact template transform, no NaN, no out-of-range cell",
+    "uniqueness": "no byte identity, support Jaccard <= 0.50 and containment <= 0.60 against (a) every prior artifact in data/prior and data/refs, (b) the fetched top sibling submissions listed in registry/sibling_tiff_inventory.json",
+    "failure": "if no confined variant passes, no TIFF is written and the negative result is published on the site"
+  },
+  "external_evidence_used_for_parameters_not_measurable_locally": [
+    {
+      "claim": "on-published-catalogue mass is penalised (scoring reading B)",
+      "source": "https://github.com/buffedlizard55-lab/GEMSDOE32 README, Round 4: 40,199-dot file owner-reported live 0.2708 vs its 44,090-dot superset owner-reported live 0.2600; the only difference is 3,891 dots inside 100 m of the published catalogue",
+      "class": "OWNER-REPORT about a live score (not organizer-published)"
+    },
+    {
+      "claim": "widening the catalogue flank from 100 m to 200 m improved the calibrated proxy",
+      "source": "https://github.com/buffedlizard55-lab/GEMSDOE32 README, H33-2-B2 row: +0.00487 in 4/4 quadrants, live-anchored safety 2.08",
+      "class": "OWNER-REPORT / proxy measurement"
+    },
+    {
+      "claim": "new faults include newly mapped geometry (continuations, splays, parallel strands) of existing fault systems",
+      "source": "https://community.drivendata.org/t/where-do-you-draw-the-line/11536",
+      "class": "ORGANIZER (DrivenData staff) statement"
+    }
+  ]
+}

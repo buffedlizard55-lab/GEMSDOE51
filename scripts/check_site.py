@@ -75,9 +75,18 @@ def main() -> int:
         for name in allowed_current:
             if f'href="downloads/{name}"' not in index:
                 failures.append(f"primary artifact is not linked from index: {name}")
+        upload_ok = bool(manifest.get("submission_readiness", {}).get("upload_ok"))
         if readiness == "PORTAL_ACCEPTED":
             if "Portal-validated submission file" not in index:
                 failures.append("portal-accepted primary is not prominently marked in index")
+        elif upload_ok:
+            # A primary file whose local gates passed and which the manifest marks as
+            # upload-eligible must say so at the top of the page; the site must never
+            # offer a download without an explicit, machine-checkable status marker.
+            if "SUBMIT THIS FILE" not in index:
+                failures.append("upload-eligible primary is not marked 'SUBMIT THIS FILE' in index")
+            if manifest["submission_readiness"].get("caveat") and "no organizer score" not in index.lower():
+                failures.append("upload-eligible primary is not accompanied by a no-organizer-score caveat")
         else:
             index_upper = index.upper()
             if ("NO UPLOAD-ELIGIBLE ARTIFACT" not in index_upper
