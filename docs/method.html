@@ -8,86 +8,74 @@
 <h1>GEMSDOE51</h1>
 <p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
 <nav>
-  <a class="" href="index.html">Executive summary</a>  
-  <a class="" href="how-to-submit.html">How to submit</a>  
-  <a class="active" href="method.html">Method</a>  
-  <a class="" href="hypotheses.html">Hypotheses</a>  
-  <a class="" href="holdout.html">Holdout</a>  
-  <a class="" href="analysis.html">Analysis</a>  
-  <a class="" href="sources.html">Sources</a>  
-  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="index.html">Executive summary</a>
+  <a class="" href="how-to-submit.html">How to submit</a>
+  <a class="active" href="method.html">Method</a>
+  <a class="" href="hypotheses.html">Hypotheses</a>
+  <a class="" href="holdout.html">Holdout</a>
+  <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
+  <a class="" href="sources.html">Sources</a>
+  <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
 </nav>
 </div></header>
 <main class="wrap">
 
-<h2>Method</h2>
+<h2>Method, with Stage 1 and Stage 2 kept separate</h2>
 <h3>Stage 1 — geodetic strain-budget deficit (coarse prior only)</h3>
-<p>Kostrov (1974) moment-tensor summation, per tile:</p>
-<pre>eps_dot_ij  =  (1 / (2·mu·V)) · sum_k  Mdot_ij^(k)
-Mdot_ij^(k) =  mu · A_k · sdot_k · ( n_i·m_j + n_j·m_i )
-A_k = L_k · W_k ,  W_k = H / sin(delta) ,  V = A_tile · H</pre>
-<p>mu and H cancel, giving the two working equations used in the code:</p>
-<pre>strike-slip :  eps_dot_sn = L_k · sdot_k / (2 · A_tile · sin delta)
-dip-slip    :  eps_dot_nn = L_k · sdot_k · cot(delta) / A_tile</pre>
-<p>Slip rates come from the INGENIOUS compilation mirrored in
-<a href="https://gdr.openei.org/submissions/1391">GDR submission 1391</a> — the attribute
-<code>slip_rate</code> (mm/yr) is present on all 1,126 traces, confirmed directly in
-<code>data/raw/external/gdr_qfaults_traces.csv</code>. Geometry (trace length per cell) comes from
-the catalogue raster itself, so L is exact at 100&nbsp;m resolution; dip follows from
-<code>slip_sense</code> (normal 60°, strike-slip 90°) and H is 15&nbsp;km with 10/20&nbsp;km
-sensitivities.</p>
-<p><b>Result, measured over the 10&nbsp;km tiles:</b> the mapped faults accommodate a median of
-<b>nan</b> nanostrain/yr of second invariant <i>on tiles that contain a mapped trace</i>,
-against an observed geodetic median of <b>nan</b> — about <b>nan&nbsp;%</b>. Over
-<i>all</i> tiles the fault-accommodated median is exactly <b>0.0</b>, because most tiles contain no
-mapped trace at all. That is the structural reason the deficit is a weak prior: the fault term is
-near-null almost everywhere, so subtracting it mostly subtracts nothing, and where it is not null
-it is measuring how well-mapped a tile already is rather than how much strain is unaccounted
-for.</p>
-<p class="warn"><b>Convention caveat (IR-51-02).</b> The three geodetic layers shipped with the
-competition satisfy no exact algebraic identity — <code>sqrt(dil²+shear²)</code>,
-<code>sqrt((dil²+shear²)/2)</code> and <code>|dil|+|shear|</code> all miss by more than 30&nbsp;%
-locally (best r = 0.993) — so the invariant convention behind <code>geod_2ndinv</code> is not
-recoverable from the shipped data. Stage&nbsp;1 is therefore stated in <b>quantile space</b>,
-<code>Q(observed) − Q(fault)</code>, which is invariant to any monotone rescaling of either side.
-No absolute claim rests on the nanostrain/yr numbers.</p>
-<p>Used strictly as a prior over broad tiles. It approves tiles; it never places a point.</p>
+<p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
+<pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
+m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
+<p>Here <code>L</code> is the trace-segment length, <code>u_dot</code> the slip rate,
+<code>A</code> the supported tile area, <code>delta</code> dip, and <code>n</code> and
+<code>s</code> the unit fault normal and slip direction. For a vertical pure strike-slip segment,
+the horizontal shear coefficient is <code>L*u_dot/(2*A*sin(delta))</code>. For pure dip slip,
+the horizontal projections yield <code>L*u_dot*cos(delta)/A</code>. This is the tensor formula in
+<a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a>;
+the exact code and unit conversions are in <code>src/gems51/strain_budget.py</code>.</p>
+<p>The implementation is approximate, not a full inversion: it rasterizes local trace directions,
+assigns slip rates by nearest trace centroid, simplifies slip-sense/dip categories, and lacks
+per-segment rake. Partial tiles use actual footprint support area. The local slip-rate column is
+provisionally interpreted as mm/yr; the NBMG <a href="https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson">layer schema</a>
+lists numeric <code>SLIPRTNUM</code> but not its units, and the linked GDR field-definition text was
+not audited locally. Absolute strain values are not source-validated. The quantile comparison is
+invariant to a uniform rescaling, but not to mixed units or record-specific errors. The competition
+geodetic layers have no recoverable exact invariant identity, so the Stage-1 prior is built in quantile space,
+<code>Q(observed second-invariant layer) - Q(fault tensor invariant)</code>. Do not subtract raw
+scalar dilation/shear from the fault tensor invariant as if their units and conventions matched.</p>
+<p><b>Measured Stage-1 holdout:</b> deficit Spearman vs held-out known-fault density = 0.03916;
+geodetic-only = 0.09930. Top-50% tile lift is 1.08290 for the deficit and 1.23864 for geodetic-only.
+Stage 1 alone has mean randomized DTI 0.14810 versus 0.18615 uniform using the provisional
+full-map mass assumption g_hidden=12,700. This is not an organizer label count. Stage 1 is a weak
+prior, not a fine-scale locator. Evidence: <a href="../data/stage1_trace_holdout.json">trace holdout</a> and
+<a href="../data/two_stage_results.json">separate two-stage scores</a>.</p>
 
-<h3>Stage 2 — fine-scale detector</h3>
-<p>Histogram gradient boosting over 58 physical layers: the 19 competition bands (rank
-transformed), ten 1&nbsp;m-DEM-derived scarp layers, four radiometric layers, the USGS SGMC fault
-raster, and a multi-scale lineament bank (gradient magnitude, crestness and Hessian anisotropy of
-detrended elevation, TMI, isostatic gravity and lidar relief at 150&nbsp;m and 400&nbsp;m).
-Missing data inside a smoothing window is handled by normalised convolution rather than
-zero-fill.</p>
-<p class="warn"><b>Leak control (IR-51-LEAK-01).</b> Any feature derived from the catalogue is a
-perfect training leak in a blocked holdout, because every positive has distance-to-catalogue
-exactly 0. Measured: in-block AUC collapsed to 0.500 with those columns present and recovered to
-0.667 without them. Catalogue-derived quantities are therefore excluded from the model and used
-only at emission time.</p>
-
-<h3>Emission</h3>
-<p>Greedy non-maximum suppression at a 2.4&nbsp;px radius, every point at least 200&nbsp;m from any
-catalogued fault pixel, at a mass chosen from the holdout. The reason for the sparsity is the
-break-even bar: a marginal pixel earning expected kernel credit <code>c</code> raises the score only
-if <code>c &gt; 0.2·DTI</code>, and pixels adjacent to an already-emitted dot earn almost nothing
-because the dot beside them already collected the credit.</p>
-<p class="warn"><b>Where Stage&nbsp;1 enters, in the two shipped files.</b> In the <b>primary</b>
-file the deficit enters as a <b>soft multiplicative prior</b>: the detector's field is multiplied by
-<code>1 + 0.10·z</code> where <code>z</code> is the standardised tile deficit clipped to ±4, so a
-high-deficit tile and a low-deficit tile differ by at most a few percent — enough to break ties
-between otherwise equal pixels, not enough to veto a strong detection. In the <b>secondary</b> file
-it enters as the brief's literal <b>hard gate</b>: emission is permitted only inside the top
-80&nbsp;% of tiles. The holdout says the soft version costs nothing (+0.0004, 4 of 6 folds) and the
-hard version costs 0.0025 and loses in 6 of 6 folds. Both numbers are on the
-<a href="holdout.html">holdout</a> page.</p>
+<h3>Stage 2 — fine-scale detector and sparse emission</h3>
+<p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
+features. A 3x3 spatial holdout removes a 1.2 km boundary band from training; each fold's Stage-2
+field is scored against held-out known-fault labels at matched mass ratio <code>M/|G|=3.47</code>.
+H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183. These are measurements on the visible
+known-fault proxy, not organizer scores.</p>
+<p>Distance-to-catalogue is not used as a predictive shortcut because it directly encodes the
+known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression at
+2.4 pixels. The official metric gives a marginal-pixel credit bar near <code>0.2*DTI</code>; this
+motivates sparse dots, but does not prove any individual prediction is a real fault.</p>
+<p><b>Where Stage 1 enters:</b> only as a soft multiplicative score adjustment,
+<code>field * (1 + w*z)</code>, over the full footprint. No hard Stage-1 tile mask is applied. A
+soft <code>w=0.20</code> had a small proxy gain (+0.000483 paired mean, 4/6 folds), and the
+Stage-1 top-half lift for the in-memory candidate was 0.98592. However, its support duplicated the
+existing soft-0.10 candidate (Jaccard 0.86130, over the 0.50 uniqueness limit), so the writer
+correctly stopped before producing any TIF.</p>
+<p class="warn"><b>Leading new feature result:</b> the narrowed H51-X1 magnetic/gravity edge-normal
+implementation used rank-normalized total-magnetic and isostatic-gravity bands as new-transform
+inputs; the planned derivative bands remained in the common baseline stack but were not used by this
+transform. It scored mean proxy DTI 0.2796713, below H-D by 0.0019913, and was positive in only 3/6
+folds. It failed the frozen promotion rule. The broader preregistered layer-family hypothesis was
+not fully tested. Do not describe this implementation as a win or submit it.</p>
 
 </main>
 <footer><div class="wrap">
-<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
-evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
-independently verifiable here. Organizer-verified = none; no score on this site has been
-confirmed by DrivenData.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

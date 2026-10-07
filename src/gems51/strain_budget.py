@@ -29,21 +29,39 @@ form used by modern geodetic/geologic deformation budgets, e.g.
   W_k  = H / sin(delta)       down-dip width        [m]   (H = seismogenic thickness)
   V    = A_tile * H           volume of the tile    [m^3]
   mu   = shear modulus        [Pa]  -- cancels out of (1) when W_k = H/sin(delta)
-  n    = unit normal to the fault plane (horizontal)
+  n    = unit normal to the complete (3-D) fault plane
   m    = unit slip direction
 
-Substituting W_k and V into (1) removes mu and H:
+Kreemer et al. (2000), eq. (3), write the horizontal strain-rate components as
 
-  strike-slip segment (m = s_hat, n perpendicular to strike):
-        eps_dot_sn = L_k * sdot_k / (2 * A_tile * sin(delta))                  (3)
-  dip-slip segment (horizontal projection of slip is cos(delta) along n):
-        eps_dot_nn = L_k * sdot_k * cot(delta) / A_tile                        (4)
+        eps_dot_ij = (1/2) sum_k [L_k * u_dot_k / (A_tile * sin(delta_k))] m_ij^k
 
-and the horizontal tensor is assembled by rotating (3) and (4) into the (x, y)
-frame with the strike of each segment.  This is what ``kostrov_tiles`` computes.
+where ``m_ij^k = n_i m_j + n_j m_i`` is the unit moment tensor.  For a vertical
+pure strike-slip segment, the strike-normal component is
 
-Unit convention: slip rates in the INGENIOUS/GDR compilation are mm/yr; we
-convert to m/yr and report strain rate in nanostrain/yr (1e-9 /yr).
+        eps_dot_sn = L_k * u_dot_k / (2 * A_tile)                             (3)
+
+For a pure dip-slip segment, the horizontal projections of the full unit normal
+and slip direction have magnitudes ``sin(delta)`` and ``cos(delta)``.  Their
+product cancels the ``sin(delta)`` in the prefactor, giving the horizontal
+extension/contraction component
+
+        eps_dot_nn = L_k * u_dot_k * cos(delta_k) / A_tile                    (4)
+
+The tensor is rotated from the local strike/dip frame into projected x/y axes.
+This projection is explicitly approximate for this project: fault rakes and
+per-trace dips are not supplied in the table used here, so normal/unspecified
+traces use a documented 60-degree dip and the two lateral classes use a vertical
+fault assumption.  The current implementation uses raster-trace local strike
+and nearest-centroid slip-rate assignment; it is not a full geodetic inversion.
+
+Unit convention is provisional: the locally mirrored CSV's `slip_rate` field is
+interpreted as mm/yr and converted to m/yr, but the retained NBMG service schema
+for `SLIPRTNUM` does not state units and the accompanying GDR field-definition file
+has not been audited locally. Raw nanostrain/yr values are therefore not
+source-validated. The current quantile-rank Stage-1 comparison is invariant to a
+uniform rate rescaling, but not to mixed units, categorical encodings, or
+record-specific attribute errors.
 
 What we can and cannot verify
 -----------------------------
@@ -89,7 +107,9 @@ class BudgetConfig:
 # ------------------------------------------------------------------ inputs
 def load_slip_rates(raw_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(raw_dir / "external" / "gdr_qfaults_traces.csv")
-    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # mm/yr -> m/yr
+    # Provisional unit interpretation; the mirrored SLIPRTNUM source field's
+    # unit must be checked against the GDR text field-definition file.
+    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # assumed mm/yr -> m/yr
     df["dip_deg"] = df["slip_sense"].map(DIP_BY_SENSE).fillna(DIP_DEFAULT)
     df["is_strike_slip"] = df["slip_sense"].isin(["RL", "LL"])
     return df
@@ -134,6 +154,64 @@ def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig)
         assigned, float(np.sqrt(np.median(best_d ** 2)))
 
 
+def trace_assignments(catalogue: np.ndarray, df: pd.DataFrame, step: int = 4096):
+    """Map each positive catalogue pixel to its nearest trace-centroid row ID.
+
+    This deterministic approximation is used to remove whole attribute rows
+    whose assigned pixels overlap a held-out fold. It returns original DataFrame
+    index labels, not positions, so a caller can safely filter ``df``.
+    """
+    ys, xs = np.nonzero(catalogue)
+    if ys.size == 0:
+        return ys, xs, np.empty(0, dtype=np.asarray(df.index).dtype)
+    cy = df["centroid_row"].to_numpy(float)
+    cx = df["centroid_col"].to_numpy(float)
+    row_ids = np.asarray(df.index)
+    ok = np.isfinite(cy) & np.isfinite(cx)
+    cy, cx, row_ids = cy[ok], cx[ok], row_ids[ok]
+    if not row_ids.size:
+        raise ValueError("no finite trace centroids are available")
+    assigned = np.empty(ys.size, dtype=row_ids.dtype)
+    for start in range(0, ys.size, step):
+        stop = min(start + step, ys.size)
+        d2 = ((ys[start:stop, None] - cy[None, :]) ** 2
+              + (xs[start:stop, None] - cx[None, :]) ** 2)
+        nearest = np.argmin(d2, axis=1)
+        assigned[start:stop] = row_ids[nearest]
+    return ys, xs, assigned
+
+
+def horizontal_segment_tensor(length_m, slip_m_yr, dip_deg, strike_x, strike_y,
+                              is_strike_slip, area_m2):
+    """Kreemer-eq.-(3) horizontal tensor contribution for pure-slip segments.
+
+    All quantities may be NumPy arrays and are broadcast together. ``strike_y``
+    is in projected map coordinates (north-positive); ``area_m2`` is the actual
+    cell/tile support area. Returns ``(exx, eyy, exy)`` in 1/yr.
+    """
+    length = np.asarray(length_m, dtype=np.float64)
+    slip = np.asarray(slip_m_yr, dtype=np.float64)
+    dip = np.deg2rad(np.asarray(dip_deg, dtype=np.float64))
+    sx = np.asarray(strike_x, dtype=np.float64)
+    sy = np.asarray(strike_y, dtype=np.float64)
+    ss = np.asarray(is_strike_slip, dtype=bool)
+    area = np.asarray(area_m2, dtype=np.float64)
+    if np.any(area <= 0.0):
+        raise ValueError("fault strain tensor requires positive support area")
+    if np.any((dip <= 0.0) | (dip > np.pi / 2.0)):
+        raise ValueError("dip must be in (0, 90] degrees")
+
+    # Eq. (3): strike-slip tensor has unit off-diagonal local component; for a
+    # dip-slip tensor, the horizontal projections contribute sin(dip)*cos(dip).
+    shear = np.where(ss, length * slip / (2.0 * area * np.maximum(np.sin(dip), 1e-12)), 0.0)
+    normal = np.where(~ss, length * slip * np.cos(dip) / area, 0.0)
+    nx, ny = -sy, sx  # horizontal dip direction, perpendicular to strike
+    exx = normal * nx * nx + 2.0 * shear * nx * sx
+    eyy = normal * ny * ny + 2.0 * shear * ny * sy
+    exy = normal * nx * ny + shear * (nx * sy + ny * sx)
+    return exx, eyy, exy
+
+
 def strike_orientation(catalogue: np.ndarray, sigma_grad: float = 2.0,
                        sigma_int: float = 3.0):
     """Local strike direction (unit vector) at every catalogue pixel.
@@ -162,61 +240,69 @@ def tile_index(catalogue_pixels_yx, tile_px: int):
 
 
 # ------------------------------------------------------------------ Kostrov
-def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig):
-    """Fault-accommodated horizontal strain-rate tensor per tile, in nanostrain/yr.
+def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig,
+                  area_mask: np.ndarray | None = None):
+    """Fault-accommodated horizontal tensor per tile, in nanostrain/yr.
 
-    Returns ``(exx, eyy, exy, tiles_shape, meta)`` where each array is on the
-    coarse tile grid.
+    ``area_mask`` defines the area over which observed tile means are computed
+    (normally the competition footprint). Partial edge tiles use their actual
+    support area rather than the nominal full-tile area.
+
+    Returns ``(exx, eyy, exy, trace_len, n_trace_px, assigned_px, moment_area_rate,
+    tiles_shape, meta)``; the first three arrays are on the coarse tile grid.
     """
+    if catalogue.shape != (H_PX, W_PX):
+        raise ValueError(f"catalogue shape {catalogue.shape} != {(H_PX, W_PX)}")
+    if area_mask is None:
+        area_mask = np.ones(catalogue.shape, dtype=bool)
+    else:
+        area_mask = np.asarray(area_mask, dtype=bool)
+        if area_mask.shape != catalogue.shape:
+            raise ValueError("area_mask and catalogue must have identical shapes")
+
     ys, xs, srate, dip, is_ss, assigned, med_d = assign_slip_rate(catalogue, df, cfg)
-    sx, sy = strike_orientation(catalogue)
-    A_tile = (cfg.tile_px * PIXEL_M) ** 2
-    # length of the trace inside one raster cell: a cell traversed at azimuth
-    # (sx, sy) carries 1/max(|sx|,|sy|) cells of trace, i.e. between 100 m and
-    # 141.4 m.  Using a flat 100 m would under-count diagonal traces by up to 29%.
-    sxs = sx[ys, xs]; sys_ = sy[ys, xs]
+    sx, sy_image = strike_orientation(catalogue)
+    # Raster rows increase southward, whereas projected UTM y increases northward.
+    sxs = sx[ys, xs]
+    sys_ = -sy_image[ys, xs]
+    # A cell traversed at azimuth (sx, sy) carries 100..141.4 m of trace.
     L = PIXEL_M / np.maximum(np.maximum(np.abs(sxs), np.abs(sys_)), 1e-6)
     L = np.clip(L, PIXEL_M, PIXEL_M * np.sqrt(2.0))
 
-    d = np.deg2rad(dip)
-    # per-segment tensor-strain contribution, in 1/yr, already divided by A_tile
-    ess = np.where(is_ss, L * srate / (2.0 * A_tile * np.sin(d)), 0.0)   # (3)
-    enn = np.where(is_ss, 0.0, L * srate / (A_tile * np.tan(d)))          # (4) cot = 1/tan
-
-    # rotate the segment frame (s_hat, n_hat) into (x, y)
-    #   s_hat = (sx, sy);  n_hat = (-sy, sx)
-    #   eps_ij = ess * (s_i n_j + n_i s_j) / 2? -- see note below; we build the
-    #   tensor directly from the two segment-frame components.
-    #
-    # In the segment frame the tensor is [[0, ess], [ess, 0]] (strike-slip) or
-    # [[enn, 0], [0, 0]] (dip-slip, n = e1 axis).  Rotating a 2x2 tensor with
-    # R = [[sx, -sy], [sy, sx]] (columns are s_hat and n_hat):
-    #   E = R @ Eseg @ R.T
-    c1 = np.where(is_ss, 0.0, enn)   # Eseg_11 (along n_hat)
-    c2 = 0.0                          # Eseg_22 (along s_hat)
-    c12 = np.where(is_ss, ess, 0.0)   # Eseg_12
-    # E = c1 * n n^T + c2 * s s^T + c12 * (n s^T + s n^T)
-    nx, ny = -sys_, sxs
-    exx = c1 * nx * nx + c12 * 2.0 * nx * sxs
-    eyy = c1 * ny * ny + c12 * 2.0 * ny * sys_
-    exy = c1 * nx * ny + c12 * (nx * sys_ + ny * sxs)
-
+    area_by_tile = block_reduce_sum(area_mask.astype(np.float64), cfg.tile_px) * PIXEL_M ** 2
     tid, tshape = tile_index((ys, xs), cfg.tile_px)
+    if tuple(area_by_tile.shape) != tuple(tshape):
+        raise RuntimeError("tile area and trace aggregation grids disagree")
     n_tiles = tshape[0] * tshape[1]
+    area_flat = area_by_tile.reshape(-1)
+    segment_area = area_flat[tid]
+    if np.any(segment_area <= 0.0):
+        raise ValueError("catalogue traces fall in tiles with zero support area")
+
+    exx, eyy, exy = horizontal_segment_tensor(
+        L, srate, dip, sxs, sys_, is_ss, segment_area)
+
     def agg(v):
         return np.bincount(tid, weights=v, minlength=n_tiles)
     exx_t = agg(exx) * 1e9      # -> nanostrain/yr
     eyy_t = agg(eyy) * 1e9
     exy_t = agg(exy) * 1e9
-    len_t = agg(np.full(ys.size, L))                 # metres of mapped trace per tile
+    len_t = agg(np.full(ys.size, L))
     npix_t = np.bincount(tid, minlength=n_tiles)
     assigned_t = agg(assigned.astype(float))
-    mom_t = agg(L * srate * (cfg.h_seis_m / np.sin(d)))   # mu*A*sdot/mu [m^2 * m/yr]
+    dip_rad = np.deg2rad(dip)
+    mom_t = agg(L * srate * (cfg.h_seis_m / np.maximum(np.sin(dip_rad), 1e-12)))
+    finite_area = area_by_tile[area_by_tile > 0]
     meta = dict(tile_px=cfg.tile_px, tile_shape=list(tshape), h_seis_m=cfg.h_seis_m,
                 median_centroid_distance_px=med_d,
-                frac_catalogue_px_with_slip_rate=float(assigned.mean()),
-                regional_median_slip_rate_mm_yr=float(np.nanmedian(df["slip_rate"])),
-                total_mapped_trace_km=float(len_t.sum() / 1000.0))
+                frac_catalogue_px_with_slip_rate=float(assigned.mean()) if assigned.size else 0.0,
+                regional_median_slip_rate_assumed_mm_yr=float(np.nanmedian(df["slip_rate"]))
+                if len(df) else float("nan"),
+                total_mapped_trace_km=float(len_t.sum() / 1000.0),
+                area_mask_px=int(area_mask.sum()),
+                slip_rate_unit_assumption="mm/yr (provisional; verify GDR field definition)",
+                tile_area_m2_min=float(finite_area.min()) if finite_area.size else 0.0,
+                tile_area_m2_max=float(finite_area.max()) if finite_area.size else 0.0)
     return (exx_t.reshape(tshape), eyy_t.reshape(tshape), exy_t.reshape(tshape),
             len_t.reshape(tshape), npix_t.reshape(tshape),
             assigned_t.reshape(tshape), mom_t.reshape(tshape), tshape, meta)

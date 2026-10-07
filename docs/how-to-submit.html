@@ -8,68 +8,60 @@
 <h1>GEMSDOE51</h1>
 <p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
 <nav>
-  <a class="" href="index.html">Executive summary</a>  
-  <a class="active" href="how-to-submit.html">How to submit</a>  
-  <a class="" href="method.html">Method</a>  
-  <a class="" href="hypotheses.html">Hypotheses</a>  
-  <a class="" href="holdout.html">Holdout</a>  
-  <a class="" href="analysis.html">Analysis</a>  
-  <a class="" href="sources.html">Sources</a>  
-  <a class="" href="leaderboard.html">Leaderboard</a>  
+  <a class="" href="index.html">Executive summary</a>
+  <a class="active" href="how-to-submit.html">How to submit</a>
+  <a class="" href="method.html">Method</a>
+  <a class="" href="hypotheses.html">Hypotheses</a>
+  <a class="" href="holdout.html">Holdout</a>
+  <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
+  <a class="" href="sources.html">Sources</a>
+  <a class="" href="leaderboard.html">Leaderboard</a>
   <a class="" href="irregularities.html">Irregularities</a>
 </nav>
 </div></header>
 <main class="wrap">
 
-<h2>How to submit into the contest — exactly</h2>
+<h2>Submission guide — current status first</h2>
+<p class="warn"><b>There is no eligible file to upload today.</b> Do not use the archived zero-outside
+files: they fail the official null/NaN-outside requirement. Do not re-upload a previous candidate:
+the only new proposal that passed the numeric holdout screen failed the local uniqueness check before any TIFF was written. No weekly slot is recommended.</p>
+<h3>When a candidate is cleared</h3>
 <ol class="steps">
-<li><b>Download the file.</b> Go to the <a href="index.html">executive summary</a> and click the
-big download button. You get a single-band GeoTIFF called
-<code>gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif</code>.</li>
-<li><b>Open the submission page.</b>
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
-(requires login). The form is titled <b>New submission</b>.</li>
-<li><b>File to submit → Choose File.</b> Select the <code>.tif</code> you just downloaded. You may
-also upload the <code>.zip</code>; both contain the same single GeoTIFF.</li>
-<li><b>Note (optional).</b> Paste this exact string so you can tell this submission apart later:</li>
-</ol>
-<pre class="note">GEMSDOE51 | H_D detector (58 physical layers + 4 scarp-facing-coherence layers, 3-bag GBDT) | NEW: strike-coherent trace emission (multi-scale Frangi ridge x 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px) replacing isotropic NMS: +0.0020 paired DTI on 6 blocked folds, 4/6, w-&gt;0 control provably reduces to the incumbent | Stage 1 geodetic strain-budget deficit as a soft prior w=0.1 (dominance lift 0.963) | 44,069 dots at mass ratio 3.47x|G|, none within 200 m of the catalogue | off-catalogue A/B: 0.0813 vs 0.0424 random and 0.0022 catalogue-halo control | UNSCORED</pre>
-<ol class="steps" start="5">
-<li><b>Submit.</b> The score appears on the
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a>
-once the validator finishes.</li>
+<li>Return to the <a href="index.html">executive summary</a> and download only the GeoTIFF linked in
+the current eligibility card; check its SHA-256 against the receipt shown there.</li>
+<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
+(requires the participant's own login).</li>
+<li>Choose the single-band <code>.tif</code> file, or the linked <code>.zip</code> containing exactly
+that one GeoTIFF.</li>
+<li>Paste the unique submission name and short note displayed on the executive summary. Do not
+reuse names or notes from archived candidates.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure (template below). Read
+the official rules before submitting and select one final file for both prize rounds by the deadline.</li>
 </ol>
 
-<h2>Why you previously saw <code>"Predicted values must be in range [0, 1]"</code></h2>
-<p>Two different failures produce that one message, and both are measured on the written bytes of
-every file offered here:</p>
-<dl class="kv">
-<dt>Mechanism 1 — the float32 sentinel</dt>
-<dd><code>training_features.tif</code> uses <code>-3.4028234663852886e+38</code> as nodata.
-Writing those bytes through unchanged puts values far outside [0,&nbsp;1].</dd>
-<dt>Mechanism 2 — a NaN nodata tag</dt>
-<dd>A raster tagged <code>nodata=NaN</code> is a legitimate reading of the competition format,
-but it is one validator change away from the same rejection.</dd>
-</dl>
-<p><b>The fix:</b> the primary download is written <b>all-finite with no nodata tag</b> — every one
-of the 12,279,160 cells is finite, the minimum is 0.0 and the maximum is 1.0. This is verified by
-re-opening the file from disk after writing, not from memory. An official NaN-outside twin is
-offered alongside it.</p>
+<h3>Official format checklist</h3>
+<p>DrivenData specifies EPSG:32611, 100 m, matching bounds, one float32 band, values in [0,1], and
+null/NaN outside the bounds. The repository writer now emits NaN outside and verifies the written
+bytes. This local check does not prove acceptance by the portal. If the validator reports an error,
+retain the exact rejected file and message for diagnosis; do not assume an unverified root cause.</p>
 
-<h2>What the validator checks</h2>
-<table class=''><thead><tr><th>requirement</th><th>this file</th></tr></thead><tbody><tr><td>single band</td><td>True</td></tr><tr><td>dtype float32</td><td>True</td></tr><tr><td>CRS EPSG:32611</td><td>True</td></tr><tr><td>geotransform matches template</td><td>True</td></tr><tr><td>3730 x 3292</td><td>True</td></tr><tr><td>all cells finite</td><td>True</td></tr><tr><td>values inside [0, 1]</td><td>True</td></tr><tr><td>nodata tag absent</td><td>True</td></tr><tr><td>positive pixels</td><td>44,069</td></tr><tr><td>total emitted mass</td><td>44,069</td></tr></tbody></table>
+<h3>Generative-AI narrative disclosure</h3>
+<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">September 2026 GEMS Prize Rules</a>
+requires a narrative, outside the word count, that states the extent to which generative AI was used
+and how it contributed to the submission elements. Adapt this text to the actual final process and
+verify every statement before submission:</p>
+<pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source material, generate and rank hypotheses, edit and debug code, and draft project documentation. The geospatial predictions are produced by the documented feature-engineering and machine-learning pipeline, not by a generative model. The person submitting is responsible for checking the data provenance, code, scientific claims, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted artifact.</pre>
+<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include all
+actual AI use across the eventual submission materials.</p>
 
-<h2>Rules and deadlines</h2>
-<p>Read the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/rules/">competition rules</a>
-and the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">prize rules PDF (NLR 96647)</a>
-before submitting. You must choose a <b>single</b> submission for scoring across both prize rounds
-before the deadline, without knowing your private-test performance.</p>
+<h3>Leaderboard and Terms of Use</h3>
+<p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
+<a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit automated monitoring/copying
+and manual monitoring/copying without prior written consent. No such consent is on record.</p>
 
 </main>
 <footer><div class="wrap">
-<p>Every number on this site is read from an artifact in <code>data/</code> and carries an
-evidence class. Measured = computed on bytes we hold. Claim = reported by the owner group and not
-independently verifiable here. Organizer-verified = none; no score on this site has been
-confirmed by DrivenData.</p>
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
 </div></footer>
 </body></html>

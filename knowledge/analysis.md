@@ -1,122 +1,16 @@
-# Why the best prior submission scored what it did, and what beating it requires
+# Current analysis index
 
-Evidence class: **measured**, except where marked. Nothing here is organizer-verified.
+The up-to-date, source-linked result review is [`gemsdoe32-case-study-2026-10-07.md`](gemsdoe32-case-study-2026-10-07.md). Prior analysis versions contained leaderboard-derived calculations and copied standings; these are not reproduced in the active record. Superseded local experiment receipts are kept under `archive/` with a historical-only notice. DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibits automated monitoring/copying and manual monitoring/copying without prior written consent.
 
-## 1. The arithmetic of the metric, first
+## Current measured evidence
 
-From the published definitions `FN = |G| − TP`, so
+- H-D six-fold baseline: mean proxy DTI 0.2816627 and mean AUC 0.6726183 at `M/|G|=3.47` ([`data/holdout_H_D.json`](../data/holdout_H_D.json)).
+- Narrowed H51-X1 implementation: mean proxy DTI 0.2796713; delta -0.0019913 versus H-D; wins 3/6 folds; not promoted. The measured features used only rank-normalized `comp_tmi` and `comp_iso_grav_anom`, not the full preregistered derivative-band family (those layers remained in the common baseline stack but were not inputs to the new transform), so the broader hypothesis remains incompletely tested ([`data/holdout_H_X1.json`](../data/holdout_H_X1.json), [`preregistration-2026-10-07.md`](preregistration-2026-10-07.md)).
+- Corrected Stage-1 trace holdout: deficit Spearman 0.03916 and top-50% lift 1.08290, below the geodetic-only comparator; Stage 1 is weak ([`data/stage1_trace_holdout.json`](../data/stage1_trace_holdout.json)).
+- Hard Stage-1 gates substantially reduce Stage-2 proxy DTI ([`data/two_stage_results.json`](../data/two_stage_results.json), [`data/gate_sweep.json`](../data/gate_sweep.json)).
+- H-D soft `w=0.20` clears the numerical promotion test only marginally but fails local uniqueness against the archived soft-`w=0.10` map (support Jaccard 0.86130, containment 0.92548). The generator stopped before writing a new GeoTIFF; no slot was used.
+- A post-branch synchronization audit found PR #6's separately recorded H-D emission-geometry sweep: Stage-2-only mean proxy DTI 0.2836026 for `ste_L9_w0.35_s2.4_nothin` versus 0.2816394 for its isotropic comparator, +0.0019632 over 4/6 folds. This is a provisional, unreplicated metric-geometry lead, not a geological hypothesis or organizer score. The packaged Stage-1 soft-`w=0.10` variant reports a separate -0.0020 holdout cost; the H-M arm is 0.2826030. Stage-1 lift in the packaged H-D file is 0.963, so it did not dominate placement, but the packaged Stage-1-weighted maps are not the Stage-2-only leader. Their NaN twins pass the current local format checker; zero-outside copies do not. All are archived, were already published on `main`, and are not reused or reissued. The missing training-feature/prepared inputs prevent clean reproduction and rebuild in this checkout ([`data/holdout_archive_review.json`](../data/holdout_archive_review.json), [`archive/evidence/2026-10-07/emission_geometry.json`](../archive/evidence/2026-10-07/emission_geometry.json)).
 
-```
-DTI = TP / (TP + 0.2·FP + 0.8·FN) = TP / (0.2·(TP + FP) + 0.8·|G|)
-```
+## Scope limits
 
-`|G|`, the hidden truth size, is fixed. A submission is therefore decided by
-**credit earned per unit of emitted mass**. Two corollaries, both proved
-numerically in `tests/test_metric.py`:
-
-* redundancy is expensive — for each truth pixel the scorer takes the *maximum*
-  over nearby predictions, so two dots 1 px apart earn the credit of one and cost
-  the mass of two;
-* there is a break-even bar: a marginal pixel of value `p` earning expected
-  kernel credit `c` raises the score iff `c > 0.2·DTI`, i.e. `c > 0.056` at
-  DTI = 0.28.
-
-## 2. A free natural experiment sitting in the group's own artifacts
-
-`gemsdoe32-h33-h33-2-b2` (0.2778) is exactly the 0.2600 anchor with 6,436 dots
-deleted. Measured here: the deleted set is precisely the emitted pixels at
-Euclidean distance 1–2 px from a catalogued fault pixel (min 1.000, max 2.000,
-mean 1.286), and the retained set all lie at distance ≥ 2.236 px.
-
-Writing `K = 0.8·|G|`:
-
-```
-TP(44 090) = 0.2600 · (0.2·44 090 + K) = 2 292.68 + 0.2600 K
-TP(37 654) = 0.2778 · (0.2·37 654 + K) = 2 092.06 + 0.2778 K
-ΔTP        =   200.62 − 0.0178 K
-```
-
-`ΔTP ≥ 0` bounds the hidden truth at **|G| ≤ 14 090 px**. With the group's own
-generative truth model (12 691 px, from GEMSDOE25 H28) → `K = 10 153` and
-**ΔTP ≈ 20**.
-
-So the 6 436 deleted dots earned **0.003 credit each**, against **0.139** for the
-dots that were kept. A factor of 45. **Predicting within 200 m of the catalogue
-is worth essentially nothing**, which is consistent with the organizer's
-confirmation that known fault pixels are masked out of the scoring entirely.
-
-Two independent routes give the same |G|: the group's generative model gives
-12 691 px, and 44 090 / 3.47 (the mass ratio our holdout prefers) gives 12 708 px.
-We adopt **|G| ≈ 12 700** and record that the bound is loose (2 700 – 14 100).
-
-## 3. What the leader is actually doing better
-
-At `|G| = 12 700`, inverting the same identity:
-
-| submission | public DTI | emitted mass M | implied TP | credit per dot |
-|---|---:|---:|---:|---:|
-| 0.2600 anchor | 0.2600 | 44 090 | 4 736 | 0.107 |
-| 0.2778 (group best) | 0.2778 | 37 654 | 4 915 | 0.131 |
-| nchuzhoy | 0.3262 | ~40 000? | ~5 770 | ~0.144 |
-| leader | 0.3774 | ~44 000? | ~7 160 | ~0.163 |
-
-(M for the two non-group rows is not published; the implied TP assumes the same
-mass as the group's files, so those two rows are **estimates**, not measurements.)
-
-The kernel is `k = 1 − d/3`. A credit of 0.131 corresponds to a mean distance of
-**2.6 px = 260 m** between an emitted dot and the nearest hidden fault pixel; the
-leader's 0.163 corresponds to **2.0 px = 200 m**.
-
-**That is the whole game.** It is a localisation problem, not a coverage problem.
-The winner is not the model that flags the most ground — it is the model whose
-dots sit closest to faults the catalogue does not have.
-
-An isolated dot landing exactly on a straight trace earns about
-`1 + 2(0.667) + 2(0.333) ≈ 3.0` credit, so a mean of 0.131 means only about 4 %
-of the group's dots land *on* a hidden trace; the rest sit in the 1–3 px halo or
-in open ground.
-
-## 4. Why the group's dotted/thinned design worked, and where it runs out
-
-Thinning a thick probability surface down to isolated dots at ~2.4 px spacing
-removes mass that was already covered by a neighbouring dot, which raises credit
-per unit mass — exactly the objective the metric rewards. That is why
-0.1922 (continuous field) → 0.2477 → 0.2600 → 0.2778 as the emission got
-sparser and better spaced.
-
-It runs out when the dots start landing off the traces. At that point no amount
-of re-spacing helps; only a better field does. Our holdout in-block AUC is 0.667
-and our proxy DTI at matched mass is 0.279 — i.e. our detector is, on this
-instrument, about as good as the one that produced 0.2778. Beating 0.3774
-requires a materially better field, not a better emission rule.
-
-## 5. What would move it
-
-Ranked by expected effect on credit-per-dot:
-
-1. **Train the shipped model on the whole catalogue.** Every holdout fold trains
-   on 8/9 of it; the shipped model trains on 9/9. Cheap, certain, small.
-2. **Beat the 0.667 in-block AUC.** The single layers top out near AUC 0.63
-   in-block; the model already combines them. The remaining gap is the
-   difference between "looks like a mapped fault" and "is a fault" —
-   the catalogue is amplitude-biased, so the geometric/persistence features
-   (H-D) and the buried-structure features (H-E) are the right direction, but
-   measured here they did not move it (see `holdout.html`).
-3. **Emission spacing.** Our sweep finds the mass ratio `M/|G| ≈ 3.5` optimal and
-   the curve flat between 2 and 5, so this is worth a few thousandths, not
-   hundredths.
-4. **External data.** The 1 m 3DEP DEM is the obvious unlock — a fault mapper
-   reads sub-pixel scarp geometry that a 100 m aggregate destroys. It is *not
-   reachable from this sandbox* (measured: HTTP 000 to
-   elevation.nationalmap.gov and prd-tnm.s3.amazonaws.com), so it cannot be
-   validated here and is not proposed as viable without a machine with
-   unrestricted egress.
-
-## 6. Honest expectation
-
-Our instrument says 0.279 ± 0.02 at the live mass ratio, which brackets the
-group's own best of 0.2778 and sits well below the current leader of 0.3774.
-A submission built by this pipeline should be expected to land **in the high
-0.2s**, not at the top of the board, unless Stage 2's field improves
-substantially. That expectation is stated before the score is known and is the
-number we will compare against.
+These are local blocked holdout results against the known-fault catalogue, not against the hidden new-fault test labels. They cannot validate that a geological signature finds genuinely unmapped faults or predict an organizer score. The archived 2026-10-06 official leaderboard read is not retained in the active research record; no automated or manual leaderboard monitoring/copying is implemented.

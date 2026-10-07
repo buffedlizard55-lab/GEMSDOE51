@@ -1,4 +1,11 @@
-"""Stage A -- geodetic strain-budget deficit over broad tiles (COARSE PRIOR ONLY).
+"""DEPRECATED Stage-A scalar prototype; not valid for current scoring or submission.
+
+This module is retained only for historical provenance. Its scalar moment reduction,
+centroid-to-tile allocation, nominal rectangle areas, and legacy fold masking do not
+match the corrected horizontal tensor/footprint/trace-row construction in
+``gems51.strain_budget``. Public Stage-A report functions below now fail closed.
+
+Historical notes from the prototype follow:
 
 Hypothesis (stated in the task brief, implemented literally here)
 ------------------------------------------------------------------
@@ -71,6 +78,17 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from . import grid
+
+LEGACY_STAGE_A_DISABLED = True
+
+
+def _refuse_legacy_report() -> None:
+    raise RuntimeError(
+        "gems51.strain is a deprecated scalar prototype and cannot produce evidence. "
+        "Use gems51.strain_budget plus scripts/run_stage1_trace_holdout.py, "
+        "scripts/run_two_stage.py, and scripts/sweep_gate.py."
+    )
+
 
 TILE_PX: int = 250                 # 250 px * 100 m = 25 km square tiles
 NANOSTRAIN: float = 1e9            # 1/yr -> nanostrain/yr
@@ -209,6 +227,7 @@ def geodetic_strain_by_tile(band: str = "geod_2ndinv", tile_px: int = TILE_PX):
 
 def deficit_table(tile_px: int = TILE_PX, band: str = "geod_2ndinv") -> list[dict]:
     """Per-tile Stage A table: geodetic, geologic, residual and ratio."""
+    _refuse_legacy_report()
     from .paths import WORK_DIR
     traces = load_traces()
     dips = dip_by_sense()
@@ -261,6 +280,7 @@ def stage_a_holdout(tile_px: int = TILE_PX, n_blocks: int = 2, band: str = "geod
     and ask whether the approved tiles still concentrate the *held-out* catalogue labels.
     Reported per block (label density lift in approved tiles) and pooled (Spearman rho).
     """
+    _refuse_legacy_report()
     from scipy.stats import spearmanr
 
     traces = load_traces()
@@ -357,6 +377,7 @@ def _independent_layers():
 def stage_a_independent_test(tile_px: int = TILE_PX, band: str = "geod_2ndinv",
                              exclude_radius_px: float = 2.0) -> dict:
     """Falsifiable test: does the deficit concentrate INDEPENDENT off-catalogue fault evidence?"""
+    _refuse_legacy_report()
     import math as _m
 
     from scipy.stats import spearmanr
@@ -437,6 +458,7 @@ def gate_comparison(tile_px: int = TILE_PX, exclude_radius_px: float = 2.0) -> d
     Instrument: Spearman rho between the rule's tile score and (i) SGMC fault density at
     >= 2 px from the catalogue, (ii) lidar scarp-feature intensity; plus the top-quartile lift.
     """
+    _refuse_legacy_report()
     from scipy.stats import spearmanr
 
     traces = load_traces()

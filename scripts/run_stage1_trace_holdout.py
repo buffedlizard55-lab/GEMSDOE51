@@ -62,30 +62,14 @@ def upsample(tiles: np.ndarray, tile_px: int) -> np.ndarray:
     return big[:GRID.shape[0], :GRID.shape[1]]
 
 
-def assign_trace_id(catalogue: np.ndarray, df):
-    """For each catalogue pixel, the row index of the nearest CSV trace centroid."""
-    ys, xs = np.nonzero(catalogue)
-    cy = df["centroid_row"].to_numpy(float)
-    cx = df["centroid_col"].to_numpy(float)
-    ok = np.isfinite(cy) & np.isfinite(cx)
-    cy, cx = cy[ok], cx[ok]
-    ids = np.nonzero(ok)[0]
-    best = np.empty(ys.size, dtype=np.int64)
-    step = 4096
-    for a0 in range(0, ys.size, step):
-        b0 = min(a0 + step, ys.size)
-        d = (ys[a0:b0, None] - cy[None, :]) ** 2 + (xs[a0:b0, None] - cx[None, :]) ** 2
-        best[a0:b0] = ids[np.argmin(d, axis=1)]
-    return ys, xs, best
-
-
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n-splits", type=int, default=5)
     ap.add_argument("--tile-px", type=int, default=100)
     ap.add_argument("--thresholds", default="40,50,60,70,80")
     ap.add_argument("--ratio", type=float, default=3.47)
-    ap.add_argument("--g-hidden", type=int, default=12_700)
+    ap.add_argument("--g-hidden", type=int, default=12_700,
+                    help="provisional full-map mass assumption; not an organizer label count")
     ap.add_argument("--seed", type=int, default=3)
     ap.add_argument("--min-heldout", type=int, default=2000)
     a = ap.parse_args()
@@ -96,7 +80,7 @@ def main() -> int:
     obs = load_observed()
     cfg = sb.BudgetConfig(tile_px=a.tile_px)
 
-    ys, xs, tid = assign_trace_id(catalogue, df)
+    ys, xs, tid = sb.trace_assignments(catalogue, df)
     uniq = np.unique(tid)
     rng = np.random.default_rng(a.seed)
     perm = rng.permutation(uniq)
@@ -120,7 +104,11 @@ def main() -> int:
             print(f"  split {k}: only {truth.sum()} held-out px, skipped")
             continue
 
-        exx, eyy, exy, lent, npix, asg, mom, tshape, meta = sb.kostrov_tiles(known, df, cfg)
+        # Remove whole Qfault attribute rows associated with any held-out
+        # catalogue pixels, not only the held-out raster cells.
+        df_budget = df.loc[~df.index.isin(held)]
+        exx, eyy, exy, lent, npix, asg, mom, tshape, meta = sb.kostrov_tiles(
+            known, df_budget, cfg, area_mask=footprint)
         II_f = sb.invariant(exx, eyy, exy, "II")
         obsII = sb.observed_tiles(obs["geod_2ndinv"], footprint, a.tile_px)
         obsDIL = sb.observed_tiles(obs["geod_dilaterate"], footprint, a.tile_px)
@@ -131,12 +119,16 @@ def main() -> int:
         q_o = sb.quantile_map(np.where(ok_t, obsII, np.nan))
         deficit = q_o - q_f
         geo_only = q_o                      # control: geodetic field with no budget
-        dil_def = sb.quantile_map(np.where(ok_t, obsDIL, np.nan)) - q_f
-        sh_def = sb.quantile_map(np.where(ok_t, obsSH, np.nan)) - q_f
+        # The competition's scalar dilation/shear layers are separate diagnostics;
+        # do not subtract the fault second invariant from unlike quantities.
+        dil_only = sb.quantile_map(np.where(ok_t, obsDIL, np.nan))
+        shear_only = sb.quantile_map(np.where(ok_t, obsSH, np.nan))
 
-        row = dict(split=k, n_truth=int(truth.sum()), n_known=int(known.sum()))
+        row = dict(split=k, n_truth=int(truth.sum()), n_known=int(known.sum()),
+                   n_budget_trace_rows=int(len(df_budget)),
+                   frac_budget_rows_excluded=float(1.0 - len(df_budget) / max(len(df), 1)))
         for nm, field_t in [("deficit", deficit), ("geodetic_only", geo_only),
-                            ("dil_deficit", dil_def), ("shear_deficit", sh_def)]:
+                            ("dilatation_only", dil_only), ("shear_only", shear_only)]:
             big = upsample(field_t, a.tile_px)
             b = big[footprint]
             fin = np.isfinite(b)

@@ -54,6 +54,7 @@ ARMS = {
     "H_M": ["facecoh", "xscale"],                 # H_D + cross-scale crest coincidence
     "H_C": [],                                    # catalogue tips (fold-dependent)
     "H_ALL": ["base_s", "cond_s", "grav2_s", "base_step_coh", "facecoh"],
+    "H_X1": ["mg_alignment", "mg_coedge"],                # magnetic/gravity edge concordance
 }
 
 

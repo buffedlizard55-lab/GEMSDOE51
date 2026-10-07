@@ -24,17 +24,19 @@ from pathlib import Path
 
 import numpy as np
 
-KNOWN_PRIOR_SHA256 = {
-    # sha256 -> (label, reported score or None if unscored)
+KNOWN_PRIOR_SHA256_PREFIXES = {
+    # Byte fingerprints are retained only to prevent exact file re-issues.
+    # They intentionally contain no leaderboard values or score claims. One
+    # historical entry is a 16-hex-character prefix; the rest are full digests.
     "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9":
-        ("GEMSDOE32 h33-h33-2-b2 (zeros)", 0.2778),
-    "baeae3219bba6a19": ("GEMSDOE32 h33-h33-2-b2 (nan twin)", None),
+        "GEMSDOE32 H33-2-B2 (zero-outside prior)",
+    "baeae3219bba6a19": "GEMSDOE32 H33-2-B2 (NaN twin prior)",
     "4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3":
-        ("GEMSDOE32 probe-S1 anchor == GEMSDOE25 dotted-h19-5-d2-8 (zeros)", 0.2600),
+        "GEMSDOE32 probe-S1 anchor / GEMSDOE25 prior (owner label discrepancy)",
     "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30":
-        ("GEMSDOE25 dotted-h19-5-d2-8 (zeros)", 0.2600),
+        "GEMSDOE25 dotted-h19-5-d2-8 (zero-outside prior)",
     "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8":
-        ("GEMSDOE25 dotted-h19-5-d2-8 (nan)", 0.2600),
+        "GEMSDOE25 dotted-h19-5-d2-8 (NaN prior)",
 }
 
 
@@ -44,6 +46,12 @@ def sha256_file(p: Path) -> str:
         for c in iter(lambda: f.read(1 << 22), b""):
             h.update(c)
     return h.hexdigest()
+
+
+def known_prior_label(sha256: str) -> str | None:
+    """Match a full local SHA-256 or a retained digest prefix for an external prior."""
+    return next((label for fingerprint, label in KNOWN_PRIOR_SHA256_PREFIXES.items()
+                 if sha256.startswith(fingerprint)), None)
 
 
 def jaccard(a: np.ndarray, b: np.ndarray) -> float:
@@ -94,9 +102,9 @@ def run_gate(candidate_path: Path, prior_paths: dict, candidate_support: np.ndar
     sha = sha256_file(candidate_path)
     rep = UniquenessReport(candidate=str(candidate_path.name), sha256=sha)
 
-    hit = KNOWN_PRIOR_SHA256.get(sha)
+    hit = known_prior_label(sha)
     if hit:
-        rep.byte_duplicate_of.append(dict(label=hit[0], score=hit[1]))
+        rep.byte_duplicate_of.append(dict(label=hit, sha256=sha))
     for label, p in prior_paths.items():
         p = Path(p)
         if not p.exists():

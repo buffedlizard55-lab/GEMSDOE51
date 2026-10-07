@@ -14,12 +14,12 @@ This script answers it empirically on the four spatially blocked folds, under th
 variants:
   full      -- the visible catalogue as truth (the sibling instrument; dense, 60,988 px)
   thin50    -- a seeded 50% subsample of it
-  thin20    -- a seeded 20% subsample (~12,200 px), i.e. the density the hidden expert label set is
-               believed to have (the siblings' calibrated truth model implies K ~ 12,700 px)
+  thin20    -- a seeded 20% subsample, used only as a synthetic sensitivity case; it is not an
+               estimate of the hidden expert-label count or a sample of hidden-label structure
 
-Caveat that is printed into the evidence file: thinning the visible catalogue preserves its
-geometry, so it changes density, not the kind of structure.  Rankings from the thinned variants
-are therefore informative about mass/density choices, NOT projections of a real score.
+Caveat printed into the synthetic-sensitivity output: thinning the visible catalogue preserves its
+geometry, so it changes density, not the kind of structure. Rankings from the thinned variants are
+informative only about this artificial proxy setup, not the hidden-label count or a real score.
 
     python3 scripts/run_strategy_sweep.py [--folds 0,1,2,3]
 """
@@ -122,12 +122,14 @@ def main() -> None:
                             per_fold=[float(v) for v in vals]))
     out = dict(
         note="Strategies evaluated with the official DTI (alpha=0.2, beta=0.8, R=3 px) on the four "
-             "spatially blocked folds. thin20 approximates the hidden label density (K ~ 12,200 px "
-             "vs 60,988 visible). Categories are not projections of a real leaderboard score.",
+             "spatially blocked folds. thin50 and thin20 are synthetic random subsamples of the "
+             "visible catalogue; they change density but not fault geometry and do not estimate or "
+             "represent the hidden expert-label set. Results are proxy diagnostics only.",
         incumbent=dict(density=INCUMBENT_DENSITY, spacing=INCUMBENT_SPACING),
         truth_px={k: int(v.sum()) for k, v in truths.items()},
         rows=rows, summary=summary)
-    (ROOT / "evidence" / "strategy_sweep.json").write_text(json.dumps(out, indent=1) + "\n")
+    out_path = ROOT / "data" / "strategy_sweep_synthetic.json"
+    out_path.write_text(json.dumps(out, indent=1) + "\n")
 
     for tname in truths:
         block = [s for s in summary if s["truth"] == tname]

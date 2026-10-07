@@ -31,6 +31,53 @@ def _edge_bank(field: np.ndarray, mask: np.ndarray, label: str, scales=(1.5, 4.0
     return out
 
 
+def cross_physics_edge_features(magnetic: np.ndarray, gravity: np.ndarray,
+                                mask: np.ndarray, sigma: float = 2.0) -> dict[str, np.ndarray]:
+    """Return edge-normal agreement and joint edge strength for two scalar fields.
+
+    The normals are unoriented, so reversing the sign of one anomaly does not
+    change its geological edge direction.  ``coedge`` is the geometric mean of
+    robustly scaled gradient magnitudes multiplied by |cos(theta)|.  The scale
+    denominators are the 95th percentiles of deterministic, evenly subsampled
+    valid pixels; no labels or holdout truths enter the transform.
+    """
+    mask = np.asarray(mask, dtype=bool)
+    mag = np.asarray(magnetic, dtype=np.float32)
+    grav = np.asarray(gravity, dtype=np.float32)
+    valid = mask & np.isfinite(mag) & np.isfinite(grav)
+    gx_m = _ncd(mag, valid, sigma, [0, 1])
+    gy_m = _ncd(mag, valid, sigma, [1, 0])
+    gx_g = _ncd(grav, valid, sigma, [0, 1])
+    gy_g = _ncd(grav, valid, sigma, [1, 0])
+    norm_m = np.hypot(gx_m, gy_m)
+    norm_g = np.hypot(gx_g, gy_g)
+    denom = np.maximum(norm_m * norm_g, 1e-12)
+    alignment = np.clip(np.abs(gx_m * gx_g + gy_m * gy_g) / denom, 0.0, 1.0)
+    alignment[(norm_m <= 1e-8) | (norm_g <= 1e-8)] = 0.0
+
+    def robust_p95(v):
+        ok = valid & np.isfinite(v)
+        vals = v[ok]
+        if vals.size == 0:
+            return 0.0
+        stride = max(1, int(np.ceil(vals.size / 200_000)))
+        return float(np.quantile(vals[::stride], 0.95))
+
+    scale_m = robust_p95(norm_m)
+    scale_g = robust_p95(norm_g)
+    if scale_m <= 1e-12 or scale_g <= 1e-12:
+        coedge = np.zeros(mag.shape, dtype=np.float32)
+    else:
+        em = np.clip(norm_m / scale_m, 0.0, 1.0)
+        eg = np.clip(norm_g / scale_g, 0.0, 1.0)
+        coedge = np.sqrt(em * eg) * alignment
+    alignment = alignment.astype(np.float32)
+    coedge = coedge.astype(np.float32)
+    alignment[~valid] = np.nan
+    coedge[~valid] = np.nan
+    return {"alignment": alignment, "coedge": coedge}
+
+
 def build_static(stack, footprint: np.ndarray) -> dict:
     """Hypothesis groups that use no catalogue information."""
     g = {}
@@ -72,6 +119,23 @@ def build_static(stack, footprint: np.ndarray) -> dict:
         coh = np.hypot(sx, sy) / np.maximum(sw, 1e-9)
     coh[~(m.astype(bool))] = np.nan
     g["base_step_coh09"] = coh.astype(np.float32)
+
+    # ---------------------------------------------------------------- H-X1
+    # Cross-physics edge-normal concordance.  A buried fault/contact can produce
+    # a magnetic edge and a density/gravity edge even where relief is weak.  The
+    # *new* signal is not either edge magnitude by itself (both are already in
+    # the base stack), but the local agreement of their unoriented edge normals.
+    # Derivatives are computed from the rank-normalised competition bands so
+    # feature scale is comparable and robust to the source units.  Two scales
+    # (200 m and 500 m) are preregistered in knowledge/preregistration-2026-10-07.md.
+    mag = get("comp_tmi")
+    grav = get("comp_iso_grav_anom")
+    common = footprint & np.isfinite(mag) & np.isfinite(grav)
+    for sigma in (2.0, 5.0):
+        feats = cross_physics_edge_features(mag, grav, common, sigma=sigma)
+        suffix = f"s{int(sigma * 10):02d}"
+        g[f"mg_alignment_{suffix}"] = feats["alignment"]
+        g[f"mg_coedge_{suffix}"] = feats["coedge"]
 
     # ---------------------------------------------------------------- H-D
     # Scarp-facing coherence.  A through-going range-front fault has one facing

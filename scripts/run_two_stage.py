@@ -53,23 +53,29 @@ def upsample(tiles: np.ndarray, tile_px: int) -> np.ndarray:
 
 def stage1_field(catalogue_known: np.ndarray, footprint: np.ndarray, df, obs,
                  cfg: sb.BudgetConfig):
-    """Quantile-space deficit  Q(observed II) - Q(fault-accommodated II)  on tiles."""
+    """Exploratory rank residual Q(observed II) - Q(fault tensor II), per tile.
+
+    The dilatation and shear layers are returned only as separate observed-rank
+    diagnostics. They are NOT subtracted from the fault II: that would compare
+    different tensor quantities until their definitions and units are verified.
+    """
     exx, eyy, exy, lent, npix, asg, mom, tshape, meta = sb.kostrov_tiles(
-        catalogue_known, df, cfg)
+        catalogue_known, df, cfg, area_mask=footprint)
     II_f = sb.invariant(exx, eyy, exy, "II")
     obsII = sb.observed_tiles(obs["geod_2ndinv"], footprint, cfg.tile_px)
     obsDIL = sb.observed_tiles(obs["geod_dilaterate"], footprint, cfg.tile_px)
     obsSH = sb.observed_tiles(obs["geod_shearrate"], footprint, cfg.tile_px)
 
-    # restrict to tiles that contain any scored domain at all
+    # Restrict ranks to tiles with valid footprint area. Rank-space differences
+    # are a scale-free heuristic, not an absolute physical strain subtraction.
     dom = sb.observed_tiles(np.ones(GRID.shape, np.float32), footprint, cfg.tile_px)
     ok_t = np.isfinite(dom) & (dom > 0.05)
     q_f = sb.quantile_map(np.where(ok_t, II_f, np.nan))
     q_o = sb.quantile_map(np.where(ok_t, obsII, np.nan))
     deficit = q_o - q_f
-    dil_def = sb.quantile_map(np.where(ok_t, obsDIL, np.nan)) - q_f
-    sh_def = sb.quantile_map(np.where(ok_t, obsSH, np.nan)) - q_f
-    return dict(deficit=deficit, dil_deficit=dil_def, shear_deficit=sh_def,
+    return dict(deficit=deficit,
+                dilatation_rank=sb.quantile_map(np.where(ok_t, obsDIL, np.nan)),
+                shear_rank=sb.quantile_map(np.where(ok_t, obsSH, np.nan)),
                 II_fault=II_f, II_obs=obsII, trace_len=lent, ok_tiles=ok_t, meta=meta)
 
 
@@ -99,16 +105,24 @@ def main():
     cfg = sb.BudgetConfig(tile_px=a.tile_px)
     thresholds = [float(t) for t in a.thresholds.split(",")]
     ratios = [float(r) for r in a.ratios.split(",")]
+    # Trace assignments are label-only bookkeeping. Each held-out spatial block
+    # drops every linked attribute row from its budget before the prior is built.
+    trace_y, trace_x, trace_ids = sb.trace_assignments(catalogue, df)
 
     rows = []
     t0 = time.time()
     for fold in folds:
-        s1 = stage1_field(fold.known, footprint, df, obs, cfg)
+        in_held_block = fold.block[trace_y, trace_x]
+        held_trace_ids = np.unique(trace_ids[in_held_block])
+        df_budget = df.loc[~df.index.isin(held_trace_ids)]
+        s1 = stage1_field(fold.known, footprint, df_budget, obs, cfg)
         def_big = upsample(s1["deficit"], a.tile_px)
         in_block = fold.block & footprint
         excl = ndi.distance_transform_edt(~fold.known) <= a.excl_radius
 
-        row = dict(fold=fold.index, n_truth=fold.n_truth)
+        row = dict(fold=fold.index, n_truth=fold.n_truth,
+                   budget_trace_rows=int(len(df_budget)),
+                   held_out_trace_rows=int(len(held_trace_ids)))
         # ---- how much of the held-out truth sits in the top-q tiles? --------
         db = def_big[in_block]
         tb = fold.truth[in_block]
