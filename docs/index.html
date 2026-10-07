@@ -33,6 +33,42 @@
 </dl>
 <p class="ev">format checks are MEASURED by re-reading the written bytes in a second, independent process, then re-verified by scripts/run_uniqueness_gate.py which shares no code with this builder; no score on this site is organizer-verified</p>
 </section>
+<h2>This session, work stream B (2026-10-07): a second candidate submission</h2>
+<p>The site's primary download above is stream A's strike-coherent emission (best holdout,
+0.2836). Stream B independently built a <b>second, structurally different candidate</b> from the
+same detector family, so this week's three submission slots can span two hypotheses instead of
+one. Its story:</p>
+<ul>
+<li><b>Studied why the group's best scored 0.2778</b>: it is a <i>removal</i> result &mdash; pruning
+dots within 200 m of the mapped catalogue raised the live score 0.2600 &rarr; 0.2708 &rarr; 0.2778
+(GEMSDOE32 Round 4, live-anchored safety 2.08). Mass near mapped faults is dead mass. Full write-up:
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md">knowledge/02</a>.</li>
+<li><b>Five new candidate hypotheses pre-registered</b> (H-51-L, H-51-M, H-51-P, H-51-S, H-51-V;
+letters L/M because stream A already owns F/G) with layers, signatures and novelty checks &mdash;
+see the <a href="hypotheses.html">hypotheses</a> page.</li>
+<li><b>H-51-L (trace-axis snap) validated and falsified</b> on the blocked holdout under a
+pre-registered rule: at conserved mass and spacing, window=2 costs &minus;0.0033 proxy DTI,
+window=1 is neutral. Two earlier failure modes (spacing collapse; silent mass loss) were
+reproduced, explained and unit-tested. Registered as IR-51-14 with the instrument caveat.</li>
+<li><b>H-51-M (cross-scale crest coincidence) adopted</b>: in-block AUC 0.6747
+(+0.0021 over H_D) and proxy DTI
+0.2826 (+0.0009 over H_D at M/|G| = 3.47) &mdash; the second-best arm
+measured in this repository, 0.0010 below stream A's emission.</li>
+</ul>
+<section class="download">
+<h3>&#11015; Stream B candidate (H-51-M two-stage)</h3>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif">Download gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1.zip">.zip containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HM-SOFT-W010</code></dd>
+<dt>sha256</dt><dd><code>c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839</code></dd>
+</dl>
+<p class="ev">44,069 dots &middot; float32 EPSG:32611 3730&times;3292 &middot; all cells finite in [0,1] &middot;
+0 dots within 200 m of the catalogue &middot; Stage-1 dominance lift 0.978 &middot; holdout cost of the soft
+prior +0.0000. The hard top-80% tile variant (the brief's literal design) is also in
+<code>docs/downloads</code> and costs &minus;0.0027 on holdout, disclosed.</p>
+</section>
+
 <h2>What is offered</h2>
 <table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif</a><br><span class="ev">zip: <a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z.zip</a> &middot; nan twin: <a href="downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif">gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif</a></span></td><td>soft</td><td>H_D detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10), emitted by strike-coherent trace emission: multi-scale Frangi ridge + 900 m line accumulator, rank blend w=0.35, along-trace spacing 2.4 px</td><td>+0.0020</td><td>0.016</td><td>PASS</td></tr></tbody></table>
 <p class="warn"><b>The biggest limitation, stated first.</b> The visible USGS/INGENIOUS fault
@@ -82,7 +118,7 @@ marginal pixel is <code>c = 0.2·DTI</code>.</li>
 </ol>
 
 <h2>Holdout at a glance</h2>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r5.0: 0.2736</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr></tbody></table>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r5.0: 0.2736</td><td>6</td></tr><tr><td>H_M</td><td>0.6747</td><td>r2.0: 0.2701 / r3.47: 0.2826 / r4.5: 0.2770 / r6.0: 0.2611</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr></tbody></table>
 <p class="ev">Proxy DTI is measured with emission and scoring restricted to the held-out block and
 the mass set as a fixed multiple of that block's truth size, which is what makes it comparable
 to a live DTI. It is <b>not</b> a score.</p>

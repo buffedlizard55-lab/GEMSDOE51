@@ -284,7 +284,7 @@ def build():
     arts = subm.get("artifacts", [])
     s1stats = subm.get("stage1_stats", {})
     hold = {a: load(f"holdout_{a}.json") for a in
-            ("base", "H_E", "H_D", "H_C", "H_ALL")}
+            ("base", "H_E", "H_D", "H_M", "H_C", "H_ALL")}
     two = load("two_stage_results.json")
     lb = load("leaderboard.json", {})
 
@@ -313,7 +313,7 @@ def build():
 the resulting <code>data/submission_manifest.json</code>.</p></section>"""
 
     rows = []
-    for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
+    for a in ("base", "H_E", "H_D", "H_M", "H_C", "H_ALL"):
         h = hold.get(a)
         if not h:
             rows.append([a, "not run", "", ""])
@@ -329,7 +329,51 @@ the resulting <code>data/submission_manifest.json</code>.</p></section>"""
     _AC = autocontext_table()
     _GEO = geometry_table()
     _OFFCAT = offcat_table()
-    body = card + f"""
+    hm = load("holdout_H_M.json")
+    hd51 = load("holdout_H_D.json")
+    sess = ""
+    if hm and sub:
+        sM = hm["summary"]
+        sD = hd51["summary"] if hd51 else {}
+        dd = sM["dti_r3.47"]["mean"] - sD.get("dti_r3.47", {}).get("mean", float("nan"))
+        sess = f"""
+<h2>This session, work stream B (2026-10-07): a second candidate submission</h2>
+<p>The site's primary download above is stream A's strike-coherent emission (best holdout,
+0.2836). Stream B independently built a <b>second, structurally different candidate</b> from the
+same detector family, so this week's three submission slots can span two hypotheses instead of
+one. Its story:</p>
+<ul>
+<li><b>Studied why the group's best scored 0.2778</b>: it is a <i>removal</i> result &mdash; pruning
+dots within 200 m of the mapped catalogue raised the live score 0.2600 &rarr; 0.2708 &rarr; 0.2778
+(GEMSDOE32 Round 4, live-anchored safety 2.08). Mass near mapped faults is dead mass. Full write-up:
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md">knowledge/02</a>.</li>
+<li><b>Five new candidate hypotheses pre-registered</b> (H-51-L, H-51-M, H-51-P, H-51-S, H-51-V;
+letters L/M because stream A already owns F/G) with layers, signatures and novelty checks &mdash;
+see the <a href="hypotheses.html">hypotheses</a> page.</li>
+<li><b>H-51-L (trace-axis snap) validated and falsified</b> on the blocked holdout under a
+pre-registered rule: at conserved mass and spacing, window=2 costs &minus;0.0033 proxy DTI,
+window=1 is neutral. Two earlier failure modes (spacing collapse; silent mass loss) were
+reproduced, explained and unit-tested. Registered as IR-51-14 with the instrument caveat.</li>
+<li><b>H-51-M (cross-scale crest coincidence) adopted</b>: in-block AUC {sM['auc_mean']:.4f}
+(+{sM['auc_mean'] - sD.get('auc_mean', float('nan')):.4f} over H_D) and proxy DTI
+{sM['dti_r3.47']['mean']:.4f} ({dd:+.4f} over H_D at M/|G| = 3.47) &mdash; the second-best arm
+measured in this repository, 0.0010 below stream A's emission.</li>
+</ul>
+<section class="download">
+<h3>&#11015; Stream B candidate (H-51-M two-stage)</h3>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif">Download gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1.zip">.zip containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HM-SOFT-W010</code></dd>
+<dt>sha256</dt><dd><code>c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839</code></dd>
+</dl>
+<p class="ev">44,069 dots &middot; float32 EPSG:32611 3730&times;3292 &middot; all cells finite in [0,1] &middot;
+0 dots within 200 m of the catalogue &middot; Stage-1 dominance lift 0.978 &middot; holdout cost of the soft
+prior +0.0000. The hard top-80% tile variant (the brief's literal design) is also in
+<code>docs/downloads</code> and costs &minus;0.0027 on holdout, disclosed.</p>
+</section>
+"""
+    body = card + sess + f"""
 <h2>What is offered</h2>
 {_ART}
 <p class="warn"><b>The biggest limitation, stated first.</b> The visible USGS/INGENIOUS fault
@@ -622,7 +666,7 @@ four columns are the measured result from the block holdout, filled in after the
     # ------------------------------------------------------------ holdout
     def arm_rows():
         out = []
-        for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
+        for a in ("base", "H_E", "H_D", "H_M", "H_C", "H_ALL"):
             h = hold.get(a)
             if not h:
                 continue
@@ -632,7 +676,7 @@ four columns are the measured result from the block holdout, filled in after the
         return out
 
     ratios = []
-    for a in ("base", "H_E", "H_D", "H_C", "H_ALL"):
+    for a in ("base", "H_E", "H_D", "H_M", "H_C", "H_ALL"):
         if hold.get(a):
             ratios = hold[a]["summary"]["ratios"]
             break

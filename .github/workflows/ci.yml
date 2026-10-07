@@ -26,6 +26,8 @@ jobs:
           python scripts/verify_submission.py docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif
           python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif
           python scripts/verify_submission.py docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif
+          python scripts/verify_submission.py docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif
+          python scripts/verify_submission.py docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif
       - name: Uniqueness gate on the shipped artifact (no dataset needed)
         run: |
           python scripts/run_uniqueness_gate.py \
@@ -34,6 +36,15 @@ jobs:
                    docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif \
                    docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif \
             --out /tmp/uniqueness_gate_ci.json
+      - name: Uniqueness gate on the stream-B two-stage artifact (no dataset needed)
+        run: |
+          python scripts/run_uniqueness_gate.py \
+            --candidate docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif \
+            --refs data/prior/*.tif \
+                   docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif \
+                   docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif \
+                   docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif \
+            --out /tmp/uniqueness_gate_ci_stream_b.json
       - name: Repository health (API drift, per-module imports, dead site links)
         # IR-51-09: a whole PR#1/#2-lineage subtree imported cleanly and raised
         # AttributeError at runtime. This check fails the build if that recurs, and
