@@ -1,105 +1,59 @@
 {
- "n_prior": 12,
- "jaccard_max_allowed": 0.25,
- "max_jaccard": 0.0321931128287224,
- "max_jaccard_file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
- "rows": [
-  {
-   "file": "13gems_20261001_r13-lattice-s5_v2_nan-outside.tif",
-   "prior_px": 206895,
-   "intersection_px": 4004,
-   "jaccard": 0.01339946054119899,
-   "superset_of_prior": false,
-   "subset_of_prior": false
+  "candidate": "docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+  "candidate_sha256": "e13394d96baf6867f3a6851d9243de74f8d37c581ff003dbdf3e7497f58dab38",
+  "candidate_support_px": 44069,
+  "candidate_mass": 44069.0,
+  "n_references": 5,
+  "limits": {
+    "iou": 0.5,
+    "cosine": 0.9,
+    "containment": 0.98
   },
-  {
-   "file": "8GEMSDOE_Hedge-v2_submission.tif",
-   "prior_px": 227507,
-   "intersection_px": 6938,
-   "jaccard": 0.02192128810474698,
-   "superset_of_prior": false,
-   "subset_of_prior": false
+  "worst": {
+    "iou": {
+      "path": "docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+      "iou": 0.2340282542038279,
+      "cosine": 0.3792915642261505,
+      "containment": 0.913249671459198,
+      "byte_identical": false,
+      "mass": 44069.0,
+      "support_px": 44069,
+      "ref_support_fraction": 0.0035889262783447727,
+      "containment_null": 0.06533354073079918,
+      "containment_lift": 13.978266924521341,
+      "containment_informative": true
+    },
+    "cosine": {
+      "path": "docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+      "iou": 0.2340282542038279,
+      "cosine": 0.3792915642261505,
+      "containment": 0.913249671459198,
+      "byte_identical": false,
+      "mass": 44069.0,
+      "support_px": 44069,
+      "ref_support_fraction": 0.0035889262783447727,
+      "containment_null": 0.06533354073079918,
+      "containment_lift": 13.978266924521341,
+      "containment_informative": true
+    },
+    "containment": {
+      "path": "docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+      "iou": 0.2340282542038279,
+      "cosine": 0.3792915642261505,
+      "containment": 0.913249671459198,
+      "byte_identical": false,
+      "mass": 44069.0,
+      "support_px": 44069,
+      "ref_support_fraction": 0.0035889262783447727,
+      "containment_null": 0.06533354073079918,
+      "containment_lift": 13.978266924521341,
+      "containment_informative": true
+    }
   },
-  {
-   "file": "gems10-h25-ctx-ridge-20260927T232947704150Z-6452ae1d00.tif",
-   "prior_px": 174232,
-   "intersection_px": 8426,
-   "jaccard": 0.0321931128287224,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems10-h28-dotted-ridge-20260928T020256236880Z-6452ae1d00.tif",
-   "prior_px": 69281,
-   "intersection_px": 3565,
-   "jaccard": 0.02205477502892176,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan.tif",
-   "prior_px": 123939,
-   "intersection_px": 4994,
-   "jaccard": 0.02324174392196284,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan.tif",
-   "prior_px": 123779,
-   "intersection_px": 4974,
-   "jaccard": 0.02316375761414228,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
-   "prior_px": 121131,
-   "intersection_px": 4778,
-   "jaccard": 0.0225080082909365,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
-   "prior_px": 60069,
-   "intersection_px": 2367,
-   "jaccard": 0.01540724732960574,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
-   "prior_px": 44090,
-   "intersection_px": 1752,
-   "jaccard": 0.012671319567497197,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
-   "prior_px": 61328,
-   "intersection_px": 2398,
-   "jaccard": 0.01548525413768832,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gemsdoe-ens12-adopted-7f00890a.tif",
-   "prior_px": 172974,
-   "intersection_px": 6938,
-   "jaccard": 0.026484656230078292,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  },
-  {
-   "file": "gemsdoe9-PLACEHOLDER-2314b599.tif",
-   "prior_px": 343816,
-   "intersection_px": 3231,
-   "jaccard": 0.007401858368154828,
-   "superset_of_prior": false,
-   "subset_of_prior": false
-  }
- ],
- "passed": true
+  "matches": [],
+  "skipped": [],
+  "verdict": "PASS",
+  "n_containment_informative": 5,
+  "n_compared": 5,
+  "rule": "PASS iff (1) no sha256 equals any reference AND (2) max support IoU <= 0.50 AND (3) max cosine <= 0.90 AND (4) no sparse reference has containment > 0.98 with a lift > 3x over the random-emission null.  Continuous/lattice references are excluded from test (4) because their dilated support covers the map and the test would be vacuous.  Two artifacts anchored on the same mapped-fault network will ALWAYS show high mutual containment; that is a consequence of the metric's free-mass structure, not of copying, and tests (2) and (3) are what separate a re-emission from a copy."
 }

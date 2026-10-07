@@ -51,6 +51,36 @@
   "id": "IR-51-08",
   "summary": "The file this project has been calling the training labels is byte-identical to the known-fault raster. The competition's true training labels have therefore never been available to any GEMSDOE session, and every model here is trained against the visible catalogue as a proxy.",
   "evidence": "data/labels.tif and data/existing_faults.tif both have sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093 and 425,830 bytes; np.array_equal on the rasters is True. Their positive mask (60,988 px) is also identical to this session's independently derived catalogue (data/prepared/catalogue.npy). The upstream pin is the same for both: buffedlizard55-lab/GEMSDOE24 @ 07345ea0604953d7e, data/labels.tif and data/existing_faults.tif.",
-  "status": "OPEN - and it is the single biggest cap on achievable score. Either the upstream mirror saved the same blob under both names, or the two really are the same file; neither can be distinguished without authenticated access to the DrivenData data page. Consequence: no model in this repository has ever seen a single example of the target distribution. Next session's first action should be to obtain the real labels.tif and re-run the blocked holdout against it; if the mirror is simply mislabelled, everything measured here is measuring the wrong target."
+  "status": "CLOSED 2026-10-07 - NOT a mirror fault. The competition's own problem description says the known-fault ground truth is public and the hidden test set is the expert-identified faults ABSENT from it; the organizer reference solution trains on data/labels.tif as the positive class (notebook cell 6: FAULT_LABELS_PATH = Path('data/labels.tif')). labels.tif IS the catalogue by design. Superseded by IR-51-11, which states the real consequence."
+ },
+ {
+  "id": "IR-51-09",
+  "summary": "Twelve scripts and four src modules in the live tree called a gems51 API that the merged package does not provide, so they raised AttributeError the moment they were run while importing cleanly in CI.",
+  "evidence": "AST check (scripts/check_repo_health.py) found e.g. gems51/scoring.py -> metric.dti_components (absent), gems51/strain.py -> grid.PIXEL_M / grid.tiles / grid.SHAPE / grid.footprint / grid.catalogue / grid.spatial_blocks / grid.catalogue_distance (all absent), scripts/run_all.py -> detector.run_folds, metric.evaluate_binary, emission.ExpectedBudgetPacker, submission.write_submission (all absent).",
+  "status": "CLOSED 2026-10-07 - all thirteen files moved verbatim to attic/legacy-api/ with a table of the missing attributes; scripts/check_repo_health.py now fails the build on any recurrence and runs in CI. The evidence/*.json they produced in earlier sessions is retained and still cited, labelled as previous-session measurement."
+ },
+ {
+  "id": "IR-51-10",
+  "summary": "The brief states the leaderboard high score is 0.3195. That is stale.",
+  "evidence": "Public leaderboard read 2026-10-07: #1 xiaofanhu 0.3774, #2 alexoktaba 0.3345, #3 nchuzhoy 0.3262, #4 kinghorton42 0.3222, #5 joeyfezster 0.3220, #6 Batik Shirt Brothers 0.3218, #7 DARD 0.3195. Snapshot stored in registry/leaderboard_snapshot.json.",
+  "status": "OPEN - flagged for the owner. The target to beat is 0.3774, not 0.3195. All planning in this session uses 0.3774."
+ },
+ {
+  "id": "IR-51-11",
+  "summary": "There is no hidden training target to recover: the only label set available offline is the known-fault catalogue, so every local number in this repository measures REDISCOVERY of mapped faults, not discovery of unmapped ones.",
+  "evidence": "labels.tif == existing_faults.tif (sha256 7ba308cc..., 425,830 B both); 60,988 positive pixels inside a 5,167,373-pixel footprint; the organizer trains on the same file.",
+  "status": "OPEN - structural, cannot be closed from inside the sandbox. Mitigation shipped this session: scripts/run_offcatalogue_ab.py hides half the catalogue's fault SYSTEMS and leaves them inside the negative class, which is the closest offline analogue of 'a fault the training catalogue does not contain'."
+ },
+ {
+  "id": "IR-51-12",
+  "summary": "Auto-context stacking improves RANKING consistently but does not convert that into score: in-block AUC +0.0085 (0.6652 -> 0.6737) while paired DTI at the shipped mass moves only +0.0012, and the per-fold deltas alternate sign (+0.0102, -0.0092, +0.0012, -0.0117, +0.0012, +0.0157).",
+  "evidence": "evidence/autocontext_holdout.json (6 folds x 2 levels x 4 mass ratios, 1658 s). Paired L2-L1 at r3.47: iso +0.0012 (4/6), ste +0.0006 (3/6).",
+  "status": "CLOSED 2026-10-07 as a NEGATIVE RESULT. The preregistered promotion rule (paired mean >= +0.006 AND >= 4/6 folds positive) is not met: 4/6 folds but only +0.0012. Level 2 is NOT shipped. Diagnosis worth carrying forward: the AUC gain is real and consistent, but it is concentrated in re-ordering pixels that were already inside the emitted top 3.47x|G| mass, so it buys no new credit. The lesson is that global AUC is the wrong proxy for this metric - the right proxy is credit-per-dot at the shipped mass, which is what evidence/emission_geometry.json reports. Code retained at src/gems51/autocontext.py and reachable via scripts/build_submission_v2.py --level 2."
+ },
+ {
+  "id": "IR-51-13",
+  "summary": "The 3-fold pilot of strike-coherent trace emission overstated the effect by 65%: +0.0033 on folds 0,2,4 became +0.0020 on all six, and the best w_cont moved from 0.7 to 0.35.",
+  "evidence": "evidence/emission_geometry.json. Per-fold paired delta for ste_L9_w0.35_s2.4_nothin vs iso_nms_r2.4: +0.0023, +0.0029, +0.0042, -0.0023, -0.0019, +0.0065; mean +0.0020, 4/6, sign-test p = 0.344. The w_cont=0 control reproduces the incumbent to within 2e-4 on every fold, which validates the implementation as a strict generalisation of isotropic NMS.",
+  "status": "OPEN as a methodological warning, ACTED ON for this session's ship. Folds 0, 2 and 4 are not a random subset of the six - they are the three EASIEST folds (incumbent DTI 0.2752 / 0.2843 / 0.3070 against 0.2691 / 0.2485 / 0.3057 for the rest), so any pilot on them is biased optimistic. Rule adopted: no emission or detector change is promoted on fewer than all six folds. w_cont = 0.35 is shipped rather than the pilot's 0.7 because it has the same mean on six folds with a 5x smaller worst-fold loss (-0.0023 vs -0.0101)."
  }
 ]

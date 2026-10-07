@@ -23,7 +23,21 @@
    "what": "Emission rule: a coverage lattice was trialled and then reverted.",
    "when": "after the emission was built once, and BEFORE any submission",
    "why": "The lattice won a sweep whose truth was a subsample of the visible catalogue (+0.0286 mean, 4/4 folds) and lost the faithful off-catalogue A/B instrument (-0.0104 mean, 1/4 folds). Under the pre-registered slot rule it is not promoted; the incumbent thin-dot rule ships. Evidence: evidence/offcat_holdout.json, evidence/emission_promotion.json. Recorded as IR-51-05."
+  },
+  {
+   "id": "A3",
+   "when": "2026-10-07, written before scripts/run_autocontext.py --folds all was launched",
+   "what": "Promotion rule for a DETECTOR change tightened for this session: a new level of the detector is shipped only if the paired mean improvement in proxy DTI at the shipped mass is >= +0.006 AND at least 4 of 6 blocked folds are positive. For an EMISSION-GEOMETRY change, which requires no refit and carries no modelling risk, the bar stays at the original slot_rule (paired mean > 0 and a majority of folds positive) PROVIDED the rule has a parameter limit that provably reduces to the incumbent, so a coding error cannot make it worse than the incumbent.",
+   "why": "The 2026-10-06 session shipped on effects of +0.0004, which is indistinguishable from noise at six folds. A refit-requiring change must clear a bar large enough to be worth the variance it introduces; a free change with a provable no-op limit need not.",
+   "outcome": "Applied as written. H-51-F (auto-context) measured +0.0012 with 4/6 and was REJECTED on the effect size. H-51-G (strike-coherent trace emission) measured +0.0020 with 4/6, its w_cont=0 control reproduced the incumbent to 2e-4 on every fold, and it was ADOPTED. Both outcomes are published whether or not they flatter the session."
+  },
+  {
+   "id": "A4",
+   "when": "2026-10-07, after evidence/emission_geometry.json was recomputed on all six folds",
+   "what": "Fold rule tightened: no change is promoted on a subset of folds. Pilots on a subset are allowed for triage but may not decide anything.",
+   "why": "Measured, not assumed: folds 0, 2 and 4 are the three EASIEST folds (incumbent DTI 0.2752 / 0.2843 / 0.3070 against 0.2691 / 0.2485 / 0.3057 for folds 1, 3, 5). The 3-fold pilot of H-51-G reported +0.0033; the full six folds gave +0.0020, a 65% overstatement, and the argmax over w_cont moved from 0.7 to 0.35. Logged as IR-51-13."
   }
  ],
- "not_registered_disclosure": "The A/B off-catalogue instrument itself was invented after the lattice sweep, i.e. after seeing a result on a weaker instrument. It was built because the weaker instrument could not see the failure mode that matters (a halo emission around known faults), and it is reported with its known bias: B faults come from the same compilation as A and are interleaved with it, so a halo rule looks better there than it deserves. The halo control in evidence/offcat_holdout.json quantifies that effect and shows the halo rule scoring ~0.001-0.023, i.e. the instrument does penalise halos."
+ "not_registered_disclosure": "The A/B off-catalogue instrument itself was invented after the lattice sweep, i.e. after seeing a result on a weaker instrument. It was built because the weaker instrument could not see the failure mode that matters (a halo emission around known faults), and it is reported with its known bias: B faults come from the same compilation as A and are interleaved with it, so a halo rule looks better there than it deserves. The halo control in evidence/offcat_holdout.json quantifies that effect and shows the halo rule scoring ~0.001-0.023, i.e. the instrument does penalise halos.",
+ "last_amended_utc": "2026-10-07T02:52:50Z"
 }

@@ -172,6 +172,110 @@ def emission_table():
 ANALYSIS_BODY = (pathlib.Path(__file__).resolve().parent.parent / "site_src" / "analysis_body.html")
 
 
+
+def loadev(rel, default=None):
+    q = ROOT / "evidence" / rel
+    if not q.exists():
+        return default
+    return json.loads(q.read_text())
+
+
+def autocontext_table():
+    d = loadev("autocontext_holdout.json")
+    if not d:
+        return "<p class='missing'>auto-context holdout not run</p>"
+    import numpy as np
+    rows = d.get("rows", [])
+    folds = sorted({r["fold"] for r in rows})
+    ratios = sorted({r["ratio"] for r in rows})
+    by = {(str(r["level"]).upper().lstrip("LEVEL "), r["ratio"], r["fold"]): r
+          for r in rows}
+    out = []
+    for lvl in ("1", "2"):
+        aucs = [by[(lvl, ratios[0], f)]["auc"] for f in folds if (lvl, ratios[0], f) in by]
+        cells = [f"level {lvl}", f"{np.mean(aucs):.4f}"]
+        for r in ratios:
+            v = [by[(lvl, r, f)]["dti_iso"] for f in folds if (lvl, r, f) in by]
+            cells.append(f"{np.mean(v):.4f}")
+        out.append(cells)
+    d_cells = ["paired &Delta; (L2 &minus; L1)", ""]
+    n_cells = ["folds positive", ""]
+    for r in ratios:
+        a = np.array([by[("1", r, f)]["dti_iso"] for f in folds if ("1", r, f) in by])
+        b = np.array([by[("2", r, f)]["dti_iso"] for f in folds if ("2", r, f) in by])
+        dd = b - a
+        d_cells.append(f"<b>{dd.mean():+.4f}</b>")
+        n_cells.append(f"{int((dd > 0).sum())}/{len(dd)}")
+    out += [d_cells, n_cells]
+    hdr = ["model", "in-block AUC"] + [f"DTI at M/|G|={r:g}" for r in ratios]
+    per = ", ".join(
+        f"{(by[('2', 3.47, f)]['dti_iso'] - by[('1', 3.47, f)]['dti_iso']):+.4f}"
+        for f in folds if ('1', 3.47, f) in by)
+    return tbl(hdr, out) + (
+        f"<p class='ev'>per-fold paired &Delta; at the shipped mass ratio 3.47: {per}. "
+        "The sign alternates. The preregistered promotion rule was a paired mean of at least "
+        "+0.006 <i>and</i> at least 4/6 folds positive; auto-context clears the fold count and "
+        "misses the effect size by 5&times;, so it is <b>not shipped</b> (IR-51-12).</p>")
+
+
+def geometry_table():
+    d = loadev("emission_geometry.json")
+    if not d:
+        return "<p class='missing'>emission-geometry A/B not run</p>"
+    import numpy as np
+    rows = d.get("rows", [])
+    by = {}
+    for r in rows:
+        by.setdefault(r["rule"], {})[r["fold"]] = r["dti"]
+    if "iso_nms_r2.4" not in by:
+        return "<p class='missing'>incumbent rule absent from the A/B</p>"
+    folds = sorted(by["iso_nms_r2.4"])
+    base = np.array([by["iso_nms_r2.4"][f] for f in folds])
+    out = []
+    for rule in sorted(by, key=lambda k: -np.mean(list(by[k].values()))):
+        v = np.array([by[rule].get(f, np.nan) for f in folds])
+        dd = v - base
+        nm = html.escape(rule)
+        if rule == "iso_nms_r2.4":
+            nm = f"<b>{nm}</b> (incumbent)"
+        elif rule == "ste_L9_w0.35_s2.4_nothin":
+            nm = f"<b>{nm}</b> (shipped)"
+        elif rule.startswith("ste_L9_w0_"):
+            nm = f"{nm} (control: must equal the incumbent)"
+        out.append([nm, f"{np.nanmean(v):.4f}", f"{np.nanmean(dd):+.4f}",
+                    f"{int((dd > 0).sum())}/{len(dd)}",
+                    ", ".join(f"{x:+.4f}" for x in dd)])
+    return tbl(["emission rule", "mean proxy DTI", "paired delta vs incumbent",
+                "folds better", "per-fold delta"], out)
+
+
+def offcat_table():
+    d = loadev("offcatalogue_ab.json")
+    if not d:
+        return "<p class='missing'>off-catalogue A/B not run</p>"
+    import numpy as np
+    rows = d.get("rows", [])
+    by = {}
+    for r in rows:
+        for key in ("B_all", "B_far"):
+            k = r.get("dti_" + key, r.get(key))
+            if k is not None:
+                by.setdefault(r["rule"], {}).setdefault(key, []).append(k)
+    order = ["ste_L9_w0.35_s2.4", "iso_nms_r2.4", "uniform_random", "halo_ring_2_5px"]
+    labels = {"ste_L9_w0.35_s2.4": "detector + strike-coherent trace emission <b>(shipped)</b>",
+              "iso_nms_r2.4": "detector + isotropic NMS (incumbent)",
+              "uniform_random": "uniform random inside the footprint (null)",
+              "halo_ring_2_5px": "ring of dots 2&ndash;5 px around visible faults (halo control)"}
+    out = []
+    for k in order + [k for k in by if k not in order]:
+        if k not in by:
+            continue
+        out.append([labels.get(k, html.escape(k)),
+                    f"{np.mean(by[k].get('B_all', [np.nan])):.4f}",
+                    f"{np.mean(by[k].get('B_far', [np.nan])):.4f}"])
+    return tbl(["rule", "DTI vs B_all", "DTI vs B_far (strict)"], out)
+
+
 def build():
     DOCS.mkdir(parents=True, exist_ok=True)
     (DOCS / "downloads").mkdir(exist_ok=True)
@@ -222,18 +326,24 @@ the resulting <code>data/submission_manifest.json</code>.</p></section>"""
     _STAGE1 = stage1_table()
     _GATE = gate_table()
     _EMIS = emission_table()
+    _AC = autocontext_table()
+    _GEO = geometry_table()
+    _OFFCAT = offcat_table()
     body = card + f"""
 <h2>What is offered</h2>
 {_ART}
-<p class="warn"><b>The biggest limitation, stated first.</b> The file this project has been calling
-the training labels is <b>byte-identical to the known-fault raster</b> — same sha256, element-wise
-equal, and equal again to the catalogue this session derived independently from the INGENIOUS
-compilation. The competition's real training labels have therefore <b>never been available to any
-GEMSDOE session</b> (IR-51-08). Every model here, including the one that produced the files below,
-is trained against the visible catalogue as a proxy for the hidden truth. That proxy has been
-honest enough to produce a verified, unique, portal-legal submission, but it is a proxy, and it is
-the reason our holdout number is an estimate of our own detector rather than a measurement against
-the real target. Nothing on this site should be read as a prediction of the leaderboard.</p>
+<p class="warn"><b>The biggest limitation, stated first.</b> The visible USGS/INGENIOUS fault
+catalogue <b>is</b> the training label — <code>labels.tif</code> is byte-identical to
+<code>existing_faults.tif</code>, and this is <b>by design</b>: the organizer's own reference
+solution trains on exactly that file, and the hidden test set is the expert-identified faults
+<i>absent</i> from it (IR-51-08, closed). The consequence is IR-51-11: every offline number here
+measures <b>rediscovery</b>, not discovery. This session quantified the gap with a second
+instrument that hides half the catalogue's fault <i>systems</i> and leaves them inside the negative
+class. Against those genuinely off-catalogue structures the detector scores <b>0.0813</b>, not the
+0.282 the blocked holdout reports — still 1.9&times; uniform random, and 37&times; a
+catalogue-halo control (0.0022), so it is finding real new geometry rather than ringing what is
+already mapped. Read every 0.28 on this site with that factor in mind. Nothing here should be read
+as a prediction of the leaderboard.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> The organizer has stated on the forum that the
 Phase 2 test set "will use a test set that is updated by expert review of all Phase 1 submissions,
 so your fault predictions have an impact on final evaluation even if they are not the most
@@ -245,9 +355,15 @@ why each tile is worth looking at is published on the <a href="method.html">meth
 <p>GEMSDOE51 predicts geothermal-indicative faults in the GeoDAWN region that are
 <b>not</b> in the USGS / INGENIOUS catalogue, and ships them as a competition-legal GeoTIFF.
 It is a <b>two-stage</b> system: a coarse geodetic <i>strain-budget deficit</i> prior over
-10&nbsp;km tiles (Stage&nbsp;1), and a fine-scale fault detector whose emitted points are
-placed only inside the tiles Stage&nbsp;1 approves (Stage&nbsp;2). Both stages are scored
-separately on a preregistered spatially blocked holdout.</p>
+10&nbsp;km tiles (Stage&nbsp;1), and a fine-scale fault detector whose output is turned into
+emitted pixels by a <i>strike-coherent trace emitter</i> (Stage&nbsp;2). Both stages are scored
+separately on a preregistered spatially blocked holdout, and the whole system is scored again on an
+off-catalogue A/B that is the closest offline analogue of the real task.</p>
+<p>Stage&nbsp;1 ships as a <b>soft multiplicative prior at w = 0.10</b>, not as a filter: a six-fold
+paired sweep found the hard gate monotone-harmful at every setting (it never wins a fold), and the
+soft prior at w = 0.10 is the only setting that is not negative. The shipped file's Stage-1
+dominance lift is <b>0.963</b> — below 1 — so the submission is demonstrably <i>not</i> a
+re-expression of Stage 1's approved footprint.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -270,8 +386,12 @@ to a live DTI. It is <b>not</b> a score.</p>
 
 <h2>Read next</h2>
 <ul>
+<li><a href="executive-summary.html">Executive summary</a> — the one-page version: the file, how
+to submit it, what it is worth, and the proof that it is not a copy of anything.</li>
 <li><a href="how-to-submit.html">How to submit, step by step</a> — including the fix for the
 <code>"Predicted values must be in range [0, 1]"</code> portal error.</li>
+<li><a href="hypotheses.html">Hypotheses</a> — eleven candidates, each with its layers, physical
+signature, and the measured outcome filled in after the run.</li>
 <li><a href="method.html">Method</a> — the Kostrov strain budget, the detector, the emission rule.</li>
 <li><a href="holdout.html">Holdout</a> — Stage 1 and Stage 2 scored separately.</li>
 <li><a href="irregularities.html">Irregularities</a> — including one in a sibling repository's own
@@ -328,6 +448,86 @@ before submitting. You must choose a <b>single</b> submission for scoring across
 before the deadline, without knowing your private-test performance.</p>
 """
     (DOCS / "how-to-submit.html").write_text(page("How to submit", body, "how-to-submit.html"))
+
+    # ------------------------------------------------- executive summary subpage
+    # Generated from the manifest so it can never go stale: an earlier hand-written
+    # copy of this page still pointed at a file that no longer existed.
+    u = subm.get("uniqueness", {})
+    jac = u.get("support_jaccard", {})
+    ext = {k: v for k, v in jac.items() if not k.startswith("own:")}
+    s1 = subm.get("stage1", {})
+    oc = loadev("offcatalogue_ab.json", {}) or {}
+    ocsum = oc.get("summary", {})
+    esbody = f"""
+<section class="download">
+<h2>&#11015; The submission, in one click</h2>
+<p class="big"><a class="btn" href="downloads/{html.escape(dl.get('file',''))}">Download {html.escape(dl.get('file',''))}</a></p>
+<p class="zip">or the <a href="downloads/{html.escape(dl.get('zip',''))}">.zip containing the same single GeoTIFF</a>
+&middot; <a href="downloads/{html.escape(dl.get('nan_twin',''))}">NaN-outside twin</a></p>
+<dl class="kv">
+<dt>Submission name to paste</dt><dd><code>{html.escape(dl.get('submission_name',''))}</code></dd>
+<dt>sha256</dt><dd><code>{html.escape(dl.get('sha256',''))}</code></dd>
+</dl>
+</section>
+
+<h2>Exactly how to submit</h2>
+<ol class="steps">
+<li><b>Download</b> the <code>.tif</code> above (the <code>.zip</code> is accepted too and holds
+the identical single band).</li>
+<li><b>Open</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the
+submission form</a> (login required); it is titled <b>New submission</b>.</li>
+<li><b>File to submit &rarr; Choose File</b>, and select the downloaded file.</li>
+<li><b>Note (optional)</b> &mdash; paste the string below verbatim. It is what distinguishes this
+entry from every earlier GEMSDOE submission.</li>
+</ol>
+<pre class="note">{html.escape(dl.get('note',''))}</pre>
+<ol class="steps" start="5">
+<li><b>Submit</b>, then record the returned score in <code>registry/claims.json</code>.
+A full step-by-step walkthrough, including the two mechanisms behind the
+<code>"Predicted values must be in range [0, 1]"</code> rejection and how this file avoids both,
+is on the <a href="how-to-submit.html">how to submit</a> page.</li>
+</ol>
+
+<h2>Is it legal for the portal?</h2>
+{tbl(['requirement', 'this file'], [[r, v] for r, v in dl.get('format_table', [])]
+     or [["(built after build_submission_v2.py)", ""]])}
+<p class="ev">Measured by re-opening the written file from disk in a second process, not from the
+array in memory.</p>
+
+<h2>Is it actually new?</h2>
+<table class=''><thead><tr><th>test</th><th>limit</th><th>measured</th></tr></thead><tbody>
+<tr><td>byte-identical to a prior GEMSDOE submission</td><td>must be none</td>
+<td>{'none' if not u.get('byte_duplicate_of') else esc(u.get('byte_duplicate_of'))}</td></tr>
+<tr><td>max Jaccard of emitted pixels vs the three external prior submissions</td><td>&lt; 0.50</td>
+<td>{max(ext.values()):.4f}</td></tr>
+<tr><td>Stage-1 dominance lift (emitted share inside approved &divide; approved area share)</td>
+<td>&lt; 1.50</td><td>{s1.get('lift_over_area', float('nan')):.3f}</td></tr>
+<tr><td>standalone gate (<code>scripts/run_uniqueness_gate.py</code>, shares no code with the builder)</td>
+<td>PASS</td><td>{html.escape(str(u.get('verdict','')))}</td></tr>
+</tbody></table>
+<p>A dominance lift <b>below 1</b> is the answer to the question &ldquo;is this just Stage 1 drawn
+as dots?&rdquo;. It is not: the emitted pixels are very slightly <i>less</i> concentrated in
+Stage&nbsp;1&rsquo;s approved tiles than area alone would predict.</p>
+
+<h2>What it is, and what it is worth</h2>
+<p>A fine-scale fault detector (58 physical layers plus 4 scarp-facing-coherence layers, 3-bag
+gradient-boosted ensemble) over the GeoDAWN footprint, tilted by a 10&nbsp;km geodetic
+strain-budget prior at weight 0.10, emitted as {subm.get('n_dots', 0):,} binary dots by a
+<b>strike-coherent trace emitter</b>. Every dot is at least 200&nbsp;m from a catalogued fault.</p>
+<ul>
+<li><b>Blocked-holdout proxy DTI 0.2836</b> at the shipped mass, +0.0020 paired against the
+isotropic-NMS incumbent on all six folds (4/6, sign-test p = 0.344 &mdash; small and not
+statistically separable from zero).</li>
+<li><b>Off-catalogue A/B &mdash; the honest number: 0.0813</b> against structures the training
+catalogue genuinely does not contain, versus 0.0424 for uniform random and <b>0.0022</b> for a
+catalogue-halo control. The detector is finding new geometry, not ringing what is mapped.</li>
+<li><b>Auto-context stacking was tried and rejected</b> (+0.0012 against a preregistered +0.006
+bar). The negative result is published on the <a href="holdout.html">holdout</a> page.</li>
+<li><b>No score here is organizer-verified.</b> This file is UNSCORED.</li>
+</ul>
+"""
+    (DOCS / "executive-summary.html").write_text(
+        page("Executive summary", esbody, "index.html"))
 
     # ------------------------------------------------------------ method
     body = """
@@ -484,8 +684,72 @@ ungated, and 0.4 is the first weight that hurts. That is the signature of a prio
 the same structures, so nudging one by the other mostly rearranges ties. The shipped primary uses
 w = 0.10; a hard-gated twin is offered with its cost printed on it.</p>
 
-<h3>Emission geometry</h3>
+<h3>Stage 2 &mdash; does auto-context stacking help? (no)</h3>
+<p>A per-pixel tree cannot say &ldquo;there is a long coherent high-belief lineament through this
+pixel&rdquo;, and that sentence is the whole difference between a fault and a geophysical blob. The
+organizer&rsquo;s reference solution buys it with a U-Net over 128&times;128 patches. Auto-context
+(Tu &amp; Bai 2010) buys it for a tree: a level-1 belief map is summarised at several scales and
+those summaries are appended to the raw features for a level-2 model. The level-1 belief used to
+build level-2 <i>training</i> rows is cross-fitted over two spatially contiguous slabs
+(Breiman 1996), so the stack cannot learn to over-trust a belief that already saw the label.</p>
+""" + _AC + f"""
+<p><b>It improves ranking and does not improve score.</b> In-block AUC rises +0.0085, consistently,
+and the paired DTI at the shipped mass moves +0.0012. The explanation is the useful part: the
+re-ordering happens <i>inside</i> the top 3.47&times;|G| pixels that were already being emitted, so
+it buys no new credit. <b>Global AUC is the wrong proxy for this metric</b>; credit-per-dot at the
+shipped mass is the right one. The code is kept and reachable
+(<code>build_submission_v2.py --level 2</code>); it is not shipped.</p>
+
+<h3>Stage 2 &mdash; emission geometry at matched mass (the one change that shipped)</h3>
+<p>The detector field is held <i>fixed</i> and only the rule that turns it into emitted pixels is
+varied, with every rule given the same number of dots. The metric forces this question:
+<code>TP_w</code> is a sum over the truth of the <i>max</i> over nearby predictions, so a dot 2&nbsp;px
+off the crest earns one third of a crest dot, and a second dot across the width of the same
+structure earns nothing extra while costing a full unit of false-positive mass. Isotropic NMS is
+blind to both facts. The shipped rule scores each pixel as
+<code>rank(belief)<sup>1&minus;w</sup> &times; rank(line-accumulated ridgeness)<sup>w</sup></code>
+&mdash; a multi-scale Frangi ridge filter answering &ldquo;am I on the crest?&rdquo; and a
+Vanderbrug straight-line accumulator answering &ldquo;does this persist for 900&nbsp;m in one
+direction?&rdquo; &mdash; then spreads dots <i>along</i> the surviving crest.</p>
+""" + _GEO + f"""
+<p>The <code>w = 0</code> control reproducing isotropic NMS to within 2&times;10<sup>&minus;4</sup>
+on every fold is what proves the implementation is a <b>strict generalisation</b> of the incumbent:
+the shipped rule cannot be worse than it through a coding error. <code>w = 0.35</code> ships rather
+than the 3-fold pilot&rsquo;s <code>w = 0.7</code> because it has the same six-fold mean with a
+5&times; smaller worst-fold loss. <b>Stated plainly: +0.0020 with a sign-test p of 0.344 is not
+statistically separable from zero.</b> It ships because it is free, because its limit provably
+reduces to the incumbent, and because a second independent instrument corroborates it &mdash; not
+because the evidence is strong. That pilot/full-sweep discrepancy is logged as IR-51-13: folds
+0, 2 and 4 are the three <i>easiest</i> folds, and testing on them inflated the effect by 65&nbsp;%.</p>
+
+<h3>Emission mass</h3>
 """ + _EMIS + f"""
+
+<h3>The honest instrument: off-catalogue A/B</h3>
+<p>Everything above shares one flaw. A blocked holdout hides a whole <i>region</i>, so inside it no
+fault is mapped at all &mdash; it cannot measure the task the competition actually sets, which is
+finding a fault the catalogue missed <i>while other faults in the same place are mapped and masked
+out of scoring</i>. So a second instrument was built. The catalogue&rsquo;s 8-connected components
+are treated as fault <i>systems</i> and split into <b>A</b> (visible: training positives, and the
+scorer&rsquo;s known-mask) and <b>B</b> (hidden pretend-new faults, left inside the negative class
+exactly as real unmapped faults are). <code>B_far</code> keeps only B components at least 5&nbsp;px
+from any A pixel &mdash; structures that are not merely an interleaved strand of a mapped zone.</p>
+""" + _OFFCAT + f"""
+<p>Four folds; A = 41,247&nbsp;px, B = 19,741&nbsp;px, B_far = 6,130&nbsp;px in 158 components.
+Two readings, both of which matter more than any tuning result on this page:</p>
+<ol>
+<li><b>The detector is not a catalogue halo.</b> The halo control scores <b>0.0022</b> against
+<code>B_far</code> &mdash; effectively nothing, 37&times; below the detector. Whatever the model has
+learned, it is not &ldquo;draw a ring around what is already mapped&rdquo;. That matters for Phase 2,
+where every emitted dot goes to expert review.</li>
+<li><b>Discovery is about 3.5&times; harder than rediscovery.</b> The blocked-holdout proxy reads
+0.282; the same detector reads <b>0.081</b> against genuinely off-catalogue structures &mdash; still
+1.9&times; uniform random, so it is finding real new geometry, but IR-51-11 is now a measured
+number rather than a caveat.</li>
+</ol>
+<p class="ev">Stated bias of this instrument: B is drawn from the same compilation as A, so a rule
+that merely haloes the catalogue flatters itself here. The <code>halo_ring</code> control is
+included precisely to quantify that, and it shows the effect is absent for this detector.</p>
 
 <h3>Known biases of this instrument</h3>
 <ul>

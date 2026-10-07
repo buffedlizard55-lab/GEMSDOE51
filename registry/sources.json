@@ -106,5 +106,65 @@
   "url": "https://github.com/buffedlizard55-lab/GEMSDOE24",
   "what": "Pinned mirror of labels.tif and existing_faults.tif (the only obtainable copy; the DrivenData data page is login-walled)",
   "status": "verified 2026-10-06 - both pins resolve to the SAME sha256 7ba308cc... and the rasters are element-wise identical. See IR-51-08."
+ },
+ {
+  "id": "blakely_simpson_1986",
+  "url": "https://doi.org/10.1190/1.1442197",
+  "what": "Blakely & Simpson 1986, Approximating edges of source bodies from magnetic or gravity anomalies, Geophysics 51(7) 1494-1498 - the USGS 'maxspot' horizontal-gradient-maximum method for concealed faults",
+  "status": "verified 2026-10-07 via the USGS publication record https://www.usgs.gov/publications/approximating-edges-source-bodies-magnetic-or-gravity-anomalies (Index ID 70015190)"
+ },
+ {
+  "id": "frangi_1998",
+  "url": "https://doi.org/10.1007/BFb0056195",
+  "what": "Frangi, Niessen, Vincken & Viergever 1998, Multiscale vessel enhancement filtering, MICCAI 1998, LNCS 1496, 130-137 - the ridge/vesselness filter used by gems51.trace_emission",
+  "status": "verified 2026-10-07 - DOI and pagination confirmed on the University of Manchester and UMC Utrecht research-output records"
+ },
+ {
+  "id": "vanderbrug_1976",
+  "url": "https://doi.org/10.1109/TGE.1976.294466",
+  "what": "Vanderbrug 1976, Line detection in satellite imagery, IEEE Trans. Geoscience Electronics 14(1) 37-44 - the discrete line accumulator used for along-strike continuity",
+  "status": "cited from the published DOI; used as the standard reference for the oriented line-detector form"
+ },
+ {
+  "id": "canny_1986",
+  "url": "https://doi.org/10.1109/TPAMI.1986.4767851",
+  "what": "Canny 1986, A computational approach to edge detection, IEEE TPAMI 8(6) 679-698 - the across-strike non-maximum-suppression (thinning) step",
+  "status": "cited from the published DOI"
+ },
+ {
+  "id": "tu_bai_2010",
+  "url": "https://doi.org/10.1109/TPAMI.2009.186",
+  "what": "Tu & Bai 2010, Auto-Context and Its Application to High-Level Vision Tasks and 3D Brain Image Segmentation, IEEE TPAMI 32(10) 1744-1757 - the stacking method behind gems51.autocontext",
+  "status": "cited from the published DOI"
+ },
+ {
+  "id": "breiman_1996",
+  "url": "https://doi.org/10.1007/BF00117832",
+  "what": "Breiman 1996, Stacked regressions, Machine Learning 24(1) 49-64 - cross-fitting, the leakage control for level-2 training rows",
+  "status": "cited from the published DOI"
+ },
+ {
+  "id": "knutsson_westin_1993",
+  "url": "https://doi.org/10.1109/CVPR.1993.341081",
+  "what": "Knutsson & Westin 1993, Normalized and differential convolution, CVPR 1993, 515-523 - how derivatives are estimated across data gaps",
+  "status": "cited from the published DOI"
+ },
+ {
+  "id": "giddens_2025",
+  "url": "https://pangea.stanford.edu/ERE/pdf/IGAstandard/SGW/2025/Giddens.pdf",
+  "what": "Giddens et al. 2025, step-over database for the Great Basin, 50th Stanford Geothermal Workshop - states that INGENIOUS mapped Quaternary faults in the GeoDAWN footprint from 1 m GeoDAWN LiDAR + hillshades, with gravity the most useful geophysical dataset for concealed range-front geometry",
+  "status": "verified 2026-10-07 - quoted verbatim in knowledge/02_research_digest_2026-10-07.md section 6"
+ },
+ {
+  "id": "usgs_3dep",
+  "url": "https://www.usgs.gov/3d-elevation-program",
+  "what": "USGS 3D Elevation Program - the official home of the 1 m DEM tiles listed in the competition's 1m_DEM_links.csv",
+  "status": "named as the next external dataset to mirror; not reachable from this sandbox (IR-51-03)"
+ },
+ {
+  "id": "usgs_qfaults",
+  "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+  "what": "USGS Quaternary Fault and Fold Database - trace geometry, slip rate, slip sense",
+  "status": "named; the Stage 1 Kostrov term currently uses the GDR-1391 CSV mirror instead"
  }
 ]
