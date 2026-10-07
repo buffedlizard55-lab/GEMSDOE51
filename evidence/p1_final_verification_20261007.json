@@ -1,0 +1,47 @@
+{
+  "file": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+  "bytes": 228384,
+  "sha256": "73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4",
+  "crs": "EPSG:32611",
+  "crs_epsg": 32611,
+  "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+  ],
+  "shape": [
+    3730,
+    3292
+  ],
+  "count": 1,
+  "dtype": "float32",
+  "nodata": null,
+  "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "shape_matches_template": true,
+    "inside_footprint_finite": true,
+    "outside_footprint_nan": false,
+    "outside_footprint_zeros": true,
+    "nan_cells": 0,
+    "global_invalid_cells": 0,
+    "all_cells_finite_in_range": true,
+    "nodata_tag_safe": true,
+    "values_outside_0_1": 0,
+    "min_value": 0.0,
+    "max_value": 1.0,
+    "nodata_tag_is_nan": false,
+    "predicted_px": 44069,
+    "total_mass": 44069.0,
+    "portal_legal": true,
+    "format_valid": true
+  },
+  "approved_points": 44069,
+  "zip_identical": true,
+  "recommend_submission": false
+}

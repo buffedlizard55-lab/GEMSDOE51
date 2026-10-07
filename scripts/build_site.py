@@ -16,9 +16,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT))
 DOCS = ROOT / "docs"
 
 NAV = [("index.html", "Executive summary"),
+       ("latest.html", "Latest experiment"),
        ("how-to-submit.html", "How to submit"),
        ("method.html", "Method"),
        ("hypotheses.html", "Hypotheses"),
@@ -69,6 +71,7 @@ def page(title, body, active="index.html"):
 </nav>
 </div></header>
 <main class="wrap">
+<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
 {body}
 </main>
 <footer><div class="wrap">
@@ -279,6 +282,11 @@ def build():
             if value and Path(value).name == value:
                 expected_downloads.add(value)
     supporting_files = (
+        "p1_holdout_20261007.json", "p1_family_audit_20261007.json",
+        "p1_stage1_tiles_20261007.json", "p1_final_verification_20261007.json",
+        "official_vector_budget_20261007.json", "official_attribute_audit_20261007.json",
+        "geodetic_identity_audit_20261007.json",
+        "official-source-review-20261007.md", "next-candidates-20261007.md",
         "experimental_H_G_plus_H_D_artifact.json",
         "uniqueness_gate_H_G_HD_experimental_20261007.json",
         "uniqueness_gate_H_M_soft_20261007.json",
@@ -477,6 +485,8 @@ q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.
 
     research_cards = []
     for record in research:
+        if record.get("id") == "P1_ODD_EVEN_Q10":
+            continue  # Rendered from its own measured schema in latest_report.
         name = Path(record.get("file", "")).name
         zip_name = Path(record.get("zip", "")).name if record.get("zip") else ""
         if not name or name != record.get("file") or not (downloads / name).is_file():
@@ -542,7 +552,10 @@ Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact r
     _GATE = gate_table()
     hm_result = research_comparisons.get("H_M_cross_scale_crest", {})
     ste_result = research_comparisons.get("STE_L9_w035_s24", {})
-    body = cand_card + card + research_card + f"""
+    from scripts.latest_report import render
+    latest_card, latest_detail = render()
+    (DOCS / "latest.html").write_text(page("Latest experiment", latest_detail or "<p>P1 experiment in progress. No new submission authorized.</p>", "latest.html"))
+    body = cand_card + latest_card + card + research_card + f"""
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
 proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
@@ -685,12 +698,18 @@ or research-only file. This block is generated from the submission manifest.</p>
 """
     body = f"""
 <h2>Submission guide — current status first</h2>
+{latest_card}
 {status_block}
 <h3>What to upload, and what not to upload</h3>
 <p>Upload <b>only</b> the recommended candidate named in the big download button above; do not upload the
-archived benchmark, and do not upload the research-only TIFF (marked NOT FOR SUBMISSION). First identify
-the exact TIFF that produced the reported portal error, then reconcile the portal's `[0,1]` validation with
-the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+archived benchmark, and do not upload the research-only files (marked NOT FOR SUBMISSION). First identify the
+exact TIFF that produced the reported portal error, then reconcile the portal's `[0,1]` validation with the
+official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values,
+the one-band float32 grid/CRS/transform, and the outside encoding (finite zeros and NaN are both accepted by the
+local contract). The recommended candidate is all-finite zero-outside with no NoData tag; the archived benchmark
+and the H-G+H-D research TIFF are NaN-outside; the P1 research TIFF is zero-outside. Neither encoding has been
+portal-validated here. A future regenerated artifact must put every prediction inside the verified range and must
+keep every Stage-2 point inside the validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>
