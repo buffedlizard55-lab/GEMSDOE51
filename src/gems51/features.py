@@ -104,28 +104,18 @@ def rank_transform(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
     it is monotone, immune to outliers, and gives a tree/GBDT model a
     well-conditioned input without ever seeing the test-fold distribution.
     """
+    from scipy.stats import rankdata
+
     out = np.full(a.shape, np.nan, dtype=np.float32)
-    v = a[mask & np.isfinite(a)]
+    valid = mask & np.isfinite(a)
+    v = a[valid]
     if v.size == 0:
         return out
-    order = np.argsort(v, kind="mergesort")
-    ranks = np.empty(v.size, dtype=np.float64)
-    ranks[order] = np.arange(1, v.size + 1, dtype=np.float64)
-    # average ranks for ties
-    sv = v[order]
-    i = 0
-    while i < sv.size:
-        j = i
-        while j + 1 < sv.size and sv[j + 1] == sv[i]:
-            j += 1
-        if j > i:
-            ranks[order[i:j + 1]] = ranks[order[i:j + 1]].mean()
-        i = j + 1
-    r = np.full(a.shape, np.nan, dtype=np.float64)
-    r[mask & np.isfinite(a)] = ranks / v.size
-    out = r.astype(np.float32)
+    ranks = (rankdata(v, method="average") / v.size).astype(np.float32)
+    out[valid] = ranks
     out[~mask] = np.nan
     return out
+
 
 
 def load_competition_stack(raw: Path) -> tuple[list, np.ndarray, np.ndarray]:

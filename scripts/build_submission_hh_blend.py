@@ -301,7 +301,7 @@ def main() -> int:
     primary = DOCS / f"{base}.tif"
     DOCS.mkdir(parents=True, exist_ok=True)
     try:
-        rec = write_tif(staging, support.astype(np.float32), footprint)
+        rec = write_tif(staging, support.astype(np.float32), footprint, outside=np.nan, nodata=np.nan)
         if not rec["checks"]["format_valid"]:
             raise SystemExit("staged GeoTIFF failed local official-format verifier")
         gate = run_gate(staging, priors, support, footprint, approved)
