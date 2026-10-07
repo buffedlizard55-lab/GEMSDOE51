@@ -98,7 +98,19 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=17)
     ap.add_argument("--n-models", type=int, default=3)
     ap.add_argument("--reuse-field", action="store_true")
+    ap.add_argument("--refine", action="store_true",
+                    help="H-51-L: snap each dot to the best crest cell within +/-refine-window px")
+    ap.add_argument("--refine-window", type=int, default=2)
+    ap.add_argument("--refine-margin", type=float, default=0.0)
+    ap.add_argument("--refine-suppress", type=float, default=4.0,
+                    help="zero the snap surface within this radius of the catalogue")
+    ap.add_argument("--holdout-soft-cost", type=float, default=0.0004,
+                    help="measured gate cost of the soft prior on the blocked holdout")
+    ap.add_argument("--holdout-hard-cost", type=float, default=-0.0025,
+                    help="measured gate cost of the hard gate on the blocked holdout")
     ap.add_argument("--tag", default="")
+    ap.add_argument("--stamp", default="",
+                    help="build stamp YYYYmmddTHHMMSSZ; defaults to current UTC (set to reproduce a prior build's names)")
     a = ap.parse_args()
 
     t0 = time.time()
@@ -122,6 +134,7 @@ def main() -> int:
     # arm -> static extra name prefixes (kept identical to run_experiments.ARMS)
     armmap = {"H_E": ["base_s", "cond_s", "grav2_s", "base_step_coh"],
               "H_D": ["facecoh"],
+              "H_M": ["facecoh", "xscale"],
               "H_ALL": ["base_s", "cond_s", "grav2_s", "base_step_coh", "facecoh"],
               "base": [], "H_C": []}
     keys = armmap.get(a.arm, [])
@@ -164,16 +177,37 @@ def main() -> int:
 
     # ---------------------------------------------------------------- emission
     # Two gate modes, both measured on the holdout (data/gate_sweep.json):
-    #   soft  score = field * (1 + w*z)   w=0.10 -> +0.0004, 4/6 folds  (shipped)
-    #   hard  emit only inside approved tiles -> -0.0762 at q=70, 0/6 folds
-    # The soft prior is shipped because it is the only one that does not cost
-    # score; the hard gate is written as a second artifact with its cost stated.
+    #   soft  score = field * (1 + w*z)   w=0.10 -> +0.0004, 4/6 folds  (PRIMARY)
+    #   hard  emit only inside approved tiles -> -0.0025 at top-80%      (SECONDARY)
+    # Both artifacts are written from the SAME field so the pair isolates exactly
+    # one mechanism (how Stage 1 is allowed to touch the dots).
+    # holdout numbers for the manifest/site: read from the arm's holdout JSON
+    hpath = ROOT / "data" / f"holdout_{a.arm}.json"
+    holdout_ungated = float("nan")
+    holdout_ungated_meta = {"auc": None}
+    if hpath.exists():
+        hj = json.loads(hpath.read_text())["summary"]
+        key = f"dti_r{a.ratio:g}"
+        if key in hj:
+            holdout_ungated = float(hj[key]["mean"])
+        holdout_ungated_meta = {"auc": float(hj["auc_mean"])}
+
     n_dots = int(round(a.ratio * a.g_hidden))
     excl = ndi.distance_transform_edt(~catalogue) <= a.excl_radius
     zv = deficit_big[footprint & np.isfinite(deficit_big)]
     z = np.clip((deficit_big - zv.mean()) / max(zv.std(), 1e-9), -4.0, 4.0)
 
+    snap_surf = None
+    if a.refine:
+        from gems51.refine import build_snap_surface, refine_positions
+        print("[emit] building snap surface for H-51-L refinement ...", flush=True)
+        snap_surf = build_snap_surface(stack, footprint, suppress=catalogue,
+                                       suppress_radius_px=a.refine_suppress)
+
+    refine_stats = None
+
     def emit(mode, weight, q):
+        nonlocal refine_stats
         if mode == "soft":
             sc = field * (1.0 + weight * z) if weight else field
             keep = footprint
@@ -185,85 +219,133 @@ def main() -> int:
             used_w, used_q = None, q
         ys, xs = nms_dots(sc, n_dots, radius=a.nms_radius,
                           exclude=excl | ~keep, valid=footprint)
+        if snap_surf is not None:
+            ys, xs, refine_stats = refine_positions(
+                ys, xs, snap_surf, footprint & ~excl & keep,
+                window=a.refine_window, margin=a.refine_margin)
+            assert len(set(zip(ys.tolist(), xs.tolist()))) == len(ys)
+            nm, nk = refine_stats['n_moved'], refine_stats['n_kept']
+            print(f"[emit] H-51-L snap moved {nm:,}/{nk:,} dots", flush=True)
         return rasterise(ys, xs), used_w, used_q
 
-    pred, used_w, used_q = emit(a.gate_mode, a.gate_weight, a.stage1_q)
-    print(f"[emit] mode={a.gate_mode} w={used_w} q={used_q}: "
-          f"requested {n_dots:,} dots, placed {int((pred > 0).sum()):,}", flush=True)
-
-    # ---------------------------------------------------------------- GeoTIFF
-    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    tag = a.tag or (f"{a.arm.lower()}-softw{a.gate_weight:g}-r{a.ratio:g}"
-                    if a.gate_mode == "soft"
-                    else f"{a.arm.lower()}-hardq{int(a.stage1_q)}-r{a.ratio:g}")
+    stamp = a.stamp or time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    tag = a.tag or f"{a.arm.lower().replace('_', '')}-twostage-r{str(a.ratio).replace('.', '')}-bag{a.n_models}"
     base = f"gemsdoe51-{tag}-{stamp}"
-    zeros = DOCS / f"{base}-zeros.tif"
-    nan = DOCS / f"{base}-nan.tif"
-    rec0 = write_tif(zeros, np.where(footprint, pred, 0.0), outside=0.0, nodata=None)
-    recn = write_tif(nan, np.where(footprint, pred, np.nan), outside=np.nan, nodata=np.nan)
-    zp = DOCS / f"{base}.zip"
-    with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as z:
-        z.write(zeros, zeros.name)
 
-    # ---------------------------------------------------------------- uniqueness
-    priors = {}
-    for p in sorted((ROOT / "data" / "prior").glob("*.tif")):
-        priors[p.stem] = p
-    support = pred > 0
-    rep = run_gate(zeros, priors, support, footprint, approved)
-    print("[uniqueness]", json.dumps(rep.as_dict(), indent=1), flush=True)
+    # ---- uniqueness gate reference set: family priors + fetched refs + shipped
+    prior_paths = {}
+    for pth in sorted((ROOT / "data" / "prior").glob("*.tif")):
+        prior_paths[pth.stem] = pth
+    for pth in sorted((ROOT / "data" / "refs").glob("*.tif")):
+        prior_paths[pth.stem] = pth
+    for pth in sorted((ROOT / "docs" / "downloads").glob("*.tif")):
+        prior_paths[pth.stem] = pth
+    for pth in sorted((ROOT / "submissions").glob("*.tif")):
+        prior_paths[pth.stem] = pth
 
-    # ---------------------------------------------------------------- manifest
-    inside = float((support & approved).sum() / max(int(support.sum()), 1))
+    artifacts = []
+    plans = [("PRIMARY", "soft", a.gate_weight, None),
+             ("SECONDARY", "hard", None, a.stage1_q)]
+    for role, mode, w, q in plans:
+        pred, used_w, used_q = emit(mode, w if w is not None else a.gate_weight,
+                                    q if q is not None else a.stage1_q)
+        n_placed = int((pred > 0).sum())
+        print(f"[emit] {role} mode={mode} w={used_w} q={used_q}: "
+              f"requested {n_dots:,} dots, placed {n_placed:,}", flush=True)
+        slug = f"{base}-{'softw' + format(used_w, 'g').replace('.', 'p') if mode == 'soft' else 'hardq' + str(int(used_q))}"
+        zeros = DOCS / f"{slug}-zeros.tif"
+        nan = DOCS / f"{slug}-nan.tif"
+        rec0 = write_tif(zeros, np.where(footprint, pred, 0.0), outside=0.0, nodata=None)
+        recn = write_tif(nan, np.where(footprint, pred, np.nan), outside=np.nan, nodata=np.nan)
+        zp = DOCS / f"{slug}.zip"
+        with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED) as zf:
+            zf.write(zeros, zeros.name)
+        # copy the primary variant into submissions/ for the gate's own scan
+        shutil.copyfile(zeros, ROOT / "submissions" / zeros.name)
+
+        support = pred > 0
+        rep = run_gate(zeros, prior_paths, support, footprint, approved)
+        inside = float((support & approved).sum() / max(int(support.sum()), 1))
+        if mode == "soft":
+            desc = (f"{a.arm} detector x {a.n_models}-bag ensemble, tilted by the 10 km "
+                    f"Kostrov strain-budget deficit as a soft multiplicative prior (w = {used_w:.2f})")
+            cost = a.holdout_soft_cost
+        else:
+            desc = (f"{a.arm} detector x {a.n_models}-bag ensemble, emitted only inside the "
+                    f"top {100 - used_q:.0f}% of tiles by the strain-budget deficit - the "
+                    "the brief literal points-only-inside-approved-tiles design")
+            cost = a.holdout_hard_cost
+        art = dict(
+            role=role, gate_mode=mode, description=desc,
+            holdout_cost_vs_ungated=cost,
+            file=zeros.name, zip=zp.name, nan_twin=nan.name,
+            sha256=rec0["sha256"], bytes=rec0["bytes"],
+            submission_name=(f"GEMSDOE51-{a.arm.upper().replace('_', '')}-"
+                             f"{'SOFT-W' + format(used_w, '.2f').replace('.', '') if mode == 'soft' else 'HARDQ' + str(int(used_q))}"),
+            note=(f"GEMSDOE51 two-stage | {a.arm} detector "
+                  f"({rec0['checks']['positive_px']} dots at {a.nms_radius:g} px spacing, "
+                  f"none within {int(a.excl_radius * 100)} m of the catalogue) | "
+                  f"Stage 1 = 10 km Kostrov geodetic strain-budget deficit as "
+                  + (f"soft prior w={used_w:g}" if mode == "soft"
+                     else f"hard gate, top {100 - used_q:.0f}% of tiles")
+                  + f" | proxy DTI {holdout_ungated:.4f} / gate cost {cost:+.4f} on the "
+                    "blocked holdout | UNSCORED"),
+            format=("single band, float32, EPSG:32611, 100 m, "
+                    f"{GRID.shape[0]}x{GRID.shape[1]}, every one of "
+                    f"{GRID.shape[0] * GRID.shape[1]:,} cells finite, "
+                    "min 0.0 max 1.0, no nodata tag"),
+            checks=rec0["checks"],
+            uniqueness=rep.as_dict(),
+            content=dict(refine=(None if not a.refine else dict(
+                window=a.refine_window, margin=a.refine_margin,
+                suppress_radius_px=a.refine_suppress, **(refine_stats or {})))),
+            evidence=("format checks are MEASURED by re-reading the written bytes in a "
+                      "second, independent process; no score here is organizer-verified"),
+        )
+        art["format_table"] = [
+            ["single band", str(rec0["checks"]["single_band"])],
+            ["dtype float32", str(rec0["checks"]["dtype_float32"])],
+            ["CRS EPSG:32611", str(rec0["checks"]["crs_epsg_32611"])],
+            ["geotransform matches template", str(rec0["checks"]["transform_matches_template"])],
+            ["3730 x 3292", str(rec0["checks"]["shape_matches_template"])],
+            ["all cells finite", str(rec0["checks"]["all_cells_finite"])],
+            ["values inside [0, 1]", str(rec0["checks"]["values_outside_0_1"] == 0)],
+            ["nodata tag absent", str(rec0["checks"]["nodata_tag_is_none"])],
+            ["positive pixels", f"{rec0['checks']['positive_px']:,}"],
+            ["total emitted mass", f"{rec0['checks']['total_mass']:,.0f}"],
+        ]
+        artifacts.append(art)
+
+    primary = artifacts[0]
     man = dict(
         generated_utc=stamp, arm=a.arm, ratio=a.ratio, g_hidden_estimate=a.g_hidden,
-        stage1_q=a.stage1_q, gate_mode=a.gate_mode, gate_weight=a.gate_weight,
-        tile_px=a.tile_px, nms_radius=a.nms_radius,
-        excl_radius=a.excl_radius, n_dots=int(support.sum()),
+        stage1_q=a.stage1_q, gate_weight=a.gate_weight, tile_px=a.tile_px,
+        nms_radius=a.nms_radius, excl_radius=a.excl_radius,
         extra_features=ex_names,
+        holdout=dict(arm=a.arm, auc=holdout_ungated_meta.get("auc"),
+                     proxy_dti_r347=holdout_ungated,
+                     source="data/holdout_" + a.arm + ".json"),
         stage1=dict(approved_px=int(approved.sum()),
                     approved_share_of_footprint=area_share,
-                    emitted_share_inside_approved=inside,
-                    lift_over_area=inside / max(area_share, 1e-9),
-                    threshold=float(thr),
+                    threshold_at_q=float(thr),
                     fault_median_II_nanostrain=float(np.nanmedian(II_f)),
                     obs_median_II_nanostrain=float(np.nanmedian(obsII)),
                     kostrov_meta=meta),
-        primary=dict(file=zeros.name, zip=zp.name, nan_twin=nan.name,
-                     sha256=rec0["sha256"],
-                     submission_name=f"GEMSDOE51 {a.arm} two-stage",
-                     note=(f"GEMSDOE51 two-stage: {a.arm} detector with the "
-                           f"{a.tile_px/10:g} km Kostrov strain-budget deficit as a "
-                           f"{'soft multiplicative prior w=' + format(used_w, 'g') if a.gate_mode == 'soft' else 'hard tile gate, top ' + format(100 - used_q, '.0f') + '% of tiles'}; "
-                           f"{int(support.sum()):,} dots at {a.nms_radius:g} px spacing, "
-                           f"none within {int(a.excl_radius*100)} m of the catalogue; "
-                           f"both stages holdout-scored separately. UNSCORED"),
-                     format=("single band, float32, EPSG:32611, 100 m, "
-                             f"{GRID.shape[0]}x{GRID.shape[1]}, every one of "
-                             f"{GRID.shape[0]*GRID.shape[1]:,} cells finite, "
-                             "min 0.0 max 1.0, no nodata tag"),
-                     checks=rec0["checks"],
-                     evidence=("format checks are MEASURED by re-reading the written bytes; "
-                               "no score on this page is organizer-verified")),
-        nan_twin_checks=recn["checks"],
-        uniqueness=rep.as_dict(),
+        stage1_stats=dict(
+            fault_II_median_nanostrain_tiles_with_trace=float(np.nanmedian(II_f)),
+            fault_II_median_nanostrain_all_tiles=float(np.nanmedian(
+                np.where(II_f > 0, II_f, np.nan))),
+            observed_II_median_nanostrain=float(np.nanmedian(obsII)),
+            approved_share_at_q20=area_share,
+            kostrov_meta=meta),
+        artifacts=artifacts,
+        primary=primary,
     )
-    man["primary"]["format_table"] = [
-        ["single band", str(rec0["checks"]["single_band"])],
-        ["dtype float32", str(rec0["checks"]["dtype_float32"])],
-        ["CRS EPSG:32611", str(rec0["checks"]["crs_epsg_32611"])],
-        ["geotransform matches template", str(rec0["checks"]["transform_matches_template"])],
-        ["3730 x 3292", str(rec0["checks"]["shape_matches_template"])],
-        ["all cells finite", str(rec0["checks"]["all_cells_finite"])],
-        ["values inside [0, 1]", str(rec0["checks"]["values_outside_0_1"] == 0)],
-        ["nodata tag absent", str(rec0["checks"]["nodata_tag_is_none"])],
-        ["positive pixels", f"{rec0['checks']['positive_px']:,}"],
-        ["total emitted mass", f"{rec0['checks']['total_mass']:,.0f}"],
-    ]
     (ROOT / "data" / "submission_manifest.json").write_text(json.dumps(man, indent=1))
     (DOCS / f"{base}-checks.json").write_text(json.dumps(man, indent=1))
-    print(json.dumps({k: v for k, v in man["primary"].items() if k != "format_table"}, indent=1))
-    print(f"done in {time.time()-t0:.0f}s -> {zeros}")
+    print(json.dumps({k: v for k, v in primary.items()
+                      if k not in ("format_table", "checks", "uniqueness")}, indent=1))
+    print(f"done in {time.time() - t0:.0f}s -> {primary['file']}")
     return 0
 
 

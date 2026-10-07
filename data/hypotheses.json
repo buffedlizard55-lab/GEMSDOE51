@@ -116,5 +116,198 @@
     "measured_dti_r3_47": null,
     "delta_vs_base": null,
     "outcome": "BLOCKED - external data not obtainable from this sandbox (measured)"
+  },
+  {
+    "id": "H-51-G",
+    "name": "Strike-coherent trace emission: spend mass along the trace, not across it",
+    "session": "2026-10-07",
+    "layers": [
+      "detector belief field (any arm)",
+      "multi-scale Frangi vesselness of the belief field (sigma = 1.0, 2.0, 3.5 px)",
+      "Vanderbrug straight-line accumulator over 12 orientations, 900 m length"
+    ],
+    "signature": "score = rank(belief)^(1-w) * rank(line-accumulated ridgeness)^w, then greedy selection with a circular exclusion of 2.4 px. The ridge filter answers 'is this pixel on the crest of a linear structure rather than its shoulder', and the accumulator answers 'does that structure persist for 9 pixels in one direction'. Dots are then spread ALONG the surviving crest instead of being packed into the brightest blob.",
+    "why_new_faults": "This is a metric-geometry hypothesis, not a geology one, and it is the one the scoring definition forces. TP_w = sum over truth of max over predictions of k(d): a dot 2 px off the crest earns k(2) = 1/3 of a crest dot, and a second dot across the width of the same structure earns nothing extra while costing a full unit of FP. Uncatalogued faults are, by the INGENIOUS step-over evidence (Giddens 2025), long low-relief strands rather than compact anomalies, so the belief field's bright blobs are exactly where the catalogue already is and the belief field's long faint ridges are where it is not.",
+    "differs_from": "The incumbent emitter is gems51.emission.nms_dots: isotropic greedy non-maximum suppression of the raw belief, blind to orientation and to continuity. Nothing in the repo had ever varied the emission GEOMETRY at matched mass; every previous sweep varied mass or the gate.",
+    "expected_dti": "+0.002 to +0.004 (small but nearly free: no retraining, seconds of CPU)",
+    "cost": "low (one new module, src/gems51/trace_emission.py; no model refit)",
+    "rank_expected": 2,
+    "external_data_needed": "none",
+    "evidence": "evidence/emission_geometry.json",
+    "outcome": "PENDING-6-FOLD (3-fold pilot: +0.0033 mean, best rule ste_L9_w0.7_s2.4_nothin at 0.2921 vs 0.2888 incumbent)"
+  },
+  {
+    "id": "H-51-F",
+    "name": "Auto-context stacking: give a per-pixel tree the spatial context a U-Net has",
+    "session": "2026-10-07",
+    "layers": [
+      "level-1 belief field",
+      "8 derived context layers: ac_rank, ac_mean05/11/21, ac_max05, ac_ridge, ac_line09, ac_line17"
+    ],
+    "signature": "Tu & Bai (2010) auto-context. A level-1 HistGradientBoosting model over the 58 physical layers produces a belief map; multi-scale summaries of that map (local means at 500 m / 1.1 km / 2.1 km, local max, Frangi ridgeness, and 900 m / 1.7 km line accumulators) are appended to the raw features and a level-2 model is trained on the union. The level-1 belief used to build level-2 TRAINING rows is cross-fitted over two spatially contiguous slabs (Breiman 1996) so the stack cannot learn to over-trust a belief that already saw the label.",
+    "why_new_faults": "The scored object is a trace, not a pixel. The official reference solution buys that context with a U-Net over 128x128 patches; auto-context buys the same statement ('is there a long coherent high-belief lineament through this pixel') for a tree at CPU cost. A per-pixel model literally cannot represent trace continuity, which is the single discriminator between a fault and a noisy geophysical blob.",
+    "differs_from": "Every detector in the repo to date is strictly per-pixel: the feature vector at a pixel contains only locally-filtered geophysics, never the model's own belief about the neighbourhood.",
+    "expected_dti": "+0.006 to +0.015 (ranked 1st before measurement)",
+    "cost": "medium (new module + ~2.7x the fit cost: level 1, cross-fit, level 2)",
+    "rank_expected": 1,
+    "external_data_needed": "none",
+    "evidence": "evidence/autocontext_holdout.json",
+    "measured_auc_l1": 0.6652,
+    "measured_auc_l2": 0.6737,
+    "measured_dti_r3_47_l1": 0.2787,
+    "measured_dti_r3_47_l2": 0.2799,
+    "delta_paired": 0.0012,
+    "folds_positive": "4/6",
+    "outcome": "REJECTED FOR PRODUCTION - the preregistered promotion rule required a paired mean of at least +0.006 AND at least 4/6 folds positive. It cleared the fold count (4/6) and missed the effect size by 5x (+0.0012). Ranking quality did improve and improved consistently (+0.0085 in-block AUC), but the gain lands almost entirely inside the top mass that was already being emitted, so it does not convert into DTI. Per-fold paired delta at r3.47: +0.0102, -0.0092, +0.0012, -0.0117, +0.0012, +0.0157. Kept in the tree as src/gems51/autocontext.py and reachable via scripts/build_submission_v2.py --level 2; not shipped."
+  },
+  {
+    "id": "H-51-J",
+    "name": "Blakely-Simpson maxspot edges stacked over upward-continuation heights",
+    "session": "2026-10-07",
+    "layers": [
+      "comp_rtp_mag (reduced-to-pole magnetics)",
+      "comp_iso_grav_anom (isostatic gravity)"
+    ],
+    "signature": "Horizontal-gradient magnitude of each potential field, then sub-pixel location of its local maxima by the Blakely & Simpson (1986) 4-direction test, repeated after upward continuation to 250 m / 500 m / 1 km / 2 km. The output layer per field is the continuation height at which the edge is still detected (a depth proxy) plus the maxspot density at each height.",
+    "why_new_faults": "This is the USGS's own production method for mapping CONCEALED faults from potential-field grids, and it is how much of the Great Basin basement structure outside the Quaternary-scarp catalogue was first identified. Giddens (2025) reports that gravity was the single most useful geophysical dataset for defining the extent of Quaternary faults in exactly this region, because basin fill conceals them and geothermal alteration suppresses their magnetic signature. A maxspot that persists to 2 km of upward continuation is a deep, long basement structure - precisely the class a scarp-mapped catalogue cannot contain.",
+    "differs_from": "The shipped stack contains the raw potential fields and generic Hessian/gradient filters of them, but no edge-DETECTION operator, no multi-height continuation, and therefore no depth discrimination. Every existing gravity feature is a single-scale amplitude or gradient.",
+    "expected_dti": "+0.004 to +0.010",
+    "cost": "medium (upward continuation is an FFT per height; 8 FFTs over a 3730x3292 grid plus the 4-direction test, ~5 min, then one detector refit ~25 min for 6 folds)",
+    "rank_expected": 1,
+    "external_data_needed": "none - both fields ship with the competition",
+    "outcome": "PROPOSED - not implemented this session (ran out of compute budget behind H-51-F and H-51-G). Top-ranked candidate for the next session."
+  },
+  {
+    "id": "H-51-I",
+    "name": "Radiometric alteration-ratio lineaments (K/Th and U/Th)",
+    "session": "2026-10-07",
+    "layers": [
+      "comp_rad_k (potassium)",
+      "comp_rad_th (thorium)",
+      "comp_rad_u (uranium)",
+      "comp_rad_tc (total count)"
+    ],
+    "signature": "Pixelwise log ratios log(K/Th) and log(U/Th), which cancel the common detector/geometry/soil-moisture gain that dominates the raw channels, followed by the same Frangi ridge + line-accumulator pipeline used for the belief field. Thorium is immobile in hydrothermal systems; potassium and uranium are mobile. A linear K/Th high is therefore a mapped-out fluid pathway.",
+    "why_new_faults": "A geothermal-fluid conduit alters its wall rock whether or not it has a scarp. This finds the fault by its FLUID history rather than by its topography, so its failure mode is uncorrelated with the scarp-based catalogue's - exactly the kind of independence the Tversky metric rewards, since alpha = 0.2 makes false positives cheap and recall expensive.",
+    "differs_from": "The repo uses K, Th, U and total count only as raw amplitudes fed straight to the tree. Nothing forms a ratio, and a gradient-boosted tree cannot construct a ratio of two features by axis-aligned splits except as a coarse staircase.",
+    "expected_dti": "+0.002 to +0.006",
+    "cost": "low (4 derived layers, ~2 min to build; one detector refit)",
+    "rank_expected": 3,
+    "external_data_needed": "none",
+    "outcome": "PROPOSED - not implemented this session."
+  },
+  {
+    "id": "H-51-K",
+    "name": "Missability inverse-propensity weighting: train on what the mappers would have missed",
+    "session": "2026-10-07",
+    "layers": [
+      "catalogue (as the label)",
+      "lid_relief",
+      "comp_det_elev",
+      "lidar coverage mask",
+      "slope, drainage texture"
+    ],
+    "signature": "Fit a second model p(mapped | fault-like) that predicts, among catalogued pixels, how EASY each one was to map (high relief, inside lidar coverage, far from dense vegetation/dune cover). Then re-weight the positive training rows by 1/p. The detector is thereby pushed toward the part of the fault population the mappers systematically under-sampled.",
+    "why_new_faults": "The target is defined as the faults the catalogue does NOT contain, so the training label is a biased sample of the truth, biased exactly by mappability. IR-51-11 records that every offline number here measures rediscovery rather than discovery; IPW is the standard correction for a non-random labelling propensity and is the only idea in this slate that attacks that bias head-on instead of adding another feature.",
+    "differs_from": "Every model in the repo weights all catalogued pixels equally. No session has modelled the labelling process itself.",
+    "expected_dti": "unknown sign, potentially large (+0.01) but high variance; the measured lidar-coverage lift is only 1.054, so the propensity model will need more than coverage to be informative",
+    "cost": "low (one extra fit, no new rasters)",
+    "rank_expected": 4,
+    "external_data_needed": "none",
+    "outcome": "PROPOSED - not implemented this session."
+  },
+  {
+    "id": "H-51-L",
+    "name": "Trace-axis snap: relocate each NMS dot to the strongest catalogue-suppressed crest cell in a +/-2 px window",
+    "layers": [
+      "lidar_scarp_features_u8 (ex_max, step_max, relief)",
+      "comp_det_elev (band 12)"
+    ],
+    "signature": "Crest surface = percentile-rank fusion of Hessian crest responses (sigma 1.5/2.5 px on det_elev, 1.5 px on lid_relief) plus raw ex_max/step_max ranks, zeroed within 4 px of the catalogue; greedy relocation in detector-priority order with hard 2.4 px spacing and exact mass conservation (src/gems51/refine.py).",
+    "why_new_faults": "Attacks the measured gap to the leader directly: mean dot-to-truth distance ~260 m vs ~200 m implied for the 0.3774 leader; kernel credit decays linearly with that offset. Relocation moves dots onto the geometric axis of their own lineament without finding new structure.",
+    "differs_from": "No emission path in GEMSDOE1-52 refines position after NMS; GEMSDOE32 H34 blurred the belief field (a different mechanism) and measured a wash.",
+    "expected_dti": "unknown before validation - first positional-refinement experiment in the family",
+    "cost": "low (~1 min CPU post-processing, no retraining)",
+    "rank_expected": 1,
+    "external_data_needed": "none",
+    "measured_auc": null,
+    "measured_dti_r3_47": null,
+    "delta_vs_base": null,
+    "outcome": "FALSIFIED on the blocked holdout under pre-registered rule (knowledge/02 section 4). Mass-conserving, spacing-conserving sweep: window=2 margin=0 -> mean proxy DTI 0.2816 -> 0.2783 (-0.0033, 0/6 folds on distance); window=2 margin=0.05 -> same -0.0033; window=1 -> neutral (-0.0000). An earlier +0.0021 reading was contamination from a v2 implementation that silently dropped ~7% of dots (mass not conserved); the v1 -0.013 reading was a spacing collapse (75% of dots ended with a neighbour inside 2.4 px vs 0% at baseline). Both failure modes are now unit-tested against. INSTRUMENT CAVEAT registered as IR-51-14: the catalogue suppression that is mandatory live (mass near mapped faults is dead mass, the B=2 lesson) blinds the surface exactly where the holdout's pretend-hidden truth sits, so this instrument structurally cannot reward the live mechanism; the falsification stands but its strength is bounded."
+  },
+  {
+    "id": "H-51-M",
+    "name": "Cross-scale crest coincidence as detector features",
+    "layers": [
+      "comp_det_elev (band 12)",
+      "lid_relief"
+    ],
+    "signature": "xscale_coincide = Q(crest sigma 1.5) * exp(-d/1.5) with d the distance to the top-2% skeleton of the sigma 4 crest; xscale_minrank = min(Q(crest 1.5), Q(crest 4)); a LiDAR-relief analogue. Added to the H_D arm (scripts/run_experiments.py --arm H_M).",
+    "why_new_faults": "Asymmetric scarps displace the single-scale crest response off the trace axis; the two scales agree only on the axis. Gives the detector an explicit on-axis vs flank distinction, which is the localisation distinction the metric pays for.",
+    "differs_from": "The shipped lineament bank carries each scale independently; no feature combines scales positionally. GEMSDOE32 H33-A required orientation agreement of different physics, a different object.",
+    "expected_dti": "small positive if the localisation story is right",
+    "cost": "low-medium (one extras rebuild + one 6-fold retrain)",
+    "rank_expected": 2,
+    "external_data_needed": "none",
+    "measured_auc": 0.6747,
+    "measured_dti_r3_47": 0.2826,
+    "delta_vs_base": 0.0009,
+    "outcome": "ADOPTED - second-best arm measured in this repository (Stream A strike-coherent emission reads 0.2836, +0.0010 ahead): in-block AUC 0.6747 (+0.0021 over H_D) and proxy DTI at M/|G|=3.47 of 0.2826 (+0.0009 over H_D, 3/6 folds positive, per-fold range -0.0035..+0.0045). Promoted to the submission build; the gain is small and inside per-fold noise, which is stated rather than hidden."
+  },
+  {
+    "id": "H-51-P",
+    "name": "Parallel-strand offset template",
+    "layers": [
+      "catalogue geometry (strike field)",
+      "crest bank of comp_det_elev / lid_relief"
+    ],
+    "signature": "Crest response gated to (a) local mapped-strike coherence > 0.5, (b) response direction within 15 deg of the mapped strike, (c) orthogonal offset 1-6 px from the nearest mapped trace; additive emission attractor, not a training feature.",
+    "why_new_faults": "Organizer staff confirmed parallel strands of an existing system count as new faults (forum 11536); catalogues typically map the dominant strand of a normal-fault system and leave the 100-600 m companion strand unmapped.",
+    "differs_from": "stage2_emission.steered_field_from_provider multiplies ridges by alignment everywhere without an offset condition; GEMSDOE33's analog targeted tips/stepovers, not parallel strands.",
+    "expected_dti": "unknown",
+    "cost": "medium",
+    "rank_expected": 3,
+    "external_data_needed": "none",
+    "measured_auc": null,
+    "measured_dti_r3_47": null,
+    "delta_vs_base": null,
+    "outcome": "NOT YET TESTED - designed this session, queued behind H-51-M"
+  },
+  {
+    "id": "H-51-S",
+    "name": "Dilational-jog coincidence",
+    "layers": [
+      "comp_geod_dilaterate (band 8)",
+      "crest bank"
+    ],
+    "signature": "Positive dilatation-rate cells coincident with a topographic crest (rank product): releasing jogs and extensional stepovers on normal faults.",
+    "why_new_faults": "Jogs are where a fault system is geometrically complex and single-trace mapping most often breaks a system into pieces.",
+    "differs_from": "H-B used the geodetic field only in tile-quantile space; nothing multiplies the sign of dilatation with a crest response.",
+    "expected_dti": "low - GEMSDOE26 dilatation-conditioned emission scored 0.1223",
+    "cost": "trivial",
+    "rank_expected": 4,
+    "external_data_needed": "none",
+    "measured_auc": null,
+    "measured_dti_r3_47": null,
+    "delta_vs_base": null,
+    "outcome": "NOT YET TESTED - weak prior"
+  },
+  {
+    "id": "H-51-V",
+    "name": "Volcanic-vent feeder alignments",
+    "layers": [
+      "external/gdr_volcanic_vents_in_footprint.csv (21 vents, GDR 1391 mirror)"
+    ],
+    "signature": "Pairwise vent-alignment corridors intersected with crest response.",
+    "why_new_faults": "Measured: 0 of 21 vents lie within 300 m of the catalogue; their feeder structures are unmapped by construction.",
+    "differs_from": "GEMSDOE32 listed vents as a contrarian angle but never built a corridor surface; GEMSDOE15 used geothermometry, not vent geometry.",
+    "expected_dti": "low - 21 points define few corridors",
+    "cost": "trivial",
+    "rank_expected": 5,
+    "external_data_needed": "none",
+    "measured_auc": null,
+    "measured_dti_r3_47": null,
+    "delta_vs_base": null,
+    "outcome": "NOT YET TESTED - weak prior"
   }
 ]

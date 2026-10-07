@@ -1,86 +1,100 @@
 [
- {
-  "id": "IR-51-01",
-  "summary": "GEMSDOE32's index page labels gems32-probe-S1-ANCHOR-identical-to-live-02600.tif as the 0.2708 anchor, but that repository's own audit JSON for the same sha256 (4dc4cc54...) calls it the 0.2600 reference anchor, and the file's mask is byte-identical to the GEMSDOE25 artifact scored 0.2600.",
-  "evidence": "sha256 4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3; checks-gems32-probe-S1-ANCHOR-identical-to-live-02600.tif.json says in_footprint_values_bit_identical_to_anchor:true and positive_px 44090; gem mask equality with gems25-dotted-h19-5-d2-8-...-zeros.tif measured True in this repo.",
-  "status": "OPEN - the 0.2708 label is not reproducible from the artifacts. We treat the file as the 0.2600 anchor, which changes the size of the measured natural experiment (0.2600 -> 0.2778, not 0.2708 -> 0.2778)."
- },
- {
-  "id": "IR-51-02",
-  "summary": "The three geodetic layers satisfy no exact algebraic identity, so the invariant convention behind geod_2ndinv is not recoverable.",
-  "evidence": "Tested on 5,164,312 in-footprint pixels: sqrt(dil^2+shear^2) max |error| 33.8 on a field with median 19.9 (best r = 0.9934); sqrt((dil^2+shear^2)/2), sqrt(dil^2+2 shear^2), |dil|+|shear| all worse. geod_2ndinv >= |shear| holds everywhere but geod_2ndinv >= |dil| holds only 82% of the time.",
-  "status": "OPEN - Stage 1 is stated in quantile space, which is invariant to the unknown convention."
- },
- {
-  "id": "IR-51-LEAK-01",
-  "summary": "Any feature derived from the catalogue is a perfect training leak in a blocked holdout.",
-  "evidence": "With d_cat and cat_dens in the feature matrix, in-block AUC was exactly 0.500 while the physical features alone reach 0.63; removing them recovered in-block AUC to 0.667. Cause: every training positive is itself a catalogue pixel, so d_cat == 0 for all positives and > 0 for all negatives.",
-  "status": "CLOSED - catalogue-derived columns excluded from the model, used only at emission time."
- },
- {
-  "id": "IR-51-03",
-  "summary": "No DrivenData credentials, and the sandbox egress is allow-listed.",
-  "evidence": "curl to www.drivendata.org, raw.githubusercontent.com, objects.githubusercontent.com, buffedlizard55-lab.github.io, gdr.openei.org, www.usgs.gov, prd-tnm.s3.amazonaws.com all return HTTP 000. Reachable: pypi.org, files.pythonhosted.org, github.com, api.github.com, codeload.github.com, registry.npmjs.org.",
-  "status": "OPEN - all rasters are owner-mirrored public GitHub blobs, integrity-pinned by sha256, provenance NOT organizer-authenticated."
- },
- {
-  "id": "IR-51-04",
-  "summary": "sample_submission.tif is not the 'predicts total fault absence' file the problem page describes; it is byte-identical to labels.tif inside the footprint.",
-  "evidence": "measured: ss[footprint] == labels[footprint] everywhere; 60,988 cells with value 1, 5,106,385 with 0, 7,111,787 NaN.",
-  "status": "CLOSED - it is still used, and is used only, as the grid/footprint template."
- },
- {
-  "id": "IR-51-05",
-  "summary": "The provenance of the hidden test faults is deliberately undisclosed, so no competitor can tell whether the labels are topographic, geophysical or field-mapped. Phase 2's test set is rebuilt from expert review of Phase 1 submissions.",
-  "evidence": "chrisk-dd, 2026-09-23, community thread 11527 post 7: \"We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.\" And: \"the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1.\"",
-  "status": "RESOLVED - no answer will come. Consequence: (a) every validation instrument here is calibrated against the visible catalogue and may not match the hidden label style; (b) Phase 1 submissions are not free - they are inputs to Phase 2's test set, so geological defensibility of the emitted dots matters beyond this round's score."
- },
- {
-  "id": "IR-51-06",
-  "summary": "The footprint contains 3,073 cells where at least one of the 19 competition bands is the sentinel, so a pixel classifier cannot score them.",
-  "evidence": "measured in prepare_data.py: footprint 5,167,373, analysable 5,164,300.",
-  "status": "CLOSED - those cells are excluded from emission; the submission still writes a finite value there (0.0) so the portal range check passes."
- },
- {
-  "id": "IR-51-07",
-  "summary": "Two independent implementations of the same library occupy the same paths in this repository's history (PR #1/#2 from an earlier session, and this session's). They were developed in parallel on separate branches and are not API-compatible.",
-  "evidence": "27 paths conflicted add/add on merge: src/gems51/{__init__,detector,emission,features,grid,holdout,metric,submission}.py, scripts/{build_site,prepare_data,run_holdout}.py, tests/test_metric.py, registry/{data_manifest,hypotheses,irregularities,sources}.json, docs/*.html, README.md, .gitignore, data/restore_receipt.json.",
-  "status": "RESOLVED NON-DESTRUCTIVELY - this session's versions were kept for the shared code and site paths, because they are what produced the shipped artifacts. Every conflicting file from PR #1/#2 is preserved verbatim under attic/pr1-2/, and all 74 non-conflicting files (evidence/*.json, docs/claims.html, docs/strategy.html, docs/executive-summary.html, docs/assets/, .github/workflows/, data/labels.tif, data/existing_faults.tif, data/sample_submission.tif, index.html, pyproject.toml, requirements.txt) are carried through untouched."
- },
- {
-  "id": "IR-51-08",
-  "summary": "The file this project has been calling the training labels is byte-identical to the known-fault raster. The competition's true training labels have therefore never been available to any GEMSDOE session, and every model here is trained against the visible catalogue as a proxy.",
-  "evidence": "data/labels.tif and data/existing_faults.tif both have sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093 and 425,830 bytes; np.array_equal on the rasters is True. Their positive mask (60,988 px) is also identical to this session's independently derived catalogue (data/prepared/catalogue.npy). The upstream pin is the same for both: buffedlizard55-lab/GEMSDOE24 @ 07345ea0604953d7e, data/labels.tif and data/existing_faults.tif.",
-  "status": "CLOSED 2026-10-07 - NOT a mirror fault. The competition's own problem description says the known-fault ground truth is public and the hidden test set is the expert-identified faults ABSENT from it; the organizer reference solution trains on data/labels.tif as the positive class (notebook cell 6: FAULT_LABELS_PATH = Path('data/labels.tif')). labels.tif IS the catalogue by design. Superseded by IR-51-11, which states the real consequence."
- },
- {
-  "id": "IR-51-09",
-  "summary": "Twelve scripts and four src modules in the live tree called a gems51 API that the merged package does not provide, so they raised AttributeError the moment they were run while importing cleanly in CI.",
-  "evidence": "AST check (scripts/check_repo_health.py) found e.g. gems51/scoring.py -> metric.dti_components (absent), gems51/strain.py -> grid.PIXEL_M / grid.tiles / grid.SHAPE / grid.footprint / grid.catalogue / grid.spatial_blocks / grid.catalogue_distance (all absent), scripts/run_all.py -> detector.run_folds, metric.evaluate_binary, emission.ExpectedBudgetPacker, submission.write_submission (all absent).",
-  "status": "CLOSED 2026-10-07 - all thirteen files moved verbatim to attic/legacy-api/ with a table of the missing attributes; scripts/check_repo_health.py now fails the build on any recurrence and runs in CI. The evidence/*.json they produced in earlier sessions is retained and still cited, labelled as previous-session measurement."
- },
- {
-  "id": "IR-51-10",
-  "summary": "The brief states the leaderboard high score is 0.3195. That is stale.",
-  "evidence": "Public leaderboard read 2026-10-07: #1 xiaofanhu 0.3774, #2 alexoktaba 0.3345, #3 nchuzhoy 0.3262, #4 kinghorton42 0.3222, #5 joeyfezster 0.3220, #6 Batik Shirt Brothers 0.3218, #7 DARD 0.3195. Snapshot stored in registry/leaderboard_snapshot.json.",
-  "status": "OPEN - flagged for the owner. The target to beat is 0.3774, not 0.3195. All planning in this session uses 0.3774."
- },
- {
-  "id": "IR-51-11",
-  "summary": "There is no hidden training target to recover: the only label set available offline is the known-fault catalogue, so every local number in this repository measures REDISCOVERY of mapped faults, not discovery of unmapped ones.",
-  "evidence": "labels.tif == existing_faults.tif (sha256 7ba308cc..., 425,830 B both); 60,988 positive pixels inside a 5,167,373-pixel footprint; the organizer trains on the same file.",
-  "status": "OPEN - structural, cannot be closed from inside the sandbox. Mitigation shipped this session: scripts/run_offcatalogue_ab.py hides half the catalogue's fault SYSTEMS and leaves them inside the negative class, which is the closest offline analogue of 'a fault the training catalogue does not contain'."
- },
- {
-  "id": "IR-51-12",
-  "summary": "Auto-context stacking improves RANKING consistently but does not convert that into score: in-block AUC +0.0085 (0.6652 -> 0.6737) while paired DTI at the shipped mass moves only +0.0012, and the per-fold deltas alternate sign (+0.0102, -0.0092, +0.0012, -0.0117, +0.0012, +0.0157).",
-  "evidence": "evidence/autocontext_holdout.json (6 folds x 2 levels x 4 mass ratios, 1658 s). Paired L2-L1 at r3.47: iso +0.0012 (4/6), ste +0.0006 (3/6).",
-  "status": "CLOSED 2026-10-07 as a NEGATIVE RESULT. The preregistered promotion rule (paired mean >= +0.006 AND >= 4/6 folds positive) is not met: 4/6 folds but only +0.0012. Level 2 is NOT shipped. Diagnosis worth carrying forward: the AUC gain is real and consistent, but it is concentrated in re-ordering pixels that were already inside the emitted top 3.47x|G| mass, so it buys no new credit. The lesson is that global AUC is the wrong proxy for this metric - the right proxy is credit-per-dot at the shipped mass, which is what evidence/emission_geometry.json reports. Code retained at src/gems51/autocontext.py and reachable via scripts/build_submission_v2.py --level 2."
- },
- {
-  "id": "IR-51-13",
-  "summary": "The 3-fold pilot of strike-coherent trace emission overstated the effect by 65%: +0.0033 on folds 0,2,4 became +0.0020 on all six, and the best w_cont moved from 0.7 to 0.35.",
-  "evidence": "evidence/emission_geometry.json. Per-fold paired delta for ste_L9_w0.35_s2.4_nothin vs iso_nms_r2.4: +0.0023, +0.0029, +0.0042, -0.0023, -0.0019, +0.0065; mean +0.0020, 4/6, sign-test p = 0.344. The w_cont=0 control reproduces the incumbent to within 2e-4 on every fold, which validates the implementation as a strict generalisation of isotropic NMS.",
-  "status": "OPEN as a methodological warning, ACTED ON for this session's ship. Folds 0, 2 and 4 are not a random subset of the six - they are the three EASIEST folds (incumbent DTI 0.2752 / 0.2843 / 0.3070 against 0.2691 / 0.2485 / 0.3057 for the rest), so any pilot on them is biased optimistic. Rule adopted: no emission or detector change is promoted on fewer than all six folds. w_cont = 0.35 is shipped rather than the pilot's 0.7 because it has the same mean on six folds with a 5x smaller worst-fold loss (-0.0023 vs -0.0101)."
- }
+  {
+    "id": "IR-51-01",
+    "summary": "GEMSDOE32's index page labels gems32-probe-S1-ANCHOR-identical-to-live-02600.tif as the 0.2708 anchor, but that repository's own audit JSON for the same sha256 (4dc4cc54...) calls it the 0.2600 reference anchor, and the file's mask is byte-identical to the GEMSDOE25 artifact scored 0.2600.",
+    "evidence": "sha256 4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3; checks-gems32-probe-S1-ANCHOR-identical-to-live-02600.tif.json says in_footprint_values_bit_identical_to_anchor:true and positive_px 44090; gem mask equality with gems25-dotted-h19-5-d2-8-...-zeros.tif measured True in this repo.",
+    "status": "OPEN - the 0.2708 label is not reproducible from the artifacts. We treat the file as the 0.2600 anchor, which changes the size of the measured natural experiment (0.2600 -> 0.2778, not 0.2708 -> 0.2778)."
+  },
+  {
+    "id": "IR-51-02",
+    "summary": "The three geodetic layers satisfy no exact algebraic identity, so the invariant convention behind geod_2ndinv is not recoverable.",
+    "evidence": "Tested on 5,164,312 in-footprint pixels: sqrt(dil^2+shear^2) max |error| 33.8 on a field with median 19.9 (best r = 0.9934); sqrt((dil^2+shear^2)/2), sqrt(dil^2+2 shear^2), |dil|+|shear| all worse. geod_2ndinv >= |shear| holds everywhere but geod_2ndinv >= |dil| holds only 82% of the time.",
+    "status": "OPEN - Stage 1 is stated in quantile space, which is invariant to the unknown convention."
+  },
+  {
+    "id": "IR-51-LEAK-01",
+    "summary": "Any feature derived from the catalogue is a perfect training leak in a blocked holdout.",
+    "evidence": "With d_cat and cat_dens in the feature matrix, in-block AUC was exactly 0.500 while the physical features alone reach 0.63; removing them recovered in-block AUC to 0.667. Cause: every training positive is itself a catalogue pixel, so d_cat == 0 for all positives and > 0 for all negatives.",
+    "status": "CLOSED - catalogue-derived columns excluded from the model, used only at emission time."
+  },
+  {
+    "id": "IR-51-03",
+    "summary": "No DrivenData credentials, and the sandbox egress is allow-listed.",
+    "evidence": "curl to www.drivendata.org, raw.githubusercontent.com, objects.githubusercontent.com, buffedlizard55-lab.github.io, gdr.openei.org, www.usgs.gov, prd-tnm.s3.amazonaws.com all return HTTP 000. Reachable: pypi.org, files.pythonhosted.org, github.com, api.github.com, codeload.github.com, registry.npmjs.org.",
+    "status": "OPEN - all rasters are owner-mirrored public GitHub blobs, integrity-pinned by sha256, provenance NOT organizer-authenticated."
+  },
+  {
+    "id": "IR-51-04",
+    "summary": "sample_submission.tif is not the 'predicts total fault absence' file the problem page describes; it is byte-identical to labels.tif inside the footprint.",
+    "evidence": "measured: ss[footprint] == labels[footprint] everywhere; 60,988 cells with value 1, 5,106,385 with 0, 7,111,787 NaN.",
+    "status": "CLOSED - it is still used, and is used only, as the grid/footprint template."
+  },
+  {
+    "id": "IR-51-05",
+    "summary": "The provenance of the hidden test faults is deliberately undisclosed, so no competitor can tell whether the labels are topographic, geophysical or field-mapped. Phase 2's test set is rebuilt from expert review of Phase 1 submissions.",
+    "evidence": "chrisk-dd, 2026-09-23, community thread 11527 post 7: \"We're not sharing details about the data sources, fault types, or coverage behind the test faults beyond what's in the problem description.\" And: \"the largest prize pool (Phase 2) will use a test set that is updated by expert review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even if they are not the most performant in Phase 1.\"",
+    "status": "RESOLVED - no answer will come. Consequence: (a) every validation instrument here is calibrated against the visible catalogue and may not match the hidden label style; (b) Phase 1 submissions are not free - they are inputs to Phase 2's test set, so geological defensibility of the emitted dots matters beyond this round's score."
+  },
+  {
+    "id": "IR-51-06",
+    "summary": "The footprint contains 3,073 cells where at least one of the 19 competition bands is the sentinel, so a pixel classifier cannot score them.",
+    "evidence": "measured in prepare_data.py: footprint 5,167,373, analysable 5,164,300.",
+    "status": "CLOSED - those cells are excluded from emission; the submission still writes a finite value there (0.0) so the portal range check passes."
+  },
+  {
+    "id": "IR-51-07",
+    "summary": "Two independent implementations of the same library occupy the same paths in this repository's history (PR #1/#2 from an earlier session, and this session's). They were developed in parallel on separate branches and are not API-compatible.",
+    "evidence": "27 paths conflicted add/add on merge: src/gems51/{__init__,detector,emission,features,grid,holdout,metric,submission}.py, scripts/{build_site,prepare_data,run_holdout}.py, tests/test_metric.py, registry/{data_manifest,hypotheses,irregularities,sources}.json, docs/*.html, README.md, .gitignore, data/restore_receipt.json.",
+    "status": "RESOLVED NON-DESTRUCTIVELY - this session's versions were kept for the shared code and site paths, because they are what produced the shipped artifacts. Every conflicting file from PR #1/#2 is preserved verbatim under attic/pr1-2/, and all 74 non-conflicting files (evidence/*.json, docs/claims.html, docs/strategy.html, docs/executive-summary.html, docs/assets/, .github/workflows/, data/labels.tif, data/existing_faults.tif, data/sample_submission.tif, index.html, pyproject.toml, requirements.txt) are carried through untouched."
+  },
+  {
+    "id": "IR-51-08",
+    "summary": "The file this project has been calling the training labels is byte-identical to the known-fault raster. The competition's true training labels have therefore never been available to any GEMSDOE session, and every model here is trained against the visible catalogue as a proxy.",
+    "evidence": "data/labels.tif and data/existing_faults.tif both have sha256 7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093 and 425,830 bytes; np.array_equal on the rasters is True. Their positive mask (60,988 px) is also identical to this session's independently derived catalogue (data/prepared/catalogue.npy). The upstream pin is the same for both: buffedlizard55-lab/GEMSDOE24 @ 07345ea0604953d7e, data/labels.tif and data/existing_faults.tif.",
+    "status": "CLOSED 2026-10-07 - NOT a mirror fault. The competition's own problem description says the known-fault ground truth is public and the hidden test set is the expert-identified faults ABSENT from it; the organizer reference solution trains on data/labels.tif as the positive class (notebook cell 6: FAULT_LABELS_PATH = Path('data/labels.tif')). labels.tif IS the catalogue by design. Superseded by IR-51-11, which states the real consequence."
+  },
+  {
+    "id": "IR-51-09",
+    "summary": "Twelve scripts and four src modules in the live tree called a gems51 API that the merged package does not provide, so they raised AttributeError the moment they were run while importing cleanly in CI.",
+    "evidence": "AST check (scripts/check_repo_health.py) found e.g. gems51/scoring.py -> metric.dti_components (absent), gems51/strain.py -> grid.PIXEL_M / grid.tiles / grid.SHAPE / grid.footprint / grid.catalogue / grid.spatial_blocks / grid.catalogue_distance (all absent), scripts/run_all.py -> detector.run_folds, metric.evaluate_binary, emission.ExpectedBudgetPacker, submission.write_submission (all absent).",
+    "status": "CLOSED 2026-10-07 - all thirteen files moved verbatim to attic/legacy-api/ with a table of the missing attributes; scripts/check_repo_health.py now fails the build on any recurrence and runs in CI. The evidence/*.json they produced in earlier sessions is retained and still cited, labelled as previous-session measurement."
+  },
+  {
+    "id": "IR-51-10",
+    "summary": "The brief states the leaderboard high score is 0.3195. That is stale.",
+    "evidence": "Public leaderboard read 2026-10-07: #1 xiaofanhu 0.3774, #2 alexoktaba 0.3345, #3 nchuzhoy 0.3262, #4 kinghorton42 0.3222, #5 joeyfezster 0.3220, #6 Batik Shirt Brothers 0.3218, #7 DARD 0.3195. Snapshot stored in registry/leaderboard_snapshot.json.",
+    "status": "OPEN - flagged for the owner. The target to beat is 0.3774, not 0.3195. All planning in this session uses 0.3774."
+  },
+  {
+    "id": "IR-51-11",
+    "summary": "There is no hidden training target to recover: the only label set available offline is the known-fault catalogue, so every local number in this repository measures REDISCOVERY of mapped faults, not discovery of unmapped ones.",
+    "evidence": "labels.tif == existing_faults.tif (sha256 7ba308cc..., 425,830 B both); 60,988 positive pixels inside a 5,167,373-pixel footprint; the organizer trains on the same file.",
+    "status": "OPEN - structural, cannot be closed from inside the sandbox. Mitigation shipped this session: scripts/run_offcatalogue_ab.py hides half the catalogue's fault SYSTEMS and leaves them inside the negative class, which is the closest offline analogue of 'a fault the training catalogue does not contain'."
+  },
+  {
+    "id": "IR-51-12",
+    "summary": "Auto-context stacking improves RANKING consistently but does not convert that into score: in-block AUC +0.0085 (0.6652 -> 0.6737) while paired DTI at the shipped mass moves only +0.0012, and the per-fold deltas alternate sign (+0.0102, -0.0092, +0.0012, -0.0117, +0.0012, +0.0157).",
+    "evidence": "evidence/autocontext_holdout.json (6 folds x 2 levels x 4 mass ratios, 1658 s). Paired L2-L1 at r3.47: iso +0.0012 (4/6), ste +0.0006 (3/6).",
+    "status": "CLOSED 2026-10-07 as a NEGATIVE RESULT. The preregistered promotion rule (paired mean >= +0.006 AND >= 4/6 folds positive) is not met: 4/6 folds but only +0.0012. Level 2 is NOT shipped. Diagnosis worth carrying forward: the AUC gain is real and consistent, but it is concentrated in re-ordering pixels that were already inside the emitted top 3.47x|G| mass, so it buys no new credit. The lesson is that global AUC is the wrong proxy for this metric - the right proxy is credit-per-dot at the shipped mass, which is what evidence/emission_geometry.json reports. Code retained at src/gems51/autocontext.py and reachable via scripts/build_submission_v2.py --level 2."
+  },
+  {
+    "id": "IR-51-13",
+    "summary": "The 3-fold pilot of strike-coherent trace emission overstated the effect by 65%: +0.0033 on folds 0,2,4 became +0.0020 on all six, and the best w_cont moved from 0.7 to 0.35.",
+    "evidence": "evidence/emission_geometry.json. Per-fold paired delta for ste_L9_w0.35_s2.4_nothin vs iso_nms_r2.4: +0.0023, +0.0029, +0.0042, -0.0023, -0.0019, +0.0065; mean +0.0020, 4/6, sign-test p = 0.344. The w_cont=0 control reproduces the incumbent to within 2e-4 on every fold, which validates the implementation as a strict generalisation of isotropic NMS.",
+    "status": "OPEN as a methodological warning, ACTED ON for this session's ship. Folds 0, 2 and 4 are not a random subset of the six - they are the three EASIEST folds (incumbent DTI 0.2752 / 0.2843 / 0.3070 against 0.2691 / 0.2485 / 0.3057 for the rest), so any pilot on them is biased optimistic. Rule adopted: no emission or detector change is promoted on fewer than all six folds. w_cont = 0.35 is shipped rather than the pilot's 0.7 because it has the same mean on six folds with a 5x smaller worst-fold loss (-0.0023 vs -0.0101)."
+  },
+  {
+    "id": "IR-51-14",
+    "summary": "The blocked-holdout instrument is structurally blind to catalogue-suppressed positional refinement. The snap surface that H-51-L moves dots along MUST be suppressed around the mapped catalogue (mass within ~200 m of mapped faults is dead mass live - the mechanism behind the group's 0.2600 -> 0.2708 -> 0.2778 gains by B-pruning). But in the blocked holdout the pretend-hidden truth IS the block's catalogue pixels, so suppression zeroes the surface exactly where the instrument's truth sits. A refinement that works live can therefore never be rewarded by this holdout, and one that passes this holdout would be suspect live. H-51-L was falsified on the instrument anyway (window=2 -0.0033 DTI at conserved mass; window=1 neutral), but the instrument's verdict on suppressed-surface refinements is bounded by this argument.",
+    "evidence": "scripts/run_refine_holdout.py + data/refine_holdout.json + evidence/refine_*.json (session 2026-10-07 sweep); the B-prune mechanism is documented in knowledge/02 section 1 from GEMSDOE32 Round 4.",
+    "severity": "medium - limits what the local instrument can license; does not affect format/legal checks",
+    "status": "open - a refinement experiment needs either a non-catalogue truth model or a live slot with a pre-registered safety factor"
+  },
+  {
+    "id": "IR-51-15",
+    "summary": "The uniqueness gate's reference set is environment-dependent. The previous session compared against 211 references under /home/user/study on the owner's workstation; that path does not exist in this sandbox, where the default scan would have found 1 reference and the gate would have been vacuous. Fixed this session: scripts/fetch_gate_refs.sh rebuilds 21 family TIFs from the hash-addressable GEMSDOE24/GEMSDOE32 GitHub mirrors into data/refs/ (gitignored, regenerable), and scripts/run_uniqueness_gate.py now also scans data/refs, data/prior and docs/downloads. The gate now compares against 30 references including every live-scored family artifact whose bytes are reachable.",
+    "evidence": "scripts/fetch_gate_refs.sh (pinned repo@ref:path list); docs/uniqueness_gate.json is rewritten on every gate run.",
+    "severity": "low - fixed; kept open as a reminder that gate strength depends on the reference set present",
+    "status": "mitigated"
+  }
 ]

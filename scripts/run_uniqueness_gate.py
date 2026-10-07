@@ -82,10 +82,28 @@ def main() -> int:
     cand_hash = sha256_of(cand_path)
     refs = [Path(p) for p in (a.refs or [])]
     if not refs:
-        for root in (ROOT / "submissions", Path("/home/user/study")):
+        for root in (ROOT / "submissions", ROOT / "data" / "refs",
+                     ROOT / "data" / "prior", ROOT / "docs" / "downloads",
+                     Path("/home/user/study")):
             if root.exists():
                 refs += [p for p in root.rglob("*.tif")]
     refs = [p for p in refs if p.resolve() != cand_path.resolve()]
+    # Exclude the candidate's own build family: build_submission.py writes
+    # zeros/nan twins and a hard-gate sibling from the SAME field in one run,
+    # all carrying the same UTC build stamp.  Those are the candidate's own
+    # outputs, not prior submissions; matching them would be matching oneself.
+    import re
+    own_family_skipped = []
+    m = re.search(r"20\d{6}T\d{6}Z", cand_path.name)
+    if m:
+        stamp = m.group(0)
+        fam, refs = refs, []
+        for p in fam:
+            if stamp in p.name:
+                own_family_skipped.append({"path": str(p),
+                                           "reason": f"same build stamp {stamp} as candidate"})
+            else:
+                refs.append(p)
 
     rep = {
         "candidate": str(cand_path),
@@ -95,7 +113,7 @@ def main() -> int:
         "n_references": len(refs),
         "limits": {"iou": IOU_LIMIT, "cosine": COSINE_LIMIT,
                    "containment": CONTAINMENT_LIMIT},
-        "worst": {}, "matches": [], "skipped": [], "verdict": None,
+        "worst": {}, "matches": [], "skipped": own_family_skipped, "verdict": None,
     }
     cand_norm = float(np.linalg.norm(cand.ravel()))
 

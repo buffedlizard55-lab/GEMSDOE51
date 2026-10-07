@@ -1,0 +1,539 @@
+{
+ "generated_utc": "20261007T031825Z",
+ "arm": "H_M",
+ "ratio": 3.47,
+ "g_hidden_estimate": 12700,
+ "stage1_q": 20.0,
+ "gate_weight": 0.1,
+ "tile_px": 100,
+ "nms_radius": 2.4,
+ "excl_radius": 2.0,
+ "extra_features": [
+  "lidrel_facecoh09",
+  "lidrel_facecoh21",
+  "detelev_facecoh09",
+  "detelev_facecoh21",
+  "xscale_coincide_det",
+  "xscale_minrank_det",
+  "xscale_coincide_lid"
+ ],
+ "holdout": {
+  "arm": "H_M",
+  "auc": 0.6747456854854009,
+  "proxy_dti_r347": 0.2826030480152771,
+  "source": "data/holdout_H_M.json"
+ },
+ "stage1": {
+  "approved_px": 4136518,
+  "approved_share_of_footprint": 0.8005069500498609,
+  "threshold_at_q": -0.339622641509434,
+  "fault_median_II_nanostrain": 0.0,
+  "obs_median_II_nanostrain": 21.016352256722218,
+  "kostrov_meta": {
+   "tile_px": 100,
+   "tile_shape": [
+    38,
+    33
+   ],
+   "h_seis_m": 15000.0,
+   "median_centroid_distance_px": 36.345563690772494,
+   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+   "regional_median_slip_rate_mm_yr": 0.1,
+   "total_mapped_trace_km": 6821.350197517395
+  }
+ },
+ "stage1_stats": {
+  "fault_II_median_nanostrain_tiles_with_trace": 0.0,
+  "fault_II_median_nanostrain_all_tiles": 5.280391639762229,
+  "observed_II_median_nanostrain": 21.016352256722218,
+  "approved_share_at_q20": 0.8005069500498609,
+  "kostrov_meta": {
+   "tile_px": 100,
+   "tile_shape": [
+    38,
+    33
+   ],
+   "h_seis_m": 15000.0,
+   "median_centroid_distance_px": 36.345563690772494,
+   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+   "regional_median_slip_rate_mm_yr": 0.1,
+   "total_mapped_trace_km": 6821.350197517395
+  }
+ },
+ "artifacts": [
+  {
+   "role": "PRIMARY",
+   "gate_mode": "soft",
+   "description": "H_M detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10)",
+   "holdout_cost_vs_ungated": 0.0,
+   "file": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+   "zip": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1.zip",
+   "nan_twin": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+   "sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+   "bytes": 232804,
+   "submission_name": "GEMSDOE51-HM-SOFT-W010",
+   "note": "GEMSDOE51 two-stage | H_M detector (44069 dots at 2.4 px spacing, none within 200 m of the catalogue) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit as soft prior w=0.1 | proxy DTI 0.2826 / gate cost +0.0000 on the blocked holdout | UNSCORED",
+   "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
+   "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "shape_matches_template": true,
+    "all_cells_finite": true,
+    "nan_cells": 0,
+    "values_outside_0_1": 0,
+    "min_value": 0.0,
+    "max_value": 1.0,
+    "nodata_tag_is_none": true,
+    "positive_px": 44069,
+    "total_mass": 44069.0,
+    "portal_legal": true
+   },
+   "uniqueness": {
+    "candidate": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+    "sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+    "byte_duplicate_of": [],
+    "support_jaccard": {
+     "g25_dotted_02600": 0.015364,
+     "g32_anchor_02708": 0.015364,
+     "g32_h33b2_02778": 0.016594,
+     "13gems-r13-lattice-nan": 0.007507,
+     "8gemsdoe-hedge-v2": 0.015879,
+     "gems10-h25-ctx-ridge": 0.034337,
+     "gems10-h28-dotted-ridge": 0.024225,
+     "gems16-h16-1-baseline-nan": 0.023946,
+     "gems19-h19-4-thermalpop-allfinite": 0.024432,
+     "gems19-h19-5-powerlaw-allfinite": 0.024833,
+     "gems24-dotted-d1-5-allfinite": 0.018086,
+     "gems24-dotted-d2-8-allfinite": 0.015364,
+     "gems25-dotted-d2-8-zeros": 0.015364,
+     "gems32-bayesopt-dilation-zeros": 0.010724,
+     "gems32-probe-S1-anchor": 0.015364,
+     "gemsdoe-ens12-7f00890a": 0.019948,
+     "gemsdoe32-d28-ref02600-repro-zeros": 0.015364,
+     "gemsdoe32-h32a-dipstep-zeros": 0.015487,
+     "gemsdoe32-h32b-swarm-zeros": 0.015327,
+     "gemsdoe32-h32c-claycap-zeros": 0.015591,
+     "gemsdoe32-h32d-submodular-zeros": 0.015613,
+     "gemsdoe32-h33-2-b2-zeros": 0.016594,
+     "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.016436,
+     "gemsdoe9-2314b599": 0.004269,
+     "gems51-sbd-hridge-44090-20261006": 0.000703,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.231064,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.231064,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.297693,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.297693,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.229124,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.229124,
+     "gemsdoe51-strainbudget-s1-v1": 0.031582
+    },
+    "support_containment": {
+     "g25_dotted_02600": 0.030271,
+     "g32_anchor_02708": 0.030271,
+     "g32_h33b2_02778": 0.030271,
+     "13gems-r13-lattice-nan": 0.042433,
+     "8gemsdoe-hedge-v2": 0.096326,
+     "gems10-h25-ctx-ridge": 0.164447,
+     "gems10-h28-dotted-ridge": 0.060836,
+     "gems16-h16-1-baseline-nan": 0.089156,
+     "gems19-h19-4-thermalpop-allfinite": 0.090835,
+     "gems19-h19-5-powerlaw-allfinite": 0.090835,
+     "gems24-dotted-d1-5-allfinite": 0.04198,
+     "gems24-dotted-d2-8-allfinite": 0.030271,
+     "gems25-dotted-d2-8-zeros": 0.030271,
+     "gems32-bayesopt-dilation-zeros": 0.021444,
+     "gems32-probe-S1-anchor": 0.030271,
+     "gemsdoe-ens12-7f00890a": 0.096326,
+     "gemsdoe32-d28-ref02600-repro-zeros": 0.030271,
+     "gemsdoe32-h32a-dipstep-zeros": 0.031201,
+     "gemsdoe32-h32b-swarm-zeros": 0.030815,
+     "gemsdoe32-h32c-claycap-zeros": 0.031337,
+     "gemsdoe32-h32d-submodular-zeros": 0.031451,
+     "gemsdoe32-h33-2-b2-zeros": 0.030271,
+     "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.030316,
+     "gemsdoe9-2314b599": 0.037419,
+     "gems51-sbd-hridge-44090-20261006": 0.004334,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.375389,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.375389,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.458803,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.458803,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.372824,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.372824,
+     "gemsdoe51-strainbudget-s1-v1": 0.097257
+    },
+    "stage1_dominance": {
+     "approved_area_share_of_footprint": 0.8005069500498609,
+     "emitted_pixels_inside_approved": 34488,
+     "emitted_pixels_total": 44069,
+     "emitted_share_inside_approved": 0.782590936939799,
+     "lift_over_area_share": 0.9776191660685194
+    },
+    "verdict": "PASS",
+    "notes": []
+   },
+   "content": {
+    "refine": null
+   },
+   "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified",
+   "format_table": [
+    [
+     "single band",
+     "True"
+    ],
+    [
+     "dtype float32",
+     "True"
+    ],
+    [
+     "CRS EPSG:32611",
+     "True"
+    ],
+    [
+     "geotransform matches template",
+     "True"
+    ],
+    [
+     "3730 x 3292",
+     "True"
+    ],
+    [
+     "all cells finite",
+     "True"
+    ],
+    [
+     "values inside [0, 1]",
+     "True"
+    ],
+    [
+     "nodata tag absent",
+     "True"
+    ],
+    [
+     "positive pixels",
+     "44,069"
+    ],
+    [
+     "total emitted mass",
+     "44,069"
+    ]
+   ]
+  },
+  {
+   "role": "SECONDARY",
+   "gate_mode": "hard",
+   "description": "H_M detector x 3-bag ensemble, emitted only inside the top 80% of tiles by the strain-budget deficit - the the brief literal points-only-inside-approved-tiles design",
+   "holdout_cost_vs_ungated": -0.0027,
+   "file": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+   "zip": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20.zip",
+   "nan_twin": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+   "sha256": "741f781734cbbf7145c2f7c93112d2272e62213205f15283babad65433a7fc28",
+   "bytes": 223192,
+   "submission_name": "GEMSDOE51-HM-HARDQ20",
+   "note": "GEMSDOE51 two-stage | H_M detector (44069 dots at 2.4 px spacing, none within 200 m of the catalogue) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit as hard gate, top 80% of tiles | proxy DTI 0.2826 / gate cost -0.0027 on the blocked holdout | UNSCORED",
+   "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
+   "checks": {
+    "single_band": true,
+    "dtype_float32": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "shape_matches_template": true,
+    "all_cells_finite": true,
+    "nan_cells": 0,
+    "values_outside_0_1": 0,
+    "min_value": 0.0,
+    "max_value": 1.0,
+    "nodata_tag_is_none": true,
+    "positive_px": 44069,
+    "total_mass": 44069.0,
+    "portal_legal": true
+   },
+   "uniqueness": {
+    "candidate": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+    "sha256": "741f781734cbbf7145c2f7c93112d2272e62213205f15283babad65433a7fc28",
+    "byte_duplicate_of": [],
+    "support_jaccard": {
+     "g25_dotted_02600": 0.014196,
+     "g32_anchor_02708": 0.014196,
+     "g32_h33b2_02778": 0.015331,
+     "13gems-r13-lattice-nan": 0.007572,
+     "8gemsdoe-hedge-v2": 0.015925,
+     "gems10-h25-ctx-ridge": 0.032268,
+     "gems10-h28-dotted-ridge": 0.023033,
+     "gems16-h16-1-baseline-nan": 0.021468,
+     "gems19-h19-4-thermalpop-allfinite": 0.022061,
+     "gems19-h19-5-powerlaw-allfinite": 0.022397,
+     "gems24-dotted-d1-5-allfinite": 0.016189,
+     "gems24-dotted-d2-8-allfinite": 0.014196,
+     "gems25-dotted-d2-8-zeros": 0.014196,
+     "gems32-bayesopt-dilation-zeros": 0.010047,
+     "gems32-probe-S1-anchor": 0.014196,
+     "gemsdoe-ens12-7f00890a": 0.020006,
+     "gemsdoe32-d28-ref02600-repro-zeros": 0.014196,
+     "gemsdoe32-h32a-dipstep-zeros": 0.014493,
+     "gemsdoe32-h32b-swarm-zeros": 0.014297,
+     "gemsdoe32-h32c-claycap-zeros": 0.014377,
+     "gemsdoe32-h32d-submodular-zeros": 0.014584,
+     "gemsdoe32-h33-2-b2-zeros": 0.015331,
+     "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.015174,
+     "gemsdoe9-2314b599": 0.004496,
+     "gems51-sbd-hridge-44090-20261006": 0.000866,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.279588,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.279588,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.231631,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.231631,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.18176,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.18176,
+     "gemsdoe51-strainbudget-s1-v1": 0.037499
+    },
+    "support_containment": {
+     "g25_dotted_02600": 0.028002,
+     "g32_anchor_02708": 0.028002,
+     "g32_h33b2_02778": 0.028002,
+     "13gems-r13-lattice-nan": 0.042797,
+     "8gemsdoe-hedge-v2": 0.096599,
+     "gems10-h25-ctx-ridge": 0.154848,
+     "gems10-h28-dotted-ridge": 0.057909,
+     "gems16-h16-1-baseline-nan": 0.080124,
+     "gems19-h19-4-thermalpop-allfinite": 0.082212,
+     "gems19-h19-5-powerlaw-allfinite": 0.082121,
+     "gems24-dotted-d1-5-allfinite": 0.037646,
+     "gems24-dotted-d2-8-allfinite": 0.028002,
+     "gems25-dotted-d2-8-zeros": 0.028002,
+     "gems32-bayesopt-dilation-zeros": 0.020105,
+     "gems32-probe-S1-anchor": 0.028002,
+     "gemsdoe-ens12-7f00890a": 0.096599,
+     "gemsdoe32-d28-ref02600-repro-zeros": 0.028002,
+     "gemsdoe32-h32a-dipstep-zeros": 0.029227,
+     "gemsdoe32-h32b-swarm-zeros": 0.028773,
+     "gemsdoe32-h32c-claycap-zeros": 0.028932,
+     "gemsdoe32-h32d-submodular-zeros": 0.029408,
+     "gemsdoe32-h33-2-b2-zeros": 0.028002,
+     "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.028024,
+     "gemsdoe9-2314b599": 0.039393,
+     "gems51-sbd-hridge-44090-20261006": 0.005333,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.436997,
+     "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.436997,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.376137,
+     "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.376137,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.307609,
+     "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.307609,
+     "gemsdoe51-strainbudget-s1-v1": 0.11482
+    },
+    "stage1_dominance": {
+     "approved_area_share_of_footprint": 0.8005069500498609,
+     "emitted_pixels_inside_approved": 44069,
+     "emitted_pixels_total": 44069,
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.2492083921791226
+    },
+    "verdict": "PASS",
+    "notes": []
+   },
+   "content": {
+    "refine": null
+   },
+   "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified",
+   "format_table": [
+    [
+     "single band",
+     "True"
+    ],
+    [
+     "dtype float32",
+     "True"
+    ],
+    [
+     "CRS EPSG:32611",
+     "True"
+    ],
+    [
+     "geotransform matches template",
+     "True"
+    ],
+    [
+     "3730 x 3292",
+     "True"
+    ],
+    [
+     "all cells finite",
+     "True"
+    ],
+    [
+     "values inside [0, 1]",
+     "True"
+    ],
+    [
+     "nodata tag absent",
+     "True"
+    ],
+    [
+     "positive pixels",
+     "44,069"
+    ],
+    [
+     "total emitted mass",
+     "44,069"
+    ]
+   ]
+  }
+ ],
+ "primary": {
+  "role": "PRIMARY",
+  "gate_mode": "soft",
+  "description": "H_M detector x 3-bag ensemble, tilted by the 10 km Kostrov strain-budget deficit as a soft multiplicative prior (w = 0.10)",
+  "holdout_cost_vs_ungated": 0.0,
+  "file": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+  "zip": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1.zip",
+  "nan_twin": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+  "sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+  "bytes": 232804,
+  "submission_name": "GEMSDOE51-HM-SOFT-W010",
+  "note": "GEMSDOE51 two-stage | H_M detector (44069 dots at 2.4 px spacing, none within 200 m of the catalogue) | Stage 1 = 10 km Kostrov geodetic strain-budget deficit as soft prior w=0.1 | proxy DTI 0.2826 / gate cost +0.0000 on the blocked holdout | UNSCORED",
+  "format": "single band, float32, EPSG:32611, 100 m, 3730x3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no nodata tag",
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "transform_matches_template": true,
+   "shape_matches_template": true,
+   "all_cells_finite": true,
+   "nan_cells": 0,
+   "values_outside_0_1": 0,
+   "min_value": 0.0,
+   "max_value": 1.0,
+   "nodata_tag_is_none": true,
+   "positive_px": 44069,
+   "total_mass": 44069.0,
+   "portal_legal": true
+  },
+  "uniqueness": {
+   "candidate": "gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+   "sha256": "c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839",
+   "byte_duplicate_of": [],
+   "support_jaccard": {
+    "g25_dotted_02600": 0.015364,
+    "g32_anchor_02708": 0.015364,
+    "g32_h33b2_02778": 0.016594,
+    "13gems-r13-lattice-nan": 0.007507,
+    "8gemsdoe-hedge-v2": 0.015879,
+    "gems10-h25-ctx-ridge": 0.034337,
+    "gems10-h28-dotted-ridge": 0.024225,
+    "gems16-h16-1-baseline-nan": 0.023946,
+    "gems19-h19-4-thermalpop-allfinite": 0.024432,
+    "gems19-h19-5-powerlaw-allfinite": 0.024833,
+    "gems24-dotted-d1-5-allfinite": 0.018086,
+    "gems24-dotted-d2-8-allfinite": 0.015364,
+    "gems25-dotted-d2-8-zeros": 0.015364,
+    "gems32-bayesopt-dilation-zeros": 0.010724,
+    "gems32-probe-S1-anchor": 0.015364,
+    "gemsdoe-ens12-7f00890a": 0.019948,
+    "gemsdoe32-d28-ref02600-repro-zeros": 0.015364,
+    "gemsdoe32-h32a-dipstep-zeros": 0.015487,
+    "gemsdoe32-h32b-swarm-zeros": 0.015327,
+    "gemsdoe32-h32c-claycap-zeros": 0.015591,
+    "gemsdoe32-h32d-submodular-zeros": 0.015613,
+    "gemsdoe32-h33-2-b2-zeros": 0.016594,
+    "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.016436,
+    "gemsdoe9-2314b599": 0.004269,
+    "gems51-sbd-hridge-44090-20261006": 0.000703,
+    "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.231064,
+    "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.231064,
+    "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.297693,
+    "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.297693,
+    "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.229124,
+    "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.229124,
+    "gemsdoe51-strainbudget-s1-v1": 0.031582
+   },
+   "support_containment": {
+    "g25_dotted_02600": 0.030271,
+    "g32_anchor_02708": 0.030271,
+    "g32_h33b2_02778": 0.030271,
+    "13gems-r13-lattice-nan": 0.042433,
+    "8gemsdoe-hedge-v2": 0.096326,
+    "gems10-h25-ctx-ridge": 0.164447,
+    "gems10-h28-dotted-ridge": 0.060836,
+    "gems16-h16-1-baseline-nan": 0.089156,
+    "gems19-h19-4-thermalpop-allfinite": 0.090835,
+    "gems19-h19-5-powerlaw-allfinite": 0.090835,
+    "gems24-dotted-d1-5-allfinite": 0.04198,
+    "gems24-dotted-d2-8-allfinite": 0.030271,
+    "gems25-dotted-d2-8-zeros": 0.030271,
+    "gems32-bayesopt-dilation-zeros": 0.021444,
+    "gems32-probe-S1-anchor": 0.030271,
+    "gemsdoe-ens12-7f00890a": 0.096326,
+    "gemsdoe32-d28-ref02600-repro-zeros": 0.030271,
+    "gemsdoe32-h32a-dipstep-zeros": 0.031201,
+    "gemsdoe32-h32b-swarm-zeros": 0.030815,
+    "gemsdoe32-h32c-claycap-zeros": 0.031337,
+    "gemsdoe32-h32d-submodular-zeros": 0.031451,
+    "gemsdoe32-h33-2-b2-zeros": 0.030271,
+    "gemsdoe32-h33-2b2-plus-h33-1-zeros": 0.030316,
+    "gemsdoe9-2314b599": 0.037419,
+    "gems51-sbd-hridge-44090-20261006": 0.004334,
+    "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan": 0.375389,
+    "gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros": 0.375389,
+    "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan": 0.458803,
+    "gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros": 0.458803,
+    "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan": 0.372824,
+    "gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros": 0.372824,
+    "gemsdoe51-strainbudget-s1-v1": 0.097257
+   },
+   "stage1_dominance": {
+    "approved_area_share_of_footprint": 0.8005069500498609,
+    "emitted_pixels_inside_approved": 34488,
+    "emitted_pixels_total": 44069,
+    "emitted_share_inside_approved": 0.782590936939799,
+    "lift_over_area_share": 0.9776191660685194
+   },
+   "verdict": "PASS",
+   "notes": []
+  },
+  "content": {
+   "refine": null
+  },
+  "evidence": "format checks are MEASURED by re-reading the written bytes in a second, independent process; no score here is organizer-verified",
+  "format_table": [
+   [
+    "single band",
+    "True"
+   ],
+   [
+    "dtype float32",
+    "True"
+   ],
+   [
+    "CRS EPSG:32611",
+    "True"
+   ],
+   [
+    "geotransform matches template",
+    "True"
+   ],
+   [
+    "3730 x 3292",
+    "True"
+   ],
+   [
+    "all cells finite",
+    "True"
+   ],
+   [
+    "values inside [0, 1]",
+    "True"
+   ],
+   [
+    "nodata tag absent",
+    "True"
+   ],
+   [
+    "positive pixels",
+    "44,069"
+   ],
+   [
+    "total emitted mass",
+    "44,069"
+   ]
+  ]
+ }
+}

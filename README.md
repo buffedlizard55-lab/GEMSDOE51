@@ -316,7 +316,7 @@ python3 scripts/build_site.py
 PYTHONPATH=src python -m pytest tests -q
 ```
 
-## 4. Known irregularities — full register in `registry/irregularities.json` (14 entries)
+## 4. Known irregularities — full register in `registry/irregularities.json` (16 entries)
 
 * **IR-51-01** GEMSDOE32's "0.2708 anchor" is byte-identical to GEMSDOE25's 0.2600 file. The
   0.2708 label is not reproducible from the artifacts; we treat the file as the 0.2600 anchor.
@@ -348,9 +348,99 @@ PYTHONPATH=src python -m pytest tests -q
   effect by 65 %, because folds 0/2/4 are the three *easiest* folds. Rule adopted: nothing is
   promoted on fewer than all six folds.
 
-## 5. What shipped this session
+## 5. What shipped this session (2026-10-07) — two parallel work streams
 
-### 5.1 The deliverable
+Two independent work streams ran in this repository on 2026-10-07 and both shipped a
+portal-legal submission. **Stream A** (§5.A) re-emitted the incumbent detector with
+strike-coherent traces and holds the best measured holdout (proxy DTI **0.2836**); it is the
+site's primary download. **Stream B** (§5.B, this branch) independently added a cross-scale
+crest-coincidence arm and a two-stage builder; its artifact (**0.2826**, second-best) is
+offered as the second candidate so this week's three submission slots can span two
+structurally different emissions. Both passed the same format contract and uniqueness gate.
+
+### 5.B.1 Stream B deliverable (secondary candidate)
+
+`docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif` —
+**44,069 emitted pixels**, sha256 `c3bf15a0471c5f00d3a436f2328ef443564a955f44a32776485e706344529839`.
+
+| role | gate | file | holdout cost vs ungated | max IoU vs any prior artifact | uniqueness |
+|---|---|---|---|---|---|
+| CANDIDATE | soft prior w = 0.10 | `gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif` | +0.0000 | 0.298 (own previous H_D file) | **PASS** (31 refs) |
+| VARIANT | hard gate, top 80 % of tiles | `gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif` | −0.0027 | 0.280 | **PASS** |
+
+Both are written from the same H_M detector field so the pair isolates exactly one mechanism —
+how Stage 1 is allowed to touch the dots. Portal-legal by re-read measurement: single band,
+float32, EPSG:32611, 3730 × 3292, every one of 12,279,160 cells finite, min 0.0 max 1.0, no
+nodata tag, 0 dots within 200 m of the catalogue (min distance 2.236 px, measured).
+
+### 5.B.2 Why the group's best scored 0.2778 — and what this session did with it
+
+Studied from `buffedlizard55-lab/GEMSDOE32` (README §Round 4 + the h33-2-b2 audit JSON): the
+0.2778 file is not a better detector, it is a **removal** — dots within 200 m of the mapped
+catalogue deleted from the 0.2600 emission (44,090 → 40,199 → 37,654 dots, 0.2600 → 0.2708 →
+0.2778). Known faults are masked out of scoring, so that mass is dead. Full write-up and source
+register: `knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md`. Two consequences were
+applied here: the 2 px exclusion radius is kept, and five new candidate hypotheses were
+pre-registered (letters L/M/P/S/V because Stream A already owns F/G/I/J/K) against that backdrop (registry `registry/hypotheses.json`).
+
+### 5.B.3 The five new candidates, and what happened to them
+
+| rank | id | mechanism | result |
+|---|---|---|---|
+| 1 | **H-51-L** trace-axis snap (relocate each dot to the strongest catalogue-suppressed crest cell within ±2 px) | positional refinement — attacks the measured ~260 m vs ~200 m localisation gap | **FALSIFIED** under the pre-registered rule: at conserved mass and spacing, window = 2 costs −0.0033 proxy DTI (0/6 folds on distance); window = 1 is neutral (−0.0000). Two earlier failure modes were reproduced and explained: −0.013 was a spacing collapse (75 % of dots ended with a neighbour inside 2.4 px vs 0 % at baseline); +0.0021 was contamination from silently dropping ~7 % of dots. Instrument caveat registered as IR-51-14. |
+| 2 | **H-51-M** cross-scale crest coincidence (fine crest σ1.5 × proximity to coarse crest σ4 skeleton, det_elev + LiDAR relief) | a detector feature distinguishing on-axis from off-flank pixels | **ADOPTED** — second-best arm measured in this repository (Stream A is 0.0010 ahead): in-block AUC **0.6747** (+0.0021 over H_D) and proxy DTI **0.2826** at M/\|G\| = 3.47 (+0.0009 over H_D, 3/6 folds positive). The gain is small and inside per-fold noise; stated, not hidden. |
+| 3 | H-51-P parallel-strand offset template | not yet tested (queued) |
+| 4 | H-51-S dilational-jog coincidence | not yet tested (weak prior: GEMSDOE26 scored 0.1223) |
+| 5 | H-51-V volcanic-vent feeder alignments | not yet tested (weak prior: 21 vents) |
+
+### 5.B.4 Reproducibility, re-verified from scratch this session
+
+* `scripts/restore_data.py --group all`: **10/10 hash-pinned files PASS** (training_features
+  sha256 `4371c82e…`, labels/existing_faults `7ba308cc…`, sample_submission `2176d08e…`).
+* `prepare_data.py`: footprint 5,167,373 px; catalogue 60,988 px; grid 3730 × 3292, EPSG:32611;
+  `sample_submission == labels` in-footprint (re-confirms masking).
+* `pytest tests -q`: **16 passed** (metric identities + break-even bar + refinement invariants).
+* Blocked holdout, arm H_D: reproduced **bit-for-bit** against the previous session's committed
+  JSON (AUC 0.6726182834034514, proxy DTI 0.2816626603034904 at r = 3.47, identical per-fold).
+
+### Stage 1 and Stage 2, reported separately (this session, H_M fields)
+
+*Stage 1 alone* (trace-level holdout, uniform random dots): deficit lift recall/area = 0.98 at the
+median threshold — the deficit remains **worse than the raw geodetic field** as a standalone prior
+(Spearman deficit-vs-heldout = +0.032 vs +0.099 geodetic-only; `data/stage1_trace_holdout.json`).
+*Stage 2* (blocked holdout, `data/two_stage_results.json` on `field_H_M_fold*.npy`):
+ungated 0.2826; hard-gated q50/q60/q70/q80 → 0.1818 / 0.1692 / 0.1467 / 0.1162 — monotone harm,
+consistent with last session. Soft prior w = 0.10 is the only non-negative setting on the re-run
+gate sweep (+0.0000, 3/6 folds; `data/gate_sweep.json`).
+
+### 5.B.5 Honest expectation, written down before the score is known
+
+The instrument says **0.2826** proxy DTI at the live mass ratio, +0.0009 over the previous stack.
+That brackets the group's best owner claim (0.2778) and sits below the current public leader
+(0.3774 at the 2026-10-06 read, `registry/leaderboard.json`). **Expect this file to land in the
+high 0.2s.** It is a genuinely new, independently verified, portal-legal submission — it is not
+yet a leaderboard win. Closing the gap to the leader is a localisation problem (§6 of
+`knowledge/02`) and is what the next session should attack.
+
+### 5.B.6 What next session should do (Stream B view)
+
+* **Attack localisation with a non-block instrument.** H51-F showed the blocked holdout cannot
+  reward catalogue-supervised refinement (IR-51-14). Build a truth model that is NOT the catalogue
+  (e.g. SGMC-off-catalogue strands rescored with the masked metric, or a leave-region-out on the
+  GeoDAWN radiometric/magnetic lineaments) and re-test snap-style refinement under it.
+* **H-51-P (parallel-strand offset template)** is designed and queued; it targets the organiser's
+  explicitly-eligible category and uses no data the leader candidates are known to use.
+* The soft-prior weight is measured at zero contribution on H_M; a principled alternative is to
+  spend that degree of freedom on a *geodetic-only* tilt (Spearman +0.099 vs +0.032 for the
+  deficit) — cheap to test on the saved fields.
+* Get the real hidden-truth style: IR-51-08 stands; every number here is measured against the
+  visible catalogue as proxy.
+
+---
+
+### 5.A Stream A (site primary): strike-coherent trace emission
+
+#### 5.A.1 The deliverable
 
 `docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif`
 — 44,069 emitted pixels, sha256 `e13394d96baf…`, submission name **`GEMSDOE51-STE-HD-R347`**.
@@ -373,10 +463,10 @@ Verified by re-reading the written bytes in a second process, then again by the 
 The one thing that changed versus last session's file is the **emission geometry**, and it is the
 only change that survived six folds.
 
-### 5.2 Three hypotheses tested, one adopted, one rejected, one re-scoped
+#### 5.A.2 Three hypotheses tested, one adopted, one rejected, one re-scoped
 
 Full slate with layers, physical signature and the "why uncatalogued" argument is in
-`registry/hypotheses.json` (11 entries) and on the
+`registry/hypotheses.json` (16 entries) and on the
 [hypotheses page](https://buffedlizard55-lab.github.io/GEMSDOE51/hypotheses.html).
 
 | rank *a priori* | id | hypothesis | cost | measured paired Δ DTI | folds | verdict |
@@ -422,7 +512,7 @@ zero risk.
 Also measured and **rejected**: across-strike thinning (−0.005), along-trace spacing ≥ 3.6 px
 (−0.004 to −0.012), line length 15 (≤ L9).
 
-### 5.3 The honest instrument: off-catalogue A/B
+#### 5.A.3 The honest instrument: off-catalogue A/B
 
 The blocked holdout hides a whole *region*, so inside it no fault is mapped at all — it cannot
 measure the actual task, which is finding a fault the catalogue missed *while other faults in the
@@ -450,7 +540,7 @@ Two things fall out of this table and both matter more than any tuning result he
    random by 1.9×, so it is finding real new geometry — but **IR-51-11 is now quantified**, and
    every 0.28 in this repository should be read with that factor in mind.
 
-### 5.4 Stage 1, reported separately
+#### 5.A.4 Stage 1, reported separately
 
 *Stage 1* (Kostrov strain-budget deficit, 10 km tiles) is scored on a **trace-level** holdout: a
 spatial block would zero the fault-accommodated term inside the block and make the question
@@ -494,7 +584,7 @@ Stage 1 is therefore shipped as a **soft multiplicative prior at w = 0.10** only
 setting that is not negative — and the shipped file's Stage-1 dominance lift of 0.963 confirms it
 is a tilt, not a filter.
 
-### 5.5 Where the headroom actually is
+#### 5.A.5 Where the headroom actually is
 
 Fitting the metric identity to a scored fold gives
 `DTI = c·m / (0.2·m·(c + 1 − b) + 0.8)` with credit-per-dot `c = 0.1217`, on-truth share
@@ -510,7 +600,7 @@ both proved rather than guessed:
   This is why a +0.002 emission win is the honest result of this session rather than a
   disappointment, and why the next session's slate (H-51-J, H-51-I, H-51-K) is all detector work.
 
-### 5.6 Phase 1 entries are not free
+#### 5.A.6 Phase 1 entries are not free
 
 The organizer has stated that the Phase 2 test set "will use a test set that is updated by expert
 review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation

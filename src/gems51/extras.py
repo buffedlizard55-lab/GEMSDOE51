@@ -106,7 +106,55 @@ def build_static(stack, footprint: np.ndarray) -> dict:
         coh21[~m] = np.nan
         g[f"{lab}_facecoh21"] = coh21.astype(np.float32)
 
+    # ---------------------------------------------------------------- H-51-M
+    # Cross-scale crest coincidence (session 2026-10-07, knowledge/02 §3 rank 2)
+    _build_xscale(g, get, footprint)
+
     return g
+
+
+def _rank_over(a: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    """Percentile rank in [0, 1] over ``valid`` (monotone, 0 where invalid)."""
+    v = a[valid]
+    out = np.zeros(a.shape, np.float32)
+    if v.size == 0:
+        return out
+    order = np.argsort(np.argsort(v, kind="stable"), kind="stable")
+    out[valid] = (order.astype(np.float64) / max(1, v.size - 1)).astype(np.float32)
+    return out
+
+
+def _build_xscale(g: dict, get, footprint: np.ndarray) -> None:
+    """H-51-M — cross-scale crest coincidence (session 2026-10-07).
+
+    A fine crest (sigma 1.5 px) that sits exactly on the axis of the coarse
+    crest (sigma 4 px) marks the trace of a through-going structure; an
+    asymmetric scarp displaces the single-scale response off-axis, so the
+    positional agreement of the two scales is a localisation signal no shipped
+    feature carries.  Implemented as Q(fine crest) * exp(-d/1.5) where d is the
+    distance to the top-2% coarse-crest set, plus the symmetric rank-min
+    agreement min(Q_fine, Q_coarse).
+    """
+    det = get("comp_det_elev")
+    m = np.isfinite(det) & footprint
+    _e, crest15, _l = lineament_bank(det, m, 1.5)
+    _e, crest40, _l2 = lineament_bank(det, m, 4.0)
+    m15 = m & np.isfinite(crest15)
+    m40 = m & np.isfinite(crest40)
+    thr = np.nanpercentile(crest40[m40], 98.0)
+    d40 = ndi.distance_transform_edt(~(m40 & (crest40 >= thr))).astype(np.float32)
+    q15 = _rank_over(crest15, m15)
+    q40 = _rank_over(crest40, m40)
+    near = np.exp(-d40 / 1.5).astype(np.float32)
+    g["xscale_coincide_det"] = (q15 * near).astype(np.float32)
+    g["xscale_minrank_det"] = np.minimum(q15, q40).astype(np.float32)
+
+    lid = get("lid_relief")
+    ml = np.isfinite(lid) & footprint
+    _e, lcrest15, _l3 = lineament_bank(lid, ml, 1.5)
+    ml15 = ml & np.isfinite(lcrest15)
+    ql15 = _rank_over(lcrest15, ml15)
+    g["xscale_coincide_lid"] = (ql15 * near).astype(np.float32)
 
 
 def _ncd(a, mask, sigma, order):

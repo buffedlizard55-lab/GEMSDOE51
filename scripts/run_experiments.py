@@ -51,6 +51,7 @@ ARMS = {
     "base": [],                                   # 58 physical stack features
     "H_E": ["base_s", "cond_s", "grav2_s", "base_step_coh"],   # basin-edge geophysics
     "H_D": ["facecoh"],                           # scarp-facing coherence
+    "H_M": ["facecoh", "xscale"],                 # H_D + cross-scale crest coincidence
     "H_C": [],                                    # catalogue tips (fold-dependent)
     "H_ALL": ["base_s", "cond_s", "grav2_s", "base_step_coh", "facecoh"],
 }
