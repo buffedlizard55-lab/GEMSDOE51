@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "checked_utc_date": "2026-10-07",
+  "policy": "No leaderboard standings, participant rankings, or copied row values are stored in this repository. See the official Terms of Use link below; no written permission to monitor or copy standings is on record.",
+  "sources": {
+    "official_leaderboard": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "official_terms_of_use": "https://www.drivendata.org/termsofuse/",
+    "official_metric_definition": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "gemsdoe32_readme": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md",
+    "gemsdoe32_site": "https://buffedlizard55-lab.github.io/GEMSDOE32/"
+  },
+  "attribution_correction": {
+    "historical_claim": "A public 0.2778 result was attributed to GEMSDOE32 H33-2-B2.",
+    "status": "UNSUPPORTED_AND_CONTRADICTED_BY_SIBLING_REPORTING",
+    "basis": "The sibling's own README/site labels H33-2-B2 UNSCORED and describes 0.2747 as a modelled projection. No organizer-authenticated file-to-score mapping has been verified.",
+    "conclusion": "Do not attribute a leaderboard score to H33-2-B2; do not present its modelled projection as an observed or organizer-returned score."
+  },
+  "scientific_interpretation": {
+    "official_metric": "The published distance-weighted Tversky index is DTI = TP_w / (0.2*(TP_w + FP_w) + 0.8*|G|); the distance credit uses a triangular kernel that decreases to zero at 300 m.",
+    "citation": "The metric definition is linked above. This formula describes how a score is computed, not why a particular submission achieved it.",
+    "not_identifiable_without_scored_artifact_and_hidden_labels": [
+      "the scored TIFF and its prediction coordinates",
+      "the hidden evaluation fault geometry and hidden |G|",
+      "the submission's weighted TP and FP contributions",
+      "the geological layers, operators, training protocol, and causal reason for the result"
+    ],
+    "no_inference": "A public score by itself does not identify a geological mechanism or establish that a proposed layer/operator caused the result."
+  },
+  "local_measurements_are_separate": {
+    "best_recorded_six_fold_proxy_mean": {
+      "candidate": "STE L9, w=0.35, NMS spacing 2.4 px",
+      "mean_proxy_dti": 0.28360257965744917,
+      "comparator": "isotropic NMS, 2.4 px",
+      "comparator_mean_proxy_dti": 0.281639410150801,
+      "paired_delta": 0.001963169506648247,
+      "folds_higher": 4,
+      "folds_total": 6,
+      "paired_sd_approx": 0.00345439,
+      "approximate_paired_95pct_t_interval": [-0.00166, 0.00559],
+      "evidence": "evidence/emission_geometry.json",
+      "classification": "VISIBLE-CATALOGUE SIX-FOLD PROXY; NOT A COMPETITION SCORE; NOT A ROBUST WIN"
+    },
+    "incumbent_h_d": {
+      "mean_proxy_dti": 0.2816626603034904,
+      "folds": 6,
+      "evidence": "data/holdout_H_D.json",
+      "classification": "VISIBLE-CATALOGUE SPATIALLY BLOCKED PROXY; NOT A COMPETITION SCORE"
+    },
+    "organizer_verified_gemsdoe51_score": null
+  },
+  "decision": "No local artifact has an organizer-verified score. Do not infer hidden-label performance from any local proxy holdout, and do not claim a leaderboard score improvement without an organizer result tied to the exact submitted artifact."
+}

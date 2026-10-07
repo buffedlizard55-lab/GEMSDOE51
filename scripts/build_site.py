@@ -44,6 +44,13 @@ def load_registry(rel, default=None):
     return json.loads(p.read_text())
 
 
+def load_evidence(rel, default=None):
+    p = ROOT / "evidence" / rel
+    if not p.exists():
+        return default
+    return json.loads(p.read_text())
+
+
 def page(title, body, active="index.html"):
     nav = "\n".join(
         f'  <a class="{"active" if a == active else ""}" href="{a}">{html.escape(t)}</a>'
@@ -88,12 +95,10 @@ def tbl(headers, rows, cls=""):
 
 def artifact_table(arts, s1stats):
     if not arts:
-        return ("<p class='warn'><b>No current submission artifact is eligible or linked.</b> "
-                "Prior candidate maps are retained outside the published download directory for "
-                "audit only. Within the current preregistered H-D gate sweep, the soft-w=0.20 "
-                "proposal failed uniqueness before a new TIFF was written; the separate archived "
-                "PR #6 maps are not being reissued, and its Stage-2-only lead still requires "
-                "reproduction.</p>")
+        return ("<p class='warn'><b>No current submission artifact is eligible.</b> "
+                "The research-only H-G+H-D TIFF is linked separately above and is not a submission recommendation. "
+                "Within the current preregistered H-D gate sweep, the soft-w=0.20 proposal failed source-aware "
+                "uniqueness before writing. The archived PR #6 maps are not being reissued.</p>")
 
     def link(name):
         if not name:
@@ -150,6 +155,28 @@ def gate_table():
                rows)
 
 
+def current_hypothesis_table():
+    slate = load_evidence("hypothesis_slate_20261007.json", {})
+    rows = []
+    for h in slate.get("ranked_hypotheses", []):
+        layers = h.get("target_layers", [])
+        benefit = h.get("expected_benefit_before_test", h.get("expected_benefit", ""))
+        status = h.get("promotion_status", h.get("status", ""))
+        rows.append([
+            esc(h.get("id", "")), esc(h.get("name", "")), esc(layers),
+            esc(h.get("signature_operator", "")),
+            esc(h.get("geological_rationale", "")),
+            esc(h.get("difference_from_prior_work", "")),
+            esc(benefit), esc(h.get("implementation_cost", "")),
+            esc(status)
+        ])
+    if not rows:
+        return "<p class='missing'>current hypothesis slate not available</p>"
+    return tbl(["id", "hypothesis", "target layers", "signature / operator",
+                "geological rationale", "specific prior-art difference",
+                "expected benefit", "cost", "status / result"], rows)
+
+
 def stage1_table():
     d = load("stage1_trace_holdout.json")
     if not d:
@@ -200,21 +227,55 @@ def build():
     subm = load("submission_manifest.json", {})
     sub = subm.get("primary") or {}
     arts = subm.get("artifacts", [])
+    research = subm.get("research_only_artifacts", [])
+    research_comparisons = subm.get("research_comparisons", {})
     s1stats = subm.get("stage1_stats", {})
 
     # The download directory is public. Keep only files explicitly named by the
     # current manifest; stale or archived submissions must not remain linkable.
     expected_downloads = set()
-    for record in ([sub] if sub else []) + list(arts):
-        for key in ("file", "zip", "nan_twin", "checks_file"):
+    for record in ([sub] if sub else []) + list(arts) + list(research):
+        for key in ("file", "zip", "nan_twin", "checks_file", "format_receipt"):
             value = record.get(key)
             if value and Path(value).name == value:
                 expected_downloads.add(value)
+    supporting_files = (
+        "experimental_H_G_plus_H_D_artifact.json",
+        "uniqueness_gate_H_G_HD_experimental_20261007.json",
+        "uniqueness_gate_H_M_soft_20261007.json",
+        "uniqueness_gate_STE_HD_20261007.json",
+        "score_attribution_audit.json",
+        "stage1_formula_audit.json",
+        "stage1_reconciliation_20261007.json",
+        "hypothesis_slate_20261007.json",
+        "sibling_prior_art_audit_20261007.json",
+        "stage1_trace_holdout.json",
+        "two_stage_results.json",
+        "holdout_archive_review.json",
+        "gate_sweep.json",
+        "preregistration-2026-10-07.md",
+        "02_gemsdoe32_study_and_candidates_2026-10-07.md",
+    )
+    expected_downloads.update(supporting_files)
     for item in downloads.iterdir():
         if item.is_file() and item.name not in expected_downloads:
             item.unlink()
         elif item.is_dir():
             shutil.rmtree(item)
+    for name in supporting_files:
+        if name in {"stage1_trace_holdout.json", "two_stage_results.json",
+                    "holdout_archive_review.json", "gate_sweep.json"}:
+            source = ROOT / "data" / name
+        elif name.endswith(".md"):
+            source = ROOT / "knowledge" / name
+        else:
+            source = ROOT / "evidence" / name
+        if source.is_file():
+            shutil.copyfile(source, downloads / name)
+    for name in ("format_check_H_G_HD_nan.json",):
+        source = ROOT / "evidence" / name
+        if source.is_file():
+            shutil.copyfile(source, downloads / name)
     hold = {a: load(f"holdout_{a}.json") for a in
             ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1")}
     two = load("two_stage_results.json")
@@ -254,17 +315,69 @@ def build():
         x1 = d.get("h51_x1", {})
         soft = d.get("h_d_soft_w020", {})
         card = f"""<section class="download missing">
-<h2>⬇ No eligible submission file</h2>
-<p><b>No new GeoTIFF was generated, and no submission slot is recommended.</b>
-The narrowed H51-X1 implementation failed its six-fold promotion test
-(mean proxy DTI {x1.get('mean_proxy_dti', float('nan')):.4f}, versus
-{x1.get('incumbent_h_d_mean_proxy_dti', float('nan')):.4f} for H-D). Its broader
-preregistered layer family was not fully tested. The H-D soft w=0.20 proposal had only a small holdout gain and failed uniqueness
-(Jaccard {soft.get('uniqueness', {}).get('max_jaccard', float('nan')):.3f};
-limit 0.50). Archived TIFFs are not current recommendations and are not linked here.</p>
-<p>When a genuinely distinct candidate passes the promotion, format, uniqueness, and
-Stage-1 dominance checks, this card will contain the downloadable file, checksum,
-unique submission name, and optional note.</p></section>"""
+<h2>⬇ No upload-eligible submission file</h2>
+<p><b>No competition slot is recommended.</b> The narrowed H51-X1 implementation failed its
+six-fold promotion test (mean proxy DTI {x1.get('mean_proxy_dti', float('nan')):.4f}, versus
+{x1.get('incumbent_h_d_mean_proxy_dti', float('nan')):.4f} for H-D); its broader preregistered
+layer family was not fully tested. The H-D soft w=0.20 proposal passed the numeric screen but
+failed source-aware uniqueness (Jaccard
+{soft.get('uniqueness', {}).get('max_jaccard', float('nan')):.3f}; limit 0.50).
+A separate H-G+H-D TIFF is available below for research only; it loses the matched holdout and
+must not be uploaded.</p>
+<p>This card remains intentionally empty until a candidate passes format, scoped uniqueness,
+q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.</p></section>"""
+
+    research_cards = []
+    for record in research:
+        name = Path(record.get("file", "")).name
+        zip_name = Path(record.get("zip", "")).name if record.get("zip") else ""
+        if not name or name != record.get("file") or not (downloads / name).is_file():
+            raise SystemExit("research-only manifest names a missing/unsafe TIFF")
+        if zip_name and (zip_name != record.get("zip") or not (downloads / zip_name).is_file()):
+            raise SystemExit("research-only manifest names a missing/unsafe ZIP")
+        fmt = record.get("format", {})
+        checks = fmt.get("checks", {})
+        holdout = record.get("holdout", {})
+        unique = record.get("uniqueness", {})
+        s1 = record.get("stage1_dominance_q70", {})
+        audit_name = Path(unique.get("evidence", "")).name
+        format_receipt = Path(record.get("format_receipt", "")).name
+        zip_link = (f'<p class="zip">or <a href="downloads/{html.escape(zip_name)}">download the one-TIFF ZIP</a></p>'
+                    if zip_name else "")
+        research_cards.append(f"""
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
+visible-catalogue proxy DTI is {holdout.get('mean', float('nan')):.6f} versus
+{holdout.get('incumbent_H_D_mean', float('nan')):.6f} for H-D
+(Δ {holdout.get('paired_delta', float('nan')):+.6f};
+{holdout.get('folds_higher', 0)}/{holdout.get('folds_total', 0)} folds higher).</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download research TIFF</a></p>
+{zip_link}
+<dl class="kv">
+<dt>Research label (not a submission name)</dt><dd><code>{html.escape(record.get('submission_name', ''))}</code></dd>
+<dt>Short note</dt><dd><code>{html.escape(record.get('note', ''))}</code></dd>
+<dt>Measured format</dt><dd>{'PASS' if checks.get('format_valid') else 'FAIL'} — one-band {html.escape(fmt.get('dtype', ''))},
+EPSG:{html.escape(str(fmt.get('crs_epsg', '')))}, shape {html.escape(str(fmt.get('shape', '')))},
+inside values [{checks.get('min_value', float('nan')):.1f}, {checks.get('max_value', float('nan')):.1f}],
+NaN outside with NaN NoData tag.</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(record.get('sha256', ''))}</code></dd>
+<dt>Scoped uniqueness</dt><dd>{html.escape(unique.get('verdict', 'INCOMPLETE'))} —
+{unique.get('references_sha_verified', 0)} SHA-verified payloads,
+{unique.get('pixel_comparisons', 0)} comparisons, {unique.get('matches', 0)} matches;
+max Jaccard {unique.get('max_support_jaccard', float('nan')):.4f}, cosine
+{unique.get('max_cosine', float('nan')):.4f}.</dd>
+<dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
+{s1.get('approved_area_share', float('nan')) * 100:.3f}%; emissions inside
+{s1.get('emitted_share_inside_approved', float('nan')) * 100:.3f}%; lift
+{s1.get('lift_over_area_share', float('nan')):.3f} — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
+</dl>
+<p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
+Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
+<a href="downloads/{html.escape(audit_name)}">scoped uniqueness audit</a>;
+<a href="downloads/{html.escape(format_receipt)}">independent format receipt</a>.</p>
+</section>""")
+    research_card = "\n".join(research_cards)
 
     rows = []
     for a in ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1"):
@@ -279,17 +392,29 @@ unique submission name, and optional note.</p></section>"""
     _ART = artifact_table(arts, s1stats)
     _STAGE1 = stage1_table()
     _GATE = gate_table()
-    body = card + f"""
-<p class="warn"><b>Later result found during repository sync; pending reproduction.</b>
-The archived Stage-2-only emission sweep records mean proxy DTI
-{archive_s2.get('mean_proxy_dti', float('nan')):.4f} versus
-{archive_s2.get('incumbent_isotropic_mean_proxy_dti', float('nan')):.4f}
-(+{archive_s2.get('mean_delta_vs_incumbent', float('nan')):.4f};
-{archive_s2.get('folds_better', 0)}/{archive_s2.get('folds', 0)} folds).
-It was not rerun in this review and is a provisional emission-method result, not a promoted file.
-The packaged Stage-1 soft-weight version reports a {archive_s1.get('reported_holdout_cost_vs_ungated', float('nan')):.4f}
-holdout cost; its H-M alternative scored {archive_hm.get('mean_proxy_dti', float('nan')):.4f}.
-All artifacts remain archived. See the <a href="../data/holdout_archive_review.json">reconciliation record</a>.</p>
+    hm_result = research_comparisons.get("H_M_cross_scale_crest", {})
+    ste_result = research_comparisons.get("STE_L9_w035_s24", {})
+    body = card + research_card + f"""
+<p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
+The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
+proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
+{ste_result.get('comparator_iso_nms_r24_mean', float('nan')):.6f} for isotropic NMS
+(Δ {ste_result.get('paired_delta', float('nan')):+.6f};
+{ste_result.get('folds_higher', 0)}/{ste_result.get('folds_total', 0)} folds; approximate paired 95% t interval
+[{ste_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[0]:+.5f},
+{ste_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[1]:+.5f}]).
+H-M recorded {hm_result.get('mean_proxy_dti', float('nan')):.6f} versus
+{hm_result.get('incumbent_H_D_mean', float('nan')):.6f} for H-D
+(Δ {hm_result.get('paired_delta', float('nan')):+.6f};
+{hm_result.get('folds_higher', 0)}/{hm_result.get('folds_total', 0)} folds; approximate paired 95% t interval
+[{hm_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[0]:+.5f},
+{hm_result.get('approx_95pct_t_interval', [float('nan'), float('nan')])[1]:+.5f}]).
+Both are visible-catalogue proxy scores. Refreshed full-corpus audits fail for packaged H-M and
+STE because same-prediction NaN twins are present; H-M also exceeds the Jaccard limit against its
+hard-q20 variant. A current q70 Stage-1 map diagnostic has not been rerun for either arm.
+They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a>,
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
+<a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
 {_ART}
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
@@ -304,11 +429,12 @@ by experts for the expanded label set. Any future emission should therefore be g
 justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
 <h2>What this is</h2>
 <p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
-a 10&nbsp;km geodetic strain-budget statistic is tested only as a <b>weak broad-tile prior</b>
-(Stage&nbsp;1); a fine-scale detector supplies point locations (Stage&nbsp;2). The evidence shows
-Stage&nbsp;1 is weak, and a hard gate harms Stage&nbsp;2, so the prior must not dictate the fine-scale
-map. Both stages are evaluated separately on local spatial holdouts; no current artifact clears all
-promotion and uniqueness checks.</p>
+a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
+fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 proxy receipts
+suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
+rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
+must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
+proxy holdouts. No current artifact clears all promotion and uniqueness checks.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -344,9 +470,11 @@ to a live DTI. It is <b>not</b> a score.</p>
     # ------------------------------------------------------------ how to submit
     body = """
 <h2>Submission guide — current status first</h2>
-<p class="warn"><b>There is no eligible file to upload today.</b> Do not use the archived zero-outside
-files: they fail the official null/NaN-outside requirement. Do not re-upload a previous candidate:
-the only new proposal that passed the numeric holdout screen failed the local uniqueness check before any TIFF was written. No weekly slot is recommended.</p>
+<p class="warn"><b>There is no eligible file to upload today.</b> A NaN-outside H-G+H-D GeoTIFF is linked on
+the executive summary for research review only; its matched blocked holdout is below H-D, so it is
+<b>not for submission</b>. Do not use archived zero-outside files: they fail the current local
+null/NaN-outside format contract. The H-D w=0.20 proposal passed its numeric screen but failed
+uniqueness before a file was written. No weekly slot is recommended.</p>
 <h3>When a candidate is cleared</h3>
 <ol class="steps">
 <li>Return to the <a href="index.html">executive summary</a> and download only the GeoTIFF linked in
@@ -390,13 +518,7 @@ and manual monitoring/copying without prior written consent. No such consent is 
 <p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
 <pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
 m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
-<p>Here <code>L</code> is the trace-segment length, <code>u_dot</code> the slip rate,
-<code>A</code> the supported tile area, <code>delta</code> dip, and <code>n</code> and
-<code>s</code> the unit fault normal and slip direction. For a vertical pure strike-slip segment,
-the horizontal shear coefficient is <code>L*u_dot/(2*A*sin(delta))</code>. For pure dip slip,
-the horizontal projections yield <code>L*u_dot*cos(delta)/A</code>. This is the tensor formula in
-<a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a>;
-the exact code and unit conversions are in <code>src/gems51/strain_budget.py</code>.</p>
+<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code> supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault normal/slip direction. A total fault-plane rate for pure normal slip yields <code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields <code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are unresolved: the implementation makes vertical versus total-plane rates explicit, defaults provisionally to vertical, assumes 60-degree normal dip and converts mm/yr provisionally. See <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a> and <code>src/gems51/strain_budget.py</code>.</p>
 <p>The implementation is approximate, not a full inversion: it rasterizes local trace directions,
 assigns slip rates by nearest trace centroid, simplifies slip-sense/dip categories, and lacks
 per-segment rake. Partial tiles use actual footprint support area. The local slip-rate column is
@@ -407,12 +529,7 @@ invariant to a uniform rescaling, but not to mixed units or record-specific erro
 geodetic layers have no recoverable exact invariant identity, so the Stage-1 prior is built in quantile space,
 <code>Q(observed second-invariant layer) - Q(fault tensor invariant)</code>. Do not subtract raw
 scalar dilation/shear from the fault tensor invariant as if their units and conventions matched.</p>
-<p><b>Measured Stage-1 holdout:</b> deficit Spearman vs held-out known-fault density = 0.03916;
-geodetic-only = 0.09930. Top-50% tile lift is 1.08290 for the deficit and 1.23864 for geodetic-only.
-Stage 1 alone has mean randomized DTI 0.14810 versus 0.18615 uniform using the provisional
-full-map mass assumption g_hidden=12,700. This is not an organizer label count. Stage 1 is a weak
-prior, not a fine-scale locator. Evidence: <a href="../data/stage1_trace_holdout.json">trace holdout</a> and
-<a href="../data/two_stage_results.json">separate two-stage scores</a>.</p>
+<p class="warn"><b>Stage-1 holdout reconciliation:</b> a current-formula, leakage-controlled rerun is unavailable. The historical trace-split receipt records deficit Spearman 0.03916 and q50 lift 1.08290, below the geodetic-only 0.09930 and 1.23864; it used a pre-audit unsigned/implicit-rate formula. The separate four-scenario formula audit is not a valid holdout because its runner retained held-out trace rows in the catalogue-derived budget. Stage-1-only and q50-gate DTI results are also tied to the prior field. These are historical proxy diagnostics, not validation of the current implementation. See <a href="downloads/stage1_trace_holdout.json">historical trace receipt</a>, <a href="downloads/stage1_formula_audit.json">formula audit caveat</a>, and <a href="downloads/stage1_reconciliation_20261007.json">full reconciliation</a>. Stage 1 remains a coarse prior only.</p>
 
 <h3>Stage 2 — fine-scale detector and sparse emission</h3>
 <p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
@@ -424,12 +541,7 @@ known-fault proxy, not organizer scores.</p>
 known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression at
 2.4 pixels. The official metric gives a marginal-pixel credit bar near <code>0.2*DTI</code>; this
 motivates sparse dots, but does not prove any individual prediction is a real fault.</p>
-<p><b>Where Stage 1 enters:</b> only as a soft multiplicative score adjustment,
-<code>field * (1 + w*z)</code>, over the full footprint. No hard Stage-1 tile mask is applied. A
-soft <code>w=0.20</code> had a small proxy gain (+0.000483 paired mean, 4/6 folds), and the
-Stage-1 top-half lift for the in-memory candidate was 0.98592. However, its support duplicated the
-existing soft-0.10 candidate (Jaccard 0.86130, over the 0.50 uniqueness limit), so the writer
-correctly stopped before producing any TIF.</p>
+<p><b>Historical Stage-1 weight sweep:</b> a prior soft multiplicative adjustment <code>field * (1 + w*z)</code> gave <code>w=0.20</code> a small proxy gain (+0.000483 paired mean, 4/6 folds), but these numbers use an archived prior field and have not been reproduced against the current formula. Its support also duplicated the existing soft-0.10 candidate (Jaccard 0.86130, over the 0.50 uniqueness limit), so the writer stopped before producing that TIFF. No current Stage-1 weight is authorized.</p>
 <p class="warn"><b>Leading new feature result:</b> the narrowed H51-X1 magnetic/gravity edge-normal
 implementation used rank-normalized total-magnetic and isostatic-gravity bands as new-transform
 inputs; the planned derivative bands remained in the common baseline stack but were not used by this
@@ -455,12 +567,11 @@ not fully tested. Do not describe this implementation as a win or submit it.</p>
                      esc(h.get("outcome", "not run")), esc(h.get("measured_auc", "")),
                      esc(h.get("measured_dti_r3_47", "")), esc(h.get("delta_vs_base", ""))])
     body = f"""
-<h2>Preregistered geological hypotheses</h2>
-<p>Four distinct hypotheses were ranked before implementation. Each row identifies its layers,
-physical signature, missing-fault rationale, novelty against this repository, expected benefit and
-cost, and external-data requirements. A narrowed H51-X1 implementation has been tested; the
-full preregistered layer family and all other hypotheses remain untested. The table does not convert
-unmeasured ideas into scores. Local holdout labels are a known-fault proxy.</p>
+<h2>Current geological slate — exact operator comparisons</h2>
+<p>The latest four-item slate includes the completed H-G test and three proposals. It does not call broad thermal, river-profile, relay, edge-orientation, or cross-physics families untried. Owner documentation shows substantial sibling prior art; a concept mention is not evidence of implementation or success. See the <a href="downloads/hypothesis_slate_20261007.json">operator-level slate</a> and <a href="downloads/sibling_prior_art_audit_20261007.json">summary-only prior-art audit</a>.</p>
+{current_hypothesis_table()}
+<h2>Earlier frozen H51-X1–X4 preregistration (historical)</h2>
+<p>The following table is the original preregistered screen. The narrowed X1 implementation failed; X2–X4 were not all tested. It is distinct from the newer H-G–H-J slate above, and does not establish broad-family novelty or falsification.</p>
 {tbl(['rank / id','hypothesis','layers','physical signature','why it may find an uncatalogued fault','novelty here','expected benefit','cost','external-data needs','outcome','AUC','proxy DTI at M/|G|=3.47','Δ vs H-D'], rows) if rows else '<p class="missing">hypotheses.json not generated</p>'}
 """
     (DOCS / "hypotheses.html").write_text(page("Hypotheses", body, "hypotheses.html"))
@@ -504,34 +615,45 @@ implementation (total magnetic + isostatic gravity as new-transform inputs) scor
 (delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
 preregistered derivative-band family was not fully tested; these remain proxy results.</p>
 
-<h3>Later archived Stage-2-only emission result — pending reproduction</h3>
-<p>A sweep discovered on merged PR #6 held each H-D detector field fixed and varied only the
-matched-mass emission rule. Its best archived result is
-<code>{archive_s2.get('best_rule', 'not recorded')}</code> with mean proxy DTI
-{archive_s2.get('mean_proxy_dti', float('nan')):.6f}, versus the isotropic incumbent
-{archive_s2.get('incumbent_isotropic_mean_proxy_dti', float('nan')):.6f}
-(Δ {archive_s2.get('mean_delta_vs_incumbent', float('nan')):+.6f};
-{archive_s2.get('folds_better', 0)}/{archive_s2.get('folds', 0)} folds).
-This Stage-2-only result is a metric-geometry experiment, not a geological hypothesis, and it was
-not independently rerun in this review. Treat it as a provisional holdout lead until the raw inputs
-are restored and the sweep is reproduced. The packaged Stage-1 soft <code>w=0.10</code> variant
-reports a separate {archive_s1.get('reported_holdout_cost_vs_ungated', float('nan')):.4f} cost against
-its ungated version; its Stage-1 approved-area share is
-{archive_s1.get('approved_area_share', float('nan')):.3f}, emitted share inside approved tiles is
-{archive_s1.get('emitted_share_inside_approved', float('nan')):.3f}, and lift is
-{archive_s1.get('lift_over_area_share', float('nan')):.3f}. The H-M alternative records mean DTI
-{archive_hm.get('mean_proxy_dti', float('nan')):.6f}, below the Stage-2-only emission lead.
-These are separate stage results, not combined into one score. The <a href="../data/holdout_archive_review.json">audit JSON</a>
-links to the archived source artifacts and explains why no old map was reused.</p>
+<h3>H-G + H-D experimental matched add-on</h3>
+<p>The six-fold matched comparison averaged proxy DTI 0.2810564 for H-G added to H-D versus
+0.2816627 for H-D (paired Δ −0.0006063; 3/6 folds higher); mean AUC was 0.669619 versus 0.672618.
+This loses the incumbent and is <b>not promoted</b>. On the archived Stage-1 field used for this
+artifact, the historical q70 diagnostic has an area share of 30.046%, emissions inside of 19.728%,
+and lift 0.657 (non-dominant for that field). The signed/rate-selectable current Stage-1 map was not
+regenerated, so this is not a current-formula dominance check. It passes the scoped public-corpus
+uniqueness audit (365 SHA-verified payloads, 364 comparisons, zero matches); no organizer score is
+claimed. See the
+<a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a> and
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">uniqueness evidence</a>.</p>
+
+<h3>H-M and strike-coherent emission (STE) — higher means, inconclusive</h3>
+<p>H-M cross-scale crest coincidence averaged {hm_result.get('mean_proxy_dti', float('nan')):.6f}
+versus H-D {hm_result.get('incumbent_H_D_mean', float('nan')):.6f}
+(Δ {hm_result.get('paired_delta', float('nan')):+.6f}; {hm_result.get('folds_higher', 0)}/6 folds;
+approximate paired 95% t interval {hm_result.get('approx_95pct_t_interval', [])}).
+STE L9 (w=0.35, r=2.4) averaged {ste_result.get('mean_proxy_dti', float('nan')):.6f}
+versus isotropic NMS {ste_result.get('comparator_iso_nms_r24_mean', float('nan')):.6f}
+(Δ {ste_result.get('paired_delta', float('nan')):+.6f}; {ste_result.get('folds_higher', 0)}/6 folds;
+approximate paired 95% t interval {ste_result.get('approx_95pct_t_interval', [])}).
+Both intervals include zero. Fresh public-corpus uniqueness audits fail on same-prediction NaN twins;
+H-M also overlaps its hard-q20 variant above the Jaccard threshold. Current q70 Stage-1 map
+checks are unavailable for these two candidates, so neither is slot-eligible. See the
+<a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a> and
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>. These are repository-local
+visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
 <h3>Stage 1 — trace-held-out prior test, reported separately</h3>
 <p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before
-building the mapped-fault budget. The test compares tile-rank priors against held-out known-fault
-density; it is not a test against hidden expert labels.</p>
+building the mapped-fault budget; this historical receipt predates the current signed-shear and
+selectable-rate formula. The separate four-scenario formula audit did not exclude held-out rows and
+is not a valid holdout. A current-formula, leakage-controlled rerun is unavailable because source
+rasters and prepared arrays are missing. See the <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
+These proxy comparisons are not tests against hidden expert labels.</p>
 {_STAGE1}
 
-<h3>Stage 1 alone and hard-gate effect on Stage 2</h3>
-<p>Stage-1-only dots are randomized in approved tiles. This standalone DTI control uses the
+<h3>Historical Stage 1 alone and hard-gate effect on Stage 2</h3>
+<p>The archived Stage-1-only dots were randomized in approved tiles. This standalone DTI control uses the
 provisional g_hidden=12,700 full-map mass assumption (not an organizer count); the trace-rank
 correlations and lifts above do not depend on that count. Hard-gated Stage 2 is evaluated on the
 same spatial folds and mass ratio; it is not conflated with the soft-prior result.</p>
@@ -543,7 +665,7 @@ same spatial folds and mass ratio; it is not conflated with the soft-prior resul
 weights are marginal. H-D soft w=0.20 narrowly cleared the numeric holdout rule, but its in-memory
 support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; threshold 0.50;
 containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
-See <a href="../knowledge/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
+See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
 
 <h3>Interpretation limit</h3>
 <p>These proxy holdouts can compare candidate methods for known-fault recovery. They cannot establish
@@ -568,7 +690,7 @@ spatial alignment checks before it can enter the holdout.</p>
             local_path = ROOT / candidate
             if candidate and local_path.is_file() and not candidate.startswith("http"):
                 evidence_parts.append(
-                    f'<a href="../{html.escape(candidate)}">{html.escape(text)}</a>')
+                    f'<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/{html.escape(candidate)}">{html.escape(text)}</a>')
             else:
                 evidence_parts.append(html.escape(text))
         source = claim.get("source", "")
@@ -582,7 +704,7 @@ spatial alignment checks before it can enter the holdout.</p>
 <h2>Current claims ledger</h2>
 <p>{html.escape(str(claim_doc.get("note", "")))}</p>
 <p>Each claim links to a source and local evidence where available. The machine-readable record is
-<a href="../registry/claims.json"><code>registry/claims.json</code></a>. Proxy measurements are not
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/registry/claims.json"><code>registry/claims.json</code></a>. Proxy measurements are not
 competition scores; owner-reported results are not organizer verification.</p>
 {tbl(['id','class','claim','local evidence','source'], claim_rows)}
 """

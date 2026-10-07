@@ -41,27 +41,31 @@ pure strike-slip segment, the strike-normal component is
 
         eps_dot_sn = L_k * u_dot_k / (2 * A_tile)                             (3)
 
-For a pure dip-slip segment, the horizontal projections of the full unit normal
-and slip direction have magnitudes ``sin(delta)`` and ``cos(delta)``.  Their
-product cancels the ``sin(delta)`` in the prefactor, giving the horizontal
-extension/contraction component
-
-        eps_dot_nn = L_k * u_dot_k * cos(delta_k) / A_tile                    (4)
+For pure dip slip, the horizontal projections of the full unit normal and slip
+direction have magnitudes ``sin(delta)`` and ``cos(delta)``. If ``u_dot`` is the
+total fault-plane slip rate, their product cancels the ``sin(delta)`` denominator,
+giving ``eps_dot_nn = L*u_dot_plane*cos(delta)/A_tile``. If the source rate is
+vertical displacement, then ``u_dot_plane = u_dot_vertical/sin(delta)`` and the
+horizontal component becomes ``L*u_dot_vertical*cot(delta)/A_tile``. The source
+component convention is unresolved; ``BudgetConfig.rate_convention`` exposes both
+assumptions and defaults to ``vertical``. Right- and left-lateral strike slip use
+opposite shear signs.
 
 The tensor is rotated from the local strike/dip frame into projected x/y axes.
 This projection is explicitly approximate for this project: fault rakes and
-per-trace dips are not supplied in the table used here, so normal/unspecified
-traces use a documented 60-degree dip and the two lateral classes use a vertical
-fault assumption.  The current implementation uses raster-trace local strike
+per-trace dips are not supplied in the table used here, so normal/unknown traces
+use a documented 60-degree dip fallback and the two lateral classes use a vertical
+fault assumption. Unknown-sense contributions can be treated as normal only by an
+explicit configurable fallback. The implementation uses raster-trace local strike
 and nearest-centroid slip-rate assignment; it is not a full geodetic inversion.
 
 Unit convention is provisional: the locally mirrored CSV's `slip_rate` field is
 interpreted as mm/yr and converted to m/yr, but the retained NBMG service schema
 for `SLIPRTNUM` does not state units and the accompanying GDR field-definition file
 has not been audited locally. Raw nanostrain/yr values are therefore not
-source-validated. The current quantile-rank Stage-1 comparison is invariant to a
-uniform rate rescaling, but not to mixed units, categorical encodings, or
-record-specific attribute errors.
+source-validated. Quantile ranking is invariant to a uniform rate rescaling, but
+not to mixed units, categorical encodings, record-specific errors, or changing the
+rate-component/sense assumptions.
 
 What we can and cannot verify
 -----------------------------
@@ -102,29 +106,40 @@ class BudgetConfig:
     dip_default: float = DIP_DEFAULT
     max_assign_px: float = 60.0  # nearest-trace slip-rate assignment radius
     invariant: str = "II"       # "II" : sqrt(exx^2 + eyy^2 + 2 exy^2)
+    rate_convention: str = "vertical"  # "vertical" or "fault_plane"; source convention unresolved
+    assume_unknown_normal: bool = True  # explicit Basin-and-Range fallback for missing sense
 
 
 # ------------------------------------------------------------------ inputs
 def load_slip_rates(raw_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(raw_dir / "external" / "gdr_qfaults_traces.csv")
-    # Provisional unit interpretation; the mirrored SLIPRTNUM source field's
-    # unit must be checked against the GDR text field-definition file.
-    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # assumed mm/yr -> m/yr
-    df["dip_deg"] = df["slip_sense"].map(DIP_BY_SENSE).fillna(DIP_DEFAULT)
-    df["is_strike_slip"] = df["slip_sense"].isin(["RL", "LL"])
+    # Provisional unit interpretation; the local numeric field's source unit and
+    # rate component are not fully authenticated. Keep that caveat in every audit.
+    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # working mm/yr -> m/yr
+    sense = df["slip_sense"].fillna("").astype(str).str.strip().str.upper()
+    df["slip_sense_clean"] = sense
+    df["dip_deg"] = sense.map(DIP_BY_SENSE).fillna(DIP_DEFAULT)
+    df["is_strike_slip"] = sense.isin(["RL", "LL"])
+    # This sign convention is explicit and testable; it is not a geologic
+    # polarity inferred from dip_direct (which is a direction label, not an angle).
+    df["strike_slip_sign"] = np.where(sense == "LL", -1.0, 1.0)
+    df["sense_known"] = sense.isin(["N", "RL", "LL"])
     return df
 
 
 def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig):
-    """Per-catalogue-pixel slip rate (m/yr), dip (deg) and strike-slip flag.
+    """Per-catalogue-pixel working rate, dip proxy, mode/sign, and assignment flag.
 
-    Geometry comes from the catalogue *raster* (exact, 100 m per pixel).  Slip
-    rate comes from the INGENIOUS/GDR attribute table by nearest trace centroid.
-    Pixels with no trace centroid inside ``max_assign_px`` get the regional
-    median and are flagged, so their contribution can be switched off in a
-    sensitivity run.
+    Geometry comes from the catalogue raster. Rates and senses are transferred
+    from the nearest CSV centroid; cells beyond ``max_assign_px`` receive the
+    regional median rate and default dip/mode. This is approximate: the CSV has
+    centroids, not trace geometries, and the fallback is recorded in metadata.
     """
     ys, xs = np.nonzero(catalogue)
+    if ys.size == 0:
+        empty = np.empty(0, dtype=np.float64)
+        return ys, xs, empty, empty, empty.astype(bool), empty, empty.astype(bool), \
+            empty.astype(bool), float("nan")
     cy = df["centroid_row"].to_numpy(float)
     cx = df["centroid_col"].to_numpy(float)
     ok = np.isfinite(cy) & np.isfinite(cx)
@@ -132,8 +147,12 @@ def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig)
     sr = df["slip_rate_m_yr"].to_numpy(float)[ok]
     dip = df["dip_deg"].to_numpy(float)[ok]
     ss = df["is_strike_slip"].to_numpy(bool)[ok]
+    sign = df["strike_slip_sign"].to_numpy(float)[ok]
+    known = df["sense_known"].to_numpy(bool)[ok]
+    if not sr.size:
+        raise ValueError("no finite trace centroids with slip attributes are available")
 
-    # brute-force nearest centroid over ~61 k x 1.1 k pairs = 68 M, done in strips
+    # Brute-force nearest centroid in strips; the public table has about 1.1k rows.
     best_d = np.full(ys.size, np.inf)
     best_i = np.full(ys.size, -1, dtype=np.int64)
     step = 4096
@@ -147,11 +166,15 @@ def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig)
 
     med = float(np.nanmedian(sr))
     assigned = best_d <= cfg.max_assign_px
-    srate = np.where(assigned, sr[np.maximum(best_i, 0)], med)
-    dipv = np.where(assigned, dip[np.maximum(best_i, 0)], cfg.dip_default)
-    ssv = np.where(assigned, ss[np.maximum(best_i, 0)], False)
-    return ys, xs, srate.astype(float), dipv.astype(float), ssv.astype(bool), \
-        assigned, float(np.sqrt(np.median(best_d ** 2)))
+    nearest = np.maximum(best_i, 0)
+    srate = np.where(assigned, sr[nearest], med)
+    dipv = np.where(assigned, dip[nearest], cfg.dip_default)
+    ssv = np.where(assigned, ss[nearest], False)
+    sgn = np.where(assigned, sign[nearest], 1.0)
+    known_sense = np.where(assigned, known[nearest], False)
+    return (ys, xs, srate.astype(float), dipv.astype(float), ssv.astype(bool),
+            sgn.astype(float), known_sense.astype(bool), assigned,
+            float(np.sqrt(np.median(best_d ** 2))))
 
 
 def trace_assignments(catalogue: np.ndarray, df: pd.DataFrame, step: int = 4096):
@@ -182,12 +205,15 @@ def trace_assignments(catalogue: np.ndarray, df: pd.DataFrame, step: int = 4096)
 
 
 def horizontal_segment_tensor(length_m, slip_m_yr, dip_deg, strike_x, strike_y,
-                              is_strike_slip, area_m2):
+                              is_strike_slip, area_m2, strike_slip_sign=1.0,
+                              rate_convention="fault_plane"):
     """Kreemer-eq.-(3) horizontal tensor contribution for pure-slip segments.
 
-    All quantities may be NumPy arrays and are broadcast together. ``strike_y``
-    is in projected map coordinates (north-positive); ``area_m2`` is the actual
-    cell/tile support area. Returns ``(exx, eyy, exy)`` in 1/yr.
+    Normal-fault rate convention is explicit (the utility defaults to total
+    fault-plane slip for backward compatibility); RL/LL sense is supplied by
+    ``strike_slip_sign``. All quantities may be NumPy arrays and broadcast.
+    ``strike_y`` is projected north-positive and ``area_m2`` is actual support
+    area. Returns ``(exx, eyy, exy)`` in 1/yr.
     """
     length = np.asarray(length_m, dtype=np.float64)
     slip = np.asarray(slip_m_yr, dtype=np.float64)
@@ -195,20 +221,62 @@ def horizontal_segment_tensor(length_m, slip_m_yr, dip_deg, strike_x, strike_y,
     sx = np.asarray(strike_x, dtype=np.float64)
     sy = np.asarray(strike_y, dtype=np.float64)
     ss = np.asarray(is_strike_slip, dtype=bool)
+    ss_sign = np.asarray(strike_slip_sign, dtype=np.float64)
     area = np.asarray(area_m2, dtype=np.float64)
     if np.any(area <= 0.0):
         raise ValueError("fault strain tensor requires positive support area")
     if np.any((dip <= 0.0) | (dip > np.pi / 2.0)):
         raise ValueError("dip must be in (0, 90] degrees")
 
-    # Eq. (3): strike-slip tensor has unit off-diagonal local component; for a
-    # dip-slip tensor, the horizontal projections contribute sin(dip)*cos(dip).
-    shear = np.where(ss, length * slip / (2.0 * area * np.maximum(np.sin(dip), 1e-12)), 0.0)
-    normal = np.where(~ss, length * slip * np.cos(dip) / area, 0.0)
+    # Eq. (3): horizontal projection of the strike-slip plane normal contributes
+    # sin(dip), cancelling the denominator in Eq. (3); the shear coefficient is
+    # therefore L*u/(2*A), independent of dip. Dip-slip uses its own projection.
+    if rate_convention not in ("vertical", "fault_plane"):
+        raise ValueError("rate_convention must be 'vertical' or 'fault_plane'")
+    shear = np.where(ss, length * slip * ss_sign / (2.0 * area), 0.0)
+    normal = np.where(~ss, dip_slip_horizontal_amplitude(
+        length, slip, np.rad2deg(dip), area, rate_convention), 0.0)
     nx, ny = -sy, sx  # horizontal dip direction, perpendicular to strike
     exx = normal * nx * nx + 2.0 * shear * nx * sx
     eyy = normal * ny * ny + 2.0 * shear * ny * sy
     exy = normal * nx * ny + shear * (nx * sy + ny * sx)
+    return exx, eyy, exy
+
+
+def dip_slip_horizontal_amplitude(length_m, rate_m_yr, dip_deg, area_m2,
+                                  rate_convention: str = "vertical"):
+    """Horizontal tensor component for a pure normal-fault segment.
+
+    ``vertical`` treats the source rate as vertical displacement, yielding
+    L*u_vertical*cot(dip)/A. ``fault_plane`` treats it as total dip-slip rate,
+    yielding L*u_plane*cos(dip)/A. Source semantics remain unresolved, so both
+    conventions are explicit, testable assumptions.
+    """
+    d = np.deg2rad(np.asarray(dip_deg, dtype=np.float64))
+    area = np.asarray(area_m2, dtype=np.float64)
+    if np.any(area <= 0.0):
+        raise ValueError("fault strain tensor requires positive support area")
+    if np.any((d <= 0.0) | (d > np.pi / 2.0)):
+        raise ValueError("dip must be in (0, 90] degrees")
+    if rate_convention == "vertical":
+        geom = 1.0 / np.tan(d)
+    elif rate_convention == "fault_plane":
+        geom = np.cos(d)
+    else:
+        raise ValueError("rate_convention must be 'vertical' or 'fault_plane'")
+    return np.asarray(length_m, dtype=np.float64) * np.asarray(rate_m_yr, dtype=np.float64) * geom / area
+
+
+def rotate_fault_tensor(strike_x, strike_y, normal_component, shear_component):
+    """Rotate local (normal, strike-shear) components into projected x/y axes."""
+    sx = np.asarray(strike_x, dtype=np.float64)
+    sy = np.asarray(strike_y, dtype=np.float64)
+    c1 = np.asarray(normal_component, dtype=np.float64)
+    c12 = np.asarray(shear_component, dtype=np.float64)
+    nx, ny = -sy, sx
+    exx = c1 * nx * nx + c12 * 2.0 * nx * sx
+    eyy = c1 * ny * ny + c12 * 2.0 * ny * sy
+    exy = c1 * nx * ny + c12 * (nx * sy + ny * sx)
     return exx, eyy, exy
 
 
@@ -242,17 +310,17 @@ def tile_index(catalogue_pixels_yx, tile_px: int):
 # ------------------------------------------------------------------ Kostrov
 def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig,
                   area_mask: np.ndarray | None = None):
-    """Fault-accommodated horizontal tensor per tile, in nanostrain/yr.
+    """Approximate fault-accommodated horizontal tensor per broad tile.
 
-    ``area_mask`` defines the area over which observed tile means are computed
-    (normally the competition footprint). Partial edge tiles use their actual
-    support area rather than the nominal full-tile area.
-
-    Returns ``(exx, eyy, exy, trace_len, n_trace_px, assigned_px, moment_area_rate,
-    tiles_shape, meta)``; the first three arrays are on the coarse tile grid.
+    Uses the Kreemer et al. (2000) Eq. (3) moment-tensor sum, with explicit
+    rate-component, missing-sense, dip, centroid-assignment, and trace-geometry
+    assumptions. Partial edge tiles use actual valid support area. This is a
+    coarse prior, not a calibrated geodetic inversion or fine-scale placer.
     """
     if catalogue.shape != (H_PX, W_PX):
         raise ValueError(f"catalogue shape {catalogue.shape} != {(H_PX, W_PX)}")
+    if cfg.rate_convention not in ("vertical", "fault_plane"):
+        raise ValueError("rate_convention must be 'vertical' or 'fault_plane'")
     if area_mask is None:
         area_mask = np.ones(catalogue.shape, dtype=bool)
     else:
@@ -260,12 +328,12 @@ def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig,
         if area_mask.shape != catalogue.shape:
             raise ValueError("area_mask and catalogue must have identical shapes")
 
-    ys, xs, srate, dip, is_ss, assigned, med_d = assign_slip_rate(catalogue, df, cfg)
+    (ys, xs, srate, dip, is_ss, ss_sign, sense_known,
+     assigned, med_d) = assign_slip_rate(catalogue, df, cfg)
     sx, sy_image = strike_orientation(catalogue)
-    # Raster rows increase southward, whereas projected UTM y increases northward.
+    # Raster rows increase southward while projected UTM northing increases northward.
     sxs = sx[ys, xs]
     sys_ = -sy_image[ys, xs]
-    # A cell traversed at azimuth (sx, sy) carries 100..141.4 m of trace.
     L = PIXEL_M / np.maximum(np.maximum(np.abs(sxs), np.abs(sys_)), 1e-6)
     L = np.clip(L, PIXEL_M, PIXEL_M * np.sqrt(2.0))
 
@@ -279,28 +347,41 @@ def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig,
     if np.any(segment_area <= 0.0):
         raise ValueError("catalogue traces fall in tiles with zero support area")
 
-    exx, eyy, exy = horizontal_segment_tensor(
-        L, srate, dip, sxs, sys_, is_ss, segment_area)
+    d = np.deg2rad(dip)
+    normal_mode = (~is_ss) & (sense_known | bool(cfg.assume_unknown_normal))
+    # Eq. (3), after horizontal projection. RL/LL use opposite shear signs.
+    ess = L * srate / (2.0 * segment_area)
+    enn = dip_slip_horizontal_amplitude(L, srate, dip, segment_area,
+                                        cfg.rate_convention)
+    c1 = np.where(normal_mode, enn, 0.0)
+    c12 = np.where(is_ss, ess * ss_sign, 0.0)
+    exx, eyy, exy = rotate_fault_tensor(sxs, sys_, c1, c12)
 
     def agg(v):
         return np.bincount(tid, weights=v, minlength=n_tiles)
-    exx_t = agg(exx) * 1e9      # -> nanostrain/yr
+    exx_t = agg(exx) * 1e9
     eyy_t = agg(eyy) * 1e9
     exy_t = agg(exy) * 1e9
     len_t = agg(np.full(ys.size, L))
     npix_t = np.bincount(tid, minlength=n_tiles)
     assigned_t = agg(assigned.astype(float))
-    dip_rad = np.deg2rad(dip)
-    mom_t = agg(L * srate * (cfg.h_seis_m / np.maximum(np.sin(dip_rad), 1e-12)))
+    total_rate = srate.copy()
+    if cfg.rate_convention == "vertical":
+        total_rate = np.where(normal_mode, srate / np.maximum(np.sin(d), 1e-9), srate)
+    total_rate = np.where(normal_mode | is_ss, total_rate, 0.0)
+    mom_t = agg(L * total_rate * (cfg.h_seis_m / np.maximum(np.sin(d), 1e-9)))
     finite_area = area_by_tile[area_by_tile > 0]
     meta = dict(tile_px=cfg.tile_px, tile_shape=list(tshape), h_seis_m=cfg.h_seis_m,
                 median_centroid_distance_px=med_d,
                 frac_catalogue_px_with_slip_rate=float(assigned.mean()) if assigned.size else 0.0,
-                regional_median_slip_rate_assumed_mm_yr=float(np.nanmedian(df["slip_rate"]))
-                if len(df) else float("nan"),
+                frac_catalogue_px_with_known_sense=float(sense_known.mean()) if sense_known.size else 0.0,
+                rate_convention=cfg.rate_convention,
+                assume_unknown_normal=bool(cfg.assume_unknown_normal),
+                dip_assumptions={"normal_deg": cfg.dip_default, "strike_slip_deg": 90.0},
+                regional_median_slip_rate_mm_yr=float(np.nanmedian(df["slip_rate"])) if len(df) else float("nan"),
                 total_mapped_trace_km=float(len_t.sum() / 1000.0),
                 area_mask_px=int(area_mask.sum()),
-                slip_rate_unit_assumption="mm/yr (provisional; verify GDR field definition)",
+                slip_rate_unit_assumption="mm/yr (provisional; verify source field definition)",
                 tile_area_m2_min=float(finite_area.min()) if finite_area.size else 0.0,
                 tile_area_m2_max=float(finite_area.max()) if finite_area.size else 0.0)
     return (exx_t.reshape(tshape), eyy_t.reshape(tshape), exy_t.reshape(tshape),

@@ -34,7 +34,8 @@
    "arm": "thin_d0.04_s3.0",
    "n_px": 24264,
    "dti_B_far": 0.08116143173432938,
-   "delta_vs_shipped": NaN,
+    "delta_vs_shipped": null,
+    "delta_status": "SHIPPED_REFERENCE_ARM; no pairwise delta is defined",
    "folds_positive": 0,
    "n_folds": 0,
    "promoted": false

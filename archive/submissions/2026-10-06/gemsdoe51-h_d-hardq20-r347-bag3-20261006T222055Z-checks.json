@@ -2,7 +2,6 @@
  "generated_utc": "20261006T222055Z",
  "arm": "H_D",
  "ratio": 3.47,
- "g_hidden_estimate": 12700,
  "stage1_q": 20.0,
  "gate_mode": "hard",
  "gate_weight": 0.1,
@@ -144,5 +143,7 @@
   },
   "verdict": "PASS",
   "notes": []
- }
+ },
+ "truth_mass_proxy": 12700,
+ "truth_mass_proxy_caveat": "12,700 is a planning truth-mass proxy used to set the emitted count at M/|G|=3.47; the actual hidden |G| is unknown, and the proxy is not inferred from a verified leaderboard artifact."
 }

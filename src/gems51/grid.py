@@ -9,6 +9,8 @@ from pathlib import Path
 import numpy as np
 import rasterio
 
+ROOT = Path(__file__).resolve().parents[2]
+
 TEMPLATE_TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
 TEMPLATE_SHAPE = (3730, 3292)
 TEMPLATE_EPSG = 32611
@@ -36,6 +38,33 @@ class Grid:
 
 
 GRID = Grid()
+
+
+def footprint(path: Path | str | None = None) -> np.ndarray:
+    """Return the valid data-area mask from the competition sample raster.
+
+    Prefer the restored, hash-pinned sample submission. A checked-in small
+    repository copy is accepted as a fallback for format verification; it is
+    the same competition grid template, not a substitute for feature inputs.
+    """
+    if path is None:
+        from .paths import SAMPLE_SUBMISSION
+
+        candidates = [SAMPLE_SUBMISSION, ROOT / "data" / "sample_submission.tif"]
+        path = next((candidate for candidate in candidates if Path(candidate).is_file()), None)
+    if path is None or not Path(path).is_file():
+        raise FileNotFoundError(
+            "sample_submission.tif is required to determine the valid competition footprint"
+        )
+    with rasterio.open(path) as src:
+        GRID.assert_matches(dict(transform=src.transform, height=src.height,
+                                 width=src.width, crs=src.crs))
+        if src.count != 1:
+            raise ValueError(f"sample submission must have one band, got {src.count}")
+        area = np.isfinite(src.read(1))
+    if area.shape != GRID.shape or not area.any():
+        raise ValueError("sample submission has an invalid or empty footprint")
+    return area
 
 
 def read_band(path, band=1) -> np.ndarray:

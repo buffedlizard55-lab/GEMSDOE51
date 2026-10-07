@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "CURRENT_FORMULA_CODE_PRESENT_BUT_NO_VALID_CURRENT_STAGE1_HOLDOUT_AVAILABLE",
+  "date_utc": "2026-10-07",
+  "current_method": {
+    "implementation": "src/gems51/strain_budget.py",
+    "equation": "Kreemer et al. (2000), Eq. 3: eps_dot_ij = (1/2) sum_k [L_k * u_dot_k / (A * sin(delta_k))] m_ij^k, with m_ij^k = n_i*s_j + n_j*s_i",
+    "source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "horizontal_modes": {
+      "normal_fault_total_fault_plane_rate": "L*u_plane*cos(delta)/A",
+      "normal_fault_vertical_displacement_rate": "L*u_vertical*cot(delta)/A",
+      "vertical_strike_slip": "L*u/(2A), with RL and LL assigned opposite shear signs"
+    },
+    "assumptions": [
+      "GDR/QFaults slip_rate component convention is unresolved; both vertical and total fault-plane interpretations are explicit options.",
+      "The copied unit conversion treats source values as mm/yr provisionally; physical unit semantics are not fully source-authenticated.",
+      "No numeric dip angle or rake is available in the local CSV; normal dip defaults to 60 degrees and strike-slip dip to 90 degrees.",
+      "Unknown slip sense is either explicitly treated as normal or excluded; the default is a declared Basin-and-Range prior, not a measured attribute.",
+      "Rates are assigned from nearest trace centroids, and line orientations are estimated from the rasterized catalogue."
+    ],
+    "role": "Broad-tile prior only; never a fine-scale point placer or unvalidated hard gate."
+  },
+  "historical_receipts": [
+    {
+      "file": "data/stage1_trace_holdout.json",
+      "integrity": "The historical runner excluded held-out trace rows from the attribute budget, but used the pre-audit unsigned/implicit rate implementation.",
+      "reported_numbers_are": "Historical visible-catalogue trace-split proxy measurements only; they are not results from the current source formula.",
+      "known_values": {
+        "deficit_spearman": 0.0391598373,
+        "geodetic_only_spearman": 0.0992971255,
+        "deficit_top_half_lift": 1.0828987924,
+        "geodetic_only_top_half_lift": 1.2386357907
+      }
+    },
+    {
+      "file": "evidence/stage1_formula_audit.json",
+      "integrity": "The branch-era four-scenario formula screen used the new selectable rate conventions and signed shear, but its runner passed all slip-rate rows into every split; held-out trace attributes therefore entered the catalogue-derived budget term.",
+      "reported_numbers_are": "Formula-sensitivity diagnostics with leakage risk, not valid holdout comparisons or promotion evidence.",
+      "scenarios": [
+        "vertical_unknown_normal",
+        "fault_plane_unknown_normal",
+        "vertical_known_sense_only",
+        "fault_plane_known_sense_only"
+      ]
+    }
+  ],
+  "current_holdout_status": {
+    "stage1_trace_holdout": "NOT AVAILABLE: current-formula, held-row-excluded rerun not completed.",
+    "stage2_spatial_holdout": "Reported separately in data/holdout_H_D.json and candidate-specific files; these are visible-catalogue proxies and are not altered by this Stage-1 code reconciliation.",
+    "raw_inputs": "The current checkout lacks raw training-feature rasters, prepared arrays, and the local QFaults slip-rate CSV required for rerunning Stage 1."
+  },
+  "decision": "Do not claim that the geodetic deficit improves Stage-1 holdout performance under the current formula. Retain it only as a coarse prior candidate; restore inputs, run a leakage-controlled trace split across the explicit rate/sense scenarios, and report it separately from Stage 2 before assigning any operational weight."
+}

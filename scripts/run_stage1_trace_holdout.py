@@ -11,8 +11,9 @@ field.  That measures the wrong quantity.
 
 The right design holds out a random subset of *traces* scattered across the whole
 region, so that the remaining catalogue still covers everywhere and the deficit
-is a genuine residual everywhere.  Because Stage 1 is scored with uniform random
-dots -- no detector, nothing fitted -- there is no leakage to control here.
+is a genuine residual everywhere. There is no learned detector, but the fault-budget
+term is catalogue-derived: all table rows assigned to held-out traces are removed
+before computing it, so held-out trace attributes cannot enter the prior.
 
 Scoring
 -------
@@ -69,7 +70,12 @@ def main() -> int:
     ap.add_argument("--thresholds", default="40,50,60,70,80")
     ap.add_argument("--ratio", type=float, default=3.47)
     ap.add_argument("--g-hidden", type=int, default=12_700,
-                    help="provisional full-map mass assumption; not an organizer label count")
+                    help="planning constant only; hidden truth size is unknown")
+    ap.add_argument("--rate-convention", choices=("vertical", "fault_plane"),
+                    default="vertical", help="Interpret source rate as vertical or total fault-plane slip")
+    ap.add_argument("--assume-unknown-normal", action=argparse.BooleanOptionalAction,
+                    default=True, help="Use explicit normal-fault fallback for unknown slip sense")
+    ap.add_argument("--output", default="data/stage1_trace_holdout.json")
     ap.add_argument("--seed", type=int, default=3)
     ap.add_argument("--min-heldout", type=int, default=2000)
     a = ap.parse_args()
@@ -78,7 +84,9 @@ def main() -> int:
     catalogue = np.load(P / "catalogue.npy")
     df = sb.load_slip_rates(ROOT / "data" / "raw")
     obs = load_observed()
-    cfg = sb.BudgetConfig(tile_px=a.tile_px)
+    cfg = sb.BudgetConfig(tile_px=a.tile_px,
+                          rate_convention=a.rate_convention,
+                          assume_unknown_normal=a.assume_unknown_normal)
 
     ys, xs, tid = sb.trace_assignments(catalogue, df)
     uniq = np.unique(tid)
@@ -171,7 +179,10 @@ def main() -> int:
         v = [r[key] for r in rows if key in r]
         if v and isinstance(v[0], (int, float, np.floating)) and key not in ("split",):
             out[key] = dict(mean=float(np.mean(v)), per_split=[float(x) for x in v])
-    p = ROOT / "data" / "stage1_trace_holdout.json"
+    p = Path(a.output)
+    if not p.is_absolute():
+        p = ROOT / p
+    p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(dict(config=vars(a), per_split=rows, summary=out), indent=1))
     print(json.dumps(out, indent=1))
     print(f"wrote {p}")

@@ -2,19 +2,19 @@
 
 Theory (from the metric identity DTI = TP / (a*(TP+FP) + b*|G|))
 ---------------------------------------------------------------
-|G| is fixed by the hidden truth, so the only thing under our control is the
-ratio of credit earned to mass emitted.  Two consequences drive every function
-here:
+The score depends on the metric's weighted TP/FP terms, not just raw dot count.
+Two consequences guide emission:
 
-1. **Redundancy is expensive.**  For each truth pixel the scorer takes the
-   *maximum* over nearby predictions, so two dots 1 px apart on the same trace
-   earn the credit of one and cost the mass of two.  Dots must be separated.
+1. **Redundancy is costly.** For each truth pixel the scorer takes the maximum
+   over nearby predictions. A second dot can add little or no TP credit while
+   still adding weighted false-positive cost.
 
-2. **There is a break-even bar.**  Adding a pixel of value p that earns expected
-   credit c changes DTI by  sign(c - a*DTI).  With a = 0.2 the bar is
-   c = 0.2 * DTI ~ 0.056 at DTI = 0.28.  Below it, emitting *lowers* the score.
+2. **The marginal break-even condition depends on both terms.** If a proposed
+   increment changes weighted TP by c and weighted FP by f, it improves DTI iff
+   c*(1 - a*DTI) > a*DTI*f. The often-quoted c > a*DTI applies only when
+   c+f=1; it is not a universal raw-pixel rule.
 
-Both are derived in ``tests/test_metric.py`` (``test_break_even_bar_*``).
+The algebra and tests are in ``src/gems51/metric.py`` and ``tests/test_metric.py``.
 """
 
 from __future__ import annotations

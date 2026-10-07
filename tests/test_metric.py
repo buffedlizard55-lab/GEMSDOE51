@@ -11,7 +11,7 @@ import pytest
 
 from gems51.metric import (
     ALPHA, BETA, RADIUS_PX, dti, dti_binary, dti_bruteforce, kernel,
-    breakeven_credit_bar,
+    breakeven_credit_bar, marginal_dti_improves,
 )
 
 
@@ -114,28 +114,44 @@ def test_empty_truth_gives_zero():
     assert r["fp"] == pytest.approx(1.0)
 
 
-def test_break_even_bar_is_alpha_times_dti():
-    """Marginal pixel with expected credit c raises DTI iff c > alpha*DTI."""
-    assert breakeven_credit_bar(0.278) == pytest.approx(0.0556, abs=1e-4)
+def test_break_even_bar_is_alpha_times_dti_special_case():
+    """For an increment with delta_tp+delta_fp=1, the threshold is alpha*DTI."""
+    d = 0.25
+    c = breakeven_credit_bar(d)
+    assert c == pytest.approx(0.05, abs=1e-12)
+    # At equality the score is unchanged; slightly more credit improves it.
+    assert not marginal_dti_improves(d, c, 1.0 - c)
+    assert marginal_dti_improves(d, c + 1e-6, 1.0 - c - 1e-6)
 
 
-def test_break_even_bar_is_empirically_correct():
-    """Numeric check: adding a pixel that earns exactly alpha*DTI leaves DTI ~unchanged."""
+def test_general_marginal_improvement_condition_matches_budget_algebra():
+    """Use actual weighted TP/FP increments, not raw pixel count, in the test."""
+    cases = [(100.0, 200.0, 1000.0, 0.5, 0.5),
+             (25.0, 5.0, 250.0, 1.0, 0.0),
+             (10.0, 30.0, 100.0, 0.0, 1.0),
+             (300.0, 10.0, 800.0, 0.02, 0.8)]
+    for tp, fp, n_truth, c, f in cases:
+        base = tp / (ALPHA * (tp + fp) + BETA * n_truth)
+        after = (tp + c) / (ALPHA * (tp + c + fp + f) + BETA * n_truth)
+        assert marginal_dti_improves(base, c, f) == (after > base)
+
+
+def test_full_credit_point_helps_and_zero_credit_point_hurts():
+    """An isolated full-credit point helps; a zero-credit point adds only FP cost."""
     rng = np.random.default_rng(7)
     H = W = 60
     truth = rng.random((H, W)) < 0.02
     pred = ((rng.random((H, W)) < 0.05) * 1.0)
     base = dti(pred, truth)["dti"]
-    bar = breakeven_credit_bar(base)
 
-    # place a new isolated dot far from everything else -> earns ~0 credit
+    # place a new isolated dot far from everything else -> earns zero TP credit
     far = np.zeros((H, W), bool)
     far[0, 0] = True
     assert not truth[0, 0]
     after_bad = dti(np.where(far, 1.0, pred), truth)["dti"]
     assert after_bad < base, "a zero-credit pixel must lower DTI"
 
-    # place a new dot directly on an *uncovered* truth pixel -> earns ~1.0 credit
+    # place a new dot directly on an uncovered truth pixel -> full local credit
     covered = np.zeros_like(pred)
     ys, xs = np.nonzero(truth)
     tgt = None
@@ -146,5 +162,4 @@ def test_break_even_bar_is_empirically_correct():
     if tgt is not None:
         covered[tgt] = 1.0
         after_good = dti(np.where(covered > 0, 1.0, pred), truth)["dti"]
-        assert after_good > base, "a full-credit pixel must raise DTI"
-        assert bar < 1.0
+        assert after_good > base, "a full-credit point must raise DTI"

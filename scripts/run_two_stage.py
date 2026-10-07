@@ -92,6 +92,10 @@ def main():
     ap.add_argument("--excl-radius", type=float, default=2.0)
     ap.add_argument("--fields", default="")
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--rate-convention", choices=("vertical", "fault_plane"),
+                    default="vertical", help="Interpret source rate as vertical or total fault-plane slip")
+    ap.add_argument("--assume-unknown-normal", action=argparse.BooleanOptionalAction,
+                    default=True, help="Use explicit normal-fault fallback for unknown slip sense")
     a = ap.parse_args()
 
     footprint = np.load(P / "footprint.npy")
@@ -102,7 +106,9 @@ def main():
                        n_rows=a.grid, n_cols=a.grid, min_truth=a.min_truth)
     if a.limit_folds:
         folds = folds[:a.limit_folds]
-    cfg = sb.BudgetConfig(tile_px=a.tile_px)
+    cfg = sb.BudgetConfig(tile_px=a.tile_px,
+                          rate_convention=a.rate_convention,
+                          assume_unknown_normal=a.assume_unknown_normal)
     thresholds = [float(t) for t in a.thresholds.split(",")]
     ratios = [float(r) for r in a.ratios.split(",")]
     # Trace assignments are label-only bookkeeping. Each held-out spatial block

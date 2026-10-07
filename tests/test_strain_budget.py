@@ -20,6 +20,7 @@ def test_normal_fault_horizontal_tensor_uses_full_3d_projection():
         strike_y=0.0,
         is_strike_slip=False,
         area_m2=10_000.0,
+        rate_convention="fault_plane",
     )
     expected = 100.0 * 1e-3 * np.cos(np.deg2rad(60.0)) / 10_000.0
     assert exx == pytest.approx(0.0, abs=1e-15)
@@ -34,6 +35,39 @@ def test_vertical_strike_slip_horizontal_shear_component():
     assert exx == pytest.approx(0.0, abs=1e-15)
     assert eyy == pytest.approx(0.0, abs=1e-15)
     assert exy == pytest.approx(100.0 * 1e-3 / (2.0 * 10_000.0))
+
+
+def test_strike_slip_horizontal_projection_is_independent_of_dip():
+    args = (100.0, 1e-3)
+    strike_x = strike_y = 2**-0.5
+    shallow_dip = horizontal_segment_tensor(
+        *args, 60.0, strike_x, strike_y, True, 10_000.0,
+    )
+    vertical_dip = horizontal_segment_tensor(
+        *args, 90.0, strike_x, strike_y, True, 10_000.0,
+    )
+    for shallow, vertical in zip(shallow_dip, vertical_dip):
+        assert shallow == pytest.approx(vertical)
+
+
+def test_horizontal_segment_tensor_exposes_vertical_rate_and_shear_sign():
+    normal = horizontal_segment_tensor(
+        100.0, 1e-3, 60.0, 1.0, 0.0, False, 10_000.0,
+        rate_convention="vertical",
+    )
+    expected_vertical = 100.0 * 1e-3 / np.tan(np.deg2rad(60.0)) / 10_000.0
+    assert normal[1] == pytest.approx(expected_vertical)
+
+    right = horizontal_segment_tensor(
+        100.0, 1e-3, 90.0, 2**-0.5, 2**-0.5, True, 10_000.0,
+        strike_slip_sign=1.0,
+    )
+    left = horizontal_segment_tensor(
+        100.0, 1e-3, 90.0, 2**-0.5, 2**-0.5, True, 10_000.0,
+        strike_slip_sign=-1.0,
+    )
+    for r, l in zip(right, left):
+        assert l == pytest.approx(-r)
 
 
 def test_horizontal_segment_tensor_rejects_invalid_area_and_dip():

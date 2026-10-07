@@ -34,34 +34,45 @@ implementation (total magnetic + isostatic gravity as new-transform inputs) scor
 (delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
 preregistered derivative-band family was not fully tested; these remain proxy results.</p>
 
-<h3>Later archived Stage-2-only emission result — pending reproduction</h3>
-<p>A sweep discovered on merged PR #6 held each H-D detector field fixed and varied only the
-matched-mass emission rule. Its best archived result is
-<code>ste_L9_w0.35_s2.4_nothin</code> with mean proxy DTI
-0.283603, versus the isotropic incumbent
-0.281639
-(Δ +0.001963;
-4/6 folds).
-This Stage-2-only result is a metric-geometry experiment, not a geological hypothesis, and it was
-not independently rerun in this review. Treat it as a provisional holdout lead until the raw inputs
-are restored and the sweep is reproduced. The packaged Stage-1 soft <code>w=0.10</code> variant
-reports a separate 0.0020 cost against
-its ungated version; its Stage-1 approved-area share is
-0.801, emitted share inside approved tiles is
-0.771, and lift is
-0.963. The H-M alternative records mean DTI
-0.282603, below the Stage-2-only emission lead.
-These are separate stage results, not combined into one score. The <a href="../data/holdout_archive_review.json">audit JSON</a>
-links to the archived source artifacts and explains why no old map was reused.</p>
+<h3>H-G + H-D experimental matched add-on</h3>
+<p>The six-fold matched comparison averaged proxy DTI 0.2810564 for H-G added to H-D versus
+0.2816627 for H-D (paired Δ −0.0006063; 3/6 folds higher); mean AUC was 0.669619 versus 0.672618.
+This loses the incumbent and is <b>not promoted</b>. On the archived Stage-1 field used for this
+artifact, the historical q70 diagnostic has an area share of 30.046%, emissions inside of 19.728%,
+and lift 0.657 (non-dominant for that field). The signed/rate-selectable current Stage-1 map was not
+regenerated, so this is not a current-formula dominance check. It passes the scoped public-corpus
+uniqueness audit (365 SHA-verified payloads, 364 comparisons, zero matches); no organizer score is
+claimed. See the
+<a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a> and
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">uniqueness evidence</a>.</p>
+
+<h3>H-M and strike-coherent emission (STE) — higher means, inconclusive</h3>
+<p>H-M cross-scale crest coincidence averaged 0.282603
+versus H-D 0.281663
+(Δ +0.000940; 3/6 folds;
+approximate paired 95% t interval [-0.0022464, 0.0041272]).
+STE L9 (w=0.35, r=2.4) averaged 0.283603
+versus isotropic NMS 0.281639
+(Δ +0.001963; 4/6 folds;
+approximate paired 95% t interval [-0.00166, 0.00559]).
+Both intervals include zero. Fresh public-corpus uniqueness audits fail on same-prediction NaN twins;
+H-M also overlaps its hard-q20 variant above the Jaccard threshold. Current q70 Stage-1 map
+checks are unavailable for these two candidates, so neither is slot-eligible. See the
+<a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a> and
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>. These are repository-local
+visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
 <h3>Stage 1 — trace-held-out prior test, reported separately</h3>
 <p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before
-building the mapped-fault budget. The test compares tile-rank priors against held-out known-fault
-density; it is not a test against hidden expert labels.</p>
+building the mapped-fault budget; this historical receipt predates the current signed-shear and
+selectable-rate formula. The separate four-scenario formula audit did not exclude held-out rows and
+is not a valid holdout. A current-formula, leakage-controlled rerun is unavailable because source
+rasters and prepared arrays are missing. See the <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
+These proxy comparisons are not tests against hidden expert labels.</p>
 <table class=''><thead><tr><th>prior</th><th>approved</th><th>area share</th><th>truth recall</th><th>lift = recall/area</th><th>proxy DTI (uniform random dots)</th></tr></thead><tbody><tr><td>deficit</td><td>top 50% of tiles</td><td>0.501</td><td>0.543</td><td>1.083</td><td>0.0508</td></tr><tr><td>geodetic_only</td><td>top 50% of tiles</td><td>0.500</td><td>0.620</td><td>1.239</td><td>0.0554</td></tr><tr><td>deficit</td><td>top 30% of tiles</td><td>0.302</td><td>0.329</td><td>1.093</td><td>0.0468</td></tr><tr><td>geodetic_only</td><td>top 30% of tiles</td><td>0.301</td><td>0.375</td><td>1.247</td><td>0.0534</td></tr><tr><td>deficit</td><td>top 20% of tiles</td><td>0.201</td><td>0.241</td><td>1.196</td><td>0.0464</td></tr><tr><td>geodetic_only</td><td>top 20% of tiles</td><td>0.201</td><td>0.256</td><td>1.273</td><td>0.0487</td></tr><tr><td>no gate</td><td>whole footprint</td><td>1.000</td><td>1.000</td><td>1.000</td><td>0.0478</td></tr></tbody></table><p class='ev'>Spearman rank correlation between each tile field and the density of held-out faults: deficit = +0.039, geodetic_only = +0.099, dilatation_only = +0.053, shear_only = +0.092</p>
 
-<h3>Stage 1 alone and hard-gate effect on Stage 2</h3>
-<p>Stage-1-only dots are randomized in approved tiles. This standalone DTI control uses the
+<h3>Historical Stage 1 alone and hard-gate effect on Stage 2</h3>
+<p>The archived Stage-1-only dots were randomized in approved tiles. This standalone DTI control uses the
 provisional g_hidden=12,700 full-map mass assumption (not an organizer count); the trace-rank
 correlations and lifts above do not depend on that count. Hard-gated Stage 2 is evaluated on the
 same spatial folds and mass ratio; it is not conflated with the soft-prior result.</p>
@@ -73,7 +84,7 @@ same spatial folds and mass ratio; it is not conflated with the soft-prior resul
 weights are marginal. H-D soft w=0.20 narrowly cleared the numeric holdout rule, but its in-memory
 support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; threshold 0.50;
 containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
-See <a href="../knowledge/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
+See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
 
 <h3>Interpretation limit</h3>
 <p>These proxy holdouts can compare candidate methods for known-fault recovery. They cannot establish

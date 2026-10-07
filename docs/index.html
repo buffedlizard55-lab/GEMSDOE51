@@ -22,29 +22,71 @@
 </div></header>
 <main class="wrap">
 <section class="download missing">
-<h2>⬇ No eligible submission file</h2>
-<p><b>No new GeoTIFF was generated, and no submission slot is recommended.</b>
-The narrowed H51-X1 implementation failed its six-fold promotion test
-(mean proxy DTI 0.2797, versus
-0.2817 for H-D). Its broader
-preregistered layer family was not fully tested. The H-D soft w=0.20 proposal had only a small holdout gain and failed uniqueness
-(Jaccard 0.861;
-limit 0.50). Archived TIFFs are not current recommendations and are not linked here.</p>
-<p>When a genuinely distinct candidate passes the promotion, format, uniqueness, and
-Stage-1 dominance checks, this card will contain the downloadable file, checksum,
-unique submission name, and optional note.</p></section>
-<p class="warn"><b>Later result found during repository sync; pending reproduction.</b>
-The archived Stage-2-only emission sweep records mean proxy DTI
-0.2836 versus
-0.2816
-(+0.0020;
-4/6 folds).
-It was not rerun in this review and is a provisional emission-method result, not a promoted file.
-The packaged Stage-1 soft-weight version reports a 0.0020
-holdout cost; its H-M alternative scored 0.2826.
-All artifacts remain archived. See the <a href="../data/holdout_archive_review.json">reconciliation record</a>.</p>
+<h2>⬇ No upload-eligible submission file</h2>
+<p><b>No competition slot is recommended.</b> The narrowed H51-X1 implementation failed its
+six-fold promotion test (mean proxy DTI 0.2797, versus
+0.2817 for H-D); its broader preregistered
+layer family was not fully tested. The H-D soft w=0.20 proposal passed the numeric screen but
+failed source-aware uniqueness (Jaccard
+0.861; limit 0.50).
+A separate H-G+H-D TIFF is available below for research only; it loses the matched holdout and
+must not be uploaded.</p>
+<p>This card remains intentionally empty until a candidate passes format, scoped uniqueness,
+q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.</p></section>
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
+visible-catalogue proxy DTI is 0.281056 versus
+0.281663 for H-D
+(Δ -0.000606;
+3/6 folds higher).</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif">Download research TIFF</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (not a submission name)</dt><dd><code>GEMSDOE51-HG-HD-XING-R347-EXP-20261007</code></dd>
+<dt>Short note</dt><dd><code>Research-only H-G magnetic-gravity crossing add-on to H-D; matched blocked proxy DTI is below H-D; NOT SLOT-ELIGIBLE; no organizer score claimed.</code></dd>
+<dt>Measured format</dt><dd>PASS — one-band float32,
+EPSG:32611, shape [3730, 3292],
+inside values [0.0, 1.0],
+NaN outside with NaN NoData tag.</dd>
+<dt>SHA-256</dt><dd><code>4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f</code></dd>
+<dt>Scoped uniqueness</dt><dd>PASS —
+365 SHA-verified payloads,
+364 comparisons, 0 matches;
+max Jaccard 0.3216, cosine
+0.4867.</dd>
+<dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
+30.046%; emissions inside
+19.728%; lift
+0.657 — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
+</dl>
+<p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
+Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>;
+<a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
+</section>
+<p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
+The archived STE rule <code>STE L9</code> recorded
+proxy DTI 0.283603 versus
+0.281639 for isotropic NMS
+(Δ +0.001963;
+4/6 folds; approximate paired 95% t interval
+[-0.00166,
++0.00559]).
+H-M recorded 0.282603 versus
+0.281663 for H-D
+(Δ +0.000940;
+3/6 folds; approximate paired 95% t interval
+[-0.00225,
++0.00413]).
+Both are visible-catalogue proxy scores. Refreshed full-corpus audits fail for packaged H-M and
+STE because same-prediction NaN twins are present; H-M also exceeds the Jaccard limit against its
+hard-q20 variant. A current q70 Stage-1 map diagnostic has not been rerun for either arm.
+They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_soft_20261007.json">H-M audit</a>,
+<a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
+<a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
-<p class='warn'><b>No current submission artifact is eligible or linked.</b> Prior candidate maps are retained outside the published download directory for audit only. Within the current preregistered H-D gate sweep, the soft-w=0.20 proposal failed uniqueness before a new TIFF was written; the separate archived PR #6 maps are not being reissued, and its Stage-2-only lead still requires reproduction.</p>
+<p class='warn'><b>No current submission artifact is eligible.</b> The research-only H-G+H-D TIFF is linked separately above and is not a submission recommendation. Within the current preregistered H-D gate sweep, the soft-w=0.20 proposal failed source-aware uniqueness before writing. The archived PR #6 maps are not being reissued.</p>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
@@ -57,11 +99,12 @@ by experts for the expanded label set. Any future emission should therefore be g
 justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
 <h2>What this is</h2>
 <p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
-a 10&nbsp;km geodetic strain-budget statistic is tested only as a <b>weak broad-tile prior</b>
-(Stage&nbsp;1); a fine-scale detector supplies point locations (Stage&nbsp;2). The evidence shows
-Stage&nbsp;1 is weak, and a hard gate harms Stage&nbsp;2, so the prior must not dictate the fine-scale
-map. Both stages are evaluated separately on local spatial holdouts; no current artifact clears all
-promotion and uniqueness checks.</p>
+a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
+fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 proxy receipts
+suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
+rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
+must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
+proxy holdouts. No current artifact clears all promotion and uniqueness checks.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>

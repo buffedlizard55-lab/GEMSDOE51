@@ -1,126 +1,133 @@
 {
- "schema_version": 2,
- "generated_utc": "2026-10-07",
- "note": "Current claims only. PROXY means the local truth is the existing known-fault catalogue, not the hidden expert-labeled new-fault test set. OWNER-REPORTED is attributed to sibling project pages and is not organizer-verified. No leaderboard standings are stored or monitored.",
- "claims": [
-  {
-   "id": "C51-001",
-   "class": "MEASURED",
-   "claim": "The official metric implementation reproduces the published worked example TP_w=3.00, FP_w=1.89, FN_w=2.00, DTI=0.60, and its optimized calculation agrees with a brute-force reference on the test cases.",
-   "evidence": "tests/test_metric.py",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-002",
-   "class": "OFFICIAL_RULE",
-   "claim": "The binary-mass identity used in local DTI analysis is DTI=T/(T+0.2F+0.8(K-T))=T/(0.2(T+F)+0.8K), with T=TP_w, F=FP_w and K=|G|; this follows from FN_w=K-T for binary predictions.",
-   "evidence": "src/gems51/metric.py and tests/test_metric.py",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-003",
-   "class": "MEASURED",
-   "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. Full training-feature and external inputs are not restored here.",
-   "evidence": "data/sample_submission.tif; src/gems51/grid.py; current raw inputs status in data/restore_receipt.json",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-004",
-   "class": "MEASURED_WITH_PROVENANCE_LIMIT",
-   "claim": "Local labels.tif and existing_faults.tif are byte-identical. This is consistent with the official description of training labels as existing USGS/INGENIOUS faults; it does not show that the training labels are missing. Holdouts against these masks are known-fault recovery proxies, not hidden-new-fault tests.",
-   "evidence": "data/irregularities.json IR-51-08; local hash-pinned mirror comparison",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-005",
-   "class": "METHOD_WITH_LIMITATIONS",
-   "claim": "The Stage-1 fault tensor uses Kreemer et al. (2000), Eq. 3: eps_dot_ij=(1/2) sum_k [L_k*u_dot_k/(A*sin(delta_k))] m_ij^k, with m_ij=n_i*s_j+n_j*s_i. The horizontal projections, nearest-centroid slip assignment, and simplified slip-sense categories are approximate. The mirrored slip-rate field is interpreted as mm/yr, but the NBMG layer schema does not state SLIPRTNUM units and the GDR field-definition text was not audited locally; raw strain units are not source-validated.",
-   "evidence": "src/gems51/strain_budget.py; knowledge/gemsdoe32-case-study-2026-10-07.md; data/irregularities.json IR-51-12",
-   "source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
-  },
-  {
-   "id": "C51-006",
-   "class": "PROXY",
-   "claim": "Corrected five-split Stage-1 trace holdout yields deficit Spearman 0.03916 and top-50% lift 1.08290; geodetic-only has Spearman 0.09930 and lift 1.23864. This is weak evidence for a deficit locator and is measured against the known-fault proxy.",
-   "evidence": "data/stage1_trace_holdout.json",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-007",
-   "class": "PROXY",
-   "claim": "Six-fold H-D Stage-2 baseline at mass ratio M/|G|=3.47 has mean proxy DTI 0.2816627 and mean AUC 0.6726183; these are local holdout measurements, not competition scores.",
-   "evidence": "data/holdout_H_D.json",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-008",
-   "class": "PROXY",
-   "claim": "The narrowed H51-X1 implementation has mean proxy DTI 0.2796713, delta -0.0019913 against H-D at the matched mass ratio, and wins 3/6 folds; it fails the frozen promotion rule. The broader preregistered layer-family transform remains incompletely tested.",
-   "evidence": "knowledge/preregistration-2026-10-07.md; data/holdout_H_X1.json",
-   "source": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and"
-  },
-  {
-   "id": "C51-009",
-   "class": "PROXY_AND_MEASURED_PREFLIGHT",
-   "claim": "H-D with soft Stage-1 weight 0.20 narrowly clears the numeric holdout screen (mean 0.2821227, +0.000483 paired mean, 4/6 folds), and its top-half Stage-1 lift is 0.98592; however its support fails local uniqueness against the existing soft-0.10 output (Jaccard 0.86130; containment 0.92548). The builder stopped before writing a TIF.",
-   "evidence": "data/gate_sweep.json; recorded preflight in knowledge/gemsdoe32-case-study-2026-10-07.md; scripts/build_submission.py",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-010",
-   "class": "MEASURED_FORMAT_AUDIT",
-   "claim": "Legacy zero-outside TIFFs fail the official null/NaN-outside format check. The local writer now encodes NaN outside the footprint and verifies the written bytes; local format validity does not prove portal acceptance.",
-   "evidence": "src/gems51/submission.py; data/irregularities.json IR-51-06",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-011",
-   "class": "OWNER_REPORTED_UNSCORED",
-   "claim": "GEMSDOE32's owner page reports H33-2-B2 with 37,654 dots and a projected 0.2747, explicitly labels it UNSCORED, and states that no organizer score exists for the artifact. Its claimed gain is not treated as causal or organizer-verified.",
-   "evidence": "knowledge/gemsdoe32-case-study-2026-10-07.md",
-   "source": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html"
-  },
-  {
-   "id": "C51-012",
-   "class": "OFFICIAL_COMPLIANCE_RULE",
-   "claim": "The September 2026 GEMS Prize rules require a narrative disclosure of whether and how generative AI was used, including its use across submission elements.",
-   "evidence": "README.md narrative-disclosure template; knowledge/gemsdoe32-case-study-2026-10-07.md",
-   "source": "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
-  },
-  {
-   "id": "C51-013",
-   "class": "OFFICIAL_COMPLIANCE_RULE",
-   "claim": "DrivenData Terms of Use prohibit automated monitoring or copying of site material and manual monitoring or copying without prior written consent; no consent is on record.",
-   "evidence": "README.md; docs/leaderboard.html; no leaderboard-monitoring workflow found in .github/workflows/",
-   "source": "https://www.drivendata.org/termsofuse/"
-  },
-  {
-   "id": "C51-014",
-   "class": "METHOD_LIMITATION",
-   "claim": "The Stage-1 slip-rate unit conversion is provisional: the copied field is treated as mm/yr, but the NBMG layer schema does not state SLIPRTNUM units and the GDR v2 field-definition text has not been audited locally. Rank comparisons survive a uniform rescaling only.",
-   "evidence": "data/irregularities.json IR-51-12; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious",
-   "source": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson"
-  },
-  {
-   "id": "C51-015",
-   "class": "UNREPRODUCED_REPOSITORY_MEASUREMENT",
-   "claim": "Merged PR #6 records a Stage-2-only, matched-mass emission sweep whose best rule has mean proxy DTI 0.2836026 versus 0.2816394 for its isotropic incumbent (+0.0019632; 4/6 folds). This is a provisional method result, not independently rerun in this review, not a geological hypothesis, and not an organizer score.",
-   "evidence": "data/holdout_archive_review.json; archive/evidence/2026-10-07/emission_geometry.json",
-   "source": "archive/evidence/2026-10-07/emission_geometry.json"
-  },
-  {
-   "id": "C51-016",
-   "class": "UNREPRODUCED_ARCHIVED_FORMAT_AUDIT",
-   "claim": "The archived PR #6 H-D STE and H-M soft-w=0.10 NaN-outside TIFF variants were reported as passing a prior local format audit, but were not rerun in this review. Their zero-outside counterparts were rechecked and fail the official null-outside check. This does not establish portal acceptance, uniqueness, promotion, or submission status.",
-   "evidence": "data/holdout_archive_review.json; archived prior audit status is distinguished there from the current zero-outside recheck",
-   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
-  },
-  {
-   "id": "C51-017",
-   "class": "CURRENT_WORKSPACE_LIMITATION",
-   "claim": "The current checkout does not contain the raw training-feature raster or prepared arrays needed to reproduce the archived PR #6 holdout sweep or generate a fresh model output.",
-   "evidence": "data/restore_receipt.json; registry/data_manifest.json",
-   "source": "local checkout and hash-pinned data manifest"
-  }
- ]
+  "schema_version": 2,
+  "generated_utc": "2026-10-07T05:02:00Z",
+  "note": "Current claims only. PROXY means the local truth is the existing known-fault catalogue, not the hidden expert-labeled new-fault test set. OWNER-REPORTED is attributed to sibling project pages and is not organizer-verified. No leaderboard standings are stored or monitored.",
+  "claims": [
+    {
+      "id": "C51-001",
+      "class": "MEASURED",
+      "claim": "The official metric implementation reproduces the published worked example TP_w=3.00, FP_w=1.89, FN_w=2.00, DTI=0.60, and its optimized calculation agrees with a brute-force reference on the test cases.",
+      "evidence": "tests/test_metric.py",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-002",
+      "class": "OFFICIAL_RULE",
+      "claim": "The binary-mass identity used in local DTI analysis is DTI=T/(T+0.2F+0.8(K-T))=T/(0.2(T+F)+0.8K), with T=TP_w, F=FP_w and K=|G|; this follows from FN_w=K-T for binary predictions.",
+      "evidence": "src/gems51/metric.py and tests/test_metric.py",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-003",
+      "class": "MEASURED",
+      "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. Full training-feature and external inputs are not restored here.",
+      "evidence": "data/sample_submission.tif; src/gems51/grid.py; current raw inputs status in data/restore_receipt.json",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-004",
+      "class": "MEASURED_WITH_PROVENANCE_LIMIT",
+      "claim": "Local labels.tif and existing_faults.tif are byte-identical. This is consistent with the official description of training labels as existing USGS/INGENIOUS faults; it does not show that the training labels are missing. Holdouts against these masks are known-fault recovery proxies, not hidden-new-fault tests.",
+      "evidence": "data/irregularities.json IR-51-08; local hash-pinned mirror comparison",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-005",
+      "class": "METHOD_WITH_LIMITATIONS",
+      "claim": "The current Stage-1 implementation cites Kreemer et al. (2000), Eq. 3: eps_dot_ij=(1/2) sum_k [L_k*u_dot_k/(A*sin(delta_k))] m_ij^k, m_ij=n_i*s_j+n_j*s_i. It exposes vertical versus total fault-plane slip-rate conventions, assigns opposite RL/LL shear signs, uses approximate nearest-centroid/raster geometry and simplified sense/dip assumptions, and treats mm/yr as provisional; the source component/units are not fully authenticated.",
+      "evidence": "src/gems51/strain_budget.py; tests/test_strain_budget.py; tests/test_strain_budget_formula.py; evidence/stage1_reconciliation_20261007.json",
+      "source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+    },
+    {
+      "id": "C51-006",
+      "class": "HISTORICAL_PROXY_WITH_FORMULA_CAVEAT",
+      "claim": "The historical five-split Stage-1 trace holdout (old unsigned/implicit-rate formula) yields deficit Spearman 0.03916 and top-50% lift 1.08290; geodetic-only has Spearman 0.09930 and lift 1.23864. Held-out trace rows were excluded in that receipt, but it predates the current signed/rate-selectable formula and does not validate current Stage 1. The separate formula-sensitivity receipts retain held-out attributes and are not valid holdouts.",
+      "evidence": "data/stage1_trace_holdout.json; evidence/stage1_reconciliation_20261007.json; evidence/stage1_formula_audit.json",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-007",
+      "class": "PROXY",
+      "claim": "Six-fold H-D Stage-2 baseline at mass ratio M/|G|=3.47 has mean proxy DTI 0.2816627 and mean AUC 0.6726183; these are local holdout measurements, not competition scores.",
+      "evidence": "data/holdout_H_D.json",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-008",
+      "class": "PROXY",
+      "claim": "The narrowed H51-X1 implementation has mean proxy DTI 0.2796713, delta -0.0019913 against H-D at the matched mass ratio, and wins 3/6 folds; it fails the frozen promotion rule. The broader preregistered layer-family transform remains incompletely tested.",
+      "evidence": "knowledge/preregistration-2026-10-07.md; data/holdout_H_X1.json",
+      "source": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and"
+    },
+    {
+      "id": "C51-009",
+      "class": "PROXY_AND_MEASURED_PREFLIGHT",
+      "claim": "H-D with soft Stage-1 weight 0.20 narrowly clears the numeric holdout screen (mean 0.2821227, +0.000483 paired mean, 4/6 folds), and its top-half Stage-1 lift is 0.98592; however its support fails local uniqueness against the existing soft-0.10 output (Jaccard 0.86130; containment 0.92548). The builder stopped before writing a TIF.",
+      "evidence": "data/gate_sweep.json; recorded preflight in knowledge/gemsdoe32-case-study-2026-10-07.md; scripts/build_submission.py",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-010",
+      "class": "MEASURED_FORMAT_AUDIT",
+      "claim": "Legacy zero-outside TIFFs fail the official null/NaN-outside format check. The local writer now encodes NaN outside the footprint and verifies the written bytes; local format validity does not prove portal acceptance.",
+      "evidence": "src/gems51/submission.py; data/irregularities.json IR-51-06",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-011",
+      "class": "OWNER_REPORTED_UNSCORED",
+      "claim": "GEMSDOE32's owner page reports H33-2-B2 with 37,654 dots and a projected 0.2747, explicitly labels it UNSCORED, and states that no organizer score exists for the artifact. Its claimed gain is not treated as causal or organizer-verified.",
+      "evidence": "knowledge/gemsdoe32-case-study-2026-10-07.md",
+      "source": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html"
+    },
+    {
+      "id": "C51-012",
+      "class": "OFFICIAL_COMPLIANCE_RULE",
+      "claim": "The September 2026 GEMS Prize rules require a narrative disclosure of whether and how generative AI was used, including its use across submission elements.",
+      "evidence": "README.md narrative-disclosure template; knowledge/gemsdoe32-case-study-2026-10-07.md",
+      "source": "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
+    },
+    {
+      "id": "C51-013",
+      "class": "OFFICIAL_COMPLIANCE_RULE",
+      "claim": "DrivenData Terms of Use prohibit automated monitoring or copying of site material and manual monitoring or copying without prior written consent; no consent is on record.",
+      "evidence": "README.md; docs/leaderboard.html; no leaderboard-monitoring workflow found in .github/workflows/",
+      "source": "https://www.drivendata.org/termsofuse/"
+    },
+    {
+      "id": "C51-014",
+      "class": "METHOD_LIMITATION",
+      "claim": "The Stage-1 slip-rate unit conversion is provisional: the copied field is treated as mm/yr, but the NBMG layer schema does not state SLIPRTNUM units and the GDR v2 field-definition text has not been audited locally. Rank comparisons survive a uniform rescaling only.",
+      "evidence": "data/irregularities.json IR-51-12; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious",
+      "source": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson"
+    },
+    {
+      "id": "C51-015",
+      "class": "UNREPRODUCED_REPOSITORY_MEASUREMENT",
+      "claim": "Merged PR #6 records a Stage-2-only, matched-mass emission sweep whose best rule has mean proxy DTI 0.2836026 versus 0.2816394 for its isotropic incumbent (+0.0019632; 4/6 folds). This is a provisional method result, not independently rerun in this review, not a geological hypothesis, and not an organizer score.",
+      "evidence": "data/holdout_archive_review.json; archive/evidence/2026-10-07/emission_geometry.json",
+      "source": "archive/evidence/2026-10-07/emission_geometry.json"
+    },
+    {
+      "id": "C51-016",
+      "class": "UNREPRODUCED_ARCHIVED_FORMAT_AUDIT",
+      "claim": "The archived PR #6 H-D STE and H-M soft-w=0.10 NaN-outside TIFF variants were reported as passing a prior local format audit, but were not rerun in this review. Their zero-outside counterparts were rechecked and fail the official null-outside check. This does not establish portal acceptance, uniqueness, promotion, or submission status.",
+      "evidence": "data/holdout_archive_review.json; archived prior audit status is distinguished there from the current zero-outside recheck",
+      "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-017",
+      "class": "CURRENT_WORKSPACE_LIMITATION",
+      "claim": "The current checkout does not contain the raw training-feature raster or prepared arrays needed to reproduce the archived PR #6 holdout sweep or generate a fresh model output.",
+      "evidence": "data/restore_receipt.json; registry/data_manifest.json",
+      "source": "local checkout and hash-pinned data manifest"
+    },
+    {
+      "id": "C51-018",
+      "class": "RESEARCH_ONLY_FORMAT_REENCODING",
+      "claim": "The NaN-outside H-G+H-D experimental artifact is locally format-valid and passes the scoped public-corpus uniqueness audit; the historical q70 diagnostic is non-dominant on the archived prior field, but its matched six-block proxy holdout is below H-D and the current-formula q70 map was not rerun. It is a format re-encoding, not a new model run, and is research-only/not slot-eligible.",
+      "evidence": "evidence/experimental_H_G_plus_H_D_artifact.json; evidence/format_check_H_G_HD_nan.json; evidence/uniqueness_gate_H_G_HD_experimental_20261007.json; evidence/holdout_H_G_plus_H_D.json; evidence/stage1_reconciliation_20261007.json",
+      "source": "local measurements and official format specification at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    }
+  ]
 }

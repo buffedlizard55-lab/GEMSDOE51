@@ -17,6 +17,13 @@ from gems51.grid import footprint  # noqa: E402
 from gems51.submission import verify  # noqa: E402
 
 
+def _passes(name: str, value: object) -> bool:
+    """Interpret count-valued checks by their zero-is-good semantics."""
+    if name == "values_outside_0_1":
+        return value == 0
+    return bool(value)
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print(__doc__)
@@ -34,7 +41,7 @@ def main() -> int:
     for name, value in checks.items():
         if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells"}:
             continue
-        print(f"  {'PASS' if value else 'FAIL'}  {name}: {value}")
+        print(f"  {'PASS' if _passes(name, value) else 'FAIL'}  {name}: {value}")
     print(f"  file  {report['file']}")
     print(f"  sha256  {report['sha256']}")
     print("  note  local byte-level format checks only; portal acceptance is not inferred")

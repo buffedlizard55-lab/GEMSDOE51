@@ -1,0 +1,1081 @@
+{
+  "generated_utc": "2026-10-07T03:37:22+00:00",
+  "schema_version": 1,
+  "evaluation": {
+    "stage": "Stage 1 only; no Stage-2 detector or learned point ranking",
+    "design": "five random trace-level splits; the same five held-out trace groups are reused in all four formula scenarios",
+    "tile_size": "100 x 100 pixels = 10 x 10 km at the 100 m grid",
+    "thresholds": {
+      "q50": "top half of eligible tile ranking",
+      "q70": "top 30% of eligible tile ranking"
+    },
+    "dot_budget": "round(3.47 * 12,700) = 44,069 random dots per split; 12,700 is a planning proxy inherited from an unverified prior-project density scenario, not a measured hidden truth count",
+    "truth": "owner-mirrored visible USGS/INGENIOUS catalogue traces; proxy only, not organizer labels",
+    "limitations": [
+      "Trace-level holdout is intentionally not a contiguous spatial block: withholding a whole spatial block would erase the catalogue-derived budget term in that block and reduce the deficit to the raw geodetic field.",
+      "The score is a catalogue-proxy diagnostic, not an organizer score and not a test of hidden-fault discovery.",
+      "Each approved-area random-dot DTI is one seeded realization per split. These DTI draws are not paired across different masks/scenarios; do not read small DTI differences as a precise effect. Area, recall, lift, and Spearman comparisons are deterministic on the same held-out trace splits.",
+      "The five split results are a small sample and were not used to tune a new Stage-1 model.",
+      "Post-branch code review found that the runner used for these four scenarios passed the full slip-rate table to every trace split; it did not remove held-out trace attribute rows before constructing the fault-budget term. Treat all scenario scores/ranks as leakage-risk diagnostics, not holdout validation or a promotion gate."
+    ],
+    "interpretation_status": "INVALID_AS_LEAKAGE_CONTROLLED_HOLDOUT; FORMULA-SENSITIVITY RECORD ONLY",
+    "reproduction_status": "NOT_RERUN_AFTER_LEAKAGE_FIX: source data and prepared arrays are absent from the current checkout."
+  },
+  "formula": {
+    "source": "Kreemer et al. (2000), On the determination of a global strain rate model, Earth, Planets and Space 52, 765-770, Eq. (3)",
+    "source_url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "source_formula": "epsilon_dot_ij = (1/2) * sum_k [(L_k * u_dot_k) / (A * sin(delta_k))] * m_ij^k",
+    "source_formula_equivalent": "epsilon_dot_ij = 1/(2A) * sum_k [L_k * u_dot_k / sin(delta_k)] * m_ij^k",
+    "terms": {
+      "A": "tile area",
+      "L_k": "catalogue trace length represented by fault segment k",
+      "u_dot_k": "slip-rate component passed by the source table (component semantics unresolved)",
+      "delta_k": "dip angle (not present as a numeric field in the local CSV; code uses an explicit 60-degree normal-fault assumption and 90-degree strike-slip assumption)",
+      "m_ij": "unit moment tensor defined by fault orientation and unit slip vector, as specified by the paper"
+    },
+    "implementation_components": {
+      "normal_fault_vertical_rate_assumption": "L * u_dot_vertical * cot(delta) / A",
+      "normal_fault_total_fault_plane_rate_assumption": "L * u_dot_plane * cos(delta) / A",
+      "strike_slip_shear": "L * u_dot / (2A), with RL and LL signs opposite",
+      "horizontal_invariant": "sqrt(exx^2 + eyy^2 + 2*exy^2)",
+      "rate_unit_conversion": "local CSV numeric value multiplied by 1e-3 (working mm/yr-to-m/yr assumption)"
+    }
+  },
+  "source_field_audit": {
+    "gdr_landing_page": "https://gdr.openei.org/submissions/1391",
+    "gdr_landing_page_takeaway": "GDR identifies the public INGENIOUS compilation, DOI 10.15121/1881483 and CC BY 4.0; it says Quaternary Faults v2 supersedes v1 and includes a field-definition text document.",
+    "usgs_rest_layer": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=pjson",
+    "usgs_rest_layer_takeaway": "USGS layer 21 exposes slip_rate as a string field with alias 'Slip Rate(mm/year)' and null coded-value domain; the alias supports a unit label but does not establish the component/convention of the local decimal values.",
+    "local_csv": "data/raw/external/gdr_qfaults_traces.csv",
+    "local_csv_observation": "1126 rows; slip_rate parses as float64, has 49 distinct values and no missing values (computed from the owner-mirrored CSV).",
+    "unresolved": [
+      "The GDR v2 archive's field-definition text was not extracted in this run (the direct archive fetch failed), so the numeric values' exact field semantics/precision are not authenticated here.",
+      "The local CSV does not resolve whether slip_rate is vertical displacement, total fault-plane slip, or another component; both vertical and fault-plane conversions are tested as assumptions.",
+      "Missing slip_sense is handled in two explicit cases: assume unknown is normal, or exclude unknown-sense contributions. Neither fallback is source-authenticated.",
+      "dip_direct is an azimuth/direction label, not a numeric dip angle; it is not used as a dip angle by the code."
+    ]
+  },
+  "assumption_audit": {
+    "normal_dip_degrees": 60,
+    "strike_slip_dip_degrees": 90,
+    "mu_pa": 30000000000,
+    "mu_cancels_from_rate_equation": true,
+    "h_seis_m_default": 15000,
+    "h_seis_role": "used only in a reported scalar moment-rate proxy; it does not enter the strain-tensor components or Stage-1 ranking, so the old description of a seismogenic-thickness sensitivity for this strain calculation was misleading.",
+    "unknown_sense_modes": [
+      "assume normal (Basin-and-Range fallback)",
+      "exclude unknown-sense contributions"
+    ],
+    "dip_direction": "not used as an inclination angle; local strike is estimated from catalogue raster geometry"
+  },
+  "scenarios": [
+    {
+      "scenario": "vertical_unknown_normal",
+      "rate_convention": "vertical",
+      "assume_unknown_normal": true,
+      "n_splits": 5,
+      "heldout_trace_pixel_counts": [
+        11492,
+        10961,
+        12076,
+        13521,
+        12938
+      ],
+      "spearman_deficit": {
+        "mean": 0.031779889089333525,
+        "per_split": [
+          0.03663206552339192,
+          0.005978462598463753,
+          0.025437792912153534,
+          0.10447769524689972,
+          -0.013626570834241281
+        ]
+      },
+      "spearman_geodetic_only": {
+        "mean": 0.0992971254632764,
+        "per_split": [
+          0.03736713058363244,
+          0.08299061483947416,
+          0.07526516658311413,
+          0.19162835587412994,
+          0.10923435943603133
+        ]
+      },
+      "deficit_q50": {
+        "area_share": {
+          "mean": 0.5019223500993639,
+          "per_split": [
+            0.5007432209751455,
+            0.5009841557789616,
+            0.5025487805892859,
+            0.5034782664228032,
+            0.5018573267306231
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.5516576083230756,
+          "per_split": [
+            0.5769230769230769,
+            0.5702946811422316,
+            0.5332063597217622,
+            0.573922047185859,
+            0.5039418766424486
+          ]
+        },
+        "lift": {
+          "mean": 1.0991108822093065,
+          "per_split": [
+            1.15213357416917,
+            1.138348737307873,
+            1.0610041856962174,
+            1.1399142434956657,
+            1.004153670377606
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.049715744017956184,
+          "per_split": [
+            0.052131480746672884,
+            0.04639723270866034,
+            0.0477550808955369,
+            0.056670141056392793,
+            0.04562478468251801
+          ]
+        }
+      },
+      "geodetic_only_q50": {
+        "area_share": {
+          "mean": 0.5004506158158121,
+          "per_split": [
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.619876044208959,
+          "per_split": [
+            0.5625652627915071,
+            0.6261290028282092,
+            0.5701391189135475,
+            0.6775386435914503,
+            0.6630081929200804
+          ]
+        },
+        "lift": {
+          "mean": 1.2386357906633103,
+          "per_split": [
+            1.1241174353925782,
+            1.2511304473220037,
+            1.1392515083314112,
+            1.3538571482961557,
+            1.3248224139744025
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.056290084094157825,
+          "per_split": [
+            0.048272344292484774,
+            0.05294720311313594,
+            0.054072812572735815,
+            0.067941510986031,
+            0.05821654950640152
+          ]
+        }
+      },
+      "deficit_q70": {
+        "area_share": {
+          "mean": 0.30147624334453893,
+          "per_split": [
+            0.3002604998710176,
+            0.30155612919756325,
+            0.30116773068249575,
+            0.3028113124405767,
+            0.3015855445310412
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.31685882795332704,
+          "per_split": [
+            0.3270100939784198,
+            0.29833044430252714,
+            0.3011758860549851,
+            0.3888026033577398,
+            0.2689751120729634
+          ]
+        },
+        "lift": {
+          "mean": 1.050852951914412,
+          "per_split": [
+            1.0890879556881208,
+            0.9893032023470403,
+            1.0000270791710348,
+            1.2839764810108867,
+            0.8918700413549784
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.04527599482893939,
+          "per_split": [
+            0.04654721086338174,
+            0.04147021640868004,
+            0.041308157564660025,
+            0.058639888117511384,
+            0.03841450119046379
+          ]
+        }
+      },
+      "geodetic_only_q70": {
+        "area_share": {
+          "mean": 0.3011356060419869,
+          "per_split": [
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.375498857594109,
+          "per_split": [
+            0.32492168465019144,
+            0.3902016239394216,
+            0.33214640609473334,
+            0.4486354559573996,
+            0.3815891173287989
+          ]
+        },
+        "lift": {
+          "mean": 1.2469427396166288,
+          "per_split": [
+            1.0789879314533402,
+            1.295767143142204,
+            1.1029795196268575,
+            1.4898120546224847,
+            1.2671670492382574
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.053329741842758335,
+          "per_split": [
+            0.046648597586448,
+            0.050830311605998164,
+            0.04690634649249284,
+            0.06774390744902495,
+            0.05451954607982773
+          ]
+        }
+      },
+      "uniform_random_dot_proxy_dti": {
+        "mean": 0.047952582913083394,
+        "per_split": [
+          0.04880237377724046,
+          0.04614611427868643,
+          0.04475570996495848,
+          0.05001635653863857,
+          0.050042360005893016
+        ]
+      },
+      "input": "data/stage1_vertical_assume.json"
+    },
+    {
+      "scenario": "fault_plane_unknown_normal",
+      "rate_convention": "fault_plane",
+      "assume_unknown_normal": true,
+      "n_splits": 5,
+      "heldout_trace_pixel_counts": [
+        11492,
+        10961,
+        12076,
+        13521,
+        12938
+      ],
+      "spearman_deficit": {
+        "mean": 0.031256126055855496,
+        "per_split": [
+          0.0370552933604477,
+          0.0059376498949498075,
+          0.023600634837023935,
+          0.10444075968895905,
+          -0.01475370750210299
+        ]
+      },
+      "spearman_geodetic_only": {
+        "mean": 0.0992971254632764,
+        "per_split": [
+          0.03736713058363244,
+          0.08299061483947416,
+          0.07526516658311413,
+          0.19162835587412994,
+          0.10923435943603133
+        ]
+      },
+      "deficit_q50": {
+        "area_share": {
+          "mean": 0.5015946013574015,
+          "per_split": [
+            0.5007432209751455,
+            0.5048545943944824,
+            0.5006135612815255,
+            0.5015430471150428,
+            0.5002185830208116
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.5503291186663056,
+          "per_split": [
+            0.5769230769230769,
+            0.5711157741082018,
+            0.5318814176879761,
+            0.5677834479698247,
+            0.5039418766424486
+          ]
+        },
+        "lift": {
+          "mean": 1.0970714468025835,
+          "per_split": [
+            1.15213357416917,
+            1.1312480473574622,
+            1.062459067881437,
+            1.1320732113341168,
+            1.0074433332707315
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05019703566378364,
+          "per_split": [
+            0.05238706971521766,
+            0.0450012484927092,
+            0.05174283949888816,
+            0.055873672958134994,
+            0.04598034765396822
+          ]
+        }
+      },
+      "geodetic_only_q50": {
+        "area_share": {
+          "mean": 0.5004506158158121,
+          "per_split": [
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.619876044208959,
+          "per_split": [
+            0.5625652627915071,
+            0.6261290028282092,
+            0.5701391189135475,
+            0.6775386435914503,
+            0.6630081929200804
+          ]
+        },
+        "lift": {
+          "mean": 1.2386357906633103,
+          "per_split": [
+            1.1241174353925782,
+            1.2511304473220037,
+            1.1392515083314112,
+            1.3538571482961557,
+            1.3248224139744025
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05598472288484134,
+          "per_split": [
+            0.04511664303012923,
+            0.053849791524598394,
+            0.05335164044719639,
+            0.06610614409294052,
+            0.061499395329342156
+          ]
+        }
+      },
+      "deficit_q70": {
+        "area_share": {
+          "mean": 0.3010376065362419,
+          "per_split": [
+            0.3002604998710176,
+            0.30155612919756325,
+            0.30116773068249575,
+            0.30061812839909174,
+            0.3015855445310412
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.31756032400529954,
+          "per_split": [
+            0.3270100939784198,
+            0.29833044430252714,
+            0.3011758860549851,
+            0.3864359145033651,
+            0.2748492811872005
+          ]
+        },
+        "lift": {
+          "mean": 1.0550473989066087,
+          "per_split": [
+            1.0890879556881208,
+            0.9893032023470403,
+            1.0000270791710348,
+            1.2854710943790595,
+            0.9113476629477881
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.04469561361268174,
+          "per_split": [
+            0.048637716105865425,
+            0.034541451859771075,
+            0.04012849871600759,
+            0.05898872226036917,
+            0.04118167912139544
+          ]
+        }
+      },
+      "geodetic_only_q70": {
+        "area_share": {
+          "mean": 0.3011356060419869,
+          "per_split": [
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.375498857594109,
+          "per_split": [
+            0.32492168465019144,
+            0.3902016239394216,
+            0.33214640609473334,
+            0.4486354559573996,
+            0.3815891173287989
+          ]
+        },
+        "lift": {
+          "mean": 1.2469427396166288,
+          "per_split": [
+            1.0789879314533402,
+            1.295767143142204,
+            1.1029795196268575,
+            1.4898120546224847,
+            1.2671670492382574
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05360678510825785,
+          "per_split": [
+            0.04443570554255496,
+            0.053919472273005406,
+            0.04765103377231354,
+            0.06770947179539731,
+            0.054318242158017976
+          ]
+        }
+      },
+      "uniform_random_dot_proxy_dti": {
+        "mean": 0.048272328382892075,
+        "per_split": [
+          0.0445329969254768,
+          0.04732610770893116,
+          0.04715708132350663,
+          0.05198221589120065,
+          0.05036324006534513
+        ]
+      },
+      "input": "data/stage1_fault_plane_assume.json"
+    },
+    {
+      "scenario": "vertical_known_sense_only",
+      "rate_convention": "vertical",
+      "assume_unknown_normal": false,
+      "n_splits": 5,
+      "heldout_trace_pixel_counts": [
+        11492,
+        10961,
+        12076,
+        13521,
+        12938
+      ],
+      "spearman_deficit": {
+        "mean": 0.027294741073120514,
+        "per_split": [
+          0.03547381877959458,
+          -0.008013433769318155,
+          0.03197813940712456,
+          0.09330190059522094,
+          -0.01626671964701934
+        ]
+      },
+      "spearman_geodetic_only": {
+        "mean": 0.0992971254632764,
+        "per_split": [
+          0.03736713058363244,
+          0.08299061483947416,
+          0.07526516658311413,
+          0.19162835587412994,
+          0.10923435943603133
+        ]
+      },
+      "deficit_q50": {
+        "area_share": {
+          "mean": 0.5006976659126408,
+          "per_split": [
+            0.5014100975485997,
+            0.500597498961271,
+            0.5001465928625628,
+            0.5008914587741199,
+            0.5004426814166502
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.5512582969590876,
+          "per_split": [
+            0.5924991298294465,
+            0.5323419396040507,
+            0.5736170917522359,
+            0.5776199985208195,
+            0.4802133250888855
+          ]
+        },
+        "lift": {
+          "mean": 1.100947561066236,
+          "per_split": [
+            1.1816657317556674,
+            1.0634131027595,
+            1.1468979294033945,
+            1.1531839651138887,
+            0.9595770762987291
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05063439938299154,
+          "per_split": [
+            0.053466630169229104,
+            0.04783699977295936,
+            0.05156123655671352,
+            0.054684890982875864,
+            0.045622239433179834
+          ]
+        }
+      },
+      "geodetic_only_q50": {
+        "area_share": {
+          "mean": 0.5004506158158121,
+          "per_split": [
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.619876044208959,
+          "per_split": [
+            0.5625652627915071,
+            0.6261290028282092,
+            0.5701391189135475,
+            0.6775386435914503,
+            0.6630081929200804
+          ]
+        },
+        "lift": {
+          "mean": 1.2386357906633103,
+          "per_split": [
+            1.1241174353925782,
+            1.2511304473220037,
+            1.1392515083314112,
+            1.3538571482961557,
+            1.3248224139744025
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.055371668865392985,
+          "per_split": [
+            0.04577678130873739,
+            0.0544257200353165,
+            0.054072812572735815,
+            0.06375420486086449,
+            0.05882882554931074
+          ]
+        }
+      },
+      "deficit_q70": {
+        "area_share": {
+          "mean": 0.30085271568357846,
+          "per_split": [
+            0.30041473684984615,
+            0.30110212674796266,
+            0.30088383401004726,
+            0.30096162982621927,
+            0.3009012509838171
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.3193875565500989,
+          "per_split": [
+            0.2839366515837104,
+            0.32132104734969436,
+            0.33653527658164956,
+            0.3666148953479772,
+            0.2885299118874633
+          ]
+        },
+        "lift": {
+          "mean": 1.0615636670266881,
+          "per_split": [
+            0.945148878384179,
+            1.0671497103660643,
+            1.1184890597027284,
+            1.218144969375888,
+            0.9588857173045813
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.04518868567756942,
+          "per_split": [
+            0.037070981351096884,
+            0.047761026199651564,
+            0.046806860279425544,
+            0.05540340459257423,
+            0.03890115596509891
+          ]
+        }
+      },
+      "geodetic_only_q70": {
+        "area_share": {
+          "mean": 0.3011356060419869,
+          "per_split": [
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.375498857594109,
+          "per_split": [
+            0.32492168465019144,
+            0.3902016239394216,
+            0.33214640609473334,
+            0.4486354559573996,
+            0.3815891173287989
+          ]
+        },
+        "lift": {
+          "mean": 1.2469427396166288,
+          "per_split": [
+            1.0789879314533402,
+            1.295767143142204,
+            1.1029795196268575,
+            1.4898120546224847,
+            1.2671670492382574
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05303342832000892,
+          "per_split": [
+            0.04443570554255496,
+            0.053919472273005406,
+            0.04690634649249284,
+            0.06538607121216368,
+            0.05451954607982773
+          ]
+        }
+      },
+      "uniform_random_dot_proxy_dti": {
+        "mean": 0.04901231148462561,
+        "per_split": [
+          0.044471917308024814,
+          0.04637094056074711,
+          0.04837435637483147,
+          0.053407028403207164,
+          0.05243731477631752
+        ]
+      },
+      "input": "data/stage1_vertical_known_sense_only.json"
+    },
+    {
+      "scenario": "fault_plane_known_sense_only",
+      "rate_convention": "fault_plane",
+      "assume_unknown_normal": false,
+      "n_splits": 5,
+      "heldout_trace_pixel_counts": [
+        11492,
+        10961,
+        12076,
+        13521,
+        12938
+      ],
+      "spearman_deficit": {
+        "mean": 0.026920942592201937,
+        "per_split": [
+          0.035641296520916174,
+          -0.008264835366490846,
+          0.030833217803117825,
+          0.09308720927482114,
+          -0.016692175271354647
+        ]
+      },
+      "spearman_geodetic_only": {
+        "mean": 0.0992971254632764,
+        "per_split": [
+          0.03736713058363244,
+          0.08299061483947416,
+          0.07526516658311413,
+          0.19162835587412994,
+          0.10923435943603133
+        ]
+      },
+      "deficit_q50": {
+        "area_share": {
+          "mean": 0.5011801934948377,
+          "per_split": [
+            0.5013038540086036,
+            0.5023467436935557,
+            0.5009162295812591,
+            0.5008914587741199,
+            0.5004426814166502
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.5534112297166025,
+          "per_split": [
+            0.5919770274973895,
+            0.5403704041602043,
+            0.5736170917522359,
+            0.573922047185859,
+            0.4871695779873242
+          ]
+        },
+        "lift": {
+          "mean": 1.1041962018870852,
+          "per_split": [
+            1.1808746786280038,
+            1.0756920611987564,
+            1.145135768972291,
+            1.1458012252604066,
+            0.9734772753759681
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05186570766073621,
+          "per_split": [
+            0.05020084520725168,
+            0.049671425407226494,
+            0.055771955169426575,
+            0.05574188946649792,
+            0.047942423053278435
+          ]
+        }
+      },
+      "geodetic_only_q50": {
+        "area_share": {
+          "mean": 0.5004506158158121,
+          "per_split": [
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121,
+            0.5004506158158121
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.619876044208959,
+          "per_split": [
+            0.5625652627915071,
+            0.6261290028282092,
+            0.5701391189135475,
+            0.6775386435914503,
+            0.6630081929200804
+          ]
+        },
+        "lift": {
+          "mean": 1.2386357906633103,
+          "per_split": [
+            1.1241174353925782,
+            1.2511304473220037,
+            1.1392515083314112,
+            1.3538571482961557,
+            1.3248224139744025
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05567418807838519,
+          "per_split": [
+            0.04511664303012923,
+            0.05294720311313594,
+            0.054072812572735815,
+            0.06536716663664492,
+            0.060867115039280044
+          ]
+        }
+      },
+      "deficit_q70": {
+        "area_share": {
+          "mean": 0.30079434946925643,
+          "per_split": [
+            0.30041473684984615,
+            0.30110212674796266,
+            0.30088383401004726,
+            0.300669798754609,
+            0.3009012509838171
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.3243679275554162,
+          "per_split": [
+            0.2839366515837104,
+            0.3215035124532433,
+            0.3484597548857237,
+            0.3794098069669403,
+            0.2885299118874633
+          ]
+        },
+        "lift": {
+          "mean": 1.0783585717078457,
+          "per_split": [
+            0.945148878384179,
+            1.0677557011158465,
+            1.1581205618181794,
+            1.2618819999164428,
+            0.9588857173045813
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.04627186285877776,
+          "per_split": [
+            0.040712725308581894,
+            0.04508481717730622,
+            0.04850867680718112,
+            0.05431608511570063,
+            0.04273700988511895
+          ]
+        }
+      },
+      "geodetic_only_q70": {
+        "area_share": {
+          "mean": 0.3011356060419869,
+          "per_split": [
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869,
+            0.3011356060419869
+          ]
+        },
+        "truth_recall": {
+          "mean": 0.375498857594109,
+          "per_split": [
+            0.32492168465019144,
+            0.3902016239394216,
+            0.33214640609473334,
+            0.4486354559573996,
+            0.3815891173287989
+          ]
+        },
+        "lift": {
+          "mean": 1.2469427396166288,
+          "per_split": [
+            1.0789879314533402,
+            1.295767143142204,
+            1.1029795196268575,
+            1.4898120546224847,
+            1.2671670492382574
+          ]
+        },
+        "random_dot_proxy_dti": {
+          "mean": 0.05270583727622523,
+          "per_split": [
+            0.04443570554255496,
+            0.050830311605998164,
+            0.04690634649249284,
+            0.06527843464505546,
+            0.056078388095024724
+          ]
+        }
+      },
+      "uniform_random_dot_proxy_dti": {
+        "mean": 0.05043918240244784,
+        "per_split": [
+          0.047350898041053524,
+          0.04674522047570378,
+          0.050407472938247336,
+          0.055255005780917035,
+          0.05243731477631752
+        ]
+      },
+      "input": "data/stage1_fault_plane_known_sense_only.json"
+    }
+  ],
+  "paired_deterministic_comparisons": {
+    "vertical_unknown_normal": {
+      "q50_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.028016138776591815,
+          -0.11278171001413084,
+          -0.07824732263519385,
+          -0.21394290480048994,
+          -0.32066874359679653
+        ],
+        "mean_delta": -0.13952490845400387,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "q70_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.010100024234780625,
+          -0.3064639407951637,
+          -0.10295244045582264,
+          -0.205835573611598,
+          -0.375297007883279
+        ],
+        "mean_delta": -0.19608978770221655,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "spearman_deficit_minus_geodetic_only": {
+        "a_minus_b_per_split": [
+          -0.0007350650602405209,
+          -0.0770121522410104,
+          -0.0498273736709606,
+          -0.08715066062723022,
+          -0.1228609302702726
+        ],
+        "mean_delta": -0.06751723637394287,
+        "a_wins": 0,
+        "n_splits": 5
+      }
+    },
+    "fault_plane_unknown_normal": {
+      "q50_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.028016138776591815,
+          -0.11988239996454153,
+          -0.07679244044997424,
+          -0.2217839369620389,
+          -0.31737908070367093
+        ],
+        "mean_delta": -0.14156434386072675,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "q70_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.010100024234780625,
+          -0.3064639407951637,
+          -0.10295244045582264,
+          -0.20434096024342518,
+          -0.3558193862904693
+        ],
+        "mean_delta": -0.19189534071002004,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "spearman_deficit_minus_geodetic_only": {
+        "a_minus_b_per_split": [
+          -0.0003118372231847369,
+          -0.07705296494452435,
+          -0.0516645317460902,
+          -0.08718759618517088,
+          -0.12398806693813431
+        ],
+        "mean_delta": -0.0680409994074209,
+        "a_wins": 0,
+        "n_splits": 5
+      }
+    },
+    "vertical_known_sense_only": {
+      "q50_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.05754829636308911,
+          -0.18771734456250377,
+          0.0076464210719833225,
+          -0.200673183182267,
+          -0.36524533767567335
+        ],
+        "mean_delta": -0.13768822959707433,
+        "a_wins": 2,
+        "n_splits": 5
+      },
+      "q70_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          -0.1338390530691611,
+          -0.22861743277613966,
+          0.015509540075870909,
+          -0.2716670852465968,
+          -0.30828133193367613
+        ],
+        "mean_delta": -0.18537907258994055,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "spearman_deficit_minus_geodetic_only": {
+        "a_minus_b_per_split": [
+          -0.0018933118040378588,
+          -0.09100404860879231,
+          -0.043287027175989576,
+          -0.098326455278909,
+          -0.12550107908305067
+        ],
+        "mean_delta": -0.07200238439015587,
+        "a_wins": 0,
+        "n_splits": 5
+      }
+    },
+    "fault_plane_known_sense_only": {
+      "q50_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          0.056757243235425525,
+          -0.17543838612324736,
+          0.005884260640879768,
+          -0.20805592303574905,
+          -0.3513451385984344
+        ],
+        "mean_delta": -0.1344395887762251,
+        "a_wins": 2,
+        "n_splits": 5
+      },
+      "q70_deficit_minus_geodetic_only_lift": {
+        "a_minus_b_per_split": [
+          -0.1338390530691611,
+          -0.22801144202635748,
+          0.055141042191321876,
+          -0.22793005470604188,
+          -0.30828133193367613
+        ],
+        "mean_delta": -0.16858416790878294,
+        "a_wins": 1,
+        "n_splits": 5
+      },
+      "spearman_deficit_minus_geodetic_only": {
+        "a_minus_b_per_split": [
+          -0.0017258340627162652,
+          -0.09125545020596501,
+          -0.04443194877999631,
+          -0.0985411465993088,
+          -0.12592653470738596
+        ],
+        "mean_delta": -0.07237618287107447,
+        "a_wins": 0,
+        "n_splits": 5
+      }
+    }
+  },
+  "interpretation": {
+    "bottom_line": "These scenario values do not support a performance comparison because their runner did not exclude held-out trace rows from the catalogue-derived fault-budget term. Use only as formula-sensitivity history; no claim is made that the deficit beats raw geodetic-only.",
+    "physical_caution": "Subtracting mapped-fault strain is not guaranteed to isolate uncatalogued faulting: mapped faults can spatially covary with unmapped faults, and uncertainty in the slip table, dip, rake, assignments, and geodetic tensor convention is large relative to this coarse residual.",
+    "usage_decision": "Keep the geodetic strain-budget deficit as a low-confidence broad-tile prior only; do not use it as a fine-scale point placer or hard Stage-2 gate. Re-run the trace holdout with held-row exclusion, current signed shear/rate conventions, and restored inputs before using any Stage-1 performance numbers."
+  },
+  "reconciliation_record": "evidence/stage1_reconciliation_20261007.json"
+}

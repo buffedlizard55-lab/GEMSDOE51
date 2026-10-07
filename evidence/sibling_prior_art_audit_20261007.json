@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "audit_date_utc": "2026-10-07",
+  "status": "SUMMARY_ONLY_RAW_PAGE_COPIES_REMOVED",
+  "scope": {
+    "owner_repositories_reviewed": 54,
+    "keyword_selected_documents_reviewed": 582,
+    "selection_method": "Keyword-selected public owner-repository README/site material, not an exhaustive branch, code, raster, or literature search.",
+    "limitations": [
+      "Owner documentation establishes that a concept was described, not that code implemented it or that it improved a score.",
+      "The audit cannot establish global novelty.",
+      "Some broad regular expressions match generic wording; a hit is a prompt for source review, not proof of an exact operator.",
+      "No copied leaderboard standings or raw third-party page text are stored in this summary."
+    ]
+  },
+  "prior_art_findings": [
+    {
+      "concept_family": "Thermal remote sensing, geothermal expression, geothermometer consensus, and alteration",
+      "status": "SUBSTANTIAL_OWNER_DOCUMENTED_PRIOR_ART; EXACT_OPERATORS_VARY",
+      "implication": "Do not call broad thermal, temperature, or alteration-expression families untried. For a candidate, record the exact input layer, spatial operator, scale, background control, and blocked-holdout comparison; the keyword inventory alone does not prove any one signature was implemented or successful.",
+      "manual_review_sources": [
+        "https://github.com/buffedlizard55-lab/GEMSDOE29",
+        "https://github.com/buffedlizard55-lab/GEMSDOE32",
+        "https://github.com/buffedlizard55-lab/GEMSDOE47"
+      ]
+    },
+    {
+      "concept_family": "River-profile and drainage-network morphology",
+      "status": "SUBSTANTIAL_OWNER_DOCUMENTED_PRIOR_ART",
+      "implication": "The keyword-selected owner corpus returned river, fluvial, knickpoint, stream-gradient, or drainage-profile material across multiple sibling repositories. Specify an exact profile statistic, scale, drainage mask, and ablation before describing a new variant; a keyword hit alone does not prove implementation or performance.",
+      "manual_review_sources": [
+        "https://github.com/buffedlizard55-lab/GEMSDOE25",
+        "https://github.com/buffedlizard55-lab/GEMSDOE26",
+        "https://github.com/buffedlizard55-lab/GEMSDOE32",
+        "https://github.com/buffedlizard55-lab/GEMSDOE47"
+      ]
+    },
+    {
+      "concept_family": "Magnetic-gravity and multi-physics edge orientation/agreement",
+      "status": "SUBSTANTIAL_OWNER_DOCUMENTED_PRIOR_ART",
+      "implication": "The H-G high-angle, edge-weighted TMI-gravity discordance operator at 400/800 m is a specific variant of an already documented edge-orientation/cross-physics family, not a globally untried family. Its matched H-D holdout was negative. A future proposal must name a materially different operator, such as finite edge-endpoint pairing with an independently measured bridge, and test it against matched edge-only controls.",
+      "manual_review_sources": [
+        "https://github.com/buffedlizard55-lab/GEMSDOE26",
+        "https://github.com/buffedlizard55-lab/GEMSDOE27",
+        "https://github.com/buffedlizard55-lab/GEMSDOE28",
+        "https://github.com/buffedlizard55-lab/GEMSDOE49"
+      ]
+    },
+    {
+      "concept_family": "Cross-gradient and multi-physics co-location",
+      "status": "DOCUMENTED_AS_BROAD_CO-LOCATION/ORIENTATION; FORMAL_CROSS_GRADIENT_NOT_VERIFIED_BY_KEYWORD_SEARCH",
+      "implication": "Generic co-location, gradient agreement, or cross-gradient language is not a novelty claim. The audit found owner-documented geophysical edge-orientation agreement, but did not authenticate a particular formal cross-gradient implementation. State the exact gradients, normalization, direction/angle rule, offsets, controls, and source evidence for any new proposal.",
+      "manual_review_sources": [
+        "https://github.com/buffedlizard55-lab/GEMSDOE26",
+        "https://github.com/buffedlizard55-lab/GEMSDOE27",
+        "https://github.com/buffedlizard55-lab/GEMSDOE49"
+      ]
+    }
+  ],
+  "hypothesis_slate": "evidence/hypothesis_slate_20261007.json",
+  "decision_rule": "Use prior art as a constraint on novelty claims, not as performance evidence. Preserve exact operator comparisons and local holdout results separately.",
+  "score_attribution_policy": "No leaderboard rows, ranks, or participant-score tables are copied into this audit. The disputed GEMSDOE32 H33-2-B2 attribution is handled in evidence/score_attribution_audit.json and remains unsupported/contradicted by the sibling's UNSCORED label and modelled 0.2747 projection."
+}

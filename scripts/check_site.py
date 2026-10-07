@@ -51,19 +51,35 @@ def main() -> int:
         manifest = {}
     if manifest.get("status") == "NO_ELIGIBLE_CANDIDATE" and not manifest.get("primary"):
         download_dir = DOCS / "downloads"
+        public_downloads = set()
         if download_dir.exists():
-            exposed = [p.name for p in download_dir.iterdir()
-                       if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}]
-            if exposed:
-                failures.append(f"archived/uncleared downloads remain public: {exposed}")
+            public_downloads = {p.name for p in download_dir.iterdir()
+                                if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}}
+        allowed_research = set()
+        for record in manifest.get("research_only_artifacts", []):
+            for key in ("file", "zip"):
+                value = record.get(key)
+                if value:
+                    allowed_research.add(Path(value).name)
+        if public_downloads != allowed_research:
+            failures.append(f"public TIFF/ZIPs do not match research-only manifest: "
+                            f"found={sorted(public_downloads)}, allowed={sorted(allowed_research)}")
         index = (DOCS / "index.html").read_text(encoding="utf-8")
-        if "No eligible submission file" not in index:
+        if ("No eligible submission file" not in index
+                and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
-        if 'href="downloads/' in index:
-            failures.append("index page links to a download despite an empty eligibility manifest")
+        if allowed_research:
+            if "NOT FOR SUBMISSION" not in index:
+                failures.append("research-only download is not prominently marked NOT FOR SUBMISSION")
+            for name in allowed_research:
+                if f'href="downloads/{name}"' not in index:
+                    failures.append(f"research-only artifact is not linked from index: {name}")
+        elif 'href="downloads/' in index:
+            failures.append("index page links to a download despite an empty artifact manifest")
 
     for rel in ("data/leaderboard.json", "registry/leaderboard.json",
-                "registry/leaderboard_reads.json", "registry/leaderboard_snapshot.json"):
+                "registry/leaderboard_reads.json", "registry/leaderboard_snapshot.json",
+                "registry/scored_submissions.json"):
         if (ROOT / rel).exists():
             failures.append(f"{rel} must not mirror leaderboard standings")
     if failures:

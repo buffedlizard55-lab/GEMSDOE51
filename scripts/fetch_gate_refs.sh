@@ -40,7 +40,7 @@ fetch $G24 $R24 "inputs/gems16-h16-1-topo-geophys-baseline-ridges-20260930-df20f
 fetch $G24 $R24 "docs/downloads/gems24-h25-1-dotted-h19-5-d2-8-20261002-e56ea318af89-allfinite.tif" data/refs/gems24-dotted-d2-8-allfinite.tif
 fetch $G24 $R24 "docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-allfinite.tif" data/refs/gems24-dotted-d1-5-allfinite.tif
 
-# ---- GEMSDOE32: the 0.2778 family and its ablations -------------------------
+# ---- GEMSDOE32 owner-published H33 artifacts (no verified score mapping) ----
 fetch $G32 $R32 "docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif" data/refs/gems25-dotted-d2-8-zeros.tif
 fetch $G32 $R32 "docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif" data/refs/gemsdoe32-h33-2-b2-zeros.tif
 fetch $G32 $R32 "docs/downloads/gemsdoe32-h33-h33-2b2-plus-h33-1-20261004T220000Z-31588dc7-zeros.tif" data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif
