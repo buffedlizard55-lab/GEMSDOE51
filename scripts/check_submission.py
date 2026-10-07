@@ -26,6 +26,11 @@ def _passes(name: str, value: object, checks: dict) -> bool:
         # NaN/NoData outside; this diagnostic is not a failure when the NaN
         # alternative is the one present on disk.
         return bool(checks.get("outside_footprint_zeros")) or bool(checks.get("outside_footprint_nan"))
+    if name in {"outside_footprint_nan", "nodata_tag_is_nan"}:
+        # Same contract, seen from the other side: when the artifact encodes the
+        # outside-footprint area as finite zeros, the NaN diagnostics are simply
+        # "not applicable" rather than failures.
+        return bool(value) or bool(checks.get("outside_footprint_zeros"))
     return bool(value)
 
 

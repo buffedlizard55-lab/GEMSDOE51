@@ -1,0 +1,72 @@
+{
+ "script": "scripts/run_h51_n1.py",
+ "instrument": "ab",
+ "preregistered_rule": "ADOPT iff mean dti_B_all(n1) > mean dti_B_all(static) AND n1 beats static on B_all in >=3/4 folds AND mean dti_B_far(n1) >= mean dti_B_far(static) - 0.002",
+ "config": {
+  "instrument": "ab",
+  "folds": "0,1,2,3",
+  "grid": 2,
+  "buffer": 12,
+  "seed": 51,
+  "neg": 250000,
+  "max_iter": 250,
+  "ratio": 3.47,
+  "excl_radius": 2.0,
+  "dti0": 0.28,
+  "ste_w": 0.35,
+  "ste_spacing": 3.0,
+  "ste_linelen": 9,
+  "sigmas": [
+   1.0,
+   2.0,
+   3.5
+  ],
+  "arms": "static",
+  "save_fields": "work/fields",
+  "skip_emission": true,
+  "out": "evidence/h51_n1_ab_static_fields.json"
+ },
+ "n_rows": 4,
+ "rows": [
+  {
+   "fold": 0,
+   "arm": "static",
+   "rule": "field_only",
+   "n_dots": 0,
+   "auc_truth_all": 0.6302130535511176,
+   "auc_truth_far": 0.5658477218139811
+  },
+  {
+   "fold": 1,
+   "arm": "static",
+   "rule": "field_only",
+   "n_dots": 0,
+   "auc_truth_all": 0.7789422285432404,
+   "auc_truth_far": 0.7476836259025206
+  },
+  {
+   "fold": 2,
+   "arm": "static",
+   "rule": "field_only",
+   "n_dots": 0,
+   "auc_truth_all": 0.6571837165133961,
+   "auc_truth_far": 0.6139533677026975
+  },
+  {
+   "fold": 3,
+   "arm": "static",
+   "rule": "field_only",
+   "n_dots": 0,
+   "auc_truth_all": 0.7079929123293707,
+   "auc_truth_far": 0.6668630209001212
+  }
+ ],
+ "summary": {},
+ "paired_n1_minus_static": {},
+ "runtime_s": 302.0,
+ "limitations": [
+  "proxy/off-catalogue DTI values are not competition scores",
+  "the A/B split shares one compilation between A and B",
+  "no competition slot is authorized by this file"
+ ]
+}

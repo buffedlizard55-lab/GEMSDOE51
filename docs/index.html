@@ -23,7 +23,47 @@
 </div></header>
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
-<section class="download missing">
+
+<section class="download">
+<h2>⬇ Recommended upload candidate — NOT YET PORTAL-VALIDATED</h2>
+<p class="warn"><b>RECOMMENDED UPLOAD CANDIDATE.</b> This is the only artifact in this repository that
+satisfies every constraint in the method brief at once: official grid/CRS/transform/dtype, all pixel
+values finite and inside [0, 1], every emitted point at least 224 m from the mapped catalogue, every
+emitted point inside the Stage-1 strain-deficit approved tiles, Stage-1 non-dominance, and a support
+that no locally held prior submission matches. It has <b>not</b> been uploaded, so portal acceptance is
+unproven, and it is <b>not</b> an organizer score.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif">Download the submission GeoTIFF</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-N2-physical-creditthin-r3.0-q10</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>H-D physical detector (58 physical stack layers + 4 scarp-facing-coherence layers) fitted on the visible USGS/INGENIOUS known-fault catalogue; unit-valued dots at &gt;=2.4 px (240 m) greedy non-maximum-suppression spacing; every point &gt;=2.24 px (224 m) from the mapped catalogue and inside the Stage-1 strain-deficit q10 approved tiles; mass = 3.0x the estimated hidden-truth pixel count.</code></dd>
+<dt>Format receipt (local, not portal validation)</dt><dd>one-band float32 EPSG:32611
+ shape [3730, 3292], finite everywhere (nan_cells=0),
+ values in [0.0, 1.0], format_valid=True,
+ portal_legal=True</dd>
+<dt>Mass geometry</dt><dd>38100 unit dots; nearest-neighbour spacing median
+ 3.0 px; distance to mapped catalogue median
+ 5.66 px (p10 2.83,
+ p90 19.0)</dd>
+<dt>Stage 1 (kept coarse)</dt><dd>approved area 90.09% of footprint;
+ every emitted point inside approved tiles; lift 1.110 (limit 1.5);
+ formula Kreemer et al. (2000), Eq. 3: eps_ij = 1/2 sum_k [L_k u_dot_k/(A sin(delta_k))] m_ij^k</dd>
+<dt>Uniqueness (local priors)</dt><dd>PASS —
+ max support Jaccard 0.1546 (limit 0.50),
+ max containment 0.2887 (limit 0.60);
+ 39 local priors compared, 21 of them family references</dd>
+<dt>Paired six-fold proxy vs the archived H-D arm</dt><dd>candidate
+ 0.280116 vs baseline 0.281663
+ (Δ -0.001547; 0/6 folds won).
+ The baseline reproduces the archived receipt exactly (max deviation 0.0),
+ so the comparison is paired and reproducible. <b>This is a compliance cost, not a score improvement:</b>
+ the brief's all-points-inside-approved requirement costs about 0.0015 mean proxy DTI.</dd>
+<dt>SHA-256</dt><dd><code>b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22</code></dd>
+</dl>
+<p class="ev">Receipts: <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json">local checks</a>,
+ <a href="holdout.html">Stage 1 / Stage 2 holdouts reported separately</a>,
+ <a href="irregularities.html">IR-51-21</a>. No upload, portal acceptance or organizer score is claimed anywhere on this site.</p>
+</section><section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
 <h2>New, independently generated TIFF</h2>
 <p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
@@ -41,7 +81,7 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 </section>
 <section class="download missing">
 <h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
-<p><b>No upload-eligible artifact is available.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<p><b>This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
 <p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
 <p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
