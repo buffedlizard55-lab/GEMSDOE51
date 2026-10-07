@@ -1,0 +1,192 @@
+{
+ "schema_version": 1,
+ "evidence_class": "MEASURED local proxies + MODEL; not an organizer score",
+ "operator": "H51-OMIT catalogue-omission residual (see module docstring)",
+ "channels": [
+  "comp_tmi_hg",
+  "comp_tmi_vg",
+  "comp_iso_grav_anom_hg",
+  "comp_iso_grav_anom_vg",
+  "comp_tc",
+  "comp_det_elev_slope",
+  "comp_iso_grav_anom_slope",
+  "comp_rtp",
+  "comp_mag_anom",
+  "lid_step_max",
+  "lid_cross_max",
+  "lid_ex_max",
+  "lid_downface_max",
+  "lid_coh100",
+  "lid_relief",
+  "rad_TC",
+  "rad_K",
+  "rad_Th",
+  "comp_depth_to_base_surf",
+  "comp_cond_surf"
+ ],
+ "dcat_excl_px": 2.0,
+ "min_sep_px": 2.0,
+ "stage1": {
+  "tile_px": 100,
+  "tile_shape": [
+   38,
+   33
+  ],
+  "q": 0.1,
+  "threshold": -0.4552315608919382,
+  "approved_area_px": 4588003,
+  "approved_area_frac": 0.8878791989662832,
+  "meta": {
+   "tile_px": 100,
+   "tile_shape": [
+    38,
+    33
+   ],
+   "h_seis_m": 15000.0,
+   "median_centroid_distance_px": 36.345563690772494,
+   "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+   "frac_catalogue_px_with_known_sense": 0.7436052994031612,
+   "rate_convention": "vertical",
+   "assume_unknown_normal": true,
+   "dip_assumptions": {
+    "normal_deg": 60.0,
+    "strike_slip_deg": 90.0
+   },
+   "regional_median_slip_rate_mm_yr": 0.1,
+   "total_mapped_trace_km": 6821.350197517395,
+   "area_mask_px": 12279160,
+   "slip_rate_unit_assumption": "mm/yr (provisional; verify source field definition)",
+   "tile_area_m2_min": 27600000.0,
+   "tile_area_m2_max": 100000000.0
+  }
+ },
+ "baselines": {
+  "repo_historical_44069": {
+   "S": 0.2190552202130097,
+   "L": 0.07043264493824763,
+   "mass": 44069,
+   "S_tp": 13858.82526168688,
+   "S_fp": 37364.948256664604,
+   "L_tp": 2379.8545909383542,
+   "L_fp": 42525.56787792607
+  },
+  "sibling_d2.8_44090_reference_only": {
+   "S": 0.10275935835895889,
+   "L": 0.040356614680136266,
+   "mass": 44090,
+   "S_tp": 6425.832491508483,
+   "S_fp": 41130.26906222889,
+   "L_tp": 1360.1151148460704,
+   "L_fp": 43111.92753618507
+  },
+  "random_allowed_216658": {
+   "S": 0.18619751134990253,
+   "L": 0.13713501651196622,
+   "mass": 216658,
+   "S_tp": 18284.930757428894,
+   "S_fp": 207616.0689028253,
+   "L_tp": 9425.222686327445,
+   "L_fp": 210182.33451891097
+  }
+ },
+ "mass_sweep": {
+  "16000": {
+   "S": 0.022439866018561357,
+   "L": 0.038941267474274364,
+   "mass": 16000,
+   "S_tp": 1264.2598972753024,
+   "S_fp": 15327.260106444228,
+   "L_tp": 1092.2974224203433,
+   "L_fp": 15117.043863394774
+  }
+ },
+ "chosen_mass": 16000,
+ "gates": {
+  "mass": 16000,
+  "inside_approved_tiles_frac": 1.0,
+  "outside_approved_tiles": 0,
+  "inside_catalogue_flank": 0,
+  "on_catalogue_px": 0,
+  "all_finite_and_in_unit_interval": true,
+  "instruments": {
+   "S": 0.022439866018561357,
+   "L": 0.038941267474274364,
+   "mass": 16000,
+   "S_tp": 1264.2598972753024,
+   "S_fp": 15327.260106444228,
+   "L_tp": 1092.2974224203433,
+   "L_fp": 15117.043863394774
+  },
+  "beats_historical_on_S": false,
+  "beats_historical_on_L": false,
+  "uniqueness": {
+   "calib_13gems_20261001_r13-lattice-s5_v2_nan-ou.tif": {
+    "jaccard": 0.0028479902097524545,
+    "containment": 0.0395625
+   },
+   "calib_8GEMSDOE_Hedge-v2_submission.tif": {
+    "jaccard": 0.003573194856577646,
+    "containment": 0.0541875
+   },
+   "calib_gems10-h25-ctx-ridge-20260927T2329477041.tif": {
+    "jaccard": 0.002582454069209769,
+    "containment": 0.030625
+   },
+   "calib_gems10-h28-dotted-ridge-20260928T0202562.tif": {
+    "jaccard": 0.0028103760494814327,
+    "containment": 0.0149375
+   },
+   "calib_gemsdoe-ens12-adopted-7f00890a.tif": {
+    "jaccard": 0.004609078875320961,
+    "containment": 0.0541875
+   },
+   "calib_gemsdoe9-PLACEHOLDER-2314b599.tif": {
+    "jaccard": 0.0015978087194704405,
+    "containment": 0.035875
+   },
+   "scored_d15_scored.tif": {
+    "jaccard": 0.004808136846971798,
+    "containment": 0.02275
+   },
+   "scored_d28_unscored.tif": {
+    "jaccard": 0.004479957206378924,
+    "containment": 0.01675
+   },
+   "scored_gems27_tgc_v2_d15.tif": {
+    "jaccard": 0.004729483914557455,
+    "containment": 0.02275
+   },
+   "scored_h16_1.tif": {
+    "jaccard": 0.0052583562608202175,
+    "containment": 0.04575
+   },
+   "scored_h19_4.tif": {
+    "jaccard": 0.005452413664122686,
+    "containment": 0.047375
+   },
+   "scored_h19_5.tif": {
+    "jaccard": 0.005506672532629418,
+    "containment": 0.0469375
+   },
+   "g25_dotted_prior.tif": {
+    "jaccard": 0.004479957206378924,
+    "containment": 0.01675
+   },
+   "g32_anchor_prior.tif": {
+    "jaccard": 0.004479957206378924,
+    "containment": 0.01675
+   },
+   "g32_h33b2_prior.tif": {
+    "jaccard": 0.0050200427078260215,
+    "containment": 0.01675
+   }
+  },
+  "max_jaccard_vs_priors": 0.005506672532629418,
+  "max_containment_vs_priors": 0.0541875,
+  "uniqueness_pass_jaccard_le_0.2": true
+ },
+ "caveats": [
+  "Instruments S and L are local proxies for unmapped structure, not the organizer's hidden expert labels.",
+  "The two-stage structure confining points to Stage-1 tiles does not make Stage 1 predictive; it is reported separately."
+ ]
+}
