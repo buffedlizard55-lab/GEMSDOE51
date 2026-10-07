@@ -97,7 +97,7 @@ def module_aliases(tree: ast.AST) -> dict[str, str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--json", dest="out", default=str(ROOT / "evidence" / "repo_health.json"))
+    ap.add_argument("--json", dest="out", default=str(ROOT / "data" / "repo_health.json"))
     args = ap.parse_args()
 
     exports = {p.stem: module_exports(p) for p in sorted(PKG.glob("*.py"))}

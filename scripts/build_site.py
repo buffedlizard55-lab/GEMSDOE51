@@ -89,8 +89,11 @@ def tbl(headers, rows, cls=""):
 def artifact_table(arts, s1stats):
     if not arts:
         return ("<p class='warn'><b>No current submission artifact is eligible or linked.</b> "
-                "The previous candidates are retained outside the published download directory "
-                "for audit only; the latest proposal failed uniqueness before a TIFF was written.</p>")
+                "Prior candidate maps are retained outside the published download directory for "
+                "audit only. Within the current preregistered H-D gate sweep, the soft-w=0.20 "
+                "proposal failed uniqueness before a new TIFF was written; the separate archived "
+                "PR #6 maps are not being reissued, and its Stage-2-only lead still requires "
+                "reproduction.</p>")
 
     def link(name):
         if not name:
@@ -215,6 +218,10 @@ def build():
     hold = {a: load(f"holdout_{a}.json") for a in
             ("base", "H_E", "H_D", "H_C", "H_ALL", "H_X1")}
     two = load("two_stage_results.json")
+    archive_review = load("holdout_archive_review.json", {})
+    archive_s2 = archive_review.get("stage2_emission_geometry", {})
+    archive_s1 = archive_review.get("stage1_prior", {})
+    archive_hm = archive_review.get("secondary_h_m", {})
 
     # ------------------------------------------------------------ index
     dl = sub
@@ -273,6 +280,16 @@ unique submission name, and optional note.</p></section>"""
     _STAGE1 = stage1_table()
     _GATE = gate_table()
     body = card + f"""
+<p class="warn"><b>Later result found during repository sync; pending reproduction.</b>
+The archived Stage-2-only emission sweep records mean proxy DTI
+{archive_s2.get('mean_proxy_dti', float('nan')):.4f} versus
+{archive_s2.get('incumbent_isotropic_mean_proxy_dti', float('nan')):.4f}
+(+{archive_s2.get('mean_delta_vs_incumbent', float('nan')):.4f};
+{archive_s2.get('folds_better', 0)}/{archive_s2.get('folds', 0)} folds).
+It was not rerun in this review and is a provisional emission-method result, not a promoted file.
+The packaged Stage-1 soft-weight version reports a {archive_s1.get('reported_holdout_cost_vs_ungated', float('nan')):.4f}
+holdout cost; its H-M alternative scored {archive_hm.get('mean_proxy_dti', float('nan')):.4f}.
+All artifacts remain archived. See the <a href="../data/holdout_archive_review.json">reconciliation record</a>.</p>
 <h2>What is offered</h2>
 {_ART}
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
@@ -482,10 +499,30 @@ known-fault catalogue; the official test target is expert-identified new faults.
 recoverability of the known-fault proxy only.</p>
 <h3>Stage 2 — fine-scale models</h3>
 {tbl(['arm','mean AUC'] + [f'proxy DTI at M/|G|={ratio}' for ratio in ratios], arm_rows())}
-<p>H-D is the current incumbent at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
+<p>H-D is the current isotropic baseline at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
 implementation (total magnetic + isostatic gravity as new-transform inputs) scores 0.2796713
 (delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
 preregistered derivative-band family was not fully tested; these remain proxy results.</p>
+
+<h3>Later archived Stage-2-only emission result — pending reproduction</h3>
+<p>A sweep discovered on merged PR #6 held each H-D detector field fixed and varied only the
+matched-mass emission rule. Its best archived result is
+<code>{archive_s2.get('best_rule', 'not recorded')}</code> with mean proxy DTI
+{archive_s2.get('mean_proxy_dti', float('nan')):.6f}, versus the isotropic incumbent
+{archive_s2.get('incumbent_isotropic_mean_proxy_dti', float('nan')):.6f}
+(Δ {archive_s2.get('mean_delta_vs_incumbent', float('nan')):+.6f};
+{archive_s2.get('folds_better', 0)}/{archive_s2.get('folds', 0)} folds).
+This Stage-2-only result is a metric-geometry experiment, not a geological hypothesis, and it was
+not independently rerun in this review. Treat it as a provisional holdout lead until the raw inputs
+are restored and the sweep is reproduced. The packaged Stage-1 soft <code>w=0.10</code> variant
+reports a separate {archive_s1.get('reported_holdout_cost_vs_ungated', float('nan')):.4f} cost against
+its ungated version; its Stage-1 approved-area share is
+{archive_s1.get('approved_area_share', float('nan')):.3f}, emitted share inside approved tiles is
+{archive_s1.get('emitted_share_inside_approved', float('nan')):.3f}, and lift is
+{archive_s1.get('lift_over_area_share', float('nan')):.3f}. The H-M alternative records mean DTI
+{archive_hm.get('mean_proxy_dti', float('nan')):.6f}, below the Stage-2-only emission lead.
+These are separate stage results, not combined into one score. The <a href="../data/holdout_archive_review.json">audit JSON</a>
+links to the archived source artifacts and explains why no old map was reused.</p>
 
 <h3>Stage 1 — trace-held-out prior test, reported separately</h3>
 <p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before

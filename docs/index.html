@@ -33,8 +33,18 @@ limit 0.50). Archived TIFFs are not current recommendations and are not linked h
 <p>When a genuinely distinct candidate passes the promotion, format, uniqueness, and
 Stage-1 dominance checks, this card will contain the downloadable file, checksum,
 unique submission name, and optional note.</p></section>
+<p class="warn"><b>Later result found during repository sync; pending reproduction.</b>
+The archived Stage-2-only emission sweep records mean proxy DTI
+0.2836 versus
+0.2816
+(+0.0020;
+4/6 folds).
+It was not rerun in this review and is a provisional emission-method result, not a promoted file.
+The packaged Stage-1 soft-weight version reports a 0.0020
+holdout cost; its H-M alternative scored 0.2826.
+All artifacts remain archived. See the <a href="../data/holdout_archive_review.json">reconciliation record</a>.</p>
 <h2>What is offered</h2>
-<p class='warn'><b>No current submission artifact is eligible or linked.</b> The previous candidates are retained outside the published download directory for audit only; the latest proposal failed uniqueness before a TIFF was written.</p>
+<p class='warn'><b>No current submission artifact is eligible or linked.</b> Prior candidate maps are retained outside the published download directory for audit only. Within the current preregistered H-D gate sweep, the soft-w=0.20 proposal failed uniqueness before a new TIFF was written; the separate archived PR #6 maps are not being reissued, and its Stage-2-only lead still requires reproduction.</p>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
@@ -67,7 +77,7 @@ marginal pixel is <code>c = 0.2·DTI</code>.</li>
 </ol>
 
 <h2>Holdout at a glance</h2>
-<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r4.5: 0.2781 / r6.0: 0.2625</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr><tr><td>H_X1</td><td>0.6667</td><td>r3.47: 0.2797</td><td>6</td></tr></tbody></table>
+<table class=''><thead><tr><th>arm</th><th>in-block AUC</th><th>proxy DTI by mass ratio M/|G|</th><th>folds</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>r2.0: 0.2645 / r3.47: 0.2794 / r5.0: 0.2720</td><td>6</td></tr><tr><td>H_E</td><td>0.6633</td><td>r2.0: 0.2584 / r3.47: 0.2768 / r5.0: 0.2728</td><td>6</td></tr><tr><td>H_D</td><td>0.6726</td><td>r2.0: 0.2649 / r3.47: 0.2817 / r5.0: 0.2736</td><td>6</td></tr><tr><td>H_C</td><td>0.6322</td><td>r2.0: 0.2273 / r3.47: 0.2544 / r5.0: 0.2585</td><td>6</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>r2.0: 0.2251 / r3.47: 0.2552 / r5.0: 0.2567</td><td>6</td></tr><tr><td>H_X1</td><td>0.6667</td><td>r3.47: 0.2797</td><td>6</td></tr></tbody></table>
 <p class="ev">Proxy DTI is measured with emission and scoring restricted to the held-out block and
 the mass set as a fixed multiple of that block's truth size, which is what makes it comparable
 to a live DTI. It is <b>not</b> a score.</p>

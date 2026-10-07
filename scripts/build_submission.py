@@ -179,8 +179,9 @@ def require_holdout_promotion(arm: str, gate_mode: str, gate_weight: float,
 def prior_rasters() -> dict[str, Path]:
     """Return every locally available prior submission raster for uniqueness checks."""
     paths = {}
-    roots = (ROOT / "data" / "prior", ROOT / "docs" / "downloads",
-             ROOT / "submissions", ROOT / "archive" / "submissions")
+    roots = (ROOT / "data" / "prior", ROOT / "data" / "refs",
+             ROOT / "docs" / "downloads", ROOT / "submissions",
+             ROOT / "archive" / "submissions")
     for root in roots:
         if not root.exists():
             continue
@@ -189,6 +190,20 @@ def prior_rasters() -> dict[str, Path]:
                 continue
             paths[p.relative_to(ROOT).as_posix()] = p
     return paths
+
+
+FAMILY_REFERENCE_MIN = 21
+
+
+def require_family_reference_coverage(prior_paths: dict[str, Path]) -> int:
+    """Require the commit-pinned cross-family reference set before any candidate build."""
+    count = sum(1 for label in prior_paths if label.startswith("data/refs/"))
+    if count < FAMILY_REFERENCE_MIN:
+        raise SystemExit(
+            f"cross-family uniqueness references incomplete: {count}/{FAMILY_REFERENCE_MIN}; "
+            "run scripts/fetch_gate_refs.sh for the commit-pinned reference set before building"
+        )
+    return count
 
 
 def require_unique_support(candidate_support: np.ndarray, prior_paths: dict,
@@ -286,6 +301,7 @@ def main() -> int:
         arm=a.arm, gate_mode=a.gate_mode, gate_weight=a.gate_weight,
         ratio=a.ratio, g_hidden_estimate=a.g_hidden, stage1_q=a.stage1_q,
         tile_px=a.tile_px, nms_radius=a.nms_radius, excl_radius=a.excl_radius))
+    require_family_reference_coverage(prior_rasters())
     promotion = require_holdout_promotion(
         a.arm, a.gate_mode, a.gate_weight, a.ratio, a.stage1_q,
         a.nms_radius, a.excl_radius, a.tile_px, a.g_hidden)

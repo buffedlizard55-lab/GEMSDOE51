@@ -63,7 +63,7 @@
   },
   "submission_slot_used": false,
   "new_tif_written": false,
-  "reason": "The only proposal to pass the numeric holdout screen is too similar to a previous local candidate. No TIF or upload recommendation is emitted; the unchanged candidate must not be rerun."
+  "reason": "Within the current preregistered H-D gate and H51-X1 candidates, the only proposal to pass the numeric holdout screen is too similar to a previous local candidate. No TIF or upload recommendation is emitted; the unchanged candidate must not be rerun. A later merged-PR emission-geometry result is tracked separately as an unreplicated archived lead in data/holdout_archive_review.json and is not a promoted artifact."
  },
  "legacy_artifacts": {
   "zero_outside_files": "Retired. They violate the official null/NaN-outside footprint requirement and must not be submitted.",
@@ -79,5 +79,16 @@
    "status": "ARCHIVE_ONLY_HARD_GATE_HOLDOUT_HARM"
   }
  },
- "notice": "No organizer score or portal acceptance is claimed. The active site must not link to archived artifacts as current submissions."
+ "notice": "No organizer score or portal acceptance is claimed. The active site must not link to archived artifacts as current submissions.",
+ "post_sync_review": {
+  "status": "PROVISIONAL_HOLDOUT_LEAD_PENDING_REPRODUCTION",
+  "record": "data/holdout_archive_review.json",
+  "stage2_only_best_recorded_mean_proxy_dti": 0.28360257965744917,
+  "stage2_only_rule": "ste_L9_w0.35_s2.4_nothin",
+  "stage2_reproduced_in_this_review": false,
+  "stage1_weighted_packaged_artifacts_promoted": false,
+  "archived_artifacts_reused_or_reissued": false,
+  "new_tif_written_this_review": false,
+  "portal_or_slot_status_verified": false
+ }
 }

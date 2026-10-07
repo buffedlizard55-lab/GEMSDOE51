@@ -20,8 +20,8 @@
   {
    "id": "C51-003",
    "class": "MEASURED",
-   "claim": "The template grid is EPSG:32611, 100 m, 3730 x 3292; current local masks distinguish the finite footprint from the sample-submission domain and are recorded in the restore receipt.",
-   "evidence": "data/restore_receipt.json; src/gems51/grid.py",
+   "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. Full training-feature and external inputs are not restored here.",
+   "evidence": "data/sample_submission.tif; src/gems51/grid.py; current raw inputs status in data/restore_receipt.json",
    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
   },
   {
@@ -100,6 +100,27 @@
    "claim": "The Stage-1 slip-rate unit conversion is provisional: the copied field is treated as mm/yr, but the NBMG layer schema does not state SLIPRTNUM units and the GDR v2 field-definition text has not been audited locally. Rank comparisons survive a uniform rescaling only.",
    "evidence": "data/irregularities.json IR-51-12; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious",
    "source": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson"
+  },
+  {
+   "id": "C51-015",
+   "class": "UNREPRODUCED_REPOSITORY_MEASUREMENT",
+   "claim": "Merged PR #6 records a Stage-2-only, matched-mass emission sweep whose best rule has mean proxy DTI 0.2836026 versus 0.2816394 for its isotropic incumbent (+0.0019632; 4/6 folds). This is a provisional method result, not independently rerun in this review, not a geological hypothesis, and not an organizer score.",
+   "evidence": "data/holdout_archive_review.json; archive/evidence/2026-10-07/emission_geometry.json",
+   "source": "archive/evidence/2026-10-07/emission_geometry.json"
+  },
+  {
+   "id": "C51-016",
+   "class": "UNREPRODUCED_ARCHIVED_FORMAT_AUDIT",
+   "claim": "The archived PR #6 H-D STE and H-M soft-w=0.10 NaN-outside TIFF variants were reported as passing a prior local format audit, but were not rerun in this review. Their zero-outside counterparts were rechecked and fail the official null-outside check. This does not establish portal acceptance, uniqueness, promotion, or submission status.",
+   "evidence": "data/holdout_archive_review.json; archived prior audit status is distinguished there from the current zero-outside recheck",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+  },
+  {
+   "id": "C51-017",
+   "class": "CURRENT_WORKSPACE_LIMITATION",
+   "claim": "The current checkout does not contain the raw training-feature raster or prepared arrays needed to reproduce the archived PR #6 holdout sweep or generate a fresh model output.",
+   "evidence": "data/restore_receipt.json; registry/data_manifest.json",
+   "source": "local checkout and hash-pinned data manifest"
   }
  ]
 }

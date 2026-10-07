@@ -28,11 +28,31 @@ training, and scores each held-out region at matched emitted-mass ratio. Its lab
 known-fault catalogue; the official test target is expert-identified new faults. This measures
 recoverability of the known-fault proxy only.</p>
 <h3>Stage 2 — fine-scale models</h3>
-<table class=''><thead><tr><th>arm</th><th>mean AUC</th><th>proxy DTI at M/|G|=2.0</th><th>proxy DTI at M/|G|=3.47</th><th>proxy DTI at M/|G|=4.5</th><th>proxy DTI at M/|G|=6.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2781</td><td>0.2625</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr><tr><td>H_X1</td><td>0.6667</td><td>0.2797</td></tr></tbody></table>
-<p>H-D is the current incumbent at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
+<table class=''><thead><tr><th>arm</th><th>mean AUC</th><th>proxy DTI at M/|G|=2.0</th><th>proxy DTI at M/|G|=3.47</th><th>proxy DTI at M/|G|=5.0</th></tr></thead><tbody><tr><td>base</td><td>0.6668</td><td>0.2645</td><td>0.2794</td><td>0.2720</td></tr><tr><td>H_E</td><td>0.6633</td><td>0.2584</td><td>0.2768</td><td>0.2728</td></tr><tr><td>H_D</td><td>0.6726</td><td>0.2649</td><td>0.2817</td><td>0.2736</td></tr><tr><td>H_C</td><td>0.6322</td><td>0.2273</td><td>0.2544</td><td>0.2585</td></tr><tr><td>H_ALL</td><td>0.6293</td><td>0.2251</td><td>0.2552</td><td>0.2567</td></tr><tr><td>H_X1</td><td>0.6667</td><td>0.2797</td></tr></tbody></table>
+<p>H-D is the current isotropic baseline at 0.2816627 mean proxy DTI (AUC 0.6726183). The narrowed H51-X1
 implementation (total magnetic + isostatic gravity as new-transform inputs) scores 0.2796713
 (delta -0.0019913) and is positive on 3/6 folds, so it fails the frozen promotion rule. The broader
 preregistered derivative-band family was not fully tested; these remain proxy results.</p>
+
+<h3>Later archived Stage-2-only emission result — pending reproduction</h3>
+<p>A sweep discovered on merged PR #6 held each H-D detector field fixed and varied only the
+matched-mass emission rule. Its best archived result is
+<code>ste_L9_w0.35_s2.4_nothin</code> with mean proxy DTI
+0.283603, versus the isotropic incumbent
+0.281639
+(Δ +0.001963;
+4/6 folds).
+This Stage-2-only result is a metric-geometry experiment, not a geological hypothesis, and it was
+not independently rerun in this review. Treat it as a provisional holdout lead until the raw inputs
+are restored and the sweep is reproduced. The packaged Stage-1 soft <code>w=0.10</code> variant
+reports a separate 0.0020 cost against
+its ungated version; its Stage-1 approved-area share is
+0.801, emitted share inside approved tiles is
+0.771, and lift is
+0.963. The H-M alternative records mean DTI
+0.282603, below the Stage-2-only emission lead.
+These are separate stage results, not combined into one score. The <a href="../data/holdout_archive_review.json">audit JSON</a>
+links to the archived source artifacts and explains why no old map was reused.</p>
 
 <h3>Stage 1 — trace-held-out prior test, reported separately</h3>
 <p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before

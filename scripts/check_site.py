@@ -35,7 +35,12 @@ def main() -> int:
             parsed = urlsplit(value)
             if parsed.scheme or parsed.netloc or not parsed.path:
                 continue
-            target = (page.parent / unquote(parsed.path)).resolve()
+            local_path = unquote(parsed.path)
+            suffix = Path(local_path).suffix.lower()
+            if ("archive/submissions/" in local_path.lstrip("./")
+                    and suffix in {".tif", ".tiff", ".zip"}):
+                failures.append(f"{page.relative_to(ROOT)} links an archived candidate: {value}")
+            target = (page.parent / local_path).resolve()
             if not target.is_file() and not target.is_dir():
                 failures.append(f"{page.relative_to(ROOT)} -> {value}")
 

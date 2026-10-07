@@ -15,9 +15,9 @@ data/refs/
 *.dat
 !data/prior/*.npy
 
-# Byte-for-byte copies of other groups' submissions are kept (1.8 MB): the
-# uniqueness gate in src/gems51/uniqueness.py compares against them, and the
-# gate is part of the deliverable, so its inputs are too.
+# Byte-for-byte copies of other groups' prior TIFFs are kept out of Git. The
+# guarded builder enumerates data/refs/ when present, alongside data/prior/,
+# current downloads, and archived owner artifacts, for support-uniqueness checks.
 
 # Python / editors
 __pycache__/

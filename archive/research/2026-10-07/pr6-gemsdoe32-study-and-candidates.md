@@ -1,4 +1,8 @@
-# Why 0.2778 won inside the group, and five hypotheses not yet tried — session 2026-10-07
+# Historical PR #6 research draft — superseded
+
+> This draft was moved out of the active research path during repository reconciliation. Some early causal language, hypothesis ranking, and owner-reported calculations below were not independently validated and must not be treated as current findings. For the current source-checked, non-causal account of the GEMSDOE32 result, see [`../../../knowledge/gemsdoe32-case-study-2026-10-07.md`](../../../knowledge/gemsdoe32-case-study-2026-10-07.md). The leaderboard-derived section was removed under the Terms of Use.
+
+## Original heading (historical owner-reported result): 0.2778 and candidate hypotheses — session 2026-10-07
 
 Everything here is either **[OFFICIAL]** (read from an organizer/USGS/DOE page, linked),
 **[MEASURED]** (computed in this checkout or read from a hash-pinned artifact with the path
@@ -40,23 +44,16 @@ safety down to 1.27 and won only 3/4, so 200 m is the measured stopping point.
 **Mechanism, in one sentence:** the score is a budget `DTI = TP / (0.2·(TP+FP) + 0.8·|G|)`, and
 mass near the catalogue is dead mass; cutting it raises the ratio without touching recall much.
 
-## 2. Where that leaves the gap to the public leader
+## 2. Superseded leaderboard-derived analysis
 
-**[MEASURED, `registry/leaderboard.json`, manual read 2026-10-06]** the board top was
-`xiaofanhu` 0.3774; the brief's 0.3195 sat at rank 7 (`DARD`). The group's best is 0.2778.
+An earlier version of this historical note included a manual leaderboard snapshot and an inferred
+placement gap. Those standings and the derived comparison were removed during repository
+reconciliation under DrivenData's Terms of Use. No copied standings or rank-based target are
+retained here. The official leaderboard URL may be used as a source link, but the project does not
+monitor or transcribe its contents without prior written consent.
 
-**[MEASURED, prior session, README §"What next session should do"]** our instrument puts the
-group's best emission at mean dot-to-nearest-truth distance ≈ 260 m; the leader's implied number
-is ≈ 200 m. With a triangular kernel of radius 300 m, mean kernel credit per well-placed dot is
-`1 − d/R`: 0.133 at 260 m versus 0.333 at 200 m **for dots on a true trace** — i.e. the whole
-leaderboard gap can be explained by placement precision, not by finding different structures.
-Caveat: the leader's number is an inversion under assumptions, not a measurement [INFERENCE].
-
-Two consequences for this session:
-1. *Finding* more candidate structures is evidence-limited; *placing* the same dots better is the
-   open lever the group has never pulled — every emission to date emits at the NMS-selected cell
-   centre with no positional refinement.
-2. The exclusion radius must stay at 2 px (the measured B=2 optimum); deeper pruning is harmful.
+The remaining local holdout evidence concerns proxy recovery of visible catalogue labels only; it
+does not establish a gap to hidden organizer labels or a competitor-specific mechanism.
 
 ## 3. Five candidate hypotheses we have not tried, ranked
 
@@ -155,10 +152,9 @@ min truth 500 — identical to `data/holdout_H_D.json` config) using the saved H
 | 5 | Known-fault masking, organizer staff | https://community.drivendata.org/t/scoring-clarification-are-known-usgs-ingenious-faults-masked-when-scoring-and-are-they-in-the-final-round-label-set/11516 | official |
 | 6 | "New fault" includes new geometry, organizer staff | https://community.drivendata.org/t/where-do-you-draw-the-line/11536 | official |
 | 7 | Problem description & metric | https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ | official |
-| 8 | Leaderboard (2026-10-06 manual read mirrored in `registry/leaderboard.json`) | https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ | official |
+| 8 | Official competition leaderboard (source link only; no standings reproduced) | https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ | official |
 | 9 | GDR 1391 INGENIOUS (vent/well/spring compilations, CC BY 4.0) | https://gdr.openei.org/submissions/1391 | official |
 
 **No-hallucination statement:** every score attributed to a file above is an owner report carried
-in the brief or in the cited repository; the only organizer-verified scores known to this project
-are on the public leaderboard (§2). Our own holdout numbers are re-run this session and carry the
-producing path.
+in the brief or in the cited repository; none is represented as an organizer-verified result. The
+local holdout numbers are proxy measurements and carry their producing paths.

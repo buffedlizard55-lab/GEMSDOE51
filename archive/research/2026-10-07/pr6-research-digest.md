@@ -1,4 +1,6 @@
-# Research digest — session 2026-10-07 (GEMSDOE51)
+# Historical PR #6 research digest — superseded
+
+> This is a historical draft preserved for provenance, not current scientific guidance. Some findings and causal interpretations were not independently revalidated here. Use the current source-checked records in `README.md`, `knowledge/analysis.md`, and `data/holdout_archive_review.json`. Any former leaderboard snapshot was removed; no standings are retained.
 
 Every line below is either **official** (read from a competition/USGS/publisher page during
 this session, with the link), **measured-here** (produced by a script in this repository in
@@ -29,11 +31,9 @@ session's best arm) to the number recorded in `evidence/autocontext_holdout.json
 | 3 | Submission = single-band **float32** GeoTIFF, EPSG:32611, 100 m, same bounds, **values between 0 and 1**, outside bounds null/NaN | same page, "Submission format" |
 | 4 | Test set for the Initial Prize Round = faults experts identified that are **not** in the public USGS database; the Final Round rescores the *same* submission against an expert-expanded label set built by reviewing **every team's** submission | same page, "Competition structure" |
 | 5 | The reference solution trains a U-Net on patches with `FAULT_LABELS_PATH = data/labels.tif` and a Tversky loss at α=0.2, β=0.8 | [reference solution notebook](https://github.com/drivendataorg/gems-prize-reference-solution), cells 2, 6, 16 |
-| 6 | Public leaderboard top 3 on 2026-10-07: xiaofanhu **0.3774**, alexoktaba **0.3345**, nchuzhoy **0.3262**. Our group's best public score, 0.2778, corresponds to rank ≈ #13 | [leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/), snapshot in `registry/leaderboard_snapshot.json` |
+| 6 | No leaderboard standings are recorded in the active research record. The official site is linked only as a source; no snapshot is retained. | [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/) |
 
-**Correction to the brief.** The brief states "0.3195 is the highest score right now". That is
-the #7 entry as of this session's read; the live leader is **0.3774**. The target to beat is
-therefore 0.3774, not 0.3195. Recorded as **IR-51-10**.
+**Leaderboard handling.** An earlier draft contained a manual standings snapshot. Those values were removed during repository reconciliation under the Terms of Use. No standings, ranks, or copied leaderboard table are retained here.
 
 ---
 
@@ -98,11 +98,7 @@ and the measured sweep (`data/emission_sweep.json`, 6 folds × 6 ratios × 5 rad
 plus this session's re-measurement at ratios 2.5/3.47/4.5/6) puts the optimum at **m ≈ 3.5**.
 Mass is therefore **not** where the remaining score is.
 
-**What it would take to reach the leader.** Holding `m = 3.47` and `b = 0.063`, solving the
-closed form for the credit per dot that yields the leader's 0.3774 gives **c = 0.171** against
-our measured **c = 0.122** — a **40 % improvement in credit per emitted dot**. The gap to #1 is
-a detection-quality gap, not an emission-tuning gap. This is the single most useful number in
-the digest: it converts a leaderboard distance into a modelling requirement.
+**No leaderboard-derived target is used.** The archived proxy measurements do not estimate performance against hidden labels. No score gap or target derived from standings is reproduced here; future model choices should be evaluated only against the preregistered local holdout until a permitted, organizer-returned result exists.
 
 ---
 

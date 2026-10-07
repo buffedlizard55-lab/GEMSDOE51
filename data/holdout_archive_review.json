@@ -1,0 +1,53 @@
+{
+  "status": "ARCHIVED_NOT_PROMOTED_PENDING_REPRODUCTION",
+  "source_pull_request": {
+    "number": 6,
+    "url": "https://github.com/buffedlizard55-lab/GEMSDOE51/pull/6",
+    "merged_commit": "caf6dff9ff71ff92954b39c37244bbe97148c8ff"
+  },
+  "stage2_emission_geometry": {
+    "instrument": "Six-fold spatially blocked holdout; H-D detector fields held fixed; matched mass; only emission geometry varied.",
+    "best_rule": "ste_L9_w0.35_s2.4_nothin",
+    "mean_proxy_dti": 0.28360257965744917,
+    "incumbent_isotropic_mean_proxy_dti": 0.281639410150801,
+    "mean_delta_vs_incumbent": 0.001963169506648247,
+    "folds_better": 4,
+    "folds": 6,
+    "stage": "Stage 2 only, before applying the Stage-1 prior.",
+    "reproduced_in_current_review": false,
+    "evidence": "archive/evidence/2026-10-07/emission_geometry.json",
+    "interpretation": "A repository-recorded metric-geometry result, not a geological-hypothesis result, hidden-test prediction, or organizer score. Treat as an unreplicated holdout lead until rerun from restored inputs."
+  },
+  "stage1_prior": {
+    "gate_mode": "soft",
+    "weight": 0.1,
+    "approved_area_share": 0.8005069500498609,
+    "emitted_share_inside_approved": 0.7709501009780118,
+    "lift_over_area_share": 0.9630773360930743,
+    "reported_holdout_cost_vs_ungated": 0.002,
+    "stage": "Stage 1 is reported separately; these values are not merged into the Stage-2-only sweep above.",
+    "evidence": "archive/submissions/2026-10-07/submission_manifest-pr6.json"
+  },
+  "secondary_h_m": {
+    "mean_proxy_dti": 0.2826030480152771,
+    "mean_auc": 0.6747456854854009,
+    "h_d_isotropic_baseline_mean_proxy_dti": 0.2816626603034904,
+    "delta_vs_h_d_isotropic_baseline": 0.0009403877117867,
+    "delta_vs_best_stage2_emission_rule": -0.0009995316421721,
+    "evidence": "data/holdout_H_M.json",
+    "interpretation": "The cross-scale H-M model beats the older isotropic H-D baseline but not the later recorded H-D trace-emission result. It is a separate model arm, not evidence that the Stage-1 budget caused improvement."
+  },
+  "artifact_review": {
+    "stage2_only_best_has_currently_available_fresh_submission_file": false,
+    "zero_outside_variants_pass_official_null_outside_check": false,
+    "previously_published_in_repository_main": true,
+    "competition_slot_or_portal_status_verified": false,
+    "eligible_for_reuse_or_submission": false,
+    "new_tif_produced_in_this_review": false,
+    "decision": "Do not reissue or relabel the archived maps. The packaged Stage-1-weighted artifacts are not the Stage-2-only holdout leader; the matching un-gated best was not freshly built or verified here. Restore the required training/prepared inputs, rerun the registered holdout and promotion gates, then build a new file with the current guarded writer.",
+    "packaged_h_d_ste_soft_010_nan_twin_passes_per_archived_local_audit": true,
+    "packaged_h_m_soft_010_nan_twin_passes_per_archived_local_audit": true,
+    "nan_twin_format_check_rerun_in_current_review": false,
+    "zero_outside_variants_rechecked_in_current_review": true
+  }
+}

@@ -50,6 +50,8 @@ Soft Stage-1 weights are marginal: `w=0.10` gives mean proxy DTI 0.28213 and is 
 
 The six-fold gate sweep is in [`data/gate_sweep.json`](data/gate_sweep.json); Stage-1 trace holdout and separate two-stage results are in [`data/stage1_trace_holdout.json`](data/stage1_trace_holdout.json) and [`data/two_stage_results.json`](data/two_stage_results.json). The frozen hypothesis screen and outcome are in [`knowledge/preregistration-2026-10-07.md`](knowledge/preregistration-2026-10-07.md).
 
+**Post-branch synchronization audit (kept separate from the preregistered geology test):** the later merged [PR #6](https://github.com/buffedlizard55-lab/GEMSDOE51/pull/6) added a six-fold Stage-2-only emission-geometry sweep. Its best recorded rule, `ste_L9_w0.35_s2.4_nothin`, had mean proxy DTI **0.2836026**, versus **0.2816394** for that sweep's isotropic incumbent (+0.0019632; better in 4/6 folds). This is a repository-recorded, not independently rerun, *emission-method* result—not a new geological hypothesis or an organizer score. The packaged H-D map applied a Stage-1 soft prior at `w=0.10`, and its manifest reports a **0.0020 holdout cost** against the ungated version; the separate H-M arm scored 0.2826030, below the Stage-2-only emission lead. For the packaged H-D map, Stage 1 approved 80.05% of the footprint and contained 77.10% of emitted dots (lift 0.963), so it did not dominate placement, but it did not improve holdout performance. The archived local audit records both NaN-outside twins as passing; those twins were not rerun in this review. The zero-outside counterparts were rerun and fail the current local format checker. These maps were already published on `main`, and their portal/slot status is unverified, so none is being reissued or relabelled. The best Stage-2-only setting has no freshly built file in this review; its evidence remains a **provisional lead pending reproduction**. See [`data/holdout_archive_review.json`](data/holdout_archive_review.json); all PR #6 TIFF/ZIP files are archived and not linked as downloads.
+
 ## GEMSDOE32 case study — what the reported result does and does not show
 
 The GEMSDOE32 owner page presents H33-2-B2 with **37,654 dots**, a claimed 200 m catalogue-flank prune, and a **projected 0.2747** result. The page itself labels the artifact **UNSCORED** and explicitly says no organizer score exists for that artifact. Its reported `+0.00487` over a `0.2708` base is an owner-reported live-mirror/model comparison, not an organizer-returned score linked to those bytes.
@@ -69,6 +71,8 @@ The full feature/data/source matrix and preregistration are in [`knowledge/prere
 
 ## Outstanding work and limitations
 
+- Restore the official training-feature raster and prepared arrays (absent from this checkout), then independently rerun the archived PR #6 emission-geometry sweep and its Stage-1 ablation. Until that reproduction, treat `0.2836026` as a provisional Stage-2 lead, not a promoted incumbent; only a fresh, guarded build from the best holdout-cleared configuration can be considered for a slot.
+- Before any future build, fetch the commit-pinned prior-family TIFF references with `scripts/fetch_gate_refs.sh` for support comparison only (never as candidate pixels). The guarded builder scans `data/refs/`, `data/prior/`, current downloads, and archived submissions; a missing reference set is a limitation to report, not a reason to loosen the gate.
 - The full H51-X1 preregistered band-family transform was not implemented; the tested two-input transform failed promotion. If revisited, define the aggregation of RTP/TMI/gravity derivative channels before running a new blocked holdout, and treat it as a new/expanded preregistered experiment.
 - H51-X2 (paired scarp-face asymmetry) and H51-X3 (well/spring-to-lineament alignment) remain untested; validate owner-mirror provenance, units, duplicates, and coordinate transformations before feature use.
 - H51-X4 is blocked until the official USGS Siler shapefile can be obtained and its fields/units, geometry, and spatial join are verified locally.
@@ -100,7 +104,7 @@ registry/         source/data manifests, irregularities, prior-submission refere
  tests/            metric, strain-budget, feature, submission, and legacy-guard tests
 ```
 
-The old scalar prototypes `src/gems51/strain.py` and the unreferenced `src/gems51/stage1_strain.py` are not part of the active evidence path; report functions in `strain.py` fail closed. Current Stage 1 is `src/gems51/strain_budget.py`. Legacy `run_all.py`, `run_pipeline.py`, `rebuild_submission.py`, the earlier holdout runners, the old uniqueness checker, and the README-results generator are retired to prevent stale evidence or ungated files. Use only the dedicated current scripts listed above; the historical receipts remain under `archive/`.
+The old scalar prototypes `strain.py` and `stage1_strain.py` are quarantined under `attic/legacy-api/src/gems51/` and are not part of the active evidence path; report functions in the archived `strain.py` fail closed. Current Stage 1 is `src/gems51/strain_budget.py`. Legacy `run_all.py`, `run_pipeline.py`, `rebuild_submission.py`, the earlier holdout runners, the old uniqueness checker, and the README-results generator are retired to prevent stale evidence or ungated files. Use only the dedicated current scripts listed above; the historical receipts remain under `archive/`.
 
 ## Reproduce and verify
 
@@ -116,7 +120,7 @@ The old scalar prototypes `src/gems51/strain.py` and the unreferenced `src/gems5
 ./.venv/bin/python -m pytest tests -q
 ```
 
-H-D with soft Stage-1 weight `0.20`, ratio `3.47`, NMS `2.4 px`, and exclusion `2 px` is the only configuration to clear the numeric holdout screen, but it is **not promotion-cleared**: it fails source-aware uniqueness. Do not rerun that unchanged candidate, bypass the guard, or copy an archived TIFF to make a submission. A substantively distinct candidate needs its own preregistration, blocked holdout evidence, and complete gate pass.
+Within the preregistered isotropic H-D gate sweep, the soft Stage-1 weight `0.20`, ratio `3.47`, NMS `2.4 px`, and exclusion `2 px` is the only gate setting to clear that numeric screen, but it is **not promotion-cleared**: it fails source-aware uniqueness. This does not supersede the separate, provisional PR #6 emission-geometry result above. Do not rerun that unchanged candidate, bypass the guard, or copy an archived TIFF to make a submission. A substantively distinct candidate needs its own preregistration, blocked holdout evidence, and complete gate pass.
 
 The hidden test-set mass \(|G|\) is not published. The fixed `g_hidden=12,700` value used only for an illustrative full-map dot budget is an inherited, provisional local working assumption; its calibration is not independently validated here and it is not an organizer label count. Holdout model comparisons use each held-out block's observed truth mass at the same ratio; that does not validate the full-map count. Re-check sensitivity to this assumption before any future build or slot.
 

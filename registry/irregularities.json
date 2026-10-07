@@ -68,13 +68,19 @@
  {
   "id": "IR-51-11",
   "summary": "Legacy scalar Stage-1 modules and pre-reconciliation runner scripts could emit obsolete evidence or ungated submission files.",
-  "evidence": "src/gems51/strain.py used a scalar reduction and nominal tile rectangles; src/gems51/stage1_strain.py has no active runner import; old run_all.py and run_pipeline.py called obsolete model/writer APIs, while prior format/uniqueness scripts used superseded checks.",
-  "status": "CLOSED - Stage-1 report functions fail closed; stage1_strain.py is not used by the current runner; run_all.py, run_pipeline.py, rebuild_submission.py, old holdout runners, old uniqueness checker, and README-results generator are disabled. Current results come from strain_budget.py and the dedicated current holdout scripts."
+  "evidence": "attic/legacy-api/src/gems51/strain.py used a scalar reduction and nominal tile rectangles; attic/legacy-api/src/gems51/stage1_strain.py is not imported by active runners; old run_all.py and run_pipeline.py called obsolete model/writer APIs, while prior format/uniqueness scripts used superseded checks.",
+  "status": "CLOSED - Stage-1 report functions in the archived strain.py fail closed; stage1_strain.py is not used by the current runner; run_all.py, run_pipeline.py, rebuild_submission.py, build_submission_v2.py, old holdout runners, old uniqueness checker, and README-results generator are disabled. Current results come from strain_budget.py and the dedicated current holdout scripts."
  },
  {
   "id": "IR-51-12",
   "summary": "The working Stage-1 conversion treats the owner-mirrored QFaults slip_rate values as mm/yr, but the NBMG layer schema does not state the SLIPRTNUM units and the linked GDR field-definition text was not locally audited.",
   "evidence": "src/gems51/strain_budget.py load_slip_rates; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious; https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
   "status": "OPEN - absolute nanostrain/yr values are not source-validated. The current rank-based Stage-1 comparison is invariant to a uniform rescaling, but not to mixed units, categorical encodings, or record-specific errors. Audit the official GDR v2 field-definition document before using absolute strain claims."
+ },
+ {
+  "id": "IR-51-13",
+  "summary": "Merged PR #6 introduced publicly visible H-D trace-emission and H-M candidate TIFFs plus a new submission builder; the recorded Stage-2-only emission lead has not been independently reproduced in this review.",
+  "evidence": "archive/evidence/2026-10-07/emission_geometry.json records mean proxy DTI 0.2836026 for the Stage-2-only STE rule; archive/submissions/2026-10-07/submission_manifest-pr6.json records a separate Stage-1 soft-w=0.10 packaged map with a 0.0020 holdout cost. The archived local audit reports the NaN twins pass (not rerun in this review); zero-outside variants were rechecked and fail. data/holdout_archive_review.json separates these results and decision.",
+  "status": "OPEN - all PR #6 TIFF/ZIP files and obsolete notes are archived, not offered or reused; build_submission_v2.py is disabled. The PR #6 portal/slot state is unverified and raw training/prepared inputs are absent. Restore inputs and independently rerun the Stage-2 sweep and Stage-1 ablation before updating the promoted holdout best or building a new candidate."
  }
 ]
