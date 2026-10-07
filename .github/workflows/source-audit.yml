@@ -1,6 +1,8 @@
 name: Official fault source audit
 on:
   workflow_dispatch:
+  push:
+    paths: [".github/workflows/source-audit.yml"]
 jobs:
   source:
     runs-on: ubuntu-latest
