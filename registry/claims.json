@@ -40,8 +40,8 @@
     },
     {
       "id": "C51-006",
-      "class": "HISTORICAL_PROXY_WITH_FORMULA_CAVEAT",
-      "claim": "The historical five-split Stage-1 trace holdout (old unsigned/implicit-rate formula) yields deficit Spearman 0.03916 and top-50% lift 1.08290; geodetic-only has Spearman 0.09930 and lift 1.23864. Held-out trace rows were excluded in that receipt, but it predates the current signed/rate-selectable formula and does not validate current Stage 1. The separate formula-sensitivity receipts retain held-out attributes and are not valid holdouts.",
+      "class": "HISTORICAL_PROXY_WITH_FORMULA_CAVEAT_AND_CURRENT_UPDATE",
+      "claim": "The historical five-split Stage-1 receipt is retained as a pre-audit comparison, not current validation. The current five-split trace holdout removes held-out trace rows before the budget and reports mean q70 lifts 1.0929 (second-invariant deficit), 1.0653 (dilatation rank residual), 1.0722 (shear rank residual), 1.1477 (combined diagnostic), and 1.2469 (geodetic-only control). These are rank diagnostics only; the primary uses Stage-1 weight 0.0.",
       "evidence": "data/stage1_trace_holdout.json; evidence/stage1_reconciliation_20261007.json; evidence/stage1_formula_audit.json",
       "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     },
@@ -117,9 +117,9 @@
     },
     {
       "id": "C51-017",
-      "class": "CURRENT_WORKSPACE_LIMITATION",
-      "claim": "The current checkout does not contain the raw training-feature raster or prepared arrays needed to reproduce the archived PR #6 holdout sweep or generate a fresh model output.",
-      "evidence": "data/restore_receipt.json; registry/data_manifest.json",
+      "class": "SUPERSEDED_WORKSPACE_LIMITATION",
+      "claim": "The current checkout now contains the restored raw/prepared/reference inputs used for the current H-H/H-D build and trace-held-out Stage-1 rerun. Archived PR #6 reproductions remain separately limited where their exact inputs or formulas differ.",
+      "evidence": "data/stage1_trace_holdout.json; data/submission_manifest.json; evidence/stage1_reconciliation_20261007.json",
       "source": "local checkout and hash-pinned data manifest"
     },
     {
@@ -128,6 +128,13 @@
       "claim": "The NaN-outside H-G+H-D experimental artifact is locally format-valid and passes the scoped public-corpus uniqueness audit; the historical q70 diagnostic is non-dominant on the archived prior field, but its matched six-block proxy holdout is below H-D and the current-formula q70 map was not rerun. It is a format re-encoding, not a new model run, and is research-only/not slot-eligible.",
       "evidence": "evidence/experimental_H_G_plus_H_D_artifact.json; evidence/format_check_H_G_HD_nan.json; evidence/uniqueness_gate_H_G_HD_experimental_20261007.json; evidence/holdout_H_G_plus_H_D.json; evidence/stage1_reconciliation_20261007.json",
       "source": "local measurements and official format specification at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+    },
+    {
+      "id": "C51-019",
+      "class": "CURRENT_MEASURED_LOCAL_PROMOTION_AND_FORMAT_AUDIT",
+      "claim": "The current fixed 50/50 H-H/H-D probability blend plus STE passed the frozen six-fold local promotion rule, source-aware scoped uniqueness, q70 Stage-1 non-dominance, and written GeoTIFF format checks. It is a new local primary artifact, not an organizer upload, score, portal acceptance, hidden-label result, or pure-H-H causal proof.",
+      "evidence": "data/submission_manifest.json; evidence/hh_blend_holdout.json; docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json; evidence/hypothesis_slate_20261007.json",
+      "source": "local measurements; official format specification at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     }
   ]
 }

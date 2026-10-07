@@ -67,3 +67,9 @@ comparisons, expected benefit, cost, and the matched H-G test, is
 `evidence/hypothesis_slate_20261007.json`. The prior-art audit covers 582 selected public documents
 from 54 sibling repositories and makes no global novelty claim:
 `evidence/sibling_prior_art_audit_20261007.json`.
+
+## GEMSDOE51 follow-up: current primary status
+
+The H-H potential-field edge-termination/conductive-relay model arm was implemented and evaluated only in the fixed 50/50 H-H/H-D blend with STE. That blend passed the frozen six-fold visible-known-fault proxy rule (mean DTI 0.2853406 versus H-D 0.2816627; +0.0036779 paired mean; 4/6 folds) and is now the locally eligible primary GeoTIFF. This does not establish a pure H-H effect, a hidden-fault result, or an organizer score. The final file, checksum, format receipt, scoped uniqueness receipt, and upload guide are generated from `data/submission_manifest.json`; no organizer upload or score has been verified.
+
+Stage 1 was rerun separately with trace-row exclusion and now reports rank-space dilatation/shear residual controls. It remains a coarse diagnostic with zero weight in the primary and must not dominate fine-scale Stage 2.

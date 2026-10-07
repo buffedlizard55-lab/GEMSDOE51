@@ -15,6 +15,16 @@ is a genuine residual everywhere. There is no learned detector, but the fault-bu
 term is catalogue-derived: all table rows assigned to held-out traces are removed
 before computing it, so held-out trace attributes cannot enter the prior.
 
+Residual convention
+-------------------
+The fault tensor and the supplied dilatation/shear scalar layers are not
+source-verified to share a numerical convention. The runner therefore computes
+requested dilatation and shear residual diagnostics as
+``rank(observed scalar) - rank(fault tensor II)``. These rank residuals are
+coarse prior fields, not dimensional strain rates; no absolute subtraction is
+claimed. The combined prior is the pixelwise maximum of the three rank
+residuals and is never used to place fine-scale points.
+
 Scoring
 -------
 Uniform random dots inside the approved tiles versus uniform random dots over the
@@ -125,18 +135,39 @@ def main() -> int:
         ok_t = np.isfinite(dom) & (dom > 0.05)
         q_f = sb.quantile_map(np.where(ok_t, II_f, np.nan))
         q_o = sb.quantile_map(np.where(ok_t, obsII, np.nan))
+        q_dil = sb.quantile_map(np.where(ok_t, obsDIL, np.nan))
+        q_shear = sb.quantile_map(np.where(ok_t, obsSH, np.nan))
         deficit = q_o - q_f
+        # The requested dilatation/shear residuals are reported in rank space:
+        # the supplied scalar layers and the tensor invariant have no verified
+        # common sign/convention/units, so raw-number subtraction would be a
+        # false physical claim.  These are coarse prior diagnostics only.
+        dil_residual = q_dil - q_f
+        shear_residual = q_shear - q_f
+        residual_stack = np.stack([deficit, dil_residual, shear_residual])
+        combined_residual = np.full_like(deficit, np.nan, dtype=np.float64)
+        for residual_field in residual_stack:
+            valid = np.isfinite(residual_field)
+            update = valid & (~np.isfinite(combined_residual) |
+                              (residual_field > combined_residual))
+            combined_residual[update] = residual_field[update]
         geo_only = q_o                      # control: geodetic field with no budget
-        # The competition's scalar dilation/shear layers are separate diagnostics;
-        # do not subtract the fault second invariant from unlike quantities.
-        dil_only = sb.quantile_map(np.where(ok_t, obsDIL, np.nan))
-        shear_only = sb.quantile_map(np.where(ok_t, obsSH, np.nan))
+        dil_only = q_dil
+        shear_only = q_shear
 
         row = dict(split=k, n_truth=int(truth.sum()), n_known=int(known.sum()),
+                   residual_definition="rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
                    n_budget_trace_rows=int(len(df_budget)),
                    frac_budget_rows_excluded=float(1.0 - len(df_budget) / max(len(df), 1)))
-        for nm, field_t in [("deficit", deficit), ("geodetic_only", geo_only),
-                            ("dilatation_only", dil_only), ("shear_only", shear_only)]:
+        for nm, field_t in [
+            ("deficit", deficit),
+            ("dilatation_residual", dil_residual),
+            ("shear_residual", shear_residual),
+            ("combined_residual_prior", combined_residual),
+            ("geodetic_only", geo_only),
+            ("dilatation_only", dil_only),
+            ("shear_only", shear_only),
+        ]:
             big = upsample(field_t, a.tile_px)
             b = big[footprint]
             fin = np.isfinite(b)

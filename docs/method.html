@@ -23,40 +23,58 @@
 <main class="wrap">
 
 <h2>Method, with Stage 1 and Stage 2 kept separate</h2>
-<h3>Stage 1 — geodetic strain-budget deficit (coarse prior only)</h3>
+<h3>Stage 1 — geodetic strain-budget residuals (coarse prior only)</h3>
 <p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
 <pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
 m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
-<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code> supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault normal/slip direction. A total fault-plane rate for pure normal slip yields <code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields <code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are unresolved: the implementation makes vertical versus total-plane rates explicit, defaults provisionally to vertical, assumes 60-degree normal dip and converts mm/yr provisionally. See <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a> and <code>src/gems51/strain_budget.py</code>.</p>
-<p>The implementation is approximate, not a full inversion: it rasterizes local trace directions,
-assigns slip rates by nearest trace centroid, simplifies slip-sense/dip categories, and lacks
-per-segment rake. Partial tiles use actual footprint support area. The local slip-rate column is
-provisionally interpreted as mm/yr; the NBMG <a href="https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson">layer schema</a>
-lists numeric <code>SLIPRTNUM</code> but not its units, and the linked GDR field-definition text was
-not audited locally. Absolute strain values are not source-validated. The quantile comparison is
-invariant to a uniform rescaling, but not to mixed units or record-specific errors. The competition
-geodetic layers have no recoverable exact invariant identity, so the Stage-1 prior is built in quantile space,
-<code>Q(observed second-invariant layer) - Q(fault tensor invariant)</code>. Do not subtract raw
-scalar dilation/shear from the fault tensor invariant as if their units and conventions matched.</p>
-<p class="warn"><b>Stage-1 holdout reconciliation:</b> a current-formula, leakage-controlled rerun is unavailable. The historical trace-split receipt records deficit Spearman 0.03916 and q50 lift 1.08290, below the geodetic-only 0.09930 and 1.23864; it used a pre-audit unsigned/implicit-rate formula. The separate four-scenario formula audit is not a valid holdout because its runner retained held-out trace rows in the catalogue-derived budget. Stage-1-only and q50-gate DTI results are also tied to the prior field. These are historical proxy diagnostics, not validation of the current implementation. See <a href="downloads/stage1_trace_holdout.json">historical trace receipt</a>, <a href="downloads/stage1_formula_audit.json">formula audit caveat</a>, and <a href="downloads/stage1_reconciliation_20261007.json">full reconciliation</a>. Stage 1 remains a coarse prior only.</p>
+<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code>
+supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault
+normal/slip direction. A total fault-plane rate for pure normal slip yields
+<code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient
+is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields
+<code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are
+still unresolved: the implementation exposes vertical versus total-plane rates, defaults
+provisionally to vertical, assumes a 60-degree normal dip, and converts source values
+provisionally as mm/yr. Absolute strain values remain source-sensitive.</p>
+<p>The implementation is approximate rather than a full inversion: it rasterizes local trace
+directions, assigns slip rates from trace associations, simplifies slip-sense/dip categories,
+and uses partial-footprint support area. The Stage-1 runner now performs a valid five-split
+trace holdout with held-out trace rows removed from the catalogue-derived budget before each
+field is computed (<code>n_splits=5</code>,
+rate convention <code>vertical</code>,
+planning constant <code>g_hidden=12700</code>; this is not
+an organizer truth count).</p>
+<p><b>Residual convention:</b> the supplied dilatation and shear scalar layers are not
+source-verified to share units, signs, or tensor definitions with the fault second invariant.
+The reported controls therefore use rank-space residuals
+<code>rank(observed scalar) - rank(fault tensor II)</code>, not absolute-number subtraction.
+The combined residual prior is the pixelwise maximum of the second-invariant, dilatation, and
+shear rank residuals. These are coarse diagnostics, not dimensional strain rates and not fine
+point placers.</p>
+<table class=''><thead><tr><th>field</th><th>mean Spearman rank</th><th>mean q70 lift</th></tr></thead><tbody><tr><td>geodetic second-invariant deficit</td><td>0.0402</td><td>1.0929</td></tr><tr><td>dilatation rank residual</td><td>0.0204</td><td>1.0653</td></tr><tr><td>shear rank residual</td><td>0.0306</td><td>1.0722</td></tr><tr><td>combined residual diagnostic</td><td>0.0353</td><td>1.1477</td></tr><tr><td>geodetic-only control</td><td>0.0993</td><td>1.2469</td></tr></tbody></table>
+<p class="warn">The rerun shows the geodetic-only control has the strongest mean q70 lift
+(1.2469); the combined residual is only a diagnostic
+(1.1477) and was not selected for the primary.
+The promoted artifact sets <code>stage1_weight=0.0</code>. Stage 1 therefore remains a broad,
+non-dominant prior and does not hard-gate or dominate Stage 2. Full per-split results and
+configuration are in <a href="downloads/stage1_trace_holdout.json">the trace receipt</a>;
+the formula caveat and decision are in <a href="downloads/stage1_reconciliation_20261007.json">the reconciliation</a>.</p>
 
 <h3>Stage 2 — fine-scale detector and sparse emission</h3>
 <p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
-features. A 3x3 spatial holdout removes a 1.2 km boundary band from training; each fold's Stage-2
-field is scored against held-out known-fault labels at matched mass ratio <code>M/|G|=3.47</code>.
-H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183. These are measurements on the visible
-known-fault proxy, not organizer scores.</p>
+features. A 3×3 spatial holdout removes a 1.2 km boundary band from training; each fold's
+Stage-2 field is scored against held-out known-fault labels at matched mass ratio
+<code>M/|G|=3.47</code>. H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183.
+These are measurements on the visible known-fault proxy, not organizer scores.</p>
 <p>Distance-to-catalogue is not used as a predictive shortcut because it directly encodes the
-known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression at
-2.4 pixels. The official metric gives a marginal-pixel credit bar near <code>0.2*DTI</code>; this
-motivates sparse dots, but does not prove any individual prediction is a real fault.</p>
-<p><b>Historical Stage-1 weight sweep:</b> a prior soft multiplicative adjustment <code>field * (1 + w*z)</code> gave <code>w=0.20</code> a small proxy gain (+0.000483 paired mean, 4/6 folds), but these numbers use an archived prior field and have not been reproduced against the current formula. Its support also duplicated the existing soft-0.10 candidate (Jaccard 0.86130, over the 0.50 uniqueness limit), so the writer stopped before producing that TIFF. No current Stage-1 weight is authorized.</p>
-<p class="warn"><b>Leading new feature result:</b> the narrowed H51-X1 magnetic/gravity edge-normal
-implementation used rank-normalized total-magnetic and isostatic-gravity bands as new-transform
-inputs; the planned derivative bands remained in the common baseline stack but were not used by this
-transform. It scored mean proxy DTI 0.2796713, below H-D by 0.0019913, and was positive in only 3/6
-folds. It failed the frozen promotion rule. The broader preregistered layer-family hypothesis was
-not fully tested. Do not describe this implementation as a win or submit it.</p>
+known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression
+or STE at approximately 2.4 pixels. The official metric gives a marginal-pixel credit bar
+near <code>0.2*DTI</code>; this motivates sparse dots, but does not prove any individual
+prediction is a real fault.</p>
+<p>The current primary is the fixed 50/50 H-H/H-D probability blend emitted with STE line length
+9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its matched six-fold
+proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher).
+This is a local promotion result only; no organizer score or acceptance is claimed.</p>
 
 </main>
 <footer><div class="wrap">

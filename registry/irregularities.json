@@ -81,24 +81,30 @@
     "id": "IR-51-13",
     "summary": "Merged PR #6 introduced H-D trace-emission, H-M and STE candidate TIFFs plus a builder. Fresh local reviews now have broad uniqueness results, but neither H-M nor STE is promotion-ready.",
     "evidence": "The six-fold STE mean proxy DTI is 0.283603 vs isotropic NMS 0.281639 (4/6 folds; approximate paired 95% t interval includes zero). H-M averages 0.282603 vs H-D 0.281663 (3/6 folds; approximate paired 95% t interval includes zero). Refreshed uniqueness audits fail on same-prediction NaN twins; H-M also overlaps its hard-q20 variant above the Jaccard limit. No current q70 full-map Stage-1 checks exist for these two candidates. See evidence/emission_geometry.json and evidence/uniqueness_gate_H_M_soft_20261007.json / evidence/uniqueness_gate_STE_HD_20261007.json.",
-    "status": "OPEN — treat both as research-only leads. The packaged outputs fail the refreshed scoped uniqueness check; neither has a current q70 Stage-1 dominance pass or promotion-grade robust holdout. No slot is authorized."
+    "status": "OPEN \u2014 treat both as research-only leads. The packaged outputs fail the refreshed scoped uniqueness check; neither has a current q70 Stage-1 dominance pass or promotion-grade robust holdout. No slot is authorized."
   },
   {
     "id": "IR-51-16",
     "summary": "The experimental H-G+H-D research TIFF passes the refreshed scoped public-corpus uniqueness audit and its historical q70 Stage-1 diagnostic is non-dominant, but it loses its matched H-D holdout; the q70 field predates the current strain-formula reconciliation.",
     "evidence": "NaN-outside format re-encoding is one-band float32 EPSG:32611 3730x3292, locally format-valid; in-footprint predictions exactly match the audited source. Public-corpus audit: 365 SHA-verified payloads, 364 comparisons, zero matches, one unrelated shape skip; max Jaccard 0.3216, cosine 0.4867, containment 0.9933 at 2.36x null lift. Historical q70 field: 30.046% area approved, 19.728% emissions inside, lift 0.657. The current signed/rate-selectable Stage-1 field was not regenerated, so the q70 result is not current-formula evidence. Matched proxy DTI 0.281056 vs H-D 0.281663 (delta -0.000606; 3/6 higher). See evidence/experimental_H_G_plus_H_D_artifact.json and evidence/stage1_reconciliation_20261007.json.",
-    "status": "OPEN — research-only and NOT SLOT-ELIGIBLE because matched holdout is below H-D. Uniqueness passes; historical archived-field q70 diagnostic is non-dominant, but current-formula q70 is unavailable. No organizer score or portal acceptance is claimed."
+    "status": "OPEN \u2014 research-only and NOT SLOT-ELIGIBLE because matched holdout is below H-D. Uniqueness passes; historical archived-field q70 diagnostic is non-dominant, but current-formula q70 is unavailable. No organizer score or portal acceptance is claimed."
   },
   {
     "id": "IR-51-17",
     "summary": "H-M and STE have positive six-fold mean point estimates but no robust upload-ready win.",
     "evidence": "H-M vs H-D: mean 0.282603 vs 0.281663, paired delta +0.000940, 3/6 higher, paired SD 0.003036, approximate 95% t interval [-0.002246, +0.004127]. STE vs isotropic NMS: 0.283603 vs 0.281639, delta +0.001963, 4/6 higher, paired SD about 0.003454, approximate 95% t interval [-0.00166, +0.00559]. Full public-corpus audits fail on same-prediction NaN twins; H-M also has hard-q20 support Jaccard 0.6336. No refreshed q70 Stage-1 check for either full map. See evidence/uniqueness_gate_H_M_soft_20261007.json and evidence/uniqueness_gate_STE_HD_20261007.json.",
-    "status": "OPEN — research-only noisy leads, not promoted. All local scores are visible-catalogue proxies; no competition slot is authorized."
+    "status": "OPEN \u2014 research-only noisy leads, not promoted. All local scores are visible-catalogue proxies; no competition slot is authorized."
   },
   {
     "id": "IR-51-18",
-    "summary": "The Stage-1 formula reconciliation exposed incompatible historical holdout receipts: the mainline five-split receipt used a pre-audit unsigned/implicit formula, while the branch formula-sensitivity runner did not exclude held-out trace rows from the catalogue-derived budget. No current-formula, leakage-controlled Stage-1 rerun is available.",
-    "evidence": "evidence/stage1_reconciliation_20261007.json; data/stage1_trace_holdout.json; evidence/stage1_formula_audit.json. The current source has explicit vertical versus fault-plane rate conventions, signed RL/LL shear, and optional unknown-sense handling. Raw training-feature rasters, prepared arrays, and QFaults CSV are absent, preventing a rerun.",
-    "status": "OPEN — retain geodetic deficit as a coarse prior only. Do not cite historical Stage-1 scores as validation of the current formula or use them to authorize a fine-scale gate."
+    "summary": "The Stage-1 formula reconciliation exposed incompatible historical receipts; a current five-split trace-held-out rerun is now available, but Stage 1 remains diagnostic only.",
+    "evidence": "evidence/stage1_reconciliation_20261007.json; data/stage1_trace_holdout.json; evidence/stage1_formula_audit.json. The current receipt removes held-out trace rows before building the budget and reports rank-space dilatation/shear residuals. The separate formula-sensitivity runner still retained held-out attributes and remains invalid.",
+    "status": "OPEN SCIENTIFIC LIMITATION \u2014 the current rank-space residual holdout does not authorize a fine-scale Stage-1 gate or weight. The promoted primary uses stage1_weight=0.0; source units/sign conventions remain unresolved."
+  },
+  {
+    "id": "IR-51-19",
+    "summary": "A new H-H/H-D 50/50 blend plus STE was built after passing the frozen local promotion, scoped uniqueness, Stage-1 non-dominance, and GeoTIFF format gates.",
+    "evidence": "data/submission_manifest.json; evidence/hh_blend_holdout.json; docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json; SHA-256 9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777. Mean visible-known-fault proxy DTI 0.2853406 vs H-D 0.2816627, paired delta +0.0036779, 4/6 folds higher; maximum scoped support Jaccard 0.247689 and containment 0.397036; q70 Stage-1 emissions share 0.163539 inside 0.300546 approved area.",
+    "status": "OPEN OPERATIONAL LIMITATION \u2014 locally eligible and obvious to download, but not uploaded; no organizer score, portal acceptance, or hidden-label performance is claimed. The measured gain belongs to the fixed blend, not proven pure H-H causality."
   }
 ]

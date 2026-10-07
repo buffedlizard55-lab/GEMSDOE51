@@ -174,6 +174,13 @@ def build_static(stack, footprint: np.ndarray) -> dict:
     # Cross-scale crest coincidence (session 2026-10-07, knowledge/02 §3 rank 2)
     _build_xscale(g, get, footprint)
 
+    # ---------------------------------------------------------------- H-H
+    # Potential-field/basement edge terminations joined by a conductive relay
+    # bridge.  This is deliberately a topology operator: it is not a generic
+    # high-gradient or local co-location score.  See _build_endpoint_bridge for
+    # the exact finite, label-independent construction.
+    g.update(_build_endpoint_bridge(get, footprint))
+
     return g
 
 
@@ -224,6 +231,177 @@ def _build_xscale(g: dict, get, footprint: np.ndarray) -> None:
 def _ncd(a, mask, sigma, order):
     from .stack import _nc_deriv
     return _nc_deriv(a, mask, sigma, order)
+
+
+def _rank_unit(a: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """Rank a finite array to [0, 1], preserving NaN outside ``mask``."""
+    out = np.full(a.shape, np.nan, dtype=np.float32)
+    valid = np.asarray(mask, dtype=bool) & np.isfinite(a)
+    if not valid.any():
+        return out
+    vals = a[valid]
+    order = np.argsort(vals, kind="mergesort")
+    ranks = np.empty(vals.size, dtype=np.float32)
+    ranks[order] = np.linspace(0.0, 1.0, vals.size, dtype=np.float32)
+    out[valid] = ranks
+    return out
+
+
+def _endpointness(field: np.ndarray, mask: np.ndarray, sigma: float = 2.0,
+                  threshold_q: float = 0.88) -> np.ndarray:
+    """Find finite potential-field edge terminations without labels.
+
+    A scalar-field gradient supplies the local edge normal.  The tangent is
+    sampled one and two pixels in both directions.  A high edge with weak
+    continuation on at least one side is an endpoint candidate.  Keeping only
+    local maxima above a fixed global quantile makes the result a sparse point
+    field rather than a broad habitat mask.  ``map_coordinates`` samples a
+    zero-filled edge array at invalid cells; invalid output cells are reset to
+    NaN before return.
+    """
+    valid = np.asarray(mask, dtype=bool) & np.isfinite(field)
+    gx = _ncd(field, valid, sigma, [0, 1])
+    gy = _ncd(field, valid, sigma, [1, 0])
+    edge = np.hypot(gx, gy).astype(np.float32)
+    edge[~valid] = np.nan
+    finite = valid & np.isfinite(edge)
+    out = np.full(field.shape, np.nan, dtype=np.float32)
+    if finite.sum() < 32:
+        return out
+    scale = float(np.nanpercentile(edge[finite], 95.0))
+    if not np.isfinite(scale) or scale <= 1e-8:
+        return out
+
+    # Tangent is perpendicular to the gradient normal.  The edge array is
+    # zero-filled only for interpolation; there is no label or catalogue input.
+    safe_edge = np.where(finite, edge, 0.0).astype(np.float32)
+    yy, xx = np.indices(field.shape, dtype=np.float32)
+    norm = np.maximum(edge, 1e-8)
+    tx = -gy / norm
+    ty = gx / norm
+    coords = []
+    for direction in (-1.0, 1.0):
+        coords.append(np.array([yy + direction * ty * 1.5,
+                                xx + direction * tx * 1.5], dtype=np.float32))
+        coords.append(np.array([yy + direction * ty * 3.0,
+                                xx + direction * tx * 3.0], dtype=np.float32))
+    samples = [ndi.map_coordinates(safe_edge, c, order=1, mode="constant",
+                                    cval=0.0) for c in coords]
+    forward = np.minimum(samples[2], samples[3])
+    backward = np.minimum(samples[0], samples[1])
+    continuation = np.minimum(forward, backward) / scale
+    # One-sided continuation is retained implicitly by the minimum: a segment
+    # endpoint has one weak side, while a through-going edge has two strong sides.
+    term = np.clip(edge / scale, 0.0, 2.0) * (1.0 - np.clip(continuation, 0.0, 1.0))
+    term[~finite] = -np.inf
+    q = float(np.nanpercentile(term[finite], threshold_q * 100.0))
+    maxima = term >= ndi.maximum_filter(np.where(np.isfinite(term), term, -np.inf),
+                                         size=5, mode="nearest")
+    # A slightly higher endpoint threshold than the edge threshold avoids
+    # turning every short texture fragment into an endpoint.
+    q_endpoint = max(q, float(np.nanpercentile(term[finite], 97.5)))
+    keep = finite & maxima & (term >= q_endpoint)
+    out[keep] = np.clip(term[keep] / max(q_endpoint, 1e-8), 0.0, 1.0)
+    return out
+
+
+def _paired_bridge(a: np.ndarray, b: np.ndarray, min_px: float = 3.0,
+                   max_px: float = 20.0) -> np.ndarray:
+    """Create a bridge zone between offset endpoint sets from two layers.
+
+    ``a`` and ``b`` are sparse endpoint maps.  A source endpoint is accepted
+    only when the nearest endpoint in the other layer lies in [3, 20] pixels
+    (0.3–2.0 km).  Distance transforms of those accepted endpoints define the
+    ellipse-like relay zone; a point is scored only when it is near both paired
+    sets and the two distances sum to no more than 1.25 times the maximum
+    endpoint separation.  Thus an isolated high-gradient pixel or co-located
+    edge cannot produce a bridge.
+    """
+    ma = np.isfinite(a) & (a > 0)
+    mb = np.isfinite(b) & (b > 0)
+    out = np.full(a.shape, np.nan, dtype=np.float32)
+    if not ma.any() or not mb.any():
+        return out
+    d_b = ndi.distance_transform_edt(~mb).astype(np.float32)
+    d_a = ndi.distance_transform_edt(~ma).astype(np.float32)
+    pair_a = ma & (d_b >= min_px) & (d_b <= max_px)
+    pair_b = mb & (d_a >= min_px) & (d_a <= max_px)
+    if not pair_a.any() or not pair_b.any():
+        return out
+    da = ndi.distance_transform_edt(~pair_a).astype(np.float32)
+    db = ndi.distance_transform_edt(~pair_b).astype(np.float32)
+    zone = (da <= max_px) & (db <= max_px) & ((da + db) <= max_px * 1.25)
+    # High at paired ends and along the shortest relay corridor, lower at its
+    # perimeter.  It is intentionally not a probability or a score.
+    value = np.exp(-(da + db) / max_px).astype(np.float32)
+    value[~zone] = np.nan
+    out[zone] = value[zone]
+    return out
+
+
+def _build_endpoint_bridge(get, footprint: np.ndarray) -> dict[str, np.ndarray]:
+    """H-H endpoint/bridge features, exact preregistered operator.
+
+    Inputs are rank-transformed competition layers.  Endpoint maps come from
+    TMI, gravity and basement-depth scalar fields at sigma=2 px.  Their pairwise
+    relay zones are intersected with a local positive conductivity residual.
+    ``lid_step_max`` and ``lid_coh100`` are an independent surface check, not a
+    hard mask, so blind structures remain possible.
+    """
+    fields = {
+        "mag": get("comp_tmi"),
+        "grav": get("comp_iso_grav_anom"),
+        "base": get("comp_depth_to_base_surf"),
+    }
+    endpoints = {}
+    for name, field in fields.items():
+        valid = footprint & np.isfinite(field)
+        endpoints[name] = _endpointness(field, valid, sigma=2.0, threshold_q=0.88)
+
+    bridge_mg = _paired_bridge(endpoints["mag"], endpoints["grav"])
+    bridge_mb = _paired_bridge(endpoints["mag"], endpoints["base"])
+    bridge_gb = _paired_bridge(endpoints["grav"], endpoints["base"])
+    bridges = [bridge_mg, bridge_mb, bridge_gb]
+    finite_bridges = [np.isfinite(x) for x in bridges]
+    any_bridge = np.logical_or.reduce(finite_bridges) if finite_bridges else np.zeros_like(footprint)
+    bridge = np.zeros(footprint.shape, dtype=np.float32)
+    for x in bridges:
+        bridge = np.maximum(bridge, np.nan_to_num(x, nan=0.0))
+    bridge[~any_bridge] = np.nan
+
+    cond = get("comp_cond_surf")
+    valid_cond = footprint & np.isfinite(cond)
+    # A local positive residual rejects a region-wide conductive basin while
+    # retaining a high-conductivity bridge relative to its nearby background.
+    cond_fill = np.where(valid_cond, cond, 0.0).astype(np.float32)
+    local = ndi.gaussian_filter(cond_fill, sigma=8.0, mode="nearest")
+    local_resid = cond - local
+    cond_q = _rank_unit(local_resid, valid_cond)
+    cond_gate = np.clip((cond_q - 0.65) / 0.35, 0.0, 1.0)
+    cond_gate[~valid_cond] = np.nan
+
+    step = get("lid_step_max")
+    coh = get("lid_coh100")
+    surface = np.nan_to_num(_rank_unit(step, footprint & np.isfinite(step)), nan=0.0)
+    surface_coh = np.nan_to_num(_rank_unit(coh, footprint & np.isfinite(coh)), nan=0.0)
+    surface_check = (0.5 * surface + 0.5 * surface_coh).astype(np.float32)
+    surface_check[~footprint] = np.nan
+
+    out: dict[str, np.ndarray] = {}
+    endpoint = np.zeros(footprint.shape, dtype=np.float32)
+    for x in endpoints.values():
+        endpoint = np.maximum(endpoint, np.nan_to_num(x, nan=0.0))
+    endpoint[~footprint] = np.nan
+    out["hh_endpoint"] = endpoint
+    out["hh_bridge"] = bridge
+    out["hh_bridge_cond"] = (bridge * np.nan_to_num(cond_gate, nan=0.0)).astype(np.float32)
+    out["hh_bridge_surface"] = (bridge * surface_check).astype(np.float32)
+    out["hh_endpoint_concordance"] = (
+        endpoint * np.nan_to_num(cond_gate, nan=0.0)
+    ).astype(np.float32)
+    for x in out.values():
+        x[~footprint] = np.nan
+    return out
 
 
 def build_catalogue_dependent(stack, footprint: np.ndarray, known: np.ndarray) -> dict:

@@ -23,39 +23,50 @@
 <main class="wrap">
 
 <h2>Submission guide — current status first</h2>
-<p class="warn"><b>There is no eligible file to upload today.</b> A NaN-outside H-G+H-D GeoTIFF is linked on
-the executive summary for research review only; its matched blocked holdout is below H-D, so it is
-<b>not for submission</b>. Do not use archived zero-outside files: they fail the current local
-null/NaN-outside format contract. The H-D w=0.20 proposal passed its numeric screen but failed
-uniqueness before a file was written. No weekly slot is recommended.</p>
-<h3>When a candidate is cleared</h3>
+
+<p class="download"><b>Current primary: HOLDOUT_PROMOTED_UNSCORED.</b>
+This candidate passed the frozen six-fold local promotion rule, scoped reference-aware
+uniqueness, q70 Stage-1 non-dominance, and the written GeoTIFF checks. It has not been
+uploaded and no DrivenData score or portal acceptance is claimed.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a></p>
+<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP</a></p>
+<dl class="kv">
+<dt>Unique submission name</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Note</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.</code></dd>
+<dt>Format receipt</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+</dl>
+
+<h3>Before any upload</h3>
 <ol class="steps">
-<li>Return to the <a href="index.html">executive summary</a> and download only the GeoTIFF linked in
-the current eligibility card; check its SHA-256 against the receipt shown there.</li>
+<li>Return to the <a href="index.html">executive summary</a> and download only the current
+primary GeoTIFF shown there. If using the ZIP, confirm it contains exactly that one TIFF.</li>
+<li>Recheck the displayed SHA-256 and the local receipt. The local verifier checks one band,
+float32 values in [0,1], the template grid and CRS EPSG:32611, finite in-footprint values,
+and NaN outside the footprint. A local pass does not prove portal acceptance.</li>
 <li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
-(requires the participant's own login).</li>
-<li>Choose the single-band <code>.tif</code> file, or the linked <code>.zip</code> containing exactly
-that one GeoTIFF.</li>
-<li>Paste the unique submission name and short note displayed on the executive summary. Do not
-reuse names or notes from archived candidates.</li>
-<li>Include the required narrative with an accurate generative-AI disclosure (template below). Read
-the official rules before submitting and select one final file for both prize rounds by the deadline.</li>
+(requires the participant's own login), choose the current file, and paste the exact unique
+name and note shown above. Do not reuse an archived name or relabel a previous TIFF.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure. Read the current
+official rules and verify the final file, scientific claims, provenance, and license position
+before submitting.</li>
 </ol>
 
-<h3>Official format checklist</h3>
-<p>DrivenData specifies EPSG:32611, 100 m, matching bounds, one float32 band, values in [0,1], and
-null/NaN outside the bounds. The repository writer now emits NaN outside and verifies the written
-bytes. This local check does not prove acceptance by the portal. If the validator reports an error,
-retain the exact rejected file and message for diagnosis; do not assume an unverified root cause.</p>
+<h3>Current artifact interpretation</h3>
+<p>The primary is a substantively new fixed 50/50 H-H/H-D probability blend emitted with STE
+line length 9, continuity weight 0.35, and spacing 2.4 pixels. Stage 1 is retained as a
+coarse diagnostic only and has <code>stage1_weight=0.0</code>; it does not dominate fine-scale
+placement. The local holdout truth is the visible known-fault catalogue, not hidden organizer
+labels, so “holdout-promoted” is not a competition-score claim.</p>
 
 <h3>Generative-AI narrative disclosure</h3>
-<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">September 2026 GEMS Prize Rules</a>
-requires a narrative, outside the word count, that states the extent to which generative AI was used
-and how it contributed to the submission elements. Adapt this text to the actual final process and
-verify every statement before submission:</p>
+<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">GEMS Prize Rules</a>
+requires a narrative, outside the word count, that states the extent to which generative AI was
+used and how it contributed to the submission elements. Adapt this text to the actual final
+process and verify every statement:</p>
 <pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source material, generate and rank hypotheses, edit and debug code, and draft project documentation. The geospatial predictions are produced by the documented feature-engineering and machine-learning pipeline, not by a generative model. The person submitting is responsible for checking the data provenance, code, scientific claims, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted artifact.</pre>
-<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include all
-actual AI use across the eventual submission materials.</p>
+<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include
+all actual AI use across the eventual submission materials.</p>
 
 <h3>Leaderboard and Terms of Use</h3>
 <p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
