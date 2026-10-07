@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
-"""Build the promoted H-H/H-D blend + STE GeoTIFF, fail closed.
+"""Historical H-H/H-D + STE GeoTIFF writer, currently fail-closed.
 
-This is the only current upload writer.  It refits the validated H-D and H-H
-feature arms on all visible catalogue pixels, averages their probabilities at a
-fixed 50/50 weight, and applies the previously screened strike-coherent
-emission rule (Frangi/line accumulator, L9, w=0.35, spacing 2.4 px).  The
-geodetic strain-budget output is calculated and reported as a q70 broad-tile
-prior diagnostic only; the holdout-selected Stage-1 weight is zero, so it cannot
-hard-gate or dominate fine-scale placement.
-
-No bytes are written to the public download directory until the promotion receipt,
-family-reference coverage, support uniqueness, Stage-1 dominance, and local
-GeoTIFF checks all pass.  The resulting file is locally format-verified and
-holdout-promoted but has no organizer score or portal-acceptance claim.
+The old blend and emission recipe are retained for audit/reproducibility only.
+It predates the q10 all-points-inside allowed-domain requirement, and the
+reported portal range error remains unresolved. The current manifest explicitly
+blocks any new file from this writer; a historical local proxy promotion is not
+upload authorization. A future build requires a new, explicit manifest decision
+recording a promoted holdout, q10 confinement, and Stage-1 non-dominance.
 """
 from __future__ import annotations
 
@@ -214,6 +208,39 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def require_build_authorization(manifest_path: Path | None = None) -> dict:
+    """Require an explicit promotion and q10-domain clearance before any build work."""
+    path = manifest_path or (ROOT / "data" / "submission_manifest.json")
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"submission build blocked: cannot read manifest {path}: {exc}") from exc
+    readiness = manifest.get("submission_readiness", {})
+    candidate = manifest.get("candidate_screen", {})
+    if readiness.get("status") != "CLEARED_FOR_NEW_BUILD":
+        raise SystemExit(
+            "submission build blocked: manifest is not CLEARED_FOR_NEW_BUILD; "
+            f"current status={readiness.get('status', 'MISSING')!r}. "
+            "A local proxy promotion does not clear the portal/q10 blockers."
+        )
+    if candidate.get("status") != "PROMOTED":
+        raise SystemExit(
+            "submission build blocked: candidate_screen.status must be PROMOTED; "
+            f"current status={candidate.get('status', 'MISSING')!r}."
+        )
+    q10 = candidate.get("holdout_q10_domain", {})
+    if q10.get("all_points_inside_approved") is not True:
+        raise SystemExit(
+            "submission build blocked: candidate has no passing q10 holdout proof "
+            "that every emitted Stage-2 point lies inside approved tiles."
+        )
+    if candidate.get("stage1_non_dominance_pass") is not True:
+        raise SystemExit(
+            "submission build blocked: candidate has no passing Stage-1 non-dominance receipt."
+        )
+    return manifest
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ratio", type=float, default=3.47)
@@ -229,6 +256,7 @@ def main() -> int:
     ap.add_argument("--tag", default="hh-hd-blend-ste-r347")
     ap.add_argument("--skip-cache", action="store_true")
     a = ap.parse_args()
+    require_build_authorization()
     if a.g_hidden != G_HIDDEN_ESTIMATE or abs(a.ratio - 3.47) > 1e-12:
         raise SystemExit("only the holdout-validated ratio 3.47 and planning mass 12700 are eligible")
     if abs(a.stage1_weight) > 1e-12:

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-07",
+  "status": "PREREGISTERED_SCREEN_PENDING",
+  "target": "Fault geometry absent from the supplied USGS/INGENIOUS known-fault catalogue; no direct geothermal-vent prediction is claimed.",
+  "current_best_proxy": {
+    "candidate": "H-H/H-D fixed 50/50 probability blend + STE L9/w=0.35/spacing=2.4",
+    "mean_proxy_dti": 0.285340602656319,
+    "folds": 6,
+    "positive_folds_vs_h_d": 4,
+    "evidence": "evidence/hh_blend_holdout.json",
+    "truth": "visible known-fault catalogue, not hidden organizer labels"
+  },
+  "common_holdout": {
+    "design": "3x3 contiguous spatial blocks; 12-pixel (1.2 km) training buffer; six truth-bearing blocks; emission and scoring restricted to held-out block",
+    "negative_samples": 250000,
+    "negative_seed": "fold index, as in run_experiments.py",
+    "mass_ratio": 3.47,
+    "stage1_score_weight": 0.0,
+    "stage1_allowed_domain_gate": {
+      "field": "geodetic second-invariant deficit",
+      "tile_px": 100,
+      "threshold_quantile": 10,
+      "approved_area_target": "approximately 90 percent of footprint",
+      "fold_specific": true,
+      "fold_truth_excluded_from_catalogue_budget": true,
+      "heldout_trace_rows_removed": true,
+      "separate_stage1_receipt": "evidence/stage1_q10_trace_holdout_20261007.json",
+      "stage1_trace_holdout_mean_dti_q10": 0.05062738717100875,
+      "uniform_trace_holdout_mean_dti": 0.04856426582063665,
+      "trace_holdout_mean_lift_q10": 1.0591471679793076
+    },
+    "target_comparator": "freshly reconstructed H-D/H-H 50/50 baseline, both ungated for frozen receipt reproduction and both q10-gated for paired candidate comparison",
+    "baseline_reproduction_tolerance_mean_dti": 0.00001,
+    "promotion_rule": "Fresh ungated baseline reproduces 0.285340602656319 within 1e-5; final candidate after fold-specific q10 Stage-1 gating exceeds the frozen ungated best and same-fold q10-gated H-D/H-H mean, paired gated mean DTI delta > 0, >=4/6 paired folds improve, approved area >=2/3 with Stage-1 lift <=1.5, and every candidate point lies inside approved tiles; no post-hoc parameter tuning.",
+    "slot_policy": "No portal submission or weekly slot is authorized by local holdout evidence. Local TIFF may be written only after proxy promotion, format, scoped uniqueness, all-points-inside-approved validation, and Stage-1 non-dominance gates pass."
+  },
+  "ranked_hypotheses": [
+    {
+      "id": "H51-K1",
+      "rank": 1,
+      "name": "Cross-scale potential-field tilt-edge persistence",
+      "status": "TOP CANDIDATE; local holdout pending",
+      "layers": ["tmi_hg", "tmi_vg", "iso_grav_anom_hg", "iso_grav_anom_vg"],
+      "operator": "At sigma 2 and 5 px, normalized-Gaussian smooth raw same-field vertical-gradient and absolute supplied horizontal-gradient bands. theta=atan2(VG,abs(HG)); E=rank(abs(HG))*exp(-abs(theta)/0.20 radians). Use min(E_sigma2,E_sigma5) per field; joint feature=sqrt(magnetic_persistence*gravity_persistence). Local gravity HG is signed and metadata does not establish whether it is full 2-D magnitude or one signed component, so this is a tilt-like partial-gradient proxy, not the conventional total-horizontal-derivative tilt angle.",
+      "physical_signature": "Amplitude-normalized near-zero tilt-angle/phase edges that persist across two scales and have independent magnetic and gravity support.",
+      "why_missing_fault": "Buried faulted contacts can juxtapose magnetic susceptibility and density contrasts under basin fill while showing weak surface relief; this is a structural proxy, not proof of a fault.",
+      "difference_from_repo": "H-E uses local gravity/basement/conductivity gradients, H-G compares TMI/gravity gradient orientation, H-H pairs finite edge endpoints with a conductive bridge, H-D/H-M use surface-relief coherence/scale coincidence. No implemented arm uses a signed vertical-to-horizontal derivative phase ratio with scale persistence and joint magnetic/gravity support.",
+      "expected_benefit": "Moderate but uncertain; no numeric uplift forecast.",
+      "implementation_cost": "Low-medium; only existing hash-pinned competition derivative bands.",
+      "external_data": "None.",
+      "sources": [
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+        "https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and",
+        "https://doi.org/10.1016/0926-9851(94)90022-1"
+      ]
+    },
+    {
+      "id": "H51-K2",
+      "rank": 2,
+      "name": "Directional conductivity contrast across an independent basement edge",
+      "status": "UNTESTED",
+      "layers": ["cond_surf", "depth_to_base_surf", "iso_grav_anom_hg", "tmi_hg"],
+      "operator": "Measure robust along-edge versus cross-edge conductivity contrast at 150-800 m offsets around independently detected structural axes; remove broad isotropic basin conductivity.",
+      "physical_signature": "Directional conductor/alteration corridor tied to a separate structural boundary, not a broad high-conductivity habitat mask.",
+      "why_missing_fault": "A fault damage/alteration corridor beneath basin fill may be conductive even where no surface scarp is visible; clay-rich fill and lithologic contacts are alternatives.",
+      "difference_from_repo": "H-E uses local conductivity/basement/gravity co-location; H-H uses conductivity as a bridge between paired edge endpoints. This tests along-axis versus across-axis contrast at explicit offsets.",
+      "expected_benefit": "Low-moderate and uncertain.",
+      "implementation_cost": "Medium.",
+      "external_data": "None for first screen; competition layers suffice.",
+      "sources": ["https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "https://gdr.openei.org/submissions/1391"]
+    },
+    {
+      "id": "H51-K3",
+      "rank": 3,
+      "name": "Radiometric-ratio lineaments conditional on an independent structure edge",
+      "status": "UNTESTED; band metadata audit required",
+      "layers": ["GeoDAWN K", "GeoDAWN Th", "GeoDAWN U", "depth_to_base_surf", "tmi_hg", "iso_grav_anom_hg"],
+      "operator": "After auditing units, zeros, and mask, compute robust local log-ratio features (e.g. log K/Th and U/Th) and score narrow ratio-change lineaments only where they intersect an independently detected basement/potential-field edge.",
+      "physical_signature": "A locally anomalous radiometric ratio boundary co-located with an independent structural edge; no absolute radiometric magnitude or generic prospectivity score.",
+      "why_missing_fault": "Some hydrothermal alteration/fluid-rock interaction can modify near-surface radiometric response, but lithology, soil, moisture, cover, and flight corrections are serious confounders.",
+      "difference_from_repo": "No current model uses radiometric-ratio lineament/structural-edge interaction; existing conductive-relay features use electrical conductivity instead. Broad alteration and radiometric families have sibling prior art.",
+      "expected_benefit": "Low and highly uncertain.",
+      "implementation_cost": "Medium-high.",
+      "external_data": "No new acquisition: public USGS GeoDAWN release provides radiometric products; local four-band copy is a hash-pinned owner mirror and not organizer-authenticated.",
+      "sources": ["https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7", "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and"]
+    },
+    {
+      "id": "H51-K4",
+      "rank": 4,
+      "name": "Earthquake-density ridge conditioned on an independent structural edge",
+      "status": "BLOCKED pending precise band metadata",
+      "layers": ["ieq_n100a15", "deq_n100a15", "tmi_hg", "iso_grav_anom_hg", "depth_to_base_surf"],
+      "operator": "Compare an earthquake-density ridge intersecting an independent potential-field/basement edge against edge-only and seismicity-only controls.",
+      "physical_signature": "Active seismicity aligned with a separate subsurface structural edge.",
+      "why_missing_fault": "A seismic lineament can indicate an active unmapped structure, but completeness, swarms, diffuse seismicity, and aseismic faults can reverse the signal.",
+      "difference_from_repo": "The current stack has seismicity bands as ordinary predictors, but no explicit preregistered interaction with independently detected edges.",
+      "expected_benefit": "Low and uncertain.",
+      "implementation_cost": "Low-medium after source metadata review; not viable yet.",
+      "external_data": "GDR 1391 lists public earthquake-density model data; inspect its metadata to resolve the exact band parameters before use.",
+      "sources": ["https://gdr.openei.org/submissions/1391", "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"]
+    }
+  ],
+  "stage1_source_audit": {
+    "formula_source": "Kreemer et al. (2000), Eq. 3",
+    "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "verified_qfault_fields": ["SLIPRTNUM", "SLIPRT2023", "SLIPSENSE", "DIPDIRECT", "Shape_Leng"],
+    "unit_status": "No units for SLIPRTNUM are declared in the REST layer schema; local CSV slip_rate values are derived owner-mirror data. Treat mm/yr as provisional and raw absolute nanostrain rates as unauthenticated.",
+    "schema_url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson"
+  }
+}

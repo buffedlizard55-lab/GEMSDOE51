@@ -1,15 +1,15 @@
 {
  "schema_version": 3,
- "status": "HOLDOUT_PROMOTED_UNSCORED",
+ "status": "LOCAL_BEST_UNSCORED_PORTAL_VALIDATION_UNRESOLVED",
  "generated_utc": "20261007T154954Z",
  "primary": {
   "id": "H_H_HD_BLEND_STE_20261007",
-  "role": "PRIMARY",
-  "status": "HOLDOUT_PROMOTED_UNSCORED",
+  "role": "EXISTING_LOCAL_BEST_NOT_UPLOADABLE",
+  "status": "LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED",
   "file": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
   "zip": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip",
   "submission_name": "GEMSDOE51-HH-HD-BLEND-STE-R347-20261007",
-  "note": "H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.",
+  "note": "H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.",
   "sha256": "9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777",
   "bytes": 383608,
   "format": {
@@ -434,17 +434,33 @@
   "checks_file": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json",
   "gate_mode": "H-H/H-D 50/50 + STE",
   "description": "Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.",
-  "holdout_cost_vs_ungated": null
+  "holdout_cost_vs_ungated": null,
+  "portal_validation": {
+   "status": "UNRESOLVED",
+   "reported_error": "Predicted values must be in range [0, 1]",
+   "file_identity_known": false,
+   "portal_acceptance_claimed": false
+  },
+  "stage1_q10_domain_check": {
+   "field": "current full-catalogue q10 geodetic second-invariant deficit mask",
+   "approved_area_share": 0.900925673451481,
+   "predicted_points": 44069,
+   "points_inside_approved": 38211,
+   "emitted_share_inside_approved": 0.8670720914928861,
+   "lift_over_approved_area_share": 0.9624235572853634,
+   "all_points_inside_approved": false,
+   "note": "Diagnostic only; this historical file predates the q10 allowed-domain requirement and is not eligible under it."
+  }
  },
  "artifacts": [
   {
    "id": "H_H_HD_BLEND_STE_20261007",
-   "role": "PRIMARY",
-   "status": "HOLDOUT_PROMOTED_UNSCORED",
+   "role": "EXISTING_LOCAL_BEST_NOT_UPLOADABLE",
+   "status": "LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED",
    "file": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
    "zip": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip",
    "submission_name": "GEMSDOE51-HH-HD-BLEND-STE-R347-20261007",
-   "note": "H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.",
+   "note": "H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.",
    "sha256": "9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777",
    "bytes": 383608,
    "format": {
@@ -869,7 +885,23 @@
    "checks_file": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json",
    "gate_mode": "H-H/H-D 50/50 + STE",
    "description": "Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.",
-   "holdout_cost_vs_ungated": null
+   "holdout_cost_vs_ungated": null,
+   "portal_validation": {
+    "status": "UNRESOLVED",
+    "reported_error": "Predicted values must be in range [0, 1]",
+    "file_identity_known": false,
+    "portal_acceptance_claimed": false
+   },
+   "stage1_q10_domain_check": {
+    "field": "current full-catalogue q10 geodetic second-invariant deficit mask",
+    "approved_area_share": 0.900925673451481,
+    "predicted_points": 44069,
+    "points_inside_approved": 38211,
+    "emitted_share_inside_approved": 0.8670720914928861,
+    "lift_over_approved_area_share": 0.9624235572853634,
+    "all_points_inside_approved": false,
+    "note": "Diagnostic only; this historical file predates the q10 allowed-domain requirement and is not eligible under it."
+   }
   }
  ],
  "research_only_artifacts": [
@@ -1155,5 +1187,18 @@
    "full_corpus_uniqueness": "FAIL: same-prediction NaN twin Jaccard/cosine 1.0; see evidence/uniqueness_gate_STE_HD_20261007.json",
    "stage1_q70": "NOT_RUN_IN_CURRENT_CHECKOUT"
   }
+ },
+ "submission_readiness": {
+  "status": "BLOCKED_NOT_FOR_UPLOAD",
+  "reason": "A user-reported portal error stated that predicted values must be in [0,1]. The exact previously uploaded/downloaded file was not identified, so this local artifact has not been shown to pass the live portal validator. Its local file uses NaN outside the footprint, which the local verifier accepts; live acceptance is unknown.",
+  "user_reported_error": "Predicted values must be in range [0, 1]",
+  "no_organizer_upload_or_score_claimed": true,
+  "new_h51_k1_candidate": "NOT_PROMOTED_NO_TIFF; see evidence/hk1_spatial_holdout_20261007.json"
+ },
+ "candidate_screen": {
+  "candidate": "H51-K1 cross-scale potential-field tilt-like partial-gradient edge persistence",
+  "status": "NOT_PROMOTED_NO_TIFF",
+  "evidence": "evidence/hk1_spatial_holdout_20261007.json",
+  "reason": "Candidate gated mean 0.2850766 did not exceed frozen ungated best 0.2853406; paired improvement over same-fold gated H-D/H-H was positive in only 3/6 folds; fresh ungated baseline missed preregistered reproduction tolerance."
  }
 }

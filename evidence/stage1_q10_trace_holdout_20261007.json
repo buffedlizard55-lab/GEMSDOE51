@@ -1,0 +1,638 @@
+{
+ "config": {
+  "n_splits": 5,
+  "tile_px": 100,
+  "thresholds": "10",
+  "ratio": 3.47,
+  "g_hidden": 12700,
+  "rate_convention": "vertical",
+  "assume_unknown_normal": true,
+  "output": "evidence/stage1_q10_trace_holdout_20261007.json",
+  "seed": 3,
+  "min_heldout": 2000
+ },
+ "per_split": [
+  {
+   "split": 0,
+   "n_truth": 11492,
+   "n_known": 49496,
+   "residual_definition": "rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
+   "n_budget_trace_rows": 1044,
+   "frac_budget_rows_excluded": 0.0728241563055062,
+   "spearman_deficit": 0.037774688729863906,
+   "deficit_area_q10": 0.9006142966648624,
+   "deficit_recall_q10": 0.9568395405499478,
+   "deficit_lift_q10": 1.0624298815744961,
+   "deficit_dti_q10": 0.04995599251385913,
+   "spearman_dilatation_residual": 0.0842580318843716,
+   "dilatation_residual_area_q10": 0.9008134307316309,
+   "dilatation_residual_recall_q10": 0.9150713539853811,
+   "dilatation_residual_lift_q10": 1.0158278315657105,
+   "dilatation_residual_dti_q10": 0.05052573159845409,
+   "spearman_shear_residual": 0.011754083244100131,
+   "shear_residual_area_q10": 0.9000509543243733,
+   "shear_residual_recall_q10": 0.952140619561434,
+   "shear_residual_lift_q10": 1.0578741292221194,
+   "shear_residual_dti_q10": 0.05028894407045834,
+   "spearman_combined_residual_prior": 0.06097139879353093,
+   "combined_residual_prior_area_q10": 0.9017487222230716,
+   "combined_residual_prior_recall_q10": 0.9611903933170901,
+   "combined_residual_prior_lift_q10": 1.0659182204855002,
+   "combined_residual_prior_dti_q10": 0.04881074037739561,
+   "spearman_geodetic_only": 0.03736713058363244,
+   "geodetic_only_area_q10": 0.9000221195566876,
+   "geodetic_only_recall_q10": 0.8941872607030978,
+   "geodetic_only_lift_q10": 0.9935169828309733,
+   "geodetic_only_dti_q10": 0.04941743206462865,
+   "spearman_dilatation_only": 0.09749171958777288,
+   "dilatation_only_area_q10": 0.9002464114744572,
+   "dilatation_only_recall_q10": 0.8813087365123564,
+   "dilatation_only_lift_q10": 0.9789638984163415,
+   "dilatation_only_dti_q10": 0.047123410524714165,
+   "spearman_shear_only": 0.009154143137428846,
+   "shear_only_area_q10": 0.9003365926941987,
+   "shear_only_recall_q10": 0.9206404455273234,
+   "shear_only_lift_q10": 1.0225514024397995,
+   "shear_only_dti_q10": 0.04746877100452862,
+   "uniform_dti": 0.04468426172664794
+  },
+  {
+   "split": 1,
+   "n_truth": 10961,
+   "n_known": 50027,
+   "residual_definition": "rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
+   "n_budget_trace_rows": 1045,
+   "frac_budget_rows_excluded": 0.0719360568383659,
+   "spearman_deficit": 0.01608046252904921,
+   "deficit_area_q10": 0.9010953921847716,
+   "deficit_recall_q10": 0.9417023994161117,
+   "deficit_lift_q10": 1.0450640493598413,
+   "deficit_dti_q10": 0.04624284993620545,
+   "spearman_dilatation_residual": -0.005487393133724487,
+   "dilatation_residual_area_q10": 0.9008571666879863,
+   "dilatation_residual_recall_q10": 0.8804853571754402,
+   "dilatation_residual_lift_q10": 0.9773861936543798,
+   "dilatation_residual_dti_q10": 0.04279957413323487,
+   "spearman_shear_residual": -0.008331781975151973,
+   "shear_residual_area_q10": 0.9006922860029651,
+   "shear_residual_recall_q10": 0.9534713985950187,
+   "shear_residual_lift_q10": 1.0585983841676643,
+   "shear_residual_dti_q10": 0.04759899496689304,
+   "spearman_combined_residual_prior": 0.0067835836962305916,
+   "combined_residual_prior_area_q10": 0.9000091535873257,
+   "combined_residual_prior_recall_q10": 0.9240945169236383,
+   "combined_residual_prior_lift_q10": 1.0267612426388235,
+   "combined_residual_prior_dti_q10": 0.04472777174758725,
+   "spearman_geodetic_only": 0.08299061483947416,
+   "geodetic_only_area_q10": 0.9000221195566876,
+   "geodetic_only_recall_q10": 0.9248243773378342,
+   "geodetic_only_lift_q10": 1.0275573869155161,
+   "geodetic_only_dti_q10": 0.04639561672766755,
+   "spearman_dilatation_only": 0.02793543775573245,
+   "dilatation_only_area_q10": 0.9002464114744572,
+   "dilatation_only_recall_q10": 0.8824012407627041,
+   "dilatation_only_lift_q10": 0.9801774597662372,
+   "dilatation_only_dti_q10": 0.04469155591837905,
+   "spearman_shear_only": 0.05748759313140212,
+   "shear_only_area_q10": 0.9003365926941987,
+   "shear_only_recall_q10": 0.8782957759328528,
+   "shear_only_lift_q10": 0.9755193591594559,
+   "shear_only_dti_q10": 0.04251842268278986,
+   "uniform_dti": 0.04881086068660077
+  },
+  {
+   "split": 2,
+   "n_truth": 12076,
+   "n_known": 48912,
+   "residual_definition": "rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
+   "n_budget_trace_rows": 1045,
+   "frac_budget_rows_excluded": 0.0719360568383659,
+   "spearman_deficit": 0.03838687876763256,
+   "deficit_area_q10": 0.9009398005524277,
+   "deficit_recall_q10": 0.9786353097052004,
+   "deficit_lift_q10": 1.086238291509746,
+   "deficit_dti_q10": 0.05291264473983567,
+   "spearman_dilatation_residual": 0.032020035792028924,
+   "dilatation_residual_area_q10": 0.900592235164754,
+   "dilatation_residual_recall_q10": 0.889615766810202,
+   "dilatation_residual_lift_q10": 0.9878119442673811,
+   "dilatation_residual_dti_q10": 0.04935838188584257,
+   "spearman_shear_residual": 0.0366738837464484,
+   "shear_residual_area_q10": 0.9001899030706705,
+   "shear_residual_recall_q10": 0.9755713812520702,
+   "shear_residual_lift_q10": 1.08373952865308,
+   "shear_residual_dti_q10": 0.05217075114402517,
+   "spearman_combined_residual_prior": 0.06592997981920036,
+   "combined_residual_prior_area_q10": 0.9009817948114061,
+   "combined_residual_prior_recall_q10": 0.97250745279894,
+   "combined_residual_prior_lift_q10": 1.079386352087731,
+   "combined_residual_prior_dti_q10": 0.0481002531382063,
+   "spearman_geodetic_only": 0.07526516658311413,
+   "geodetic_only_area_q10": 0.9000221195566876,
+   "geodetic_only_recall_q10": 0.9879099039417025,
+   "geodetic_only_lift_q10": 1.097650693772176,
+   "geodetic_only_dti_q10": 0.052065678823882765,
+   "spearman_dilatation_only": 0.046777358226672255,
+   "dilatation_only_area_q10": 0.9002464114744572,
+   "dilatation_only_recall_q10": 0.9249751573368665,
+   "dilatation_only_lift_q10": 1.0274688635769262,
+   "dilatation_only_dti_q10": 0.04936475046248821,
+   "spearman_shear_only": 0.08057698902627267,
+   "shear_only_area_q10": 0.9003365926941987,
+   "shear_only_recall_q10": 0.96588274263001,
+   "shear_only_lift_q10": 1.072801828191464,
+   "shear_only_dti_q10": 0.05163945240529952,
+   "uniform_dti": 0.05129834040740754
+  },
+  {
+   "split": 3,
+   "n_truth": 13521,
+   "n_known": 47467,
+   "residual_definition": "rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
+   "n_budget_trace_rows": 1045,
+   "frac_budget_rows_excluded": 0.0719360568383659,
+   "spearman_deficit": 0.10970407500558142,
+   "deficit_area_q10": 0.9003619440671304,
+   "deficit_recall_q10": 0.9538495673396938,
+   "deficit_lift_q10": 1.0594068014813556,
+   "deficit_dti_q10": 0.05004870495442527,
+   "spearman_dilatation_residual": 0.07108282070003187,
+   "dilatation_residual_area_q10": 0.9013489059140882,
+   "dilatation_residual_recall_q10": 0.9010428222764588,
+   "dilatation_residual_lift_q10": 0.9996604160324364,
+   "dilatation_residual_dti_q10": 0.05363916410336106,
+   "spearman_shear_residual": 0.09640972791897014,
+   "shear_residual_area_q10": 0.9010340457327156,
+   "shear_residual_recall_q10": 0.9586569040751424,
+   "shear_residual_lift_q10": 1.0639519212568358,
+   "shear_residual_dti_q10": 0.05305908988625756,
+   "spearman_combined_residual_prior": 0.07757065871421336,
+   "combined_residual_prior_area_q10": 0.9013303278087338,
+   "combined_residual_prior_recall_q10": 0.9572516825678574,
+   "combined_residual_prior_lift_q10": 1.062043130064287,
+   "combined_residual_prior_dti_q10": 0.05064656750448047,
+   "spearman_geodetic_only": 0.19162835587412994,
+   "geodetic_only_area_q10": 0.9000221195566876,
+   "geodetic_only_recall_q10": 0.9206419643517492,
+   "geodetic_only_lift_q10": 1.0229103755863445,
+   "geodetic_only_dti_q10": 0.05224208462671598,
+   "spearman_dilatation_only": 0.11276842641664679,
+   "dilatation_only_area_q10": 0.9002464114744572,
+   "dilatation_only_recall_q10": 0.9113970860143481,
+   "dilatation_only_lift_q10": 1.0123862471405223,
+   "dilatation_only_dti_q10": 0.05440401188062678,
+   "spearman_shear_only": 0.1770915315559116,
+   "shear_only_area_q10": 0.9003365926941987,
+   "shear_only_recall_q10": 0.9542933214998891,
+   "shear_only_lift_q10": 1.0599295077457958,
+   "shear_only_dti_q10": 0.05311633111307063,
+   "uniform_dti": 0.048086484576844946
+  },
+  {
+   "split": 4,
+   "n_truth": 12938,
+   "n_known": 48050,
+   "residual_definition": "rank(observed scalar) - rank(fault tensor II); not an absolute strain subtraction",
+   "n_budget_trace_rows": 1045,
+   "frac_budget_rows_excluded": 0.0719360568383659,
+   "spearman_deficit": -0.000849404055478242,
+   "deficit_area_q10": 0.9001330076230224,
+   "deficit_recall_q10": 0.9384758076982532,
+   "deficit_lift_q10": 1.0425968159711003,
+   "deficit_dti_q10": 0.05397674371071827,
+   "spearman_dilatation_residual": -0.08004640140133462,
+   "dilatation_residual_area_q10": 0.900997470087799,
+   "dilatation_residual_recall_q10": 0.8690678621116092,
+   "dilatation_residual_lift_q10": 0.9645619338164421,
+   "dilatation_residual_dti_q10": 0.04652389902181773,
+   "spearman_shear_residual": 0.016432228407490906,
+   "shear_residual_area_q10": 0.9010212732852844,
+   "shear_residual_recall_q10": 0.9449683104034626,
+   "shear_residual_lift_q10": 1.0487746942510463,
+   "shear_residual_dti_q10": 0.05387645524690314,
+   "spearman_combined_residual_prior": -0.034926925815644334,
+   "combined_residual_prior_area_q10": 0.9011561580710353,
+   "combined_residual_prior_recall_q10": 0.9565620652341938,
+   "combined_residual_prior_lift_q10": 1.0614831365983863,
+   "combined_residual_prior_dti_q10": 0.05379348309902977,
+   "spearman_geodetic_only": 0.10923435943603133,
+   "geodetic_only_area_q10": 0.9000221195566876,
+   "geodetic_only_recall_q10": 0.9117328798887,
+   "geodetic_only_lift_q10": 1.0130116361337658,
+   "geodetic_only_dti_q10": 0.05032929592633668,
+   "spearman_dilatation_only": -0.020591971198499634,
+   "dilatation_only_area_q10": 0.9002464114744572,
+   "dilatation_only_recall_q10": 0.8799659916524966,
+   "dilatation_only_lift_q10": 0.9774723680500491,
+   "dilatation_only_dti_q10": 0.04563820889983645,
+   "spearman_shear_only": 0.1335515365944726,
+   "shear_only_area_q10": 0.9003365926941987,
+   "shear_only_recall_q10": 0.9111145462977276,
+   "shear_only_lift_q10": 1.011971026937022,
+   "shear_only_dti_q10": 0.04866668984752911,
+   "uniform_dti": 0.049941381705682054
+  }
+ ],
+ "summary": {
+  "n_truth": {
+   "mean": 12197.6,
+   "per_split": [
+    11492.0,
+    10961.0,
+    12076.0,
+    13521.0,
+    12938.0
+   ]
+  },
+  "n_known": {
+   "mean": 48790.4,
+   "per_split": [
+    49496.0,
+    50027.0,
+    48912.0,
+    47467.0,
+    48050.0
+   ]
+  },
+  "n_budget_trace_rows": {
+   "mean": 1044.8,
+   "per_split": [
+    1044.0,
+    1045.0,
+    1045.0,
+    1045.0,
+    1045.0
+   ]
+  },
+  "frac_budget_rows_excluded": {
+   "mean": 0.07211367673179396,
+   "per_split": [
+    0.0728241563055062,
+    0.0719360568383659,
+    0.0719360568383659,
+    0.0719360568383659,
+    0.0719360568383659
+   ]
+  },
+  "spearman_deficit": {
+   "mean": 0.04021934019532978,
+   "per_split": [
+    0.037774688729863906,
+    0.01608046252904921,
+    0.03838687876763256,
+    0.10970407500558142,
+    -0.000849404055478242
+   ]
+  },
+  "deficit_area_q10": {
+   "mean": 0.9006288882184428,
+   "per_split": [
+    0.9006142966648624,
+    0.9010953921847716,
+    0.9009398005524277,
+    0.9003619440671304,
+    0.9001330076230224
+   ]
+  },
+  "deficit_recall_q10": {
+   "mean": 0.9539005249418414,
+   "per_split": [
+    0.9568395405499478,
+    0.9417023994161117,
+    0.9786353097052004,
+    0.9538495673396938,
+    0.9384758076982532
+   ]
+  },
+  "deficit_lift_q10": {
+   "mean": 1.0591471679793076,
+   "per_split": [
+    1.0624298815744961,
+    1.0450640493598413,
+    1.086238291509746,
+    1.0594068014813556,
+    1.0425968159711003
+   ]
+  },
+  "deficit_dti_q10": {
+   "mean": 0.05062738717100875,
+   "per_split": [
+    0.04995599251385913,
+    0.04624284993620545,
+    0.05291264473983567,
+    0.05004870495442527,
+    0.05397674371071827
+   ]
+  },
+  "spearman_dilatation_residual": {
+   "mean": 0.020365418768274655,
+   "per_split": [
+    0.0842580318843716,
+    -0.005487393133724487,
+    0.032020035792028924,
+    0.07108282070003187,
+    -0.08004640140133462
+   ]
+  },
+  "dilatation_residual_area_q10": {
+   "mean": 0.9009218417172518,
+   "per_split": [
+    0.9008134307316309,
+    0.9008571666879863,
+    0.900592235164754,
+    0.9013489059140882,
+    0.900997470087799
+   ]
+  },
+  "dilatation_residual_recall_q10": {
+   "mean": 0.8910566324718182,
+   "per_split": [
+    0.9150713539853811,
+    0.8804853571754402,
+    0.889615766810202,
+    0.9010428222764588,
+    0.8690678621116092
+   ]
+  },
+  "dilatation_residual_lift_q10": {
+   "mean": 0.9890496638672699,
+   "per_split": [
+    1.0158278315657105,
+    0.9773861936543798,
+    0.9878119442673811,
+    0.9996604160324364,
+    0.9645619338164421
+   ]
+  },
+  "dilatation_residual_dti_q10": {
+   "mean": 0.048569350148542065,
+   "per_split": [
+    0.05052573159845409,
+    0.04279957413323487,
+    0.04935838188584257,
+    0.05363916410336106,
+    0.04652389902181773
+   ]
+  },
+  "spearman_shear_residual": {
+   "mean": 0.030587628268371518,
+   "per_split": [
+    0.011754083244100131,
+    -0.008331781975151973,
+    0.0366738837464484,
+    0.09640972791897014,
+    0.016432228407490906
+   ]
+  },
+  "shear_residual_area_q10": {
+   "mean": 0.9005976924832018,
+   "per_split": [
+    0.9000509543243733,
+    0.9006922860029651,
+    0.9001899030706705,
+    0.9010340457327156,
+    0.9010212732852844
+   ]
+  },
+  "shear_residual_recall_q10": {
+   "mean": 0.9569617227774255,
+   "per_split": [
+    0.952140619561434,
+    0.9534713985950187,
+    0.9755713812520702,
+    0.9586569040751424,
+    0.9449683104034626
+   ]
+  },
+  "shear_residual_lift_q10": {
+   "mean": 1.062587731510149,
+   "per_split": [
+    1.0578741292221194,
+    1.0585983841676643,
+    1.08373952865308,
+    1.0639519212568358,
+    1.0487746942510463
+   ]
+  },
+  "shear_residual_dti_q10": {
+   "mean": 0.05139884706290745,
+   "per_split": [
+    0.05028894407045834,
+    0.04759899496689304,
+    0.05217075114402517,
+    0.05305908988625756,
+    0.05387645524690314
+   ]
+  },
+  "spearman_combined_residual_prior": {
+   "mean": 0.035265739041506185,
+   "per_split": [
+    0.06097139879353093,
+    0.0067835836962305916,
+    0.06592997981920036,
+    0.07757065871421336,
+    -0.034926925815644334
+   ]
+  },
+  "combined_residual_prior_area_q10": {
+   "mean": 0.9010452313003146,
+   "per_split": [
+    0.9017487222230716,
+    0.9000091535873257,
+    0.9009817948114061,
+    0.9013303278087338,
+    0.9011561580710353
+   ]
+  },
+  "combined_residual_prior_recall_q10": {
+   "mean": 0.954321222168344,
+   "per_split": [
+    0.9611903933170901,
+    0.9240945169236383,
+    0.97250745279894,
+    0.9572516825678574,
+    0.9565620652341938
+   ]
+  },
+  "combined_residual_prior_lift_q10": {
+   "mean": 1.0591184163749456,
+   "per_split": [
+    1.0659182204855002,
+    1.0267612426388235,
+    1.079386352087731,
+    1.062043130064287,
+    1.0614831365983863
+   ]
+  },
+  "combined_residual_prior_dti_q10": {
+   "mean": 0.04921576317333988,
+   "per_split": [
+    0.04881074037739561,
+    0.04472777174758725,
+    0.0481002531382063,
+    0.05064656750448047,
+    0.05379348309902977
+   ]
+  },
+  "spearman_geodetic_only": {
+   "mean": 0.0992971254632764,
+   "per_split": [
+    0.03736713058363244,
+    0.08299061483947416,
+    0.07526516658311413,
+    0.19162835587412994,
+    0.10923435943603133
+   ]
+  },
+  "geodetic_only_area_q10": {
+   "mean": 0.9000221195566876,
+   "per_split": [
+    0.9000221195566876,
+    0.9000221195566876,
+    0.9000221195566876,
+    0.9000221195566876,
+    0.9000221195566876
+   ]
+  },
+  "geodetic_only_recall_q10": {
+   "mean": 0.9278592772446169,
+   "per_split": [
+    0.8941872607030978,
+    0.9248243773378342,
+    0.9879099039417025,
+    0.9206419643517492,
+    0.9117328798887
+   ]
+  },
+  "geodetic_only_lift_q10": {
+   "mean": 1.0309294150477553,
+   "per_split": [
+    0.9935169828309733,
+    1.0275573869155161,
+    1.097650693772176,
+    1.0229103755863445,
+    1.0130116361337658
+   ]
+  },
+  "geodetic_only_dti_q10": {
+   "mean": 0.05009002163384633,
+   "per_split": [
+    0.04941743206462865,
+    0.04639561672766755,
+    0.052065678823882765,
+    0.05224208462671598,
+    0.05032929592633668
+   ]
+  },
+  "spearman_dilatation_only": {
+   "mean": 0.052876194157664945,
+   "per_split": [
+    0.09749171958777288,
+    0.02793543775573245,
+    0.046777358226672255,
+    0.11276842641664679,
+    -0.020591971198499634
+   ]
+  },
+  "dilatation_only_area_q10": {
+   "mean": 0.900246411474457,
+   "per_split": [
+    0.9002464114744572,
+    0.9002464114744572,
+    0.9002464114744572,
+    0.9002464114744572,
+    0.9002464114744572
+   ]
+  },
+  "dilatation_only_recall_q10": {
+   "mean": 0.8960096424557543,
+   "per_split": [
+    0.8813087365123564,
+    0.8824012407627041,
+    0.9249751573368665,
+    0.9113970860143481,
+    0.8799659916524966
+   ]
+  },
+  "dilatation_only_lift_q10": {
+   "mean": 0.9952937673900152,
+   "per_split": [
+    0.9789638984163415,
+    0.9801774597662372,
+    1.0274688635769262,
+    1.0123862471405223,
+    0.9774723680500491
+   ]
+  },
+  "dilatation_only_dti_q10": {
+   "mean": 0.04824438753720893,
+   "per_split": [
+    0.047123410524714165,
+    0.04469155591837905,
+    0.04936475046248821,
+    0.05440401188062678,
+    0.04563820889983645
+   ]
+  },
+  "spearman_shear_only": {
+   "mean": 0.09157235868909756,
+   "per_split": [
+    0.009154143137428846,
+    0.05748759313140212,
+    0.08057698902627267,
+    0.1770915315559116,
+    0.1335515365944726
+   ]
+  },
+  "shear_only_area_q10": {
+   "mean": 0.9003365926941986,
+   "per_split": [
+    0.9003365926941987,
+    0.9003365926941987,
+    0.9003365926941987,
+    0.9003365926941987,
+    0.9003365926941987
+   ]
+  },
+  "shear_only_recall_q10": {
+   "mean": 0.9260453663775607,
+   "per_split": [
+    0.9206404455273234,
+    0.8782957759328528,
+    0.96588274263001,
+    0.9542933214998891,
+    0.9111145462977276
+   ]
+  },
+  "shear_only_lift_q10": {
+   "mean": 1.0285546248947075,
+   "per_split": [
+    1.0225514024397995,
+    0.9755193591594559,
+    1.072801828191464,
+    1.0599295077457958,
+    1.011971026937022
+   ]
+  },
+  "shear_only_dti_q10": {
+   "mean": 0.048681933410643544,
+   "per_split": [
+    0.04746877100452862,
+    0.04251842268278986,
+    0.05163945240529952,
+    0.05311633111307063,
+    0.04866668984752911
+   ]
+  },
+  "uniform_dti": {
+   "mean": 0.04856426582063665,
+   "per_split": [
+    0.04468426172664794,
+    0.04881086068660077,
+    0.05129834040740754,
+    0.048086484576844946,
+    0.049941381705682054
+   ]
+  }
+ }
+}

@@ -70,12 +70,19 @@ def main() -> int:
         failures.append(f"public TIFF/ZIPs do not match manifest: found={sorted(public_downloads)}, "
                         f"allowed={sorted(allowed_downloads)}")
     index = (DOCS / "index.html").read_text(encoding="utf-8")
+    readiness = manifest.get("submission_readiness", {}).get("status", "")
     if manifest.get("primary"):
         for name in allowed_current:
             if f'href="downloads/{name}"' not in index:
                 failures.append(f"primary artifact is not linked from index: {name}")
-        if "One-click submission file" not in index:
-            failures.append("eligible primary is not prominently marked in index")
+        if readiness == "PORTAL_ACCEPTED":
+            if "Portal-validated submission file" not in index:
+                failures.append("portal-accepted primary is not prominently marked in index")
+        else:
+            index_upper = index.upper()
+            if ("NO UPLOAD-ELIGIBLE ARTIFACT" not in index_upper
+                    or "NOT CLEARED FOR UPLOAD" not in index_upper):
+                failures.append("blocked local benchmark is not prominently marked NOT FOR UPLOAD in index")
     else:
         if ("No eligible submission file" not in index
                 and "No upload-eligible submission file" not in index):

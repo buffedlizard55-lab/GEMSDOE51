@@ -24,40 +24,29 @@
 
 <h2>Submission guide — current status first</h2>
 
-<p class="download"><b>Current primary: HOLDOUT_PROMOTED_UNSCORED.</b>
-This candidate passed the frozen six-fold local promotion rule, scoped reference-aware
-uniqueness, q70 Stage-1 non-dominance, and the written GeoTIFF checks. It has not been
-uploaded and no DrivenData score or portal acceptance is claimed.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a></p>
-<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP</a></p>
+<p class="download missing"><b>NO UPLOAD-ELIGIBLE ARTIFACT.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
+<p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
+<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
 <dl class="kv">
-<dt>Unique submission name</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Note</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.</code></dd>
-<dt>Format receipt</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
+<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
 <dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
 </dl>
+<p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
 
-<h3>Before any upload</h3>
+<h3>Do not upload now</h3>
+<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+<h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
-<li>Return to the <a href="index.html">executive summary</a> and download only the current
-primary GeoTIFF shown there. If using the ZIP, confirm it contains exactly that one TIFF.</li>
-<li>Recheck the displayed SHA-256 and the local receipt. The local verifier checks one band,
-float32 values in [0,1], the template grid and CRS EPSG:32611, finite in-footprint values,
-and NaN outside the footprint. A local pass does not prove portal acceptance.</li>
-<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
-(requires the participant's own login), choose the current file, and paste the exact unique
-name and note shown above. Do not reuse an archived name or relabel a previous TIFF.</li>
-<li>Include the required narrative with an accurate generative-AI disclosure. Read the current
-official rules and verify the final file, scientific claims, provenance, and license position
-before submitting.</li>
+<li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>
+<li>Run the local verifier and a separate full-grid `[0,1]` scan, then confirm official CRS, transform, dtype, footprint behavior, uniqueness, and all-points-inside-approved checks. Local checks do not prove portal acceptance.</li>
+<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a> using the participant's own account; paste only the unique name and short note attached to that new artifact. Do not reuse an archived name or relabel a previous TIFF.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure. Read the current official rules and verify data provenance, claims, and license position before submitting.</li>
 </ol>
-
-<h3>Current artifact interpretation</h3>
-<p>The primary is a substantively new fixed 50/50 H-H/H-D probability blend emitted with STE
-line length 9, continuity weight 0.35, and spacing 2.4 pixels. Stage 1 is retained as a
-coarse diagnostic only and has <code>stage1_weight=0.0</code>; it does not dominate fine-scale
-placement. The local holdout truth is the visible known-fault catalogue, not hidden organizer
-labels, so “holdout-promoted” is not a competition-score claim.</p>
+<h3>Existing local benchmark interpretation</h3>
+<p>The retained H-H/H-D blend is an earlier local benchmark (six-fold visible-catalogue proxy mean DTI 0.2853406), not a new TIFF and not upload-eligible. It contains NaN outside the footprint and only 86.71% of its points lie inside the current full-map q10 approved domain. H51-K1 did not pass the frozen gated holdout rule; no K1 TIFF was written. No organizer score, upload, or portal acceptance is claimed.</p>
 
 <h3>Generative-AI narrative disclosure</h3>
 <p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">GEMS Prize Rules</a>

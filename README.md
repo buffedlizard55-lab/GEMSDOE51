@@ -1,291 +1,139 @@
-# GEMSDOE51 — DOE GEMS Prize research and submission record
+# GEMSDOE51 — DOE GEMS / GeoDAWN fault-discovery research record
 
-**Working status: `HOLDOUT_PROMOTED_UNSCORED` (local only; no organizer upload or score).**
+**Current decision (2026-10-07): NO NEW UPLOAD-ELIGIBLE TIFF. NO COMPETITION SLOT USED.**
 
-This repository is a reproducible, guarded research record for DrivenData competition #306,
-the DOE GEMS Prize / GeoDAWN Northwest Great Basin task. The current primary is a new
-H-H/H-D blend that passed the repository's frozen local promotion and artifact gates. It is
-obvious to download below, but it has **not** been uploaded to DrivenData and no portal
-acceptance, leaderboard score, or hidden-label result is claimed.
+The existing local H-H/H-D blend is retained as the best reproducible local benchmark (six-fold visible-catalogue proxy mean DTI `0.2853406`), but it is an earlier artifact, not the new TIFF requested in this work. It has not been uploaded or accepted by DrivenData. A user-reported submission-form error—“Predicted values must be in range [0, 1]”—is unresolved, and the exact file that triggered it was not identified. The local verifier does not emulate the portal.
 
-## Master Prompt & Competition Directives
+The preregistered H51-K1 candidate was implemented and evaluated on the six spatial folds with a fold-specific, leakage-controlled broad Stage-1 q10 mask. It **did not pass** the preregistered promotion gates. No candidate TIFF or replacement ZIP was written. Do not treat the earlier local benchmark as portal-ready or upload-eligible.
 
-```text
-Review the repo.
+## Full user task brief and standing acceptance criteria
 
-THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!
+This full working brief is retained so a future session can continue without asking for manual design input. It consolidates the original request and subsequent corrections; it is not a claim that every result below succeeded.
 
-MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION.  DO NOT COPY A PREVIOUS SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION.  BUT WE MUST GENERATE A UNIQUE TIF SUBMISSION.  IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED TIF SUBMISSION.
+> Review the repository and complete the end-to-end DOE GEMS project. Critically assess the claimed GEMSDOE32 `0.2778` result attributed to `H33-2-B2` and the stated `0.3195` leaderboard high; do not hallucinate a score-to-file or geological explanation. Use trusted, checked sources, link them, and distinguish owner reports, local measurements, user-supplied claims, and organizer facts.
+>
+> Before implementation, propose and rank 3–5 distinct geological hypotheses. For each, identify its layers, target physical signature/operator, why it could expose fault geometry missing from the existing USGS/INGENIOUS catalogue rather than merely recover known-fault habitat, how it differs from implemented repository/prior-art work, expected benefit, and implementation cost. If outside data is needed, name the free official source and verify availability before treating it as viable.
+>
+> Validate the leading candidate on the same spatially blocked holdout before using any competition submission slot. Do not spend a slot on an idea that has not beaten the current spatially blocked best under a preregistered rule. Report Stage 1 and Stage 2 holdouts separately. Stage 1 must remain coarse and non-dominant. Reconcile that with the requirement that every Stage-2 prediction point lie inside an approved Stage-1 tile; implement and validate the actual allowed-domain mask rather than assuming `stage1_weight=0.0` provides confinement.
+>
+> If and only if a candidate passes promotion, Stage-1 confinement/non-dominance, scoped uniqueness, and format gates, generate a substantively new, uniquely named and commented single-band GeoTIFF. Do not copy, relabel, or merely re-encode a previous submission to satisfy the requirement. Make file/download/submission status obvious. Check exact grid, CRS, affine transform, dtype, `[0,1]` values (including the outside-footprint encoding against the live portal issue), and the official submission format. Never claim upload, organizer score, or acceptance without evidence.
+>
+> Review and update the site, preserve auditable research and source links, include this full prompt in README, and autonomously attempt a pull request and merge to `main`. State blockers and irregularities. No manual user input is expected.
 
-There should be an easy to download submission tif file as described by the prompt.  Read the entire prompt.
+This session is fixed to branch `arena/ec87b811-gemsdoe51`. Do not switch branches. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
 
-Geodetic strain-budget deficit, used strictly as a coarse first stage. Hypothesis: where the geodetic strain rate exceeds what the mapped faults' slip rates can accommodate, the catalogue is likelier to be missing structures. Precedent for balancing geodetic and geologic deformation exists in the UCERF3 deformation models (Field et al., Bulletin of the Seismological Society of America 104(3), 1122–1180, 2014, doi:10.1785/0120130164). Three of those models invert geodetic and geologic data together, and UCERF3 also models off-fault strain explicitly. A related USGS-listed paper ("A fault-based model for crustal deformation, fault slip-rates and off-fault strain rate in California") estimates off-fault moment rates separately. Convert each mapped fault's slip rate (the INGENIOUS compilation is reported to hold slip rates; confirm in the shapefile attributes) and trace length into an equivalent tile strain rate using a documented moment-tensor summation. State the exact formula and cite its source, because I haven't verified one. Subtract that from the dilatation and shear strain-rate layers, and keep the residual only as a prior over broad tiles. Strain rates are coarse, and the deficit can be distributed off-fault, aseismic or caused by wrong catalogue slip rates. Habitat-style statements scored worst in this project (0.0041, 0.1223, 0.1352), so a second, separately holdout-scored fine-scale model must place points only inside approved tiles. Report both stages' holdout results separately. Normalize, write the GeoTIFF, run the uniqueness gate, and confirm the submission isn't dominated by stage one's footprint.
+## Current status and local benchmark
 
-The following sites should serve as a starting point for understanding how to generate TIF submissions.  These websites are researched, and tested and have generated TIF submissions.  But we need to generate high scoring submissions.
-...
-WE NEED TO STUDY, ANALYZE, AND UNDERSTAND THE HIGHEST SCORE FROM THE GEMDOE SITE WHERE THE SUBMISSION TIF IS DOWNLOADED FROM WHICH IS THE FOLLOWING:
-https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html
-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros: 0.2778
-Why and how did this get the highest score and are we able to generate a submission that scores higher than 0.2778?
-Answer the question using Phd level experience, knowledge, and judgement. Then use the answer to generate a unique TIF submission into the competition.  Must be unique submission unlike any within the GEMSDOE sites above.  Verify working line by line no hallucinations.
-...
-Before implementing, generate 3–5 candidate geological hypotheses we haven't tried yet, each naming: the specific layer(s) involved, the physical signature being targeted (e.g., an edge-detection or curvature transform), why it should catch a fault missing from the USGS/INGENIOUS catalogue rather than one already in it, and how it differs from anything already implemented in this repo. Rank them by expected DTI improvement and implementation cost. Validate the top candidate on our spatially-blocked holdout set before touching a weekly submission slot — do not spend a submission slot on an idea that hasn't beaten the current holdout best. If a candidate can't be validated without new external data, name the specific free, official source needed and check it's obtainable before proposing the idea as viable.
-...
-I tried to submit the document that i downloaded from the site but it returned this error on the submission form:
-"Predicted values must be in range [0, 1]"
-Also we need to give it a unique name and A short comment to help you or your team tell submissions apart later e.g. clustering with k=25
-...
-Create a executive summary subpage that explains exactly how to make a submission into the contest.
-...
-Go ahead and create a pull request and then merge the pull request onto the main. Make suggestions for what work still needs to be done and any limitations that is in the way of a successful project.  It should be worked on in this next session or the next session.  Work line by line verify everything no hallucinations.
-```
+| Item | Status / result |
+|---|---|
+| Existing local H-H/H-D blend + STE L9 | Historical local best only; not portal-validated, not uploaded, no organizer score |
+| Six-fold H-H/H-D proxy DTI | `0.2853406027`, visible known-fault catalogue; `4/6` folds beat H-D |
+| Existing H-D proxy comparator | `0.2816626603` |
+| H51-K1 new-operator screen | **NOT PROMOTED**; no new TIFF; no slot |
+| Portal `[0,1]` validation error | **OPEN BLOCKER**; triggering file identity unknown |
+| Organizer score / acceptance | None verified for GEMSDOE51 |
 
-## Read this brief before changing the project
+The existing local benchmark artifacts are linked for audit only:
 
-The operating objective is **Maximize P(Win)** while **Owning the Outcome**:
+- [GeoTIFF](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif)
+- [One-file ZIP](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip)
+- [Local checks receipt](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json)
+- [Submission manifest](data/submission_manifest.json)
+- SHA-256: `9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777`
+- Earlier identifier (do **not** paste until the portal issue is resolved): `GEMSDOE51-HH-HD-BLEND-STE-R347-20261007`
+- Earlier note: `H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.`
 
-- Work autonomously, but flag irregularities rather than hiding them.
-- Verify claims and data line by line. Do not turn a local measurement, owner report,
-  projection, or proxy holdout into an organizer fact.
-- Never copy, relabel, or repackage a prior submission to satisfy a file requirement.
-  A candidate must be substantively generated by the current pipeline and pass the scoped
-  uniqueness gate. Prior artifacts are for audit and learning only.
-- Do not spend a competition slot on an idea that has not beaten the current spatially
-  blocked holdout best under a predeclared rule.
-- Keep Stage 1 coarse and non-dominant. It may be a diagnostic or broad-tile prior, but it
-  must not hard-gate or dictate fine-scale Stage 2 without evidence.
-- Use free public official or trusted sources for external data. Check provenance,
-  availability, license, units, spatial alignment, and missingness before treating a source
-  as viable.
-- Keep the final single-band GeoTIFF and its one-file ZIP easy to find. It must satisfy the
-  competition grid, CRS, dtype, footprint null behavior, and `[0,1]` requirements.
-- The participant's DrivenData authentication is unavailable in this checkout. Never imply
-  that an upload, score, or weekly slot exists unless the organizer actually returns it.
-- Do not scrape, copy, or mirror leaderboard standings. Owner-reported and user-supplied
-  score claims remain unverified unless tied to an organizer-authenticated artifact.
+This old raster is locally verified as one-band `float32`, EPSG:32611, shape `3730 × 3292`, correct template transform, finite in-footprint values in `[0,1]`, and NaN outside with a NaN NoData tag. **The portal's reported range error remains unresolved**: local validity is not evidence that the portal accepts NaN outside. The exact file used in the reported portal attempt was not recorded. Do not infer that the old H-H/H-D TIFF either caused or fixes the error.
 
-The fixed working branch for this session is `arena/c5badd9d-gemsdoe51`. Do not switch to,
-create, or push another branch.
+## Preregistered candidate slate and result
 
-## Current primary — download only this file for a future upload
+The full four-item slate, exact operators, source checks, prior-art boundaries, costs, and outcome are in [`knowledge/candidate-hypotheses-2026-10-07.md`](knowledge/candidate-hypotheses-2026-10-07.md) and [`evidence/candidate_hypotheses_prereg_20261007.json`](evidence/candidate_hypotheses_prereg_20261007.json). They are also linked from the [hypotheses page](docs/hypotheses.html).
 
-**Candidate:** fixed 50/50 H-H/H-D probability blend, emitted with STE line length 9,
-continuity weight 0.35, and spacing 2.4 pixels. Stage 1 is retained as a diagnostic only;
-the emitted artifact uses `stage1_weight=0.0`.
+1. **H51-K1 (top):** cross-scale potential-field tilt-like partial-gradient edge persistence using `tmi_hg/tmi_vg` and `iso_grav_anom_hg/iso_grav_anom_vg`.
+2. **H51-K2:** directional conductivity contrast across an independent basement/potential-field edge.
+3. **H51-K3:** radiometric-ratio lineaments conditional on independent structural edges.
+4. **H51-K4:** earthquake-density ridge conditioned on independent structural edges; blocked until source semantics are verified.
 
-- **GeoTIFF:** [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif`](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif)
-- **One-file ZIP:** [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip`](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip)
-- **Checks receipt:** [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json`](docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json)
-- **Manifest:** [`data/submission_manifest.json`](data/submission_manifest.json)
-- **SHA-256:** `9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777`
-- **Predicted pixels:** `44,069`; total mass `44,069.0`
-- **Submission name:** `GEMSDOE51-HH-HD-BLEND-STE-R347-20261007`
-- **Note:** `H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.`
+The slate is operator-level and inspection-bounded, not a claim of global novelty. The local gravity HG band is signed; its available metadata does not establish whether it is a full 2-D magnitude or a directional component. K1 therefore tests a precisely coded **tilt-like partial-gradient proxy**, not a conventional total-horizontal-derivative tilt angle.
 
-### What “promoted” means here
+### H51-K1 Stage-2 holdout (separate from Stage 1)
 
-The artifact passed a **local** six-fold spatially blocked proxy rule using the visible known-fault
-catalogue, plus a source-aware uniqueness preflight, a q70 Stage-1 non-dominance check, and written
-GeoTIFF checks. “Promoted” does not mean submitted, accepted, scored, or validated against the
-hidden expert labels. The measured improvement belongs to the fixed blend; it does not prove that
-pure H-H alone caused the gain.
+Receipt: [`evidence/hk1_spatial_holdout_20261007.json`](evidence/hk1_spatial_holdout_20261007.json). This is a six-fold 3×3 contiguous spatial holdout, 12-pixel/1.2-km training buffer, 250,000 sampled negatives per fold, fixed seeds, `M/|G|=3.47`, and the same STE L9 / continuity `0.35` / spacing `2.4` rule. The proxy truth is the visible known-fault catalogue, not the hidden expert labels.
 
-Measured local promotion receipt:
+| Fold | Fresh H-D/H-H, ungated | H51-K1 blend, ungated | H-D/H-H, q10-gated | H51-K1, q10-gated | Paired gated Δ |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0.283432 | 0.283529 | 0.283432 | 0.283529 | +0.000097 |
+| 1 | 0.271784 | 0.275603 | 0.270436 | 0.274444 | +0.004008 |
+| 2 | 0.290270 | 0.292220 | 0.289119 | 0.290417 | +0.001298 |
+| 3 | 0.243359 | 0.242234 | 0.243359 | 0.242234 | −0.001126 |
+| 4 | 0.305049 | 0.304764 | 0.305049 | 0.304764 | −0.000286 |
+| 5 | 0.317996 | 0.315072 | 0.317996 | 0.315072 | −0.002924 |
+| **Mean** | **0.285315** | **0.285570** | **0.284899** | **0.285077** | **+0.000178** |
 
-| quantity | result |
-|---|---:|
-| primary mean proxy DTI | `0.2853406027` |
-| H-D incumbent mean proxy DTI | `0.2816626603` |
-| paired mean improvement | `+0.0036779424` |
-| folds higher | `4/6` |
-| maximum support Jaccard against scoped prior corpus | `0.2476890191` (limit `0.50`) |
-| maximum support containment | `0.3970364655` (limit `0.60`) |
-| q70 approved footprint share | `0.3005457512` |
-| emitted share inside q70 approved area | `0.1635389957` |
-| q70 emission lift over area share | `0.5441401018` |
+The fresh ungated H-D/H-H reconstruction missed the frozen `0.2853406027` receipt by `−0.00002545`, outside the preregistered `1e-5` reproduction tolerance. The final K1 q10-gated mean (`0.2850766`) did not exceed the frozen ungated best (`0.2853406`), and the paired q10-gated gain over the same-fold q10-gated baseline was positive in only `3/6` folds. It is therefore **not promoted**, despite the ungated K1 point estimate of `0.2855703`. The separate receipts preserve every fold and metric. No K1 TIFF was built.
 
-These are repository-local proxy measurements. The official target consists of hidden expert labels;
-the local holdout cannot establish performance on those labels.
+### Stage 1 q10 trace holdout (reported separately)
 
-## Artifact format and upload guide
+The q10 Stage-1 prior was evaluated before K1's six-fold comparison by holding out complete trace-table rows and removing held-out rows from the fault-budget tensor. Receipt: [`evidence/stage1_q10_trace_holdout_20261007.json`](evidence/stage1_q10_trace_holdout_20261007.json).
 
-The final TIFF is locally checked as:
+- q10 deficit mask mean approved area: `0.90063` of footprint.
+- Held-out trace recall inside mask: `0.95390`; mean lift `1.05915`.
+- Uniform-random-dot proxy DTI inside mask: `0.0506274`, versus `0.0485643` over the full footprint.
+- During the six spatial Stage-2 folds, the separately rebuilt fold-specific q10 masks approved `0.90135` of footprint on average. Confining every K1 point to them gave Stage-1 lift `1.10945`, below the preregistered non-dominance limit `1.5`; all evaluated candidate points were inside the approved mask.
 
-- one band, `float32`;
-- CRS `EPSG:32611`;
-- template shape `3730 × 3292` and matching transform/bounds;
-- finite in-footprint predictions in `[0,1]`;
-- `NaN` outside the footprint with a NaN NoData tag;
-- `44,069` predicted pixels and total mass `44,069.0`.
+This is weak coarse enrichment, not a strong predictor. Slip-rate units/component remain provisional (see IR-51-12 and the [irregularities page](docs/irregularities.html)); Stage-1 has zero soft score weight. The q10 mask is only a broad allowed-domain constraint for the tested K1 comparison. The old local H-H/H-D TIFF was created before this q10 allowed-domain requirement and fails it: on the current full-data q10 deficit mask, 38,211 of 44,069 predicted points (86.71%) are inside the 90.09% approved area (lift 0.9624). It was not rebuilt under the q10 constraint.
 
-Run the repository check before handling the file:
+## GEMSDOE32 `0.2778` and the stated `0.3195` high
 
-```bash
-PYTHONPATH=src .venv/bin/python scripts/check_submission.py \
-  docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif
-```
+The file-to-score story for `H33-2-B2 = 0.2778` is **unsupported**. The sibling GEMSDOE32 owner README/site labels `H33-2-B2` as **UNSCORED** and describes `0.2747` as a modeled projection. No organizer-authenticated mapping from the named TIFF to an observed score, exact prediction field, or hidden labels has been verified. A public DTI value alone cannot reveal a method's causal contribution or geological mechanism. See [`evidence/score_attribution_audit.json`](evidence/score_attribution_audit.json) and the [case-study page](docs/analysis.html).
 
-A local format pass is not portal acceptance. If an entrant later uploads, they must use the exact
-primary file or its one-file ZIP, verify the checksum, paste the unique name and note above, and
-include an accurate narrative disclosure required by the official rules. The official submission
-page is <https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/>.
+The `0.3195` “current leaderboard high” is preserved as a **user-supplied, unverified claim**, not a verified fact in this repository. We do not mirror or manually monitor leaderboard rows because of the current Terms of Use. Use the [official leaderboard link](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) directly; no GEMSDOE51 score is claimed.
 
-The current generated guide is [`docs/how-to-submit.html`](docs/how-to-submit.html), and the
-one-click site card is [`docs/index.html`](docs/index.html). Do not upload the research-only H-G
-artifact or any archived zero-outside TIFF.
+The official metric is the published distance-weighted Tversky index, `DTI = TP_w / (0.2·(TP_w + FP_w) + 0.8·|G|)`, with a triangular distance-credit kernel that reaches zero at 300 m. Explaining a score requires the exact scored raster, hidden truth geometry and size, and weighted TP/FP; none can be inferred from the number alone.
 
-## Stage 1 — current trace holdout, still coarse and separate
+## Site review and submission-status pages
 
-Stage 1 uses the approximate Kreemer et al. (2000) Eq. 3 fault-slip tensor to compare a geodetic
-field with a catalogue-derived fault budget. The implementation is in
-[`src/gems51/strain_budget.py`](src/gems51/strain_budget.py); the current runner is
-[`scripts/run_stage1_trace_holdout.py`](scripts/run_stage1_trace_holdout.py).
+The static site is generated from current records by `scripts/build_site.py` and checked by `scripts/check_site.py`. The key pages are:
 
-A five-split trace holdout now removes complete held-out trace rows from the catalogue-derived
-budget before calculating each field. The current configuration is recorded in
-[`data/stage1_trace_holdout.json`](data/stage1_trace_holdout.json). The source slip-rate component
-and absolute units remain unresolved; the default run uses the explicit vertical-rate convention,
-provisionally treats values as mm/yr, and uses an explicit normal-fault fallback for unknown sense.
+- [Executive summary](docs/index.html)
+- [Submission instructions and current block](docs/how-to-submit.html)
+- [Hypotheses and K1 result](docs/hypotheses.html)
+- [Separate Stage-1 / Stage-2 holdouts](docs/holdout.html)
+- [GEMSDOE32 score-attribution review](docs/analysis.html)
+- [Irregularity register](docs/irregularities.html)
+- [Leaderboard policy / official link only](docs/leaderboard.html)
 
-### Rank-space residual convention
-
-The supplied dilatation and shear scalar layers are not source-verified to share units, signs, or
-tensor definitions with the fault second invariant. Therefore the runner reports:
-
-```text
-rank(observed scalar) - rank(fault tensor second invariant)
-```
-
-for dilatation and shear. These are coarse rank diagnostics, **not** absolute strain-rate
-subtractions. The combined residual diagnostic is the pixelwise maximum of the second-invariant,
-dilatation, and shear rank residuals. It was not used to place the primary's Stage 2 points.
-
-Current five-split means:
-
-| field | mean Spearman rank | mean q70 lift |
-|---|---:|---:|
-| second-invariant deficit | `0.0402193` | `1.0929273` |
-| dilatation rank residual | `0.0203654` | `1.0653125` |
-| shear rank residual | `0.0305876` | `1.0722356` |
-| combined residual diagnostic | `0.0352657` | `1.1476560` |
-| geodetic-only control | `0.0992971` | `1.2469427` |
-
-The geodetic-only control is stronger than the budget residuals in this diagnostic. This is why
-Stage 1 is not allowed to dominate the fine detector: the promoted builder locks its operational
-weight to `0.0`. The current reconciliation, including the old invalid formula-sensitivity audit,
-is in [`evidence/stage1_reconciliation_20261007.json`](evidence/stage1_reconciliation_20261007.json).
-
-The q70 diagnostic for the full primary is separately recorded in the manifest: only `16.3539%`
-of emitted pixels lie in `30.0546%` of the footprint, a lift of `0.5441`. That is non-dominance,
-not evidence that Stage 1 improves the competition target.
-
-## Stage 2 — model and holdout evidence
-
-The H-D incumbent is the fine-scale detector baseline. The H-H arm adds the exact
-potential-field edge-termination / conductive-relay feature construction described in the active
-hypothesis slate. The current primary blends the two predicted probability fields 50/50 and uses
-one fixed STE emission rule.
-
-The promotion evidence is [`evidence/hh_blend_holdout.json`](evidence/hh_blend_holdout.json):
-
-- same six spatial folds and visible known-fault proxy truth;
-- same ratio `M/|G| = 3.47`;
-- fixed blend weight `H-H = 0.5`;
-- fixed STE L9 / `w=0.35` / spacing `2.4`;
-- improvement over H-D on 4 of 6 folds.
-
-The H-H gate sweep showed that a Stage-1 soft/hard gate did not justify an operational nonzero
-weight. Do not silently rerun an old H-D soft candidate: the earlier `w=0.20` support was too
-similar to an existing artifact and failed uniqueness before writing.
-
-## Hypotheses and research record
-
-The active operator-level slate is [`evidence/hypothesis_slate_20261007.json`](evidence/hypothesis_slate_20261007.json)
-and its generated view is [`docs/hypotheses.html`](docs/hypotheses.html). The important status is:
-
-1. **H-G magnetic/gravity crossing add-on:** tested and rejected on the matched proxy holdout;
-   research-only despite passing its scoped uniqueness audit.
-2. **H-H potential-field terminations plus conductive relay bridge:** implemented as a model arm
-   and evaluated in the fixed 50/50 blend. The blend passed the local rule, but no pure-H-H causal
-   claim is made.
-3. **H-I directional conductivity cross-edge contrast:** not tested; lower priority.
-4. **H-J earthquake-density modulation of structural edges:** not tested and blocked pending
-   source-band semantics.
-
-The prior H51-X1 partial magnetic/gravity edge-normal test lost to H-D (`0.2796713` vs `0.2816627`,
-3/6 folds higher) and does not falsify the broader family. The historical H-M and STE-only positive
-point estimates remain research leads; their packaged variants fail the refreshed uniqueness audit.
-
-Research notes and hypothesis decisions:
-
-- [`knowledge/02_research_digest_2026-10-07.md`](knowledge/02_research_digest_2026-10-07.md)
-- [`knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md`](knowledge/02_gemsdoe32_study_and_candidates_2026-10-07.md)
-- [`knowledge/preregistration-2026-10-07.md`](knowledge/preregistration-2026-10-07.md)
-- [`registry/hypotheses.json`](registry/hypotheses.json)
-- [`registry/claims.json`](registry/claims.json)
-- [`registry/irregularities.json`](registry/irregularities.json)
+The site must say clearly that no new file is upload-eligible, that the K1 TIFF was not written, and that portal validation is unresolved. The old local benchmark link is for audit only. Before any future upload, identify the exact file from the user-reported error and resolve whether outside-footprint NaNs are accepted; do not assume the local verifier is the portal.
 
 ## Sources and provenance
 
-Use the official or trusted source links below for future review. Local mirrors and owner-supplied
-files are hash-checked where recorded, but are not organizer-authenticated.
-
-- [DrivenData competition](https://www.drivendata.org/competitions/306/competition-doe-gems/)
-- [DrivenData problem description, metric, data, and format](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
-- [DrivenData competition data page](https://www.drivendata.org/competitions/306/competition-doe-gems/data/)
-- [DrivenData rules / GEMS Prize PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
+- [DrivenData problem description, metric, data layers and format](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [DrivenData competition page](https://www.drivendata.org/competitions/306/competition-doe-gems/)
 - [DrivenData Terms of Use](https://www.drivendata.org/termsofuse/)
-- [DrivenData reference solution](https://github.com/drivendataorg/gems-prize-reference-solution)
 - [USGS GeoDAWN release](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and)
 - [INGENIOUS / GDR submission 1391](https://gdr.openei.org/submissions/1391)
-- [Kreemer et al. (2000), public UNR PDF](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf)
-- [NBMG QFaults INGENIOUS schema](https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson)
-- [USGS Siler (2022) ScienceBase release](https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d)
-- [EPSG:32611](https://epsg.io/32611)
+- [NBMG QFaults INGENIOUS REST schema](https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson); its schema does not establish the local slip-rate units
+- [Kreemer et al. (2000), public UNR PDF](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf), Eq. 3
+- [Miller & Singh (1994), potential-field tilt paper](https://doi.org/10.1016/0926-9851(94)90022-1); K1 is explicitly not claimed to be the conventional total-horizontal-derivative tilt angle
+- [USGS blind geothermal systems / Great Basin report](https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and)
+- [USGS GeoDAWN ScienceBase record, DOI 10.5066/P93LGLVQ](https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7)
 
-## Build and review commands
+All large rasters and owner-mirrored datasets are out of Git. Hash pins establish local mirror consistency, not organizer authentication.
 
-The canonical current writer is [`scripts/build_submission_hh_blend.py`](scripts/build_submission_hh_blend.py).
-It is fail-closed around the frozen 50/50 promotion receipt, reference coverage, uniqueness,
-Stage-1 non-dominance, GeoTIFF format, and final-byte checks. The legacy
-[`scripts/build_submission.py`](scripts/build_submission.py) is an H-D-only historical path and
-is not the current primary writer.
+## Reproduce, test, and review
 
-The generated site is built and checked with:
+With the hash-pinned data restored (`python scripts/restore_data.py --group all`), run:
 
 ```bash
+PYTHONPATH=src .venv/bin/python scripts/prepare_data.py
+PYTHONPATH=src .venv/bin/python src/gems51/stack.py
+PYTHONPATH=src .venv/bin/python scripts/build_extras.py
+PYTHONPATH=src .venv/bin/python scripts/run_stage1_trace_holdout.py \
+  --thresholds 10 --output evidence/stage1_q10_trace_holdout_20261007.json
+PYTHONPATH=src .venv/bin/python scripts/evaluate_hk1_holdout.py
+PYTHONPATH=src .venv/bin/python -m pytest -q
 PYTHONPATH=src .venv/bin/python scripts/build_site.py
 PYTHONPATH=src .venv/bin/python scripts/check_site.py
 ```
 
-The final review should also include:
-
-```bash
-python -m py_compile scripts/run_stage1_trace_holdout.py \
-  scripts/build_submission_hh_blend.py scripts/build_site.py scripts/check_site.py
-PYTHONPATH=src .venv/bin/pytest -q
-PYTHONPATH=src .venv/bin/python scripts/check_submission.py \
-  docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif
-```
-
-Before changing the primary, fetch the 21 commit-pinned family references with
-[`scripts/fetch_gate_refs.sh`](scripts/fetch_gate_refs.sh). References are comparison inputs only;
-never use them as candidate pixels.
-
-## Limitations and irregularities that must remain visible
-
-- The hidden expert labels are unavailable. All local DTI/AUC/holdout values are visible-known-fault
-  rediscovery proxies, not organizer scores.
-- `SLIPRTNUM` units and component semantics are not fully source-authenticated. Absolute Stage-1
-  nanostrain claims are therefore provisional; rank comparisons are used where appropriate.
-- The source scalar geodetic layers do not have a verified common invariant identity. Do not claim
-  dimensional dilatation/shear subtraction from the fault tensor.
-- Scoped uniqueness against the local inventory is not a global proof of uniqueness.
-- A locally format-valid file is not proof that DrivenData will accept it.
-- The final primary has not been uploaded. There is no claimed weekly slot, portal receipt,
-  organizer score, leaderboard position, or expert-label result.
-- H-G, H-M, old STE-only, and archived H-D variants remain research/audit artifacts and must not
-  be relabeled as the current primary.
-
-If a future review finds a contradiction, stop the promotion path, record the irregularity in
-`registry/irregularities.json`, and do not loosen a gate merely to obtain a file.
+`evidence/hk1_spatial_holdout_20261007.json` is the authoritative K1 outcome. It is `NOT_PROMOTED_NO_TIFF`; do not rerun the same configuration to shop for a passing result. Any new candidate requires a new preregistration and must clear every holdout, Stage-1 allowed-domain/non-dominance, uniqueness, format, portal-range, and provenance gate before it can produce a submission artifact.

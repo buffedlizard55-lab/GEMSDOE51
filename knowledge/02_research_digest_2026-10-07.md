@@ -17,14 +17,15 @@ session, labelled as such). Nothing is recalled from memory without a check.
 ## 0. What changed this session, in one paragraph
 
 A later repository synchronization recorded auto-context, strike-coherent emission, and H-M
-screens. The completed H-H model arm was then evaluated in the predeclared fixed 50/50 H-H/H-D
-blend with STE: mean visible-known-fault proxy DTI **0.2853406** versus H-D **0.2816627**, paired
-Δ **+0.0036779**, positive in **4/6** folds. A new full-catalogue GeoTIFF passed the local format,
-scoped uniqueness, and Stage-1 non-dominance gates. It is the current primary artifact, but it has
-not been uploaded and no DrivenData score or portal acceptance is claimed. This result is for the
-blend; it is not evidence that pure H-H alone caused the gain. Stage 1 remains diagnostic only with
-weight 0.0. H-M and the old STE-only screen remain noisy research leads, and H-G+H-D remains below
-H-D.
+screens. At that time, the completed H-H model arm was evaluated in the predeclared fixed 50/50
+H-H/H-D blend with STE: mean visible-known-fault proxy DTI **0.2853406** versus H-D **0.2816627**,
+paired Δ **+0.0036779**, positive in **4/6** folds. That historical artifact passed the then-current
+local format, scoped-uniqueness, and q70 Stage-1 checks. Subsequent review added q10 all-points-inside
+confinement and surfaced an unresolved portal-range error: only 86.71% of its points are inside the
+q10 domain, so it is now **audit-only and NOT CLEARED FOR UPLOAD**. The later H51-K1 candidate failed
+its gated promotion screen and produced no TIFF. No current upload-eligible artifact, organizer
+score, or portal acceptance is established. The historical gain belongs to the blend, not proven
+pure H-H causality. H-M/STE remain noisy research leads, and H-G+H-D remains below H-D.
 
 ---
 
@@ -251,9 +252,9 @@ on an unrestricted machine before it can be used.
 
 ---
 
-## 8. Current primary and Stage-1 residual reconciliation — measured here
+## 8. Historical H-H/H-D benchmark and Stage-1 residual reconciliation — measured here
 
-The current primary is [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif`](../docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif), with a matching one-file ZIP and receipt in `docs/downloads/`. Its SHA-256 is `9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777`; it contains 44,069 predicted pixels, is a single-band float32 EPSG:32611 GeoTIFF, and passes the local `[0,1]`/NaN-outside checks. The fixed 50/50 H-H/H-D blend plus STE passed the frozen six-fold local promotion rule. This is a local visible-known-fault proxy result; no organizer upload, score, or acceptance is claimed.
+The historical H-H/H-D benchmark is [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif`](../docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif), with a matching one-file ZIP and receipt in `docs/downloads/`. Its SHA-256 is `9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777`; it contains 44,069 predicted pixels, is a single-band float32 EPSG:32611 GeoTIFF, and passes the local in-footprint `[0,1]`/NaN-outside checks. It passed the earlier frozen six-fold local proxy promotion rule, but was made before q10 all-points-inside confinement. The later full-map q10 check finds only 38,211/44,069 points inside the approved domain (86.71%). Combined with unresolved portal validation, it is retained **for audit only, NOT CLEARED FOR UPLOAD**. This is a visible-known-fault proxy result; no organizer upload, score, or acceptance is claimed.
 
 The current trace-held-out Stage-1 runner now reports the requested dilatation and shear controls. Held-out trace rows are removed from the catalogue-derived budget before every field is calculated. Because the scalar geodetic layers and the fault-tensor invariant do not have a source-verified shared convention, the controls are rank residuals `rank(observed scalar) - rank(fault tensor second invariant)`, not absolute strain subtraction. Mean results from `data/stage1_trace_holdout.json` are:
 
@@ -265,4 +266,4 @@ The current trace-held-out Stage-1 runner now reports the requested dilatation a
 | combined residual diagnostic | 0.0353 | 1.1477 |
 | geodetic-only control | 0.0993 | 1.2469 |
 
-The combined residual is an auditable diagnostic, not an approved fine-scale prior. The promoted artifact uses `stage1_weight=0.0`; Stage 1 remains coarse/non-dominant and does not hard-gate Stage 2. The reconciliation is recorded in [`evidence/stage1_reconciliation_20261007.json`](../evidence/stage1_reconciliation_20261007.json).
+The combined residual is an auditable diagnostic, not an approved fine-scale prior. The historical H-H/H-D artifact used `stage1_weight=0.0`; Stage 1 remains coarse/non-dominant. The later q10 allowed-domain requirement is separate and that artifact fails it. The reconciliation is recorded in [`evidence/stage1_reconciliation_20261007.json`](../evidence/stage1_reconciliation_20261007.json).
