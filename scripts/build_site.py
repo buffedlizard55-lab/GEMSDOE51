@@ -266,13 +266,14 @@ def build():
     sub = subm.get("primary") or {}
     arts = subm.get("artifacts", [])
     research = subm.get("research_only_artifacts", [])
+    cand = subm.get("recommended_upload_candidate") or {}
     research_comparisons = subm.get("research_comparisons", {})
     s1stats = subm.get("stage1_stats", {})
 
     # The download directory is public. Keep only files explicitly named by the
     # current manifest; stale or archived submissions must not remain linkable.
     expected_downloads = set()
-    for record in ([sub] if sub else []) + list(arts) + list(research):
+    for record in ([sub] if sub else []) + list(arts) + list(research) + ([cand] if cand else []):
         for key in ("file", "zip", "nan_twin", "checks_file", "format_receipt"):
             value = record.get(key)
             if value and Path(value).name == value:
@@ -345,6 +346,66 @@ def build():
     })
 
     # ------------------------------------------------------------ index
+    cand_card = ""
+    if cand:
+        c_file = Path(cand.get("file", "")).name
+        c_zip = Path(cand.get("zip", "")).name if cand.get("zip") else ""
+        if not c_file or not (DOCS / "downloads" / c_file).is_file():
+            raise SystemExit("recommended_upload_candidate names a missing/unsafe TIFF")
+        if c_zip and not (DOCS / "downloads" / c_zip).is_file():
+            raise SystemExit("recommended_upload_candidate names a missing/unsafe ZIP")
+        c_checks = (cand.get("format", {}) or {}).get("checks", {})
+        c_fmt = cand.get("format", {}) or {}
+        c_s1 = cand.get("stage1_dominance", {}) or {}
+        c_uniq = cand.get("uniqueness", {}) or {}
+        c_staged = c_uniq.get("staged", {}) if isinstance(c_uniq.get("staged"), dict) else {}
+        c_pre = c_uniq.get("prewrite", {}) if isinstance(c_uniq.get("prewrite"), dict) else {}
+        c_hold = cand.get("paired_holdout", {}) or {}
+        c_geom = cand.get("geometry_audit", {}) or {}
+        c_zip_note = (f'<p class="zip">or the <a href="downloads/{html.escape(c_zip)}">'
+                      "ZIP containing the same single GeoTIFF</a></p>" if c_zip else "")
+        cand_card = f"""
+<section class="download">
+<h2>⬇ Recommended upload candidate — NOT YET PORTAL-VALIDATED</h2>
+<p class="warn"><b>RECOMMENDED UPLOAD CANDIDATE.</b> This is the only artifact in this repository that
+satisfies every constraint in the method brief at once: official grid/CRS/transform/dtype, all pixel
+values finite and inside [0, 1], every emitted point at least 224 m from the mapped catalogue, every
+emitted point inside the Stage-1 strain-deficit approved tiles, Stage-1 non-dominance, and a support
+that no locally held prior submission matches. It has <b>not</b> been uploaded, so portal acceptance is
+unproven, and it is <b>not</b> an organizer score.</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(c_file)}">Download the submission GeoTIFF</a></p>
+{c_zip_note}
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>{html.escape(str(cand.get('submission_name','')))}</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>{html.escape(str(cand.get('note','')))}</code></dd>
+<dt>Format receipt (local, not portal validation)</dt><dd>one-band {html.escape(str(c_fmt.get('dtype','')))} {html.escape(str(c_fmt.get('crs','')))}
+ shape {html.escape(str(c_fmt.get('shape','')))}, finite everywhere (nan_cells={c_checks.get('nan_cells','?')}),
+ values in [{c_checks.get('min_value','?')}, {c_checks.get('max_value','?')}], format_valid={c_checks.get('format_valid', False)},
+ portal_legal={c_checks.get('portal_legal', False)}</dd>
+<dt>Mass geometry</dt><dd>{c_geom.get('dots','?')} unit dots; nearest-neighbour spacing median
+ {c_geom.get('spacing',{}).get('nn_median','?')} px; distance to mapped catalogue median
+ {c_geom.get('d_cat_median', float('nan')):.2f} px (p10 {c_geom.get('d_cat_p10', float('nan')):.2f},
+ p90 {c_geom.get('d_cat_p90', float('nan')):.1f})</dd>
+<dt>Stage 1 (kept coarse)</dt><dd>approved area {c_s1.get('approved_area_share', float('nan'))*100:.2f}% of footprint;
+ every emitted point inside approved tiles; lift {c_s1.get('lift_over_area_share', float('nan')):.3f} (limit 1.5);
+ formula {html.escape(str(c_s1.get('formula','')))}</dd>
+<dt>Uniqueness (local priors)</dt><dd>{html.escape(str(c_staged.get('verdict', c_pre.get('verdict',''))))} —
+ max support Jaccard {c_pre.get('max_jaccard', float('nan')):.4f} (limit 0.50),
+ max containment {c_pre.get('max_containment', float('nan')):.4f} (limit 0.60);
+ {c_pre.get('n_prior','?')} local priors compared, {cand.get('uniqueness',{}).get('reference_count','?')} of them family references</dd>
+<dt>Paired six-fold proxy vs the archived H-D arm</dt><dd>candidate
+ {c_hold.get('candidate_mean', float('nan')):.6f} vs baseline {c_hold.get('baseline_mean', float('nan')):.6f}
+ (Δ {c_hold.get('paired_mean_delta', float('nan')):+.6f}; {c_hold.get('folds_won', 0)}/{c_hold.get('folds_evaluated', 0)} folds won).
+ The baseline reproduces the archived receipt exactly (max deviation {c_hold.get('baseline_archived_max_abs_dev', float('nan'))}),
+ so the comparison is paired and reproducible. <b>This is a compliance cost, not a score improvement:</b>
+ the brief's all-points-inside-approved requirement costs about 0.0015 mean proxy DTI.</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(str(cand.get('sha256','')))}</code></dd>
+</dl>
+<p class="ev">Receipts: <a href="downloads/{html.escape(str(cand.get('checks_file','')))}">local checks</a>,
+ <a href="holdout.html">Stage 1 / Stage 2 holdouts reported separately</a>,
+ <a href="irregularities.html">IR-51-21</a>. No upload, portal acceptance or organizer score is claimed anywhere on this site.</p>
+</section>"""
+
     dl = sub
     if dl:
         name = dl.get("file", "")
@@ -372,7 +433,7 @@ def build():
             card = f"""
 <section class="download missing">
 <h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
-<p><b>No upload-eligible artifact is available.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<p><b>This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
 <p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download existing benchmark for audit</a></p>
 {zip_note}
 <dl class="kv">
@@ -481,7 +542,7 @@ Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact r
     _GATE = gate_table()
     hm_result = research_comparisons.get("H_M_cross_scale_crest", {})
     ste_result = research_comparisons.get("STE_L9_w035_s24", {})
-    body = card + research_card + f"""
+    body = cand_card + card + research_card + f"""
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
 proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
@@ -572,8 +633,40 @@ to a live DTI. It is <b>not</b> a score.</p>
                           f"shape {primary_fmt.get('shape', 'unknown')}, "
                           f"format_valid={primary_checks.get('format_valid', False)}")
         q10 = sub.get("stage1_q10_domain_check", {})
+        candidate_lead = ""
+        if cand:
+            c_name = Path(cand.get("file", "")).name
+            c_zip = Path(cand.get("zip", "")).name if cand.get("zip") else ""
+            c_hold = cand.get("paired_holdout", {}) or {}
+            c_zip_note = (f'<p class="zip">or the <a href="downloads/{html.escape(c_zip)}">'
+                          "ZIP containing the same single GeoTIFF</a></p>" if c_zip else "")
+            candidate_lead = f"""
+<p class="download"><b>RECOMMENDED UPLOAD CANDIDATE — NOT YET PORTAL-VALIDATED.</b>
+The only constraint-complete artifact in this repository is
+<code>{html.escape(c_name)}</code>. It is all-finite with every value in [0, 1], every point at least
+224 m from the mapped catalogue, every point inside the Stage-1 approved tiles, and its support matches
+no locally held prior. Paste this name and note:
+<dl class="kv">
+<dt>Submission name</dt><dd><code>{html.escape(str(cand.get('submission_name','')))}</code></dd>
+<dt>Note (optional)</dt><dd><code>{html.escape(str(cand.get('note','')))}</code></dd>
+</dl>
+<p class="big"><a class="btn" href="downloads/{html.escape(c_name)}">Download the submission GeoTIFF</a></p>
+{c_zip_note}
+<p class="warn"><b>Honest status.</b> Nothing here has been uploaded and no organizer score exists.
+The paired six-fold proxy screen says this configuration costs
+{abs(c_hold.get('paired_mean_delta', float('nan'))):.6f} mean proxy DTI
+({abs(c_hold.get('paired_mean_delta', float('nan')))/max(c_hold.get('baseline_mean', float('nan')), 1e-9)*100:.2f}% relative)
+versus the archived H-D configuration, because the brief requires every point inside the approved tiles.
+It is a compliance-complete submission, not a score improvement. The archived blend remains the local
+proxy best and is <b>not</b> uploadable (it fails the q10 confinement requirement).</p>
+<p class="warn"><b>If the portal still rejects it</b>, record the exact error text and the file name, then
+re-check the raster: the local receipt shows <code>nan_cells=0</code> and
+<code>values_outside_0_1=0</code>, so a range error would have to come from the portal's own reading of the
+file rather than from a NaN or out-of-range pixel.</p>
+"""
         status_block = f"""
-<p class="download missing"><b>NO UPLOAD-ELIGIBLE ARTIFACT.</b> The existing file is a local benchmark only ({html.escape(primary_status)}). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
+{candidate_lead}
+<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only ({html.escape(primary_status)}). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
 <p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: {q10.get('points_inside_approved', 'unknown')}/{q10.get('predicted_points', 'unknown')} points lie inside the current full-map q10 mask ({q10.get('emitted_share_inside_approved', float('nan')):.2%}), so it fails the all-points-inside-approved requirement.</p>
 <p class="big">{primary_link}</p>
 {primary_zip_link}
@@ -593,8 +686,11 @@ or research-only file. This block is generated from the submission manifest.</p>
     body = f"""
 <h2>Submission guide — current status first</h2>
 {status_block}
-<h3>Do not upload now</h3>
-<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+<h3>What to upload, and what not to upload</h3>
+<p>Upload <b>only</b> the recommended candidate named in the big download button above; do not upload the
+archived benchmark, and do not upload the research-only TIFF (marked NOT FOR SUBMISSION). First identify
+the exact TIFF that produced the reported portal error, then reconcile the portal's `[0,1]` validation with
+the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>

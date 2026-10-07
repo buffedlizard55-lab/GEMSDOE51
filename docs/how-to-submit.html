@@ -24,7 +24,31 @@
 
 <h2>Submission guide — current status first</h2>
 
-<p class="download missing"><b>NO UPLOAD-ELIGIBLE ARTIFACT.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
+
+<p class="download"><b>RECOMMENDED UPLOAD CANDIDATE — NOT YET PORTAL-VALIDATED.</b>
+The only constraint-complete artifact in this repository is
+<code>gemsdoe51-h51n2-creditthin-20261007T210820Z.tif</code>. It is all-finite with every value in [0, 1], every point at least
+224 m from the mapped catalogue, every point inside the Stage-1 approved tiles, and its support matches
+no locally held prior. Paste this name and note:
+<dl class="kv">
+<dt>Submission name</dt><dd><code>GEMSDOE51-N2-physical-creditthin-r3.0-q10</code></dd>
+<dt>Note (optional)</dt><dd><code>H-D physical detector (58 physical stack layers + 4 scarp-facing-coherence layers) fitted on the visible USGS/INGENIOUS known-fault catalogue; unit-valued dots at &gt;=2.4 px (240 m) greedy non-maximum-suppression spacing; every point &gt;=2.24 px (224 m) from the mapped catalogue and inside the Stage-1 strain-deficit q10 approved tiles; mass = 3.0x the estimated hidden-truth pixel count.</code></dd>
+</dl>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif">Download the submission GeoTIFF</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<p class="warn"><b>Honest status.</b> Nothing here has been uploaded and no organizer score exists.
+The paired six-fold proxy screen says this configuration costs
+0.001547 mean proxy DTI
+(0.55% relative)
+versus the archived H-D configuration, because the brief requires every point inside the approved tiles.
+It is a compliance-complete submission, not a score improvement. The archived blend remains the local
+proxy best and is <b>not</b> uploadable (it fails the q10 confinement requirement).</p>
+<p class="warn"><b>If the portal still rejects it</b>, record the exact error text and the file name, then
+re-check the raster: the local receipt shows <code>nan_cells=0</code> and
+<code>values_outside_0_1=0</code>, so a range error would have to come from the portal's own reading of the
+file rather than from a NaN or out-of-range pixel.</p>
+
+<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
 <p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
 <p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
 <p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
@@ -36,8 +60,11 @@
 </dl>
 <p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
 
-<h3>Do not upload now</h3>
-<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+<h3>What to upload, and what not to upload</h3>
+<p>Upload <b>only</b> the recommended candidate named in the big download button above; do not upload the
+archived benchmark, and do not upload the research-only TIFF (marked NOT FOR SUBMISSION). First identify
+the exact TIFF that produced the reported portal error, then reconcile the portal's `[0,1]` validation with
+the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>

@@ -124,5 +124,17 @@
     "summary": "The local `iso_grav_anom_hg` raster contains signed values, and its metadata does not establish whether it is total 2-D horizontal-gradient magnitude or one directional component.",
     "evidence": "The owner-mirrored training raster describes the layer as an isostatic-gravity horizontal gradient; the finite local range is approximately -15.44 to +12.86. H51-K1 therefore used abs(HG) in a tilt-like phase proxy and explicitly did not claim conventional total-horizontal-derivative tilt semantics; see `knowledge/candidate-hypotheses-2026-10-07.md` and `evidence/hk1_spatial_holdout_20261007.json`.",
     "status": "OPEN SOURCE-SEMANTICS LIMITATION - the tested operator is reproducible but its conventional tilt-angle interpretation is not established without authoritative band semantics."
+  },
+  {
+    "id": "IR-51-23",
+    "summary": "The owner score list attaches 0.1563 to four different artifact names, but the two of those artifacts held locally (8gemsdoe-hedge-v2.tif and gemsdoe-ens12-7f00890a.tif) have different supports (227,507 vs 172,974 px, Jaccard 0.7603), whereas the 0.2600 label is attached to three names whose supports are byte-identical (44,090 px, Jaccard 1.0000). Identical supports explain the second repetition but not the first.",
+    "evidence": "data/refs/_inventory_stats.json; pairwise support matrix computed in this session over the 21 pinned data/refs TIFFs",
+    "status": "OPEN - either a transcription error in the owner list or one number was attached to different artifacts. No artifact-to-score mapping is taken from the 0.1563 group."
+  },
+  {
+    "id": "IR-51-24",
+    "summary": "gems32-bayesopt-dilation-zeros (45,000 px, catalogue-distance p10 = 2.24 px) and gemsdoe32-h33-2-b2-zeros (37,654 px, p10 = 4.00 px) are the only held family artifacts that exclude the immediate catalogue band, but only the second carries an owner-reported score; the first is an untested sibling of the same emission idea.",
+    "evidence": "data/refs/_inventory_stats.json; measured supports of the 21 pinned reference TIFFs",
+    "status": "OPEN - noted so that the untested sibling is not later mistaken for a scored result."
   }
 ]

@@ -65,7 +65,13 @@ def main() -> int:
             value = record.get(key)
             if value:
                 allowed_research.add(Path(value).name)
-    allowed_downloads = allowed_current | allowed_research
+    allowed_candidate = set()
+    candidate = manifest.get("recommended_upload_candidate") or {}
+    for key in ("file", "zip"):
+        value = candidate.get(key)
+        if value:
+            allowed_candidate.add(Path(value).name)
+    allowed_downloads = allowed_current | allowed_research | allowed_candidate
     if public_downloads != allowed_downloads:
         failures.append(f"public TIFF/ZIPs do not match manifest: found={sorted(public_downloads)}, "
                         f"allowed={sorted(allowed_downloads)}")
@@ -78,6 +84,19 @@ def main() -> int:
         if readiness == "PORTAL_ACCEPTED":
             if "Portal-validated submission file" not in index:
                 failures.append("portal-accepted primary is not prominently marked in index")
+        elif candidate:
+            # Third state: a constraint-compliant candidate exists that has never been
+            # uploaded.  The page must say so in those words, must still mark the
+            # audit-only benchmark as not cleared, and must link the candidate bytes.
+            if "RECOMMENDED UPLOAD CANDIDATE" not in index:
+                failures.append("recommended candidate is not prominently marked in index")
+            if "NOT YET PORTAL-VALIDATED" not in index.upper():
+                failures.append("recommended candidate is not marked NOT YET PORTAL-VALIDATED")
+            if "NOT CLEARED FOR UPLOAD" not in index.upper():
+                failures.append("audit-only benchmark is not marked NOT CLEARED FOR UPLOAD")
+            for name in allowed_candidate:
+                if f'href="downloads/{name}"' not in index:
+                    failures.append(f"recommended candidate is not linked from index: {name}")
         else:
             index_upper = index.upper()
             if ("NO UPLOAD-ELIGIBLE ARTIFACT" not in index_upper
