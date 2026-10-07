@@ -1,39 +1,57 @@
-<h2>Why the best prior submission scored what it did</h2>
-<p>The group's best owner claim is <b>0.2778</b> (<code>gemsdoe32-h33-h33-2-b2</code>). Two of
-that family's artifacts give us a free natural experiment, because one is the other with 6,436 dots
-deleted.</p>
+<h2>What the best public result does—and does not—tell us</h2>
+<p>The official public leaderboard fetched <b>2026-10-07</b> shows the highest displayed score as
+<b>0.3774</b> at rank 1 for participant <code>xiaofanhu</code>. The page reports a participant and
+score; it does not identify a GeoTIFF, file hash, feature stack, or method. This is a dated public
+leaderboard observation, not an artifact-level scientific record. See the
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">official leaderboard</a>.</p>
+<div class="warn"><b>Score attribution correction.</b> The 0.2778 row is rank 13 for <code>extradr19</code>,
+not a verified GEMSDOE32 H33-2-B2 score. GEMSDOE32's own
+<a href="https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md">README</a>
+and <a href="https://buffedlizard55-lab.github.io/GEMSDOE32/">site</a> label H33-2-B2
+<b>UNSCORED</b> and give a modelled projection of 0.2747. No authenticated file-to-score link was
+found. The earlier attribution is unsupported and contradicted by the sibling's reporting.</div>
 
-<h3>The measurement</h3>
-<p>Measured here: the deleted set is exactly the emitted pixels at Euclidean distance 1–2 px from a
-catalogued fault pixel; the retained set all lie at ≥ 2.236 px. Writing <code>K = 0.8·|G|</code>:</p>
-<pre>TP(44 090) = 0.2600 · (0.2·44 090 + K) = 2 292.68 + 0.2600 K
-TP(37 654) = 0.2778 · (0.2·37 654 + K) = 2 092.06 + 0.2778 K
-ΔTP        =   200.62 − 0.0178 K</pre>
-<p><code>ΔTP ≥ 0</code> bounds the hidden truth at <b>|G| ≤ 14 090 px</b>. With the group's own
-generative truth model (12 691 px) → <b>ΔTP ≈ 20</b>. So the 6,436 deleted dots earned
-<b>0.003 credit each</b> against <b>0.139</b> for the dots that were kept — a factor of 45.
-<b>Predicting within 200 m of the catalogue is worth essentially nothing.</b> That is consistent
-with the organizer's confirmation that known fault pixels are masked out of scoring entirely.</p>
+<h3>Scientific interpretation: weighted spatial agreement, not a geological mechanism</h3>
+<p>The competition's distance-weighted Tversky index uses a triangular kernel
+<code>k(d)=max(1-d/3,0)</code>, where distance is in 100 m pixels and the radius is 300 m. For each
+truth pixel, the best nearby prediction contributes credit no greater than one. Each prediction
+contributes false-positive cost according to its distance from the nearest truth. With
+<code>K=|G|</code> and <code>TP<sub>w</sub>, FP<sub>w</sub></code> denoting the competition's
+weighted terms:</p>
+<pre>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)
+FN_w = K − TP_w
+DTI = TP_w / (0.2·(TP_w + FP_w) + 0.8·K)</pre>
+<p>Thus 0.3774 is <b>not</b> 37.74% recall, accuracy, or trace coverage. It is a scalar trade-off
+between distance-weighted credit and weighted error. Since neither the scored file and its
+positions nor the hidden truth size and labels are public, this score cannot establish which
+geological layers, fault styles, mass budget, spacing, or placement strategy produced it. Nor can it
+show that a particular geological mechanism was discovered.</p>
+<p>For an incremental prediction with changes <code>c=ΔTP_w</code> and <code>f=ΔFP_w</code>, the
+exact local improvement condition is <code>c·(1 − 0.2·DTI) &gt; 0.2·DTI·f</code>. The often-quoted
+<code>c &gt; 0.2·DTI</code> applies only to the special case <code>c+f=1</code>; it is not a universal
+per-pixel threshold. <code>TP_w+FP_w</code> is an effective weighted cost, not raw emission count.
+The official definitions and our tested implementation are linked from the
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric">competition metric page</a>.</p>
 
-<h3>What the leader is doing better</h3>
-{tbl_html}
-<p>The kernel is <code>k = 1 − d/3</code>. A credit of 0.131 means an emitted dot sits on average
-<b>2.6 px = 260 m</b> from the nearest hidden fault pixel; the leader's ~0.163 means <b>200 m</b>.
-That is the entire game: it is a localisation problem, not a coverage problem. An isolated dot
-landing exactly on a straight trace earns about 3.0 credit, so a mean of 0.131 means only about
-4&nbsp;% of the group's dots land <i>on</i> a hidden trace.</p>
+<h3>Leaderboard context and local validation are different evidence</h3>
+{score_table}
+<p>The highest public row was 0.3774. Another public row, 0.2778, belongs to <code>extradr19</code> at
+rank 13 in this snapshot. Neither is a GEMSDOE51 result. Our H-D incumbent's six-block spatial
+holdout mean is <b>0.28166</b> proxy DTI at <code>M/|G|=3.47</code>; the current H-D soft artifact's
+six-fold gate-sweep mean is <b>0.28201</b>. These use the visible catalogue as proxy truth and are
+not leaderboard scores or directly comparable to public results. The matched H-G add-on to H-D
+scored 0.281056 versus 0.281663 (paired delta −0.000606, higher in 3/6 folds) and mean AUC 0.669619
+versus 0.672618. H-G is not promoted, and no competition slot is authorized.</p>
 
-<h3>Why the dotted design worked, and where it runs out</h3>
-<p>Thinning a thick probability surface to isolated dots at ~2.4 px spacing removes mass that was
-already covered by a neighbouring dot, which is exactly the objective the metric rewards: 0.1922
-(continuous field) → 0.2477 → 0.2600 → 0.2778 as the emission got sparser and better spaced. It
-runs out when the dots start landing off the traces. Our holdout in-block AUC is 0.673 and our
-proxy DTI at matched mass is 0.282, so our detector is about as good as the one that produced
-0.2778. Beating 0.3774 needs a materially better field, not a better emission rule.</p>
-
-<h3>Honest expectation for this submission</h3>
-<p>Our instrument says <b>0.282 ± 0.02</b> at the live mass ratio, which brackets the group's best
-and sits well below the current leader of 0.3774. Expect this file to land in the <b>high
-0.2s</b>. That expectation is written down before the score is known.</p>
-<p class="ev">The two non-group rows of the table assume the same emitted mass as the group's
-files, which is not published, so those implied TPs are estimates, not measurements.</p>
+<h3>What remains unknown</h3>
+<ul>
+<li>which TIFF or model produced the top 0.3774 public score;</li>
+<li>the winning model's geology, transformations, point spacing, catalogue buffer, and emitted mass;</li>
+<li>its true-positive credit, false-positive cost, or error distribution;</li>
+<li>whether the score corresponds to a particular geological discovery mechanism or generalizes to
+  Phase 2.</li>
+</ul>
+<p class="ev">Evidence ledger: <a href="downloads/score_attribution_audit.json">score attribution audit</a>,
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE51/blob/main/registry/scored_submissions.json">scored-submission ledger</a>,
+and the <a href="leaderboard.html">dated leaderboard snapshot</a>. The board may change. No local
+artifact has an organizer-verified score.</p>

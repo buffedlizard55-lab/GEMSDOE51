@@ -6,11 +6,11 @@
 
 WHY THIS EXISTS
 ---------------
-The hidden label set is believed to be ~5x sparser than the visible catalogue.  Under
-DTI = T / (0.2T + 0.2F + 0.8K) every dot that misses costs 0.2 and every truth pixel pays at most 1,
-so mass is a liability unless the extra dots earn their 0.2.  The mass optimum therefore has to be
-decided on the FAITHFUL instrument (fault systems split A/B, detector trained on A alone), not on the
-visible catalogue, which is five times denser than the target and flatters dense emissions.
+The hidden label density is unknown. We therefore treat density as a sensitivity variable rather
+than assert a hidden-K estimate. Under DTI = T / (0.2T + 0.2F + 0.8K), extra prediction mass
+helps only when it earns enough additional weighted credit. The mass optimum should be screened on
+the faithful instrument (fault systems split A/B, detector trained on A alone), not inferred from
+the visible catalogue's denser known-fault distribution.
 
 PROMOTION RULE (pre-registered, identical to the one that killed the coverage lattice, IR-51-05):
 an arm may replace the shipped rule only if mean paired DTI on the B_far truth > 0 AND the paired

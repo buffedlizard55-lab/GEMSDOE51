@@ -15,7 +15,9 @@ import numpy as np
 from scipy import ndimage as ndi
 
 from .grid import GRID
-from .stack import lineament_bank
+from .stack import _nc_deriv, lineament_bank
+from .intersections import axial_intersection_score
+from .features import COMPETITION_BANDS
 
 H, W = GRID.shape
 
@@ -109,8 +111,57 @@ def build_static(stack, footprint: np.ndarray) -> dict:
     return g
 
 
+def build_magnetic_gravity_intersections(stack, footprint: np.ndarray,
+                                         scales=(4.0, 8.0)) -> dict:
+    """High-angle co-located edges in TMI and isostatic gravity.
+
+    The two source surfaces are robustly standardized competition bands, read
+    from the prepared mirror. At each Gaussian scale, axial orientation
+    discordance is weighted by both edge magnitudes (each scaled by its
+    footprint 95th percentile). The returned operator is therefore high only
+    where *both* independent potential-field surfaces have strong, nearly
+    orthogonal boundaries. 100 m pixels make the scales 400 m and 800 m.
+
+    No catalogue or holdout labels enter this transform. The feature is a
+    prospectivity/structure proxy, not evidence that an edge is a fault.
+    """
+    from pathlib import Path
+
+    names = [b[0] for b in COMPETITION_BANDS]
+    shape = (len(names), *GRID.shape)
+    z = np.memmap(Path(stack.dir) / "comp_z.dat", dtype=np.float32,
+                  mode="r", shape=shape)
+    tmi = z[names.index("tmi")]
+    gravity = z[names.index("iso_grav_anom")]
+    mt = np.isfinite(tmi) & footprint
+    mg = np.isfinite(gravity) & footprint
+    out = {}
+
+    for sigma in scales:
+        tx = _nc_deriv(tmi, mt, sigma, [0, 1])
+        ty = _nc_deriv(tmi, mt, sigma, [1, 0])
+        gx = _nc_deriv(gravity, mg, sigma, [0, 1])
+        gy = _nc_deriv(gravity, mg, sigma, [1, 0])
+        tm = np.hypot(tx, ty)
+        gm = np.hypot(gx, gy)
+        valid = (footprint & np.isfinite(tx) & np.isfinite(ty)
+                 & np.isfinite(gx) & np.isfinite(gy) & np.isfinite(tm)
+                 & np.isfinite(gm))
+        if not valid.any():
+            raise ValueError(f"no valid TMI/gravity gradients at sigma={sigma}")
+        tscale = float(np.percentile(tm[valid], 95))
+        gscale = float(np.percentile(gm[valid], 95))
+        _, score = axial_intersection_score(tx, ty, gx, gy, tscale, gscale)
+        score[~valid] = np.nan
+        score[~footprint] = np.nan
+        out[f"tmi_grav_xing_s{int(sigma * 100):03d}"] = score
+        del tx, ty, gx, gy, tm, gm, valid, score
+
+    del z
+    return out
+
+
 def _ncd(a, mask, sigma, order):
-    from .stack import _nc_deriv
     return _nc_deriv(a, mask, sigma, order)
 
 

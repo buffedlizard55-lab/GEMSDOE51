@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "checked_utc_date": "2026-10-07",
+  "sources": {
+    "official_public_leaderboard": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "gemsdoe32_readme": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md",
+    "gemsdoe32_site": "https://buffedlizard55-lab.github.io/GEMSDOE32/"
+  },
+  "observed_public_row": {
+    "rank": 13,
+    "participant": "extradr19",
+    "public_dw_tversky": 0.2778,
+    "observed_on": "2026-10-07",
+    "evidence_class": "MEASURED_PUBLIC_LEADERBOARD_ROW",
+    "artifact_identity": null,
+    "artifact_link_status": "The public board reports a participant and score, not the submission filename, TIFF hash, method, or model."
+  },
+  "candidate_attribution_claim": {
+    "claim": "The 0.2778 public row is GEMSDOE32 H33-2-B2.",
+    "status": "UNSUPPORTED_AND_CONTRADICTED_BY_THE_SIBLING_REPOSITORYS_OWN_REPORTING",
+    "sibling_artifact_name": "H33-2-B2",
+    "sibling_status": "UNSCORED",
+    "sibling_modelled_projection": 0.2747,
+    "note": "GEMSDOE32 README/site labels H33-2-B2 UNSCORED and gives 0.2747 as a modelled projection; it does not authenticate an organizer score of 0.2778 for that file. No file-to-score link was found."
+  },
+  "what_can_be_explained_scientifically": {
+    "metric": "The official distance-weighted Tversky index uses k(d)=max(1-d/3,0) at a 300 m radius. For q=DTI, TP_w=q*(0.2*FP_w+0.8*K)/(1-0.2*q), with K=|G| and FN_w=K-TP_w. This describes metric mechanics, not the hidden score decomposition: without the scored artifact and labels, TP_w, FP_w, K, and the geological cause are unknown.",
+    "not_inferable_without_artifact": [
+      "which TIFF or model produced the 0.2778 row",
+      "which geological layers/operator it used",
+      "its emission count, spacing, or catalogue-distance distribution",
+      "why its observed score was 0.2778 rather than another value"
+    ],
+    "no_local_score_claim": "No GEMSDOE51 artifact has an organizer-verified score. The local H-D/H-G holdouts are catalogue-proxy diagnostics, not leaderboard results."
+  },
+  "current_context": {
+    "public_leader_rank_1": {
+      "participant": "xiaofanhu",
+      "score": 0.3774,
+      "observed_on": "2026-10-07"
+    },
+    "gemsdoe51_incumbent_holdout": {
+      "arm": "H-D",
+      "metric": "spatially blocked proxy DTI at M/|G|=3.47",
+      "mean": 0.2816626603034904,
+      "folds": 6,
+      "evidence": "data/holdout_H_D.json",
+      "not_an_organizer_score": true
+    },
+    "gemsdoe51_soft_prior_holdout_delta": {
+      "mean_delta": 0.000367372806934214,
+      "folds_positive": 4,
+      "folds_total": 6,
+      "decision": "inconclusive; not a demonstrated win"
+    },
+    "matched_H_G_addon": {
+      "arm": "H-G added to H-D",
+      "proxy_dti_mean_r3_47": 0.28105639793372034,
+      "incumbent_H_D_proxy_dti_mean_r3_47": 0.2816626603034904,
+      "paired_delta": -0.0006062623697700303,
+      "folds_higher": 3,
+      "folds_total": 6,
+      "auc_mean": 0.669618890762553,
+      "incumbent_H_D_auc_mean": 0.6726182834034514,
+      "evidence": "evidence/holdout_H_G_plus_H_D.json",
+      "decision": "not promoted; no slot authorized; visible-catalogue proxy only"
+    }
+  },
+  "interpretation": "The highest public participant score in the dated snapshot is 0.3774, but it cannot be attributed to a TIFF or geology from the leaderboard row. The 0.2778 row is extradr19 and is not linked to GEMSDOE32 H33-2-B2; the sibling reports H33-2-B2 as UNSCORED with a 0.2747 modelled projection. Explain metric mechanics only; do not infer a local score or hidden-label performance.",
+  "highest_public_row": {
+    "rank": 1,
+    "participant": "xiaofanhu",
+    "public_dw_tversky": 0.3774,
+    "observed_on": "2026-10-07",
+    "evidence_class": "MEASURED_PUBLIC_LEADERBOARD_ROW",
+    "artifact_identity": null,
+    "artifact_link_status": "The public leaderboard row identifies the participant and rounded score only; no TIFF hash or method is exposed."
+  }
+}

@@ -117,51 +117,51 @@
   },
   {
    "id": "C51-017",
-   "claim": "The shipped raster contains 95,927 emitting pixels, is float32 with all 12,279,160 cells finite, min 0.0, max 1.0, no nodata tag, EPSG:32611, and 100% of the dots lie inside the approved tiles and at least 2 px from every catalogue pixel.",
+   "claim": "Historical SBD Hridge artifact gemsdoe51-strainbudget-s1-v1.tif contains 95,927 emitting pixels, is float32 with all cells finite, min 0.0, max 1.0, no nodata tag, EPSG:32611, and all dots lie inside its approved tiles and at least 2 px from catalogue pixels. This is not the current H-D soft artifact.",
    "class": "MEASURED",
    "evidence": "evidence/submission_receipt.json, docs/downloads/checks-gemsdoe51-strainbudget-s1-v1.json",
    "source": ""
   },
   {
    "id": "C51-018",
-   "claim": "Uniqueness: maximum Jaccard against the 12 scored sibling submissions on disk is 0.0322 (threshold 0.25); no subset or superset relation with any of them.",
+   "claim": "Historical uniqueness check for the earlier Hridge TIFF: max support Jaccard against 12 scored sibling submissions on disk was 0.0322 (threshold 0.25), with no subset/superset relation. This does not certify the current H-D soft TIFF; its fresh 54-repository audit failed (IR-51-13).",
    "class": "MEASURED",
-   "evidence": "evidence/uniqueness_gate.json",
+   "evidence": "evidence/uniqueness_gate.json (historic Hridge); evidence/uniqueness_gate_H_D_soft_20261007.json (current soft TIFF, FAIL)",
    "source": ""
   },
   {
    "id": "C51-019",
-   "claim": "Stage dominance: fill fraction 3.8% of the approved area, coverage inside approved tiles 1.000, tile concentration 1.537x the uniform control, verdict 'fine-scale selectivity present' - i.e. the emission is not a densified version of the Stage-A footprint.",
+   "claim": "Historical Stage-1 dominance audit for the earlier Hridge artifact: fill fraction 3.8% of approved area, coverage inside approved tiles 1.000, tile concentration 1.537x uniform control, verdict fine-scale selectivity present. Current H-D soft artifact has a separate q70 audit in data/submission_manifest.json.",
    "class": "MEASURED",
    "evidence": "evidence/stage_dominance.json",
    "source": ""
   },
   {
    "id": "C51-020",
-   "claim": "Public leaderboard on 2026-10-06: rank 1 xiaofanhu 0.3774; rank 3 nchuzhoy 0.3262; rank 7 DARD 0.3195 (the brief's stated target); rank 13 extradr19 0.2778; rank 16 smrtdoog5 0.2708; rank 20 SDCF9 0.2600.",
-   "class": "UNVERIFIED-LIVE",
-   "evidence": "registry/leaderboard_snapshot.json",
+   "claim": "Manual official leaderboard fetch on 2026-10-07: rank 1 xiaofanhu 0.3774; rank 7 DARD 0.3195; rank 13 extradr19 0.2778. These are participant rows, not artifact-level score links.",
+   "class": "PUBLIC_BOARD_OBSERVATION",
+   "evidence": "registry/leaderboard_reads.json, evidence/score_attribution_audit.json",
    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
   },
   {
    "id": "C51-021",
-   "claim": "The sibling artifact gemgdoe32-h33-h33-2-b2-...-zeros contains 37,654 px, is all-finite float32, has no nodata tag, and reports 0 px within 200 m of the visible catalogue; its own site labels it UNSCORED with a modelled projection of 0.2747.",
-   "class": "UNVERIFIED-LIVE",
-   "evidence": "registry/leaderboard_snapshot.json, IR-51-02",
-   "source": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html"
+   "claim": "GEMSDOE32 reports H33-2-B2 as UNSCORED with a modelled projection of 0.2747. It is not verified as the source of the 0.2778 public leaderboard row.",
+   "class": "SIBLING_REPOSITORY_REPORT",
+   "evidence": "registry/scored_submissions.json; evidence/score_attribution_audit.json",
+   "source": "https://buffedlizard55-lab.github.io/GEMSDOE32/"
   },
   {
    "id": "C51-022",
-   "claim": "Under the official metric, a predicted pixel that sits on a truth pixel carries zero false-positive weight and a missed truth pixel costs 0.8, so with alpha=0.2 recall is worth four times precision; emissions of 30-40% of the hidden truth at ~90% wasted mass still score ~0.26-0.28.",
-   "class": "MEASURED",
-   "evidence": "src/gems51/metric.py + this page's arithmetic; corroborated by the sibling's published live-inversion (K ~ 12,700 px, credit ~ 4,791, mass 44,090)",
+   "claim": "The official weighted DTI identity is TP_w/(TP_w+0.2*FP_w+0.8*FN_w), with FN_w=|G|-TP_w. For weighted increments c=\u0394TP_w and f=\u0394FP_w, a score increase requires c*(1-0.2*DTI)>0.2*DTI*f. TP_w+FP_w is not raw emitted pixel count.",
+   "class": "MEASURED_FORMULA_FROM_OFFICIAL_DEFINITION",
+   "evidence": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric; src/gems51/metric.py; tests/test_metric.py",
    "source": ""
   },
   {
    "id": "C51-023",
-   "claim": "A habitat-style region emission collapses to single-digit-millidigit scores: a domain-wide raster has F ~ 5.0M px and therefore DTI ~ 0.008, which is where the sibling's three habitat submissions actually scored (0.0041/0.1223/0.1352).",
-   "class": "PROXY",
-   "evidence": "site analysis page; sibling score ledger",
+   "claim": "Historical sibling notes report habitat-style score values 0.0041, 0.1223 and 0.1352. Treat those as owner-reported, artifact/score-attribution-unverified context, not as independently verified leaderboard results.",
+   "class": "UNVERIFIED_SIBLING_REPORT",
+   "evidence": "historical sibling pages; no authenticated score-to-file receipts in this repository",
    "source": ""
   },
   {
@@ -169,6 +169,41 @@
    "claim": "Every number in this repository that is scored against the visible catalogue is a PROXY for the hidden expert label set and cannot reward a genuinely unmapped fault; no leaderboard score for this file is claimed anywhere.",
    "class": "MEASURED",
    "evidence": "this registry; README limitations",
+   "source": ""
+  },
+  {
+   "id": "C51-025",
+   "claim": "A manual 2026-10-07 fetch shows public score 0.2778 for extradr19 at rank 13; no artifact identity is exposed, and GEMSDOE32 H33-2-B2 is labelled UNSCORED with modelled projection 0.2747.",
+   "class": "PUBLIC_BOARD_OBSERVATION_PLUS_SIBLING_REPORT",
+   "evidence": "evidence/score_attribution_audit.json; registry/scored_submissions.json",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/"
+  },
+  {
+   "id": "C51-026",
+   "claim": "Stage-1 deficit fails as a locator versus raw geodetic-only in all four rate/sense sensitivity cases on five trace-level splits; it is retained as a low-confidence broad-tile prior only.",
+   "class": "MEASURED_PROXY",
+   "evidence": "evidence/stage1_formula_audit.json; scripts/audit_stage1_formula_results.py",
+   "source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+  },
+  {
+   "id": "C51-027",
+   "claim": "The H-D soft Stage-1 prior has a paired proxy mean delta +0.000367 over six blocks (4/6 positive); this is inconclusive, not a demonstrated win. No submission slot is authorized.",
+   "class": "MEASURED_PROXY_DECISION",
+   "evidence": "evidence/submission_manifest_reconciliation.json; data/gate_sweep.json",
+   "source": ""
+  },
+  {
+   "id": "C51-028",
+   "claim": "On the same six spatial blocks, H-G added to H-D averaged proxy DTI 0.2810563979 versus 0.2816626603 for H-D, paired delta -0.0006062624 (3/6 folds higher); mean AUC was 0.6696189 versus 0.6726183. H-G is not promoted.",
+   "class": "MEASURED_PROXY_COMPARISON",
+   "evidence": "evidence/holdout_H_G_plus_H_D.json; data/holdout_H_D.json; evidence/hypothesis_slate_20261007.json",
+   "source": ""
+  },
+  {
+   "id": "C51-029",
+   "claim": "The experimental H-G+H-D full-raster TIFF is portal-legal and passes the scoped public-artifact uniqueness gate (359 SHA-verified payloads, 358 comparable, 0 matches; max support Jaccard 0.3216, cosine 0.4867; max containment 0.9933 has only 2.36x random-null lift, below the 3x containment flag). Its q70 Stage-1 diagnostic has 30.046% approved area and 19.728% of emissions inside (lift 0.657; no Stage-1 dominance). It is not slot-eligible because the matched six-block holdout is below H-D by 0.000606 proxy DTI.",
+   "class": "MEASURED_FORMAT_AND_SCOPED_UNIQUENESS_PLUS_MEASURED_PROXY",
+   "evidence": "evidence/experimental_H_G_plus_H_D_artifact.json; evidence/uniqueness_gate_H_G_HD_experimental_20261007.json; evidence/holdout_H_G_plus_H_D.json; data/holdout_H_D.json",
    "source": ""
   }
  ]

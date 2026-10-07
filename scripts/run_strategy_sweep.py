@@ -14,12 +14,12 @@ This script answers it empirically on the four spatially blocked folds, under th
 variants:
   full      -- the visible catalogue as truth (the sibling instrument; dense, 60,988 px)
   thin50    -- a seeded 50% subsample of it
-  thin20    -- a seeded 20% subsample (~12,200 px), i.e. the density the hidden expert label set is
-               believed to have (the siblings' calibrated truth model implies K ~ 12,700 px)
+  thin20    -- a seeded 20% subsample (~12,200 px), a hypothetical density sensitivity case.
+               It is not an estimate of the hidden expert label count.
 
 Caveat that is printed into the evidence file: thinning the visible catalogue preserves its
-geometry, so it changes density, not the kind of structure.  Rankings from the thinned variants
-are therefore informative about mass/density choices, NOT projections of a real score.
+geometry, so it changes density, not the kind of structure. Rankings from the thinned variants
+are informative about mass/density choices, NOT projections of a real score or hidden-K estimate.
 
     python3 scripts/run_strategy_sweep.py [--folds 0,1,2,3]
 """
@@ -122,8 +122,9 @@ def main() -> None:
                             per_fold=[float(v) for v in vals]))
     out = dict(
         note="Strategies evaluated with the official DTI (alpha=0.2, beta=0.8, R=3 px) on the four "
-             "spatially blocked folds. thin20 approximates the hidden label density (K ~ 12,200 px "
-             "vs 60,988 visible). Categories are not projections of a real leaderboard score.",
+             "spatially blocked folds. thin20 is a hypothetical 20%-density sensitivity case "
+             "(~12,200 visible-catalogue pixels); hidden label count is unknown. Categories are not "
+             "projections of a real leaderboard score.",
         incumbent=dict(density=INCUMBENT_DENSITY, spacing=INCUMBENT_SPACING),
         truth_px={k: int(v.sum()) for k, v in truths.items()},
         rows=rows, summary=summary)

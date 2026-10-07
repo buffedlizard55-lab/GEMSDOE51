@@ -6,55 +6,43 @@ Where the geodetic strain rate exceeds what the mapped faults' slip rates can
 accommodate, the catalogue is likelier to be missing structures.  Used strictly
 as a coarse first stage: it approves *tiles*, it never places a point.
 
-The formula (Kostrov summation)
--------------------------------
-Kostrov (1974), "Seismic moment and long-term deformation of the lithosphere",
-Izvestiya, Academy of Sciences USSR, Physics of the Solid Earth -- restated in the
-form used by modern geodetic/geologic deformation budgets, e.g.
-  * Ward, S.N. (1998), "On the consistency of earthquake moment rates, geological
-    fault data, and space geodetic strain", Geophys. J. Int. 134, 172-186;
-  * Stevens, V.L. & Avouac, J.-P. (2015), "Interseismic coupling on the main
-    Himalayan thrust", J. Geophys. Res. 120, 5828-5848, eq. (1);
-  * Field, E.H. et al. (2014), "Uniform California Earthquake Rupture Forecast,
-    Version 3 (UCERF3) -- The Time-Independent Model", Bull. Seismol. Soc. Am.
-    104(3), 1122-1180, doi:10.1785/0120130164 -- which is the precedent the
-    hypothesis cites for balancing geodetic and geologic deformation and for
-    modelling off-fault strain explicitly.
+Published moment-tensor summation (Kreemer et al. 2000, Eq. 3, *Earth Planets and Space* 52, 765–770):
 
-        eps_dot_ij  =  (1 / (2 * mu * V)) * sum_k  Mdot_ij^(k)                 (1)
-        Mdot_ij^(k) =  mu * A_k * sdot_k * ( n_i m_j + n_j m_i )               (2)
+    eps_dot_ij = (1 / (2 A)) * sum_k [ L_k * u_dot_k / sin(delta_k) ] * m_ij^k
 
-  A_k  = L_k * W_k            fault area           [m^2]
-  L_k  = surface trace length of segment k in the tile [m]
-  W_k  = H / sin(delta)       down-dip width        [m]   (H = seismogenic thickness)
-  V    = A_tile * H           volume of the tile    [m^3]
-  mu   = shear modulus        [Pa]  -- cancels out of (1) when W_k = H/sin(delta)
-  n    = unit normal to the fault plane (horizontal)
-  m    = unit slip direction
+where ``m_ij^k`` is the unit moment tensor defined by fault orientation and unit
+slip vector, ``L_k`` is trace length, ``u_dot_k`` is slip rate, and ``delta_k``
+is dip. Public source:
+https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf
 
-Substituting W_k and V into (1) removes mu and H:
+For ``m_ij = s_i n_j + s_j n_i``, the 2-D horizontal components under pure-mode
+assumptions are:
 
-  strike-slip segment (m = s_hat, n perpendicular to strike):
-        eps_dot_sn = L_k * sdot_k / (2 * A_tile * sin(delta))                  (3)
-  dip-slip segment (horizontal projection of slip is cos(delta) along n):
-        eps_dot_nn = L_k * sdot_k * cot(delta) / A_tile                        (4)
+* Pure strike slip on a vertical plane, with total along-strike rate:
+  ``eps_dot_sn = L * u_dot / (2 A)``; right- and left-lateral senses have
+  opposite shear signs.
+* Pure dip slip with total fault-plane rate: horizontal normal component
+  ``L * u_dot * cos(delta) / A``.
+* If the tabulated rate is instead vertical displacement ``u_dot_v``, total
+  dip-slip rate is ``u_dot_v / sin(delta)`` and that component is
+  ``L * u_dot_v * cot(delta) / A``.
 
-and the horizontal tensor is assembled by rotating (3) and (4) into the (x, y)
-frame with the strike of each segment.  This is what ``kostrov_tiles`` computes.
+The GDR/QFaults table has ``slip_rate``, ``slip_sense`` and ``dip_direct`` but no
+numeric dip angle or rake. ``dip_direct`` is an azimuth/direction of dip, **not**
+a dip angle. The rate convention (total fault-plane slip versus vertical
+displacement) is not established by the local CSV or its source metadata, so
+``BudgetConfig.rate_convention`` supports both. Pure normal and pure
+strike-slip motion, 60° normal-fault dip, 90° strike-slip dip, nearest-centroid
+rate assignment, and the treatment of missing slip sense are explicit
+assumptions—not measurements. Values are converted from the source table's
+rate field using the documented working unit (mm/yr) to m/yr; their physical
+interpretation is not independently verified here.
 
-Unit convention: slip rates in the INGENIOUS/GDR compilation are mm/yr; we
-convert to m/yr and report strain rate in nanostrain/yr (1e-9 /yr).
-
-What we can and cannot verify
------------------------------
-The three geodetic layers shipped with the competition are mutually consistent
-to r = 0.993 but satisfy **no exact algebraic identity** (tested: sqrt(dil^2 +
-shear^2), sqrt((dil^2+shear^2)/2), |dil| + |shear| all miss by >30% in places),
-so they were gridded/smoothed independently and the exact invariant convention
-used for ``geod_2ndinv`` is not recoverable from the data.  We therefore state
-the deficit in **quantile (rank) space**, which is invariant to any monotone
-rescaling of either side.  The raw nanostrain/yr numbers are reported too, and
-compared, but no absolute claim rests on them.
+The geodetic layers are highly correlated but satisfy no exact algebraic
+identity, so the precise invariant convention behind ``geod_2ndinv`` cannot be
+recovered. Stage 1 is therefore a coarse-tile ranking diagnostic in quantile
+space, never an absolute geodetic calibration or fine-scale point placer. See
+``evidence/stage1_formula_audit.json`` for the paired convention sensitivity.
 """
 
 from __future__ import annotations
@@ -84,25 +72,31 @@ class BudgetConfig:
     dip_default: float = DIP_DEFAULT
     max_assign_px: float = 60.0  # nearest-trace slip-rate assignment radius
     invariant: str = "II"       # "II" : sqrt(exx^2 + eyy^2 + 2 exy^2)
+    rate_convention: str = "vertical"  # "vertical" or "fault_plane"; source convention unresolved
+    assume_unknown_normal: bool = True  # explicit Basin-and-Range fallback for missing sense
 
 
 # ------------------------------------------------------------------ inputs
 def load_slip_rates(raw_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(raw_dir / "external" / "gdr_qfaults_traces.csv")
-    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # mm/yr -> m/yr
-    df["dip_deg"] = df["slip_sense"].map(DIP_BY_SENSE).fillna(DIP_DEFAULT)
-    df["is_strike_slip"] = df["slip_sense"].isin(["RL", "LL"])
+    df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # working assumption: mm/yr -> m/yr
+    sense = df["slip_sense"].fillna("").astype(str).str.strip().str.upper()
+    df["slip_sense_clean"] = sense
+    df["dip_deg"] = sense.map(DIP_BY_SENSE).fillna(DIP_DEFAULT)
+    df["is_strike_slip"] = sense.isin(["RL", "LL"])
+    df["strike_slip_sign"] = np.where(sense == "LL", -1.0, 1.0)
+    df["sense_known"] = sense.isin(["N", "RL", "LL"])
     return df
 
 
 def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig):
-    """Per-catalogue-pixel slip rate (m/yr), dip (deg) and strike-slip flag.
+    """Per-catalogue-pixel working rate, dip proxy, mode/sign, and assignment flag.
 
-    Geometry comes from the catalogue *raster* (exact, 100 m per pixel).  Slip
-    rate comes from the INGENIOUS/GDR attribute table by nearest trace centroid.
-    Pixels with no trace centroid inside ``max_assign_px`` get the regional
-    median and are flagged, so their contribution can be switched off in a
-    sensitivity run.
+    Geometry comes from the catalogue raster. Rates and senses are transferred
+    from the nearest CSV centroid; cells beyond ``max_assign_px`` receive the
+    regional median rate and default dip/mode only when ``assume_unknown_normal``
+    is enabled. This transfer is approximate: the CSV has centroids, not trace
+    geometries, and the default is recorded in the returned metadata.
     """
     ys, xs = np.nonzero(catalogue)
     cy = df["centroid_row"].to_numpy(float)
@@ -112,6 +106,8 @@ def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig)
     sr = df["slip_rate_m_yr"].to_numpy(float)[ok]
     dip = df["dip_deg"].to_numpy(float)[ok]
     ss = df["is_strike_slip"].to_numpy(bool)[ok]
+    sign = df["strike_slip_sign"].to_numpy(float)[ok]
+    known = df["sense_known"].to_numpy(bool)[ok]
 
     # brute-force nearest centroid over ~61 k x 1.1 k pairs = 68 M, done in strips
     best_d = np.full(ys.size, np.inf)
@@ -127,11 +123,15 @@ def assign_slip_rate(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig)
 
     med = float(np.nanmedian(sr))
     assigned = best_d <= cfg.max_assign_px
-    srate = np.where(assigned, sr[np.maximum(best_i, 0)], med)
-    dipv = np.where(assigned, dip[np.maximum(best_i, 0)], cfg.dip_default)
-    ssv = np.where(assigned, ss[np.maximum(best_i, 0)], False)
-    return ys, xs, srate.astype(float), dipv.astype(float), ssv.astype(bool), \
-        assigned, float(np.sqrt(np.median(best_d ** 2)))
+    nearest = np.maximum(best_i, 0)
+    srate = np.where(assigned, sr[nearest], med)
+    dipv = np.where(assigned, dip[nearest], cfg.dip_default)
+    ssv = np.where(assigned, ss[nearest], False)
+    sgn = np.where(assigned, sign[nearest], 1.0)
+    known_sense = np.where(assigned, known[nearest], False)
+    return (ys, xs, srate.astype(float), dipv.astype(float), ssv.astype(bool),
+            sgn.astype(float), known_sense.astype(bool), assigned,
+            float(np.sqrt(np.median(best_d ** 2))))
 
 
 def strike_orientation(catalogue: np.ndarray, sigma_grad: float = 2.0,
@@ -162,59 +162,95 @@ def tile_index(catalogue_pixels_yx, tile_px: int):
 
 
 # ------------------------------------------------------------------ Kostrov
-def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig):
-    """Fault-accommodated horizontal strain-rate tensor per tile, in nanostrain/yr.
+def dip_slip_horizontal_amplitude(length_m, rate_m_yr, dip_deg, area_m2,
+                                  rate_convention: str = "vertical"):
+    """Horizontal tensor component for a pure normal-fault segment.
 
-    Returns ``(exx, eyy, exy, tiles_shape, meta)`` where each array is on the
-    coarse tile grid.
+    The `vertical` convention treats the input as vertical displacement rate;
+    `fault_plane` treats it as total dip-slip rate. The source convention is not
+    resolved, so both are testable and recorded.
     """
-    ys, xs, srate, dip, is_ss, assigned, med_d = assign_slip_rate(catalogue, df, cfg)
+    d = np.deg2rad(np.asarray(dip_deg, dtype=np.float64))
+    if rate_convention == "vertical":
+        geom = 1.0 / np.tan(d)   # u_total = u_vertical / sin(dip)
+    elif rate_convention == "fault_plane":
+        geom = np.cos(d)
+    else:
+        raise ValueError("rate_convention must be 'vertical' or 'fault_plane'")
+    return np.asarray(length_m) * np.asarray(rate_m_yr) * geom / float(area_m2)
+
+
+def rotate_fault_tensor(strike_x, strike_y, normal_component, shear_component):
+    """Rotate the local (normal, strike-shear) tensor into horizontal x/y."""
+    sx = np.asarray(strike_x, dtype=np.float64)
+    sy = np.asarray(strike_y, dtype=np.float64)
+    c1 = np.asarray(normal_component, dtype=np.float64)
+    c12 = np.asarray(shear_component, dtype=np.float64)
+    nx, ny = -sy, sx
+    exx = c1 * nx * nx + c12 * 2.0 * nx * sx
+    eyy = c1 * ny * ny + c12 * 2.0 * ny * sy
+    exy = c1 * nx * ny + c12 * (nx * sy + ny * sx)
+    return exx, eyy, exy
+
+
+def kostrov_tiles(catalogue: np.ndarray, df: pd.DataFrame, cfg: BudgetConfig):
+    """Approximate fault-accommodated horizontal tensor per tile, in nanostrain/yr.
+
+    Uses the published Kreemer et al. (2000) Eq. (3) under pure-mode and rate-
+    convention assumptions documented at module top. Returns tensor components,
+    trace length, assigned-pixel counts, moment-rate proxy, tile shape, and audit
+    metadata. This is a broad prior, not a calibrated physical measurement.
+    """
+    if cfg.rate_convention not in ("vertical", "fault_plane"):
+        raise ValueError("rate_convention must be 'vertical' or 'fault_plane'")
+    (ys, xs, srate, dip, is_ss, ss_sign, sense_known,
+     assigned, med_d) = assign_slip_rate(catalogue, df, cfg)
     sx, sy = strike_orientation(catalogue)
     A_tile = (cfg.tile_px * PIXEL_M) ** 2
-    # length of the trace inside one raster cell: a cell traversed at azimuth
-    # (sx, sy) carries 1/max(|sx|,|sy|) cells of trace, i.e. between 100 m and
-    # 141.4 m.  Using a flat 100 m would under-count diagonal traces by up to 29%.
+    # A cell traversed at azimuth (sx,sy) contributes 100--141 m of trace.
     sxs = sx[ys, xs]; sys_ = sy[ys, xs]
     L = PIXEL_M / np.maximum(np.maximum(np.abs(sxs), np.abs(sys_)), 1e-6)
     L = np.clip(L, PIXEL_M, PIXEL_M * np.sqrt(2.0))
 
     d = np.deg2rad(dip)
-    # per-segment tensor-strain contribution, in 1/yr, already divided by A_tile
-    ess = np.where(is_ss, L * srate / (2.0 * A_tile * np.sin(d)), 0.0)   # (3)
-    enn = np.where(is_ss, 0.0, L * srate / (A_tile * np.tan(d)))          # (4) cot = 1/tan
+    normal_mode = (~is_ss) & (sense_known | cfg.assume_unknown_normal)
+    # For a pure strike-slip fault the source sense sets the sign. RL and LL
+    # have opposite unit moment tensors; both are not accumulated with one sign.
+    ess = L * srate / (2.0 * A_tile)
+    enn = dip_slip_horizontal_amplitude(L, srate, dip, A_tile,
+                                        cfg.rate_convention)
 
-    # rotate the segment frame (s_hat, n_hat) into (x, y)
-    #   s_hat = (sx, sy);  n_hat = (-sy, sx)
-    #   eps_ij = ess * (s_i n_j + n_i s_j) / 2? -- see note below; we build the
-    #   tensor directly from the two segment-frame components.
-    #
-    # In the segment frame the tensor is [[0, ess], [ess, 0]] (strike-slip) or
-    # [[enn, 0], [0, 0]] (dip-slip, n = e1 axis).  Rotating a 2x2 tensor with
-    # R = [[sx, -sy], [sy, sx]] (columns are s_hat and n_hat):
-    #   E = R @ Eseg @ R.T
-    c1 = np.where(is_ss, 0.0, enn)   # Eseg_11 (along n_hat)
-    c2 = 0.0                          # Eseg_22 (along s_hat)
-    c12 = np.where(is_ss, ess, 0.0)   # Eseg_12
-    # E = c1 * n n^T + c2 * s s^T + c12 * (n s^T + s n^T)
-    nx, ny = -sys_, sxs
-    exx = c1 * nx * nx + c12 * 2.0 * nx * sxs
-    eyy = c1 * ny * ny + c12 * 2.0 * ny * sys_
-    exy = c1 * nx * ny + c12 * (nx * sys_ + ny * sxs)
+    # Rotate the segment-frame tensor into x/y. `s_hat` is along strike and
+    # `n_hat=(-sy,sx)` is its horizontal perpendicular. For pure normal motion,
+    # n*n^T is invariant to the unobserved dip-direction sign; dip_direct remains
+    # directional metadata and is never read as a dip angle.
+    c1 = np.where(normal_mode, enn, 0.0)              # E_nn, pure normal
+    c12 = np.where(is_ss, ess * ss_sign, 0.0)        # E_sn, signed RL/LL
+    exx, eyy, exy = rotate_fault_tensor(sxs, sys_, c1, c12)
 
     tid, tshape = tile_index((ys, xs), cfg.tile_px)
     n_tiles = tshape[0] * tshape[1]
     def agg(v):
         return np.bincount(tid, weights=v, minlength=n_tiles)
-    exx_t = agg(exx) * 1e9      # -> nanostrain/yr
+    exx_t = agg(exx) * 1e9
     eyy_t = agg(eyy) * 1e9
     exy_t = agg(exy) * 1e9
-    len_t = agg(np.full(ys.size, L))                 # metres of mapped trace per tile
+    len_t = agg(np.full(ys.size, L))
     npix_t = np.bincount(tid, minlength=n_tiles)
     assigned_t = agg(assigned.astype(float))
-    mom_t = agg(L * srate * (cfg.h_seis_m / np.sin(d)))   # mu*A*sdot/mu [m^2 * m/yr]
+    # Keep the scalar moment-rate proxy consistent with the selected convention.
+    total_rate = srate.copy()
+    if cfg.rate_convention == "vertical":
+        total_rate = np.where(normal_mode, srate / np.maximum(np.sin(d), 1e-9), srate)
+    total_rate = np.where(normal_mode | is_ss, total_rate, 0.0)
+    mom_t = agg(L * total_rate * (cfg.h_seis_m / np.sin(d)))
     meta = dict(tile_px=cfg.tile_px, tile_shape=list(tshape), h_seis_m=cfg.h_seis_m,
                 median_centroid_distance_px=med_d,
                 frac_catalogue_px_with_slip_rate=float(assigned.mean()),
+                frac_catalogue_px_with_known_sense=float(sense_known.mean()),
+                rate_convention=cfg.rate_convention,
+                assume_unknown_normal=bool(cfg.assume_unknown_normal),
+                dip_assumptions={"normal_deg": cfg.dip_default, "strike_slip_deg": 90.0},
                 regional_median_slip_rate_mm_yr=float(np.nanmedian(df["slip_rate"])),
                 total_mapped_trace_km=float(len_t.sum() / 1000.0))
     return (exx_t.reshape(tshape), eyy_t.reshape(tshape), exy_t.reshape(tshape),

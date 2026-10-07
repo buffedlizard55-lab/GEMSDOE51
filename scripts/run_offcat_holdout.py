@@ -181,9 +181,9 @@ def main() -> None:
         rules: dict[str, np.ndarray] = {}
         n_thin = max(1, int(round(THIN_DENSITY * n_cand)))
         rules["thin_d0.04_s3.0"] = detector.rule_incumbent(belief, cand, n_thin, THIN_SPACING)
-        # Mass is a DECISION VARIABLE, not a constant: the hidden label set is believed to be
-        # ~5x sparser than the visible catalogue, and under DTI = T/(0.2T + 0.2F + 0.8K) every
-        # dot that misses costs 0.2 while every truth pixel pays at most 1.  These arms are
+        # Mass is a DECISION VARIABLE, not a constant: hidden-label density is unknown.
+        # Under DTI = T/(0.2T + 0.2F + 0.8K), extra dots help only if they earn enough
+        # weighted credit. These arms are
         # deliberately NOT mass-matched to the incumbent -- that is the point of the test -- and
         # they are paired per fold against thin_d0.04_s3.0 below.
         for d in (0.01, 0.02, 0.03, 0.06, 0.08):

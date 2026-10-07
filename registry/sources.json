@@ -27,7 +27,7 @@
   "id": "leaderboard",
   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
   "what": "Public leaderboard",
-  "status": "verified 2026-10-06 - top score 0.3774"
+  "status": "Fetched manually on 2026-10-07: rank 1 xiaofanhu 0.3774, rank 13 extradr19 0.2778; rows identify participant/score only and do not identify a TIFF or method. See registry/leaderboard_reads.json."
  },
  {
   "id": "rules_pdf",
@@ -81,7 +81,7 @@
   "id": "gdr_1391",
   "url": "https://gdr.openei.org/submissions/1391",
   "what": "Geothermal Data Repository submission 1391 - Nevada geothermal data, source of the QFaults trace table with slip rates",
-  "status": "data obtained via the owner mirror; the site itself is not reachable from this sandbox (HTTP 000)"
+  "status": "GDR landing page checked 2026-10-07: INGENIOUS/QFaults v2 supersedes v1 and includes a field-definition text file; the archive definitions were not extracted in this audit, so exact slip_rate component semantics remain unresolved. Local CSV observations do not authenticate them."
  },
  {
   "id": "ucertf3",
@@ -92,8 +92,8 @@
  {
   "id": "kostrov_1974",
   "url": "https://ui.adsabs.harvard.edu/abs/1974IzPhE..10..541K/abstract",
-  "what": "Kostrov 1974, Seismic moment and long-term deformation of the lithosphere - the moment-tensor summation used in Stage 1",
-  "status": "cited; the formula is restated here in the form used by Ward (1998) and Stevens & Avouac (2015)"
+  "what": "Kostrov 1974 is foundational moment-tensor context; the explicit implemented strain formula is cited to Kreemer et al. (2000), Eq. 3.",
+  "status": "historical source; do not cite as the exact line-by-line implementation formula without a checked equation."
  },
  {
   "id": "codeload",
@@ -106,5 +106,35 @@
   "url": "https://github.com/buffedlizard55-lab/GEMSDOE24",
   "what": "Pinned mirror of labels.tif and existing_faults.tif (the only obtainable copy; the DrivenData data page is login-walled)",
   "status": "verified 2026-10-06 - both pins resolve to the SAME sha256 7ba308cc... and the rasters are element-wise identical. See IR-51-08."
+ },
+ {
+  "id": "kreemer_2000_eq3",
+  "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+  "what": "Kreemer et al. (2000), Eq. 3, published fault-slip-based horizontal strain-rate summation used as Stage-1 formula source.",
+  "status": "full-text checked; equation transcribed to src/gems51/strain_budget.py and evidence/stage1_formula_audit.json; rate-component and dip assumptions remain explicit."
+ },
+ {
+  "id": "usgs_qfaults_rest_layer21",
+  "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=pjson",
+  "what": "USGS QFaults REST layer metadata for the trace/attribute layer.",
+  "status": "checked 2026-10-07: slip_rate is string-typed with alias 'Slip Rate(mm/year)' and no coded-value domain; does not resolve local numeric values' physical component semantics."
+ },
+ {
+  "id": "usgs_blind_geothermal_playfairway_2019",
+  "url": "https://www.usgs.gov/publications/discovering-blind-geothermal-systems-great-basin-region-integrated-geologic-and",
+  "what": "USGS report on Great Basin blind geothermal play-fairway mapping; describes collocated/terminating potential-field gradients and other independent evidence in case studies.",
+  "status": "abstract/summary checked for hypothesis rationale only; does not validate this project's raster operator."
+ },
+ {
+  "id": "faulds_hinz_2015",
+  "url": "https://pangea.stanford.edu/ERE/db/WGC/papers/WGC/2015/11100.pdf",
+  "what": "Faulds & Hinz (2015), favorable Great Basin geothermal structural settings and proxies for blind systems.",
+  "status": "paper abstract/content checked; broad geologic rationale for stepovers, terminations, and intersections only."
+ },
+ {
+  "id": "gemsdoe32_readme_attribution_check",
+  "url": "https://raw.githubusercontent.com/buffedlizard55-lab/GEMSDOE32/main/README.md",
+  "what": "Sibling repository's own score/status report for H33-2-B2.",
+  "status": "checked 2026-10-07: labels H33-2-B2 UNSCORED with modelled projection 0.2747; does not link the artifact to the public 0.2778 row under extradr19."
  }
 ]

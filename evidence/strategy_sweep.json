@@ -1,5 +1,5 @@
 {
- "note": "Strategies evaluated with the official DTI (alpha=0.2, beta=0.8, R=3 px) on the four spatially blocked folds. thin20 approximates the hidden label density (K ~ 12,200 px vs 60,988 visible). Categories are not projections of a real leaderboard score.",
+ "note": "Strategies evaluated with the official DTI (alpha=0.2, beta=0.8, R=3 px) on the four spatially blocked folds. thin20 is a hypothetical 20%-density sensitivity case (~12,200 visible-catalogue pixels); the hidden label count is unknown. Categories are not projections of a real leaderboard score.",
  "incumbent": {
   "density": 0.04,
   "spacing": 3.0

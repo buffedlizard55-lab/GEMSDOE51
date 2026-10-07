@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Build the final two-stage submission: fit -> field -> Stage 1 gate -> emit -> GeoTIFF.
 
-Decisions this script makes, and where each comes from:
-  * which hypothesis arm's features to use ....... --arm (chosen on the holdout)
-  * the emitted mass ............................. --ratio x |G| estimate (holdout argmax)
-  * the Stage 1 approval threshold ............... --stage1-q (holdout, Stage 1 scored alone)
-  * the exclusion radius around known faults ..... --excl-radius (measured: dots within
-                                                    200 m of the catalogue earn <= 0.031
-                                                    credit vs 0.139 for the rest)
+Decisions this script makes, with evidence limits:
+  * feature arm .................................. --arm (must be selected from matched holdouts)
+  * emission budget .............................. --ratio x truth-mass proxy; hidden |G| is unknown
+  * Stage-1 threshold ............................ --stage1-q for the diagnostic/hard gate
+  * exclusion radius ............................. --excl-radius, a configurable catalogue buffer
+
+Building a TIFF does not authorize a competition upload. The current H-D soft setting is
+small/inconclusive, and the matched H-G addition did not beat H-D; no slot is authorized.
 
 Usage:
     python3 scripts/build_submission.py --arm H_ALL --ratio 3.47 --stage1-q 60
@@ -40,13 +41,12 @@ from gems51.uniqueness import run_gate  # noqa: E402
 P = ROOT / "data" / "prepared"
 DOCS = ROOT / "docs" / "downloads"
 
-# |G| estimate for the hidden truth, in 100 m pixels.  Two independent routes:
-#   (a) the natural experiment between the 0.2600 and 0.2778 group submissions
-#       bounds it to [2.7k, 14.1k], with the upper end at 14.1k if the 6,436 dots
-#       removed within 200 m of the catalogue were worth exactly nothing;
-#   (b) the group's own generative truth model from GEMSDOE25 H28: 12,691 px.
-# We take 12,700 and record the sensitivity.
-G_HIDDEN_ESTIMATE = 12_700
+# Fixed planning constant for choosing an emission budget at M/|G|=3.47.
+# The hidden label count is unknown. This 12,700-pixel value is inherited from
+# an unverified prior-project density scenario; it is not a measured hidden-K
+# estimate, and the unsupported 0.2600-to-0.2778 natural-experiment rationale
+# has been withdrawn (IR-51-09).
+TRUTH_MASS_PROXY = 12_700
 
 
 def load_observed():
@@ -84,10 +84,14 @@ def stage1_approved(catalogue: np.ndarray, footprint: np.ndarray, df, obs,
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--arm", default="H_ALL")
-    ap.add_argument("--ratio", type=float, default=3.47)
-    ap.add_argument("--g-hidden", type=int, default=G_HIDDEN_ESTIMATE)
-    ap.add_argument("--stage1-q", type=float, default=70.0)
+    ap.add_argument("--arm", default="H_D")
+    ap.add_argument("--ratio", type=float, default=3.47,
+                    help="emitted pixels per unit of the planning truth-mass proxy")
+    ap.add_argument("--truth-mass-proxy", "--g-hidden", dest="truth_mass_proxy",
+                    type=int, default=TRUTH_MASS_PROXY,
+                    help="planning constant only; hidden truth size is unknown")
+    ap.add_argument("--stage1-q", type=float, default=70.0,
+                    help="Stage-1 diagnostic quantile; the soft mode does not hard-mask tiles")
     ap.add_argument("--gate-mode", default="soft", choices=["soft","hard"])
     ap.add_argument("--gate-weight", type=float, default=0.10)
     ap.add_argument("--tile-px", type=int, default=100)
@@ -163,12 +167,10 @@ def main() -> int:
       np.save(P / "field_final.npy", field)
 
     # ---------------------------------------------------------------- emission
-    # Two gate modes, both measured on the holdout (data/gate_sweep.json):
-    #   soft  score = field * (1 + w*z)   w=0.10 -> +0.0004, 4/6 folds  (shipped)
-    #   hard  emit only inside approved tiles -> -0.0762 at q=70, 0/6 folds
-    # The soft prior is shipped because it is the only one that does not cost
-    # score; the hard gate is written as a second artifact with its cost stated.
-    n_dots = int(round(a.ratio * a.g_hidden))
+    # Gate sweep (data/gate_sweep.json): soft w=0.10 has mean delta +0.000367
+    # over ungated H-D in 4/6 folds, which is small/inconclusive, not a win. A
+    # hard q70 gate is substantially worse. Neither result authorizes a slot.
+    n_dots = int(round(a.ratio * a.truth_mass_proxy))
     excl = ndi.distance_transform_edt(~catalogue) <= a.excl_radius
     zv = deficit_big[footprint & np.isfinite(deficit_big)]
     z = np.clip((deficit_big - zv.mean()) / max(zv.std(), 1e-9), -4.0, 4.0)
@@ -216,7 +218,9 @@ def main() -> int:
     # ---------------------------------------------------------------- manifest
     inside = float((support & approved).sum() / max(int(support.sum()), 1))
     man = dict(
-        generated_utc=stamp, arm=a.arm, ratio=a.ratio, g_hidden_estimate=a.g_hidden,
+        generated_utc=stamp, arm=a.arm, ratio=a.ratio,
+        truth_mass_proxy=a.truth_mass_proxy,
+        truth_mass_proxy_caveat="planning constant only; hidden truth size is unknown; not inferred from a verified leaderboard artifact",
         stage1_q=a.stage1_q, gate_mode=a.gate_mode, gate_weight=a.gate_weight,
         tile_px=a.tile_px, nms_radius=a.nms_radius,
         excl_radius=a.excl_radius, n_dots=int(support.sum()),
@@ -237,7 +241,7 @@ def main() -> int:
                            f"{'soft multiplicative prior w=' + format(used_w, 'g') if a.gate_mode == 'soft' else 'hard tile gate, top ' + format(100 - used_q, '.0f') + '% of tiles'}; "
                            f"{int(support.sum()):,} dots at {a.nms_radius:g} px spacing, "
                            f"none within {int(a.excl_radius*100)} m of the catalogue; "
-                           f"both stages holdout-scored separately. UNSCORED"),
+                           f"both stages holdout-scored separately; NOT SLOT-ELIGIBLE, UNSCORED"),
                      format=("single band, float32, EPSG:32611, 100 m, "
                              f"{GRID.shape[0]}x{GRID.shape[1]}, every one of "
                              f"{GRID.shape[0]*GRID.shape[1]:,} cells finite, "

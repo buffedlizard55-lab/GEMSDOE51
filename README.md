@@ -6,6 +6,14 @@
 
 ---
 
+> **Time-sensitive correction (2026-10-07):** The owner brief below is preserved verbatim, including
+> its historical “0.3195 is the highest” target. The official public leaderboard now shows 0.3774
+> at rank 1 and 0.3195 at rank 7. The 0.2778 row is `extradr19` at rank 13; no verified link ties
+> it to GEMSDOE32 H33-2-B2, which that repository labels UNSCORED with a 0.2747 modelled projection.
+> The historical habitat-style score values in the owner brief are owner-reported and not
+> independently authenticated to files. See the evidence and status section below; do not use old
+> score attributions as fact.
+
 ## 0. Project brief (verbatim from the owner)
 
 Review the repo.
@@ -257,22 +265,26 @@ Official sources:
 
 ### The one identity that drives every design decision
 
-From the published definitions, `FN = |G| − TP`, so
+From the published definitions, `FN_w = |G| − TP_w`, so
 
 ```
-DTI = TP / (TP + 0.2·FP + 0.8·FN)
-    = TP / ( 0.2·(TP + FP) + 0.8·|G| )
+DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)
+    = TP_w / ( 0.2·(TP_w + FP_w) + 0.8·|G| )
 ```
 
-`|G|` is fixed by the hidden truth. **A submission is therefore decided by the
-ratio of credit earned to mass emitted.** Adding a pixel of value `p` that earns
-expected kernel credit `c` raises the score iff
+Here `TP_w` and `FP_w` are distance-weighted terms. `|G|` is fixed by the hidden truth; the metric
+trades weighted true-positive credit against weighted error and a fixed truth-size term. The sum
+`TP_w + FP_w` is not the raw number of emitted pixels.
+
+`TP + FP` is the metric's effective weighted cost, not the raw number of emitted pixels. For an
+increment with weighted changes `ΔTP = c` and `ΔFP = f`, the exact local improvement condition is
 
 ```
-c > α · DTI       (≈ 0.056 at DTI = 0.28)
+c · (1 − 0.2·DTI) > 0.2·DTI·f
 ```
 
-Both identities and the bar are proved numerically in `tests/test_metric.py`.
+The familiar `c > 0.2·DTI` is only the special case `c + f = 1`; it is not a universal per-pixel
+threshold. The identities and the general/special-case tests are in `tests/test_metric.py`.
 
 ## 2. Repository layout
 
@@ -321,143 +333,215 @@ PYTHONPATH=src python -m pytest tests -q
   owner-mirror, **not** organizer-authenticated.
 
 
-## 5. What shipped this session
+## 5. Current evidence and decision (2026-10-07)
 
-### The deliverable
+### Executive decision
 
-`docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif` — 44,069 emitted pixels,
-sha256 `5db55c064eb0…`.
+The existing H-D soft research TIFF is
+`docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif`.
+It is a one-band float32 GeoTIFF on the competition grid, EPSG:32611, 100 m, 3730×3292,
+with every cell finite and values in [0, 1]; 44,069 positive pixels, SHA-256
+`5db55c064eb0b920beb84cd4d6de426a347206b7b8a2c9adc8cfb343084a570b`. Its format is verified,
+but its fresh full-corpus uniqueness audit **fails**: it overlaps the current repository's hard-q20
+alternate at Jaccard 0.631 and has a same-prediction NaN-format twin at Jaccard 1.000. Do not use it
+as a unique submission. Its suggested identifier is `GEMSDOE51-HD-SOFT-W010`; its note is only a
+label, not permission to upload.
 
-Two files are offered, both from the same detector and the same 3-bag ensemble, differing only in
-how Stage 1 is allowed to touch them:
+To produce a distinct research artifact without spending a competition slot, the matched H-G+H-D
+feature recipe was materialized as
+`docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif`.
+It is a single-band float32 GeoTIFF, EPSG:32611, 3730×3292, all finite in [0,1], 44,069 positive
+pixels, SHA-256 `c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9`. Its fresh
+public-artifact uniqueness audit **passes**: 359 TIFF payloads were fetched and SHA-verified, 358
+were pixel-comparable, zero download errors, one unrelated 32×48 format-test fixture skipped, zero
+matches, maximum support Jaccard 0.3216 (limit 0.50), maximum cosine 0.4867 (limit 0.90). Stage-1
+q70 diagnostics show 30.046% of footprint approved and 19.728% of emissions inside (lift 0.657),
+so Stage 1 does not dominate.
 
-| role | gate | holdout cost vs ungated | max Jaccard vs any prior GEMSDOE submission | uniqueness |
-|---|---|---|---|---|
-| PRIMARY | soft | +0.0004 | 0.017 | PASS |
-| SECONDARY | hard | -0.0025 | 0.015 | PASS |
+**Do not spend a competition slot or upload this experimental TIFF.** The matched six-block H-G+H-D
+holdout averaged 0.281056 proxy DTI vs H-D 0.281663 (paired Δ −0.000606; 3/6 folds higher) and lower
+mean AUC. The separate H-D soft-prior gain is +0.000367 (4/6 folds), small/inconclusive, not a
+win. Thus one artifact passes the scoped uniqueness gate, but it fails the locked incumbent holdout;
+no candidate has passed both promotion and uniqueness gates. The portal-formatted research TIFF is
+not a leaderboard claim and is not authorized for Phase 1 upload. Full records:
+`evidence/experimental_H_G_plus_H_D_artifact.json`,
+`evidence/uniqueness_gate_H_G_HD_experimental_20261007.json`, and
+`evidence/holdout_H_G_plus_H_D.json`.
 
-The **PRIMARY** uses the soft prior, because it is the only Stage-1 setting that is not negative on
-the blocked holdout. The **SECONDARY** is the brief's literal design — points only inside
-stage-one-approved tiles — shipped as ordered, with its measured cost printed next to it rather than
-hidden.
+### Public leaderboard and score attribution
 
-### Stage 1 and Stage 2, reported separately
+A manual fetch of the official board on 2026-10-07 shows the highest public row as 0.3774 at rank 1
+for participant `xiaofanhu`; 0.2778 appears at rank 13 for `extradr19`. These are leaderboard
+observations, not identified TIFFs. The board identifies participants and scores, not TIFF hashes or
+methods. The earlier claim linking 0.2778 to GEMSDOE32 H33-2-B2 is
+**unsupported and contradicted by GEMSDOE32's own reporting**: its README/site labels H33-2-B2
+UNSCORED, with a modelled projection of 0.2747. There is no verified file-to-score link. We cannot
+scientifically explain the 0.2778 row beyond the metric mechanics without the scored file, its
+positions, and the hidden labels. See `evidence/score_attribution_audit.json` and
+`registry/scored_submissions.json`.
 
-*Stage 1* (Kostrov strain-budget deficit, 10 km tiles) is scored on a **trace-level** holdout,
-because a spatial block would zero the fault-accommodated term inside the block and the question
-would be circular: with the block's own faults removed there is nothing to accommodate. A fifth of
-the mapped traces is withheld, the remaining four fifths supply the budget, and uniform random dots
-are thrown down inside the approved tiles versus everywhere. No model is fitted, so there is no
-leakage to control.
+Scientifically, the public score can only be interpreted through the published metric—not as a
+geological success rate or a known model result. With the 300 m triangular distance kernel, each
+truth pixel contributes at most its best nearby prediction credit; off-target prediction mass adds
+weighted false-positive cost. The score 0.3774 is not 37.74% recall, accuracy, or trace coverage. The
+effective `TP_w + FP_w` term is not raw emission count. For a proposed increment with weighted
+changes `c=ΔTP_w` and `f=ΔFP_w`, the exact local improvement condition is
+`c·(1−0.2·DTI) > 0.2·DTI·f`; `c > 0.2·DTI` is only a special case. Local holdouts below are
+catalogue proxies and are not directly comparable to public scores.
 
-| prior | approved | area share | truth recall | lift | proxy DTI |
-|---|---|---|---|---|---|
-| deficit | top 50 % of tiles | 0.501 | 0.551 | 1.100 | 0.0507 |
-| geodetic_only | top 50 % of tiles | 0.500 | 0.620 | 1.239 | 0.0578 |
-| deficit | top 30 % of tiles | 0.301 | 0.319 | 1.059 | 0.0448 |
-| geodetic_only | top 30 % of tiles | 0.301 | 0.375 | 1.247 | 0.0534 |
-| deficit | top 20 % of tiles | 0.201 | 0.240 | 1.193 | 0.0459 |
-| geodetic_only | top 20 % of tiles | 0.201 | 0.256 | 1.273 | 0.0489 |
-| none | whole footprint | 1.000 | 1.000 | 1.000 | 0.0494 |
+### Stage 1 — exact formula, rate sensitivity, and limitation
 
-Spearman rank correlation of each tile field against held-out fault density: deficit = +0.032, geodetic_only = +0.099, dil_deficit = +0.013, shear_deficit = +0.024.
+Kreemer et al. (2000), Eq. 3, gives the fault-slip-based horizontal strain-rate sum:
 
-The deficit is **worse than the raw geodetic field** on every column. Subtracting the
-fault-accommodated term removes signal instead of isolating it: the mapped-fault term tracks where
-faults cluster, mapped faults are surrounded by unmapped ones, so it carries *positive* information
-about where the missing ones are. Stage 1 is retained as a prior, not as a filter.
+```
+epsilon_dot_ij = 1/(2 A_tile) * sum_k [L_k * u_dot_k / sin(delta_k)] * m_ij^k
+m_ij^k = s_i^k*n_j^k + s_j^k*n_i^k
+```
 
-*Stage 2* (the detector), spatially blocked holdout:
+For pure normal motion the horizontal component is `L*u_vertical*cot(dip)/A` if the table rate is
+vertical displacement, or `L*u_fault_plane*cos(dip)/A` if it is total fault-plane slip. For a pure
+vertical-plane strike-slip fault it is `L*u/(2A)`, with opposite signs for right- and left-lateral
+motion. Source: [Kreemer et al. (2000), Eq. 3](https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf).
 
-| arm | in-block AUC | proxy DTI at M/|G| = 3.47 | folds |
-|---|---|---|---|
-| base | 0.6668 | 0.2794 | 6 |
-| H_E | 0.6633 | 0.2768 | 6 |
-| H_D | 0.6726 | 0.2817 | 6 |
-| H_C | 0.6322 | 0.2544 | 6 |
-| H_ALL | 0.6293 | 0.2552 | 6 |
+The local table has 1,126 rows and 49 distinct numeric `slip_rate` values. The USGS QFaults REST
+alias labels the string field “Slip Rate (mm/year)”, but exact component semantics are not
+authenticated here: the GDR v2 archive's field-definition text could not be read. `dip_direct` is
+direction metadata, not numeric dip. The code assumes 60° normal-fault dip and 90° strike-slip
+dip; unknown slip sense is either assumed normal or excluded in sensitivity runs. Stage 1 is
+quantile-space tile ranking only, a low-confidence broad prior—not a fine-scale point placer.
 
-### Gate sweep
+Five trace-level splits (not spatial blocks) show that the deficit is worse than raw geodetic-only
+on mean Spearman and q50 recall/area lift under all four formula/sense cases. The random-dot
+comparison uses 44,069 dots from `3.47 × 12,700`; 12,700 is a planning proxy only, not a measured
+hidden-truth size or a deduction from a public leaderboard row:
 
-Hard gate versus soft prior, six folds, paired against the ungated run:
+| rate/sense case | Spearman: deficit / geodetic-only | q50 lift: deficit / geodetic-only | single-draw q50 proxy DTI: deficit / geodetic-only |
+|---|---:|---:|---:|
+| vertical-rate assumption, unknown sense→normal | 0.0318 / 0.0993 | 1.099 / 1.239 | 0.04972 / 0.05629 |
+| fault-plane-rate assumption, unknown sense→normal | 0.0313 / 0.0993 | 1.097 / 1.239 | 0.05020 / 0.05598 |
+| vertical rate, known senses only | 0.0273 / 0.0993 | 1.101 / 1.239 | 0.05063 / 0.05537 |
+| fault-plane rate, known senses only | 0.0269 / 0.0993 | 1.104 / 1.239 | 0.05187 / 0.05567 |
 
-| gate | setting | mean proxy DTI | paired Δ | folds better |
-|---|---|---|---|---|
-| soft prior | w = 0.0 | 0.2816 | +0.0000 | 0/6 |
-| soft prior | w = 0.05 | 0.2818 | +0.0001 | 3/6 |
-| soft prior | w = 0.1 | 0.2820 | +0.0004 | 4/6 |
-| soft prior | w = 0.2 | 0.2818 | +0.0002 | 4/6 |
-| soft prior | w = 0.4 | 0.2810 | -0.0007 | 2/6 |
-| hard gate | top 100 % of tiles | 0.2816 | +0.0000 | 0/6 |
-| hard gate | top 90 % of tiles | 0.2803 | -0.0013 | 0/6 |
-| hard gate | top 80 % of tiles | 0.2791 | -0.0025 | 0/6 |
-| hard gate | top 70 % of tiles | 0.2779 | -0.0038 | 0/6 |
-| hard gate | top 60 % of tiles | 0.2721 | -0.0095 | 0/6 |
-| hard gate | top 30 % of tiles | 0.2055 | -0.0762 | 0/6 |
-| hard gate | top 10 % of tiles | 0.1372 | -0.1445 | 0/6 |
+DTI is one seeded random-dot draw per field/split and not paired across masks; treat its small
+changes as descriptive noise. Complete formula, input-field caveats, and split-level values:
+`evidence/stage1_formula_audit.json`.
 
-The hard gate is monotone-harmful: it never wins a fold at any setting. It is shipped anyway, at the
-mildest setting that still passes the anti-dominance test, because the brief asks for it — and its
-cost is disclosed on the download page rather than hidden.
+### Stage-1 dominance audit for the soft primary
 
-### Honest expectation, written down before the score is known
+The soft primary's configured diagnostic is **q70** (approve the top 30% of deficit values), not
+q20. Its original build-time check reports 30.046% of footprint approved and 20.307% of emitted
+pixels inside that area (lift 0.676). A current-code rerun reports 30.046% area, 19.560% inside
+(lift 0.651). Both are below the area share, so neither indicates Stage-1 dominance. The existing
+TIFF predates the signed strike-slip code revision; both records are preserved rather than
+conflated. The old q20/top-80% figures (80.051% area, 78.091% emitted) belong to the hard secondary
+threshold and are retained only as a comparator. See `evidence/submission_manifest_reconciliation.json`.
 
-Our instrument says **0.282** proxy DTI at the live mass ratio, against
-**0.279** for the previous stack. That brackets the group's best owner claim (0.2778)
-and sits below the current public leader (0.3774). **Expect this file to land in the high 0.2s.** It
-is a genuinely new, independently verified, portal-legal submission — it is not yet a leaderboard
-win.
+### Stage 2 — spatially blocked proxy holdout
 
-### Phase 1 entries are not free
+| arm | in-block AUC | proxy DTI at M/|G|=3.47 | evidence |
+|---|---:|---:|---|
+| H-D incumbent | 0.67262 | 0.28166 | `data/holdout_H_D.json` |
+| H-G high-angle TMI–gravity crossings, replacing H-D extras (not matched) | 0.66358 | 0.27678 | `evidence/holdout_H_G.json` |
+| H-G crossings added to H-D (matched) | 0.66962 | 0.28106 | `evidence/holdout_H_G_plus_H_D.json` |
 
-The organizer has stated that the Phase 2 test set "will use a test set that is updated by expert
-review of all Phase 1 submissions, so your fault predictions have an impact on final evaluation even
-if they are not the most performant in Phase 1" (chrisk-dd, 2026-09-23, thread 11527 post 7). Every
-emitted dot is therefore required to be individually defensible: all lie outside the 200 m exclusion
-zone, none sits on a catalogued trace, and the argument for looking in any given tile is published
-on the method page. The same organizer post declined to disclose the data sources, fault types or
-coverage behind the hidden labels, so **no** validation instrument here — including ours — can be
-shown to match the hidden label style (IR-51-05).
+The first H-G arm replaced H-D's four coherence features and lost by 0.004879 mean proxy DTI
+(1/6 folds higher); it was not an add-on comparison. The matched H-G + H-D add-on was then evaluated
+on the same six blocks, truth counts, block sizes, negative-sample plan, and M/|G|=3.47. It scored
+0.281056 versus H-D 0.281663 (paired delta −0.000606; 3/6 folds higher); mean AUC was 0.669619
+versus 0.672618. H-G is not promoted. Stage 2 is six contiguous spatial blocks with a 1.2 km
+training buffer, fixed negative-sample seed per fold, and emissions/scoring inside the held-out
+blocks. All local results use the visible catalogue as proxy truth; none establishes hidden-fault
+or geothermal resource discovery.
+
+### Hypotheses and prior art
+
+The four-candidate date-stamped slate (target layers/signatures, rationale, exact difference from
+inspected prior work, expected benefit, engineering cost, and both the initial and matched H-G
+results) is
+`evidence/hypothesis_slate_20261007.json`. Prior-art review covers 582 keyword-selected public
+documents from 54 sibling repositories and makes no global novelty claim. Broad river-profile,
+hydrothermal-expression, radiometric, relay/stepover, and magnetic–gravity orientation families
+have substantial sibling prior art. H53's default branch had only an 11-byte README with its title.
+The H-G high-angle operator is a specific variant of an already documented edge-orientation family,
+not an untried family.
+
+### Known limitations that change decisions
+
+1. **IR-51-08:** the obtainable `labels.tif` is byte-identical to the known-fault raster/catalogue;
+   the real competition training labels are not authenticated. This is the largest blocker.
+2. **IR-51-05:** the organizer does not disclose hidden-label provenance; the hidden fault style may
+   differ from the visible catalogue.
+3. **Stage 1:** rate component, slip sense fallbacks, assumed dip, and geodetic invariant convention
+   remain uncertain; the deficit loses as a locator and stays a broad prior only.
+4. **Score attribution:** public participant rows do not identify artifacts; no local organizer
+   score is claimed.
+5. **Uniqueness:** the H-D soft TIFF fails the fresh audit (hard-q20 Jaccard 0.631; its NaN twin
+   Jaccard 1.000). A newly materialized H-G+H-D experiment passes the scoped corpus gate (359
+   SHA-verified TIFF payloads; 358 comparable; zero matches; one format-test shape skip), but its
+   matched holdout is negative, so it is not slot-eligible. Neither result substitutes for the
+   historic 211-reference Hridge PASS; that input corpus is absent. See both
+   `evidence/uniqueness_gate_H_D_soft_20261007.json` and
+   `evidence/uniqueness_gate_H_G_HD_experimental_20261007.json`.
+6. **Provenance:** rasters come from hash-pinned owner mirrors, not an authenticated organizer
+   download.
+
+### Reproduction
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/audit_stage1_formula_results.py
+PYTHONPATH=src .venv/bin/python scripts/reconcile_submission_manifest.py
+PYTHONPATH=src .venv/bin/python scripts/run_public_uniqueness_audit.py \
+  --candidate docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif
+# Optional research build only; H-G+H-D failed its matched holdout and must not be uploaded.
+PYTHONPATH=src .venv/bin/python scripts/build_experimental_hg_hd_tiff.py \
+  --basename gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z
+PYTHONPATH=src .venv/bin/python scripts/run_public_uniqueness_audit.py \
+  --candidate docs/downloads/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif \
+  --out evidence/uniqueness_gate_H_G_HD_experimental_20261007.json
+.venv/bin/python scripts/build_site.py
+PYTHONPATH=src .venv/bin/python -m pytest -q
+```
 
 ### Repository history: two independent implementations
 
 PR #1/#2 (an earlier session on a different branch) and this session each built the same library
 from scratch in parallel, so 27 paths conflicted add/add at the same names. This session's versions
 were kept for the shared code and site paths because they are what produced the shipped artifacts.
-Nothing was lost: every conflicting PR #1/#2 file is preserved verbatim under `attic/pr1-2/`, and
-all 74 non-conflicting files — the `evidence/*.json` register, `docs/claims.html`,
-`docs/strategy.html`, `docs/executive-summary.html`, `docs/assets/`, the CI workflows,
-`data/labels.tif`, `data/existing_faults.tif` and `data/sample_submission.tif` — carry through
-untouched. Recorded as **IR-51-07**.
+Nothing was lost at that merge: every conflicting PR #1/#2 file is preserved verbatim under
+`attic/pr1-2/`, while the 74 non-conflicting files were retained. This follow-up now regenerates
+`docs/claims.html` from `registry/claims.json` and replaces the obsolete `docs/strategy.html`
+narrative with a score-attribution correction notice; original merge handling remains recorded as
+**IR-51-07**.
 
 ### Limitations, in the order they matter
 
-1. **IR-51-08 — the training labels are a duplicate of the known-fault raster.** Byte-identical
-   files, identical sha256, identical to the catalogue we derived independently from INGENIOUS. The
-   real target distribution has never been seen by any model in this repository. **This is the first
-   thing next session should chase**, because everything measured here measures our detector against
-   a proxy, not against the truth.
-2. **IR-51-05 — the organizer will not disclose the hidden labels' provenance.** We cannot tell
-   whether the truth is topographic, geophysical or field-mapped, and Phase 2's test set is rebuilt
-   from expert review of Phase 1 submissions.
-3. **The instrument's ceiling.** In-block AUC 0.673 and proxy DTI 0.282 is about as good as the
-   detector that produced the group's best 0.2778. Closing a 0.095 gap to the leader is a modelling
-   problem, not an emission-tuning problem.
-4. **Stage 1 does not work as specified.** The strain-budget deficit is worse than the raw geodetic
-   field on every measure. It is shipped as a soft prior because that costs nothing; the brief's
-   hard-gate version is shipped too, with its cost disclosed.
-5. **No authenticated data.** Every raster is an owner-mirrored public GitHub blob; provenance is
-   hash-consistent, not organizer-authenticated.
-6. **Regenerable bulk is not in git.** `data/raw/` and `data/prepared/` (~7 GB, the 2.67 GB feature
-   stack and 0.9 GB static extras) are rebuilt by `scripts/restore_data.py` → `prepare_data.py` →
-   `stack.build()` → `build_extras.py`, roughly four minutes end to end.
+1. **IR-51-08 — target labels are not authenticated.** The obtainable `labels.tif` is byte-identical
+   to the known-fault raster/catalogue. All local holdouts therefore test recovery of visible
+   catalogue structure, not the hidden target distribution.
+2. **No artifact-to-score mapping.** The highest public row in the 2026-10-07 fetch is 0.3774
+   (`xiaofanhu`); it reveals no TIFF or method. The 0.2778 row belongs to `extradr19` in that
+   snapshot, and must not be attributed to GEMSDOE32 H33-2-B2, which the sibling reports as
+   UNSCORED with a 0.2747 modelled projection.
+3. **Stage 1 is not a locator.** Its deficit ranks below raw geodetic-only on the audited trace-level
+   splits under all four rate/sense cases. It is retained only as a low-confidence broad-tile prior;
+   slip-rate component semantics, unknown-sense handling, dip assumptions and geodetic invariant
+   conventions remain uncertain.
+4. **No hypothesis has passed the promotion gate.** H-D soft's +0.000367 mean delta is small and
+   inconclusive; the matched H-G add-on is −0.000606 and only 3/6 folds higher. No slot is authorized.
+5. **Uniqueness scope is finite.** The fresh audit covers indexed TIFFs under public sibling
+   `docs/downloads/` and `submissions/` paths in the pinned inventory; it is not proof of global
+   uniqueness or a complete source-code/data-history search.
+6. **No organizer-authenticated raster bytes.** The available inputs are hash-pinned owner mirrors;
+   hashes establish consistency with those mirrors, not organizer provenance.
 
-### What next session should do
+### Next actions
 
-* Get the real `labels.tif` (IR-51-08) and re-run the blocked holdout against it. If the mirror is
-  simply mislabelled, every number in this repository needs re-measuring.
-* Attack the localisation problem directly: the leader's implied ~200 m mean dot-to-trace distance
-  versus our ~260 m is the whole gap, so the next candidate hypothesis should be judged on that
-  statistic, not on AUC.
-* Try a sub-pixel emission position: the metric's triangular kernel rewards being *on* the trace,
-  and every dot here is snapped to a 100 m cell centre.
+* Finish the fresh uniqueness audit for the current candidate and report its exact corpus scope,
+  Jaccard/containment results, and Stage-1 dominance check separately.
+* Rebuild and inspect the generated site, then run the full tests and Python syntax checks.
+* Keep H-G rejected unless new, preregistered evidence changes its paired result. Any H-H/H-I/H-J
+  implementation must be tested on the locked spatial blocks before any slot is considered.
+* Obtain organizer-authenticated training labels if access becomes available, then rerun all holdouts;
+  until then, all local DTI/AUC figures remain visible-catalogue proxies.
+* Do not infer the winning model's layers, mass, fault styles, or point placement from a participant
+  score alone. No local leaderboard score or geothermal discovery is claimed.

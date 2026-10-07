@@ -1,0 +1,123 @@
+{
+  "generated_utc": "2026-10-07T03:40:48+00:00",
+  "status": "EXPERIMENTAL_NOT_SLOT_ELIGIBLE",
+  "decision": "Do not upload: the matched spatial-block holdout did not beat H-D.",
+  "holdout_evidence": "evidence/holdout_H_G_plus_H_D.json",
+  "holdout_comparator": "data/holdout_H_D.json",
+  "holdout_result": {
+    "H_G_plus_H_D_proxy_dti_mean": 0.28105639793372034,
+    "H_D_proxy_dti_mean": 0.2816626603034904,
+    "paired_delta": -0.000606262369770072,
+    "fold_deltas": [
+      -0.0012611735244822952,
+      -0.0050689747488008585,
+      0.005860389571881064,
+      -0.005466333440924148,
+      0.00010642626185186632,
+      0.0021920916618541897
+    ],
+    "folds_higher": 3,
+    "folds_total": 6,
+    "H_G_plus_H_D_auc_mean": 0.669618890762553,
+    "H_D_auc_mean": 0.6726182834034514,
+    "comparability_caveat": "The blocked holdout compares the Stage-2 feature arm at matched mass; this full-raster build also applies the separately inconclusive Stage-1 soft prior. The output is an experimental realization of a non-promoted recipe, not a winner or slot-ready candidate."
+  },
+  "recipe": {
+    "arm": "H-G added to H-D",
+    "features": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21",
+      "tmi_grav_xing_s400",
+      "tmi_grav_xing_s800"
+    ],
+    "stage1": "current-code q70 diagnostic; soft w=0.10 rank multiplier; no hard tile mask",
+    "mass_ratio": 3.47,
+    "truth_mass_proxy": 12700,
+    "truth_mass_proxy_caveat": "Planning constant only; true hidden truth size is unknown and this is not an estimate inferred from a verified score.",
+    "requested_dots": 44069,
+    "models": 3,
+    "negative_samples_per_model": 400000,
+    "max_iter": 400,
+    "seed": 17,
+    "nms_radius_px": 2.4,
+    "catalogue_exclusion_radius_px": 2.0
+  },
+  "artifact": {
+    "file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+    "zip": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z.zip",
+    "sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+    "bytes": 233392,
+    "submission_name": "GEMSDOE51-HG-HD-XING-EXPERIMENT",
+    "note": "H-G TMI-gravity crossings + H-D; experimental only, matched holdout below H-D; NOT SLOT-ELIGIBLE.",
+    "format": {
+      "file": "gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+      "bytes": 233392,
+      "sha256": "c02930644a5c3b1051a57c5f2092bb1c942d6adb07d6ca76be205ad8e0d46ab9",
+      "crs": "EPSG:32611",
+      "crs_epsg": 32611,
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 1,
+      "dtype": "float32",
+      "nodata": null,
+      "checks": {
+        "single_band": true,
+        "dtype_float32": true,
+        "crs_epsg_32611": true,
+        "transform_matches_template": true,
+        "shape_matches_template": true,
+        "all_cells_finite": true,
+        "nan_cells": 0,
+        "values_outside_0_1": 0,
+        "min_value": 0.0,
+        "max_value": 1.0,
+        "nodata_tag_is_none": true,
+        "positive_px": 44069,
+        "total_mass": 44069.0,
+        "portal_legal": true
+      }
+    }
+  },
+  "stage1_dominance_q70": {
+    "threshold": 0.15608919382504288,
+    "approved_pixels": 1552597,
+    "footprint_pixels": 5167373,
+    "approved_area_share": 0.30046156915709393,
+    "emitted_pixels": 44069,
+    "emitted_share_inside_approved": 0.19728153577344618,
+    "lift": 0.6565949060536893,
+    "interpretation": "No Stage-1 dominance: the top-30% tile area is 30.046% of the footprint, while only 19.728% of emitted points fall inside; the soft prior does not hard-mask emissions."
+  },
+  "caveat": "All local holdout results use the visible catalogue as proxy truth, not authenticated competition labels.",
+  "uniqueness": {
+    "evidence": "evidence/uniqueness_gate_H_G_HD_experimental_20261007.json",
+    "verdict": "PASS",
+    "inventory_repositories": 54,
+    "indexed_paths": 409,
+    "sha_verified_payloads": 359,
+    "download_errors": 0,
+    "pixel_comparisons": 358,
+    "skipped_shape_mismatch": 1,
+    "matches": 0,
+    "max_support_jaccard": 0.3216272548696187,
+    "max_cosine": 0.4867140054702759,
+    "limits": {
+      "iou": 0.5,
+      "cosine": 0.9,
+      "containment": 0.98
+    },
+    "scope": "Indexed TIFFs under docs/downloads/ and submissions/ in the pinned public 54-repository inventory; non-submission TIFFs elsewhere and global uniqueness are out of scope."
+  }
+}

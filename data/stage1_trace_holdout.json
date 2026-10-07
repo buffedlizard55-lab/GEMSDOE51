@@ -4,9 +4,10 @@
   "tile_px": 100,
   "thresholds": "50,70,80",
   "ratio": 3.47,
-  "g_hidden": 12700,
   "seed": 3,
-  "min_heldout": 2000
+  "min_heldout": 2000,
+  "truth_mass_proxy": 12700,
+  "truth_mass_proxy_caveat": "planning constant only; hidden truth size is unknown and not inferred from a verified leaderboard artifact"
  },
  "per_split": [
   {

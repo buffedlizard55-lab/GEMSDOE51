@@ -51,6 +51,8 @@ ARMS = {
     "base": [],                                   # 58 physical stack features
     "H_E": ["base_s", "cond_s", "grav2_s", "base_step_coh"],   # basin-edge geophysics
     "H_D": ["facecoh"],                           # scarp-facing coherence
+    "H_G": [],                                    # high-angle TMI/gravity intersections
+    "H_G_HD": ["facecoh"],                        # H-D incumbent plus high-angle intersections
     "H_C": [],                                    # catalogue tips (fold-dependent)
     "H_ALL": ["base_s", "cond_s", "grav2_s", "base_step_coh", "facecoh"],
 }
@@ -82,6 +84,16 @@ def run(args):
     print(f"[holdout] {len(folds)} folds; truth/fold = {[f.n_truth for f in folds]}")
 
     ex_names, ex_mm, ex_keep = load_extras(args.arm)
+    static_extra_cols = []
+    if args.arm in ("H_G", "H_G_HD"):
+        from gems51.extras import build_magnetic_gravity_intersections
+        crossing = build_magnetic_gravity_intersections(stack, footprint)
+        if args.arm == "H_G":
+            ex_names = list(crossing)
+        else:
+            ex_names = ex_names + list(crossing)
+        static_extra_cols = list(crossing.values())
+        del crossing
     print(f"[arm {args.arm}] + {len(ex_names)} static extras: {ex_names}")
 
     ratios = [float(v) for v in args.ratios.split(",")]
@@ -90,7 +102,7 @@ def run(args):
     for fold in folds:
         # ---- feature matrix -------------------------------------------------
         rng = np.random.default_rng(1000 + fold.index)
-        extra_cols = []
+        extra_cols = list(static_extra_cols)
         if ex_mm is not None:
             extra_cols += [np.asarray(ex_mm[i], dtype=np.float32) for i in ex_keep]
         if args.arm in ("H_C", "H_ALL"):
@@ -137,8 +149,10 @@ def run(args):
         v = [x[f"dti_r{r}"] for x in rows]
         summary[f"dti_r{r}"] = dict(mean=float(np.mean(v)), std=float(np.std(v)),
                                     per_fold=[float(z) for z in v])
-    out = ROOT / "data" / f"holdout_{args.arm}.json"
-    out.write_text(json.dumps(dict(config=vars(args), per_fold=rows, summary=summary), indent=1))
+    out = Path(args.output) if args.output else ROOT / "data" / f"holdout_{args.arm}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(dict(config=vars(args), features=ex_names,
+                                   per_fold=rows, summary=summary), indent=1))
     print(json.dumps(summary, indent=1))
     print(f"wrote {out} ({time.time()-t0:.0f}s)")
     return 0
@@ -157,6 +171,7 @@ def main():
     ap.add_argument("--nms-radius", type=float, default=2.4)
     ap.add_argument("--excl-radius", type=float, default=2.0)
     ap.add_argument("--save-fields", action="store_true")
+    ap.add_argument("--output", default="", help="optional JSON results path")
     sys.exit(run(ap.parse_args()))
 
 

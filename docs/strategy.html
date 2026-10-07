@@ -1,142 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Strategy versus the leaders — GEMSDOE51</title><style>
-:root{--ink:#12202c;--mut:#5b6b7c;--bg:#f5f7fa;--card:#fff;--line:#dbe2ea;--ok:#0d7a4a;
---warn:#8a5300;--acc:#0b5fa5}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
-font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-header{background:#0c1a28;color:#fff;padding:20px 0 14px}
-header .in,main,footer .in{max-width:1080px;margin:0 auto;padding:0 20px}
-h1{margin:0 0 4px;font-size:1.42rem}h2{margin:30px 0 8px;font-size:1.2rem;
-border-bottom:2px solid var(--line);padding-bottom:5px}h3{margin:18px 0 6px;font-size:1.02rem}
-a{color:var(--acc)}nav{margin-top:10px;display:flex;flex-wrap:wrap;gap:7px}
-nav a{color:#cfe3ff;text-decoration:none;border:1px solid #2b4462;border-radius:999px;
-padding:4px 12px;font-size:.86rem}nav a.on{background:#cfe3ff;color:#0c1a28;border-color:#cfe3ff}
-main{padding:6px 0 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;
-padding:18px 20px;margin:14px 0;box-shadow:0 1px 2px rgba(16,24,40,.05)}
-.hero{border:2px solid var(--ok);background:linear-gradient(180deg,#f1fbf5,#fff)}
-.btn{display:inline-block;background:var(--ok);color:#fff;font-weight:700;text-decoration:none;
-padding:13px 20px;border-radius:10px;font-size:1.03rem;margin:5px 8px 5px 0}
-.btn.alt{background:#fff;color:var(--ok);border:2px solid var(--ok)}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;word-break:break-all}
-table{border-collapse:collapse;width:100%;margin:9px 0;font-size:.92rem}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:#eef2f7}.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:.75rem;
-font-weight:700;border:1px solid}
-.p-meas{color:var(--ok);border-color:var(--ok);background:#eafaf1}
-.p-proxy{color:var(--warn);border-color:var(--warn);background:#fff6e8}
-.p-live{color:var(--acc);border-color:var(--acc);background:#eaf2fc}
-ul,ol{margin:8px 0 8px 22px;padding:0}li{margin:4px 0}
-.mut{color:var(--mut)}.small{font-size:.88rem;line-height:1.5}
-pre{background:#0c1a28;color:#e8eef5;padding:12px 14px;border-radius:9px;overflow-x:auto;
-font-size:.85rem;line-height:1.5}
-footer{color:var(--mut);font-size:.85rem;padding:18px 0 40px}
-</style></head><body>
-<header><div class="in"><h1>GEMSDOE51 — DOE GEMS Prize, round 1</h1>
-<div class="small">DrivenData #306 · GeoDAWN / NW Nevada · unique, gated, <strong>unscored</strong>
-submission · every number traceable to a file in this repository</div>
-<nav><a class="" href="index.html">Executive summary</a><a class="" href="analysis.html">Why 0.2778? Can we beat it?</a><a class="on" href="strategy.html">Strategy versus the leaders</a><a class="" href="hypotheses.html">Hypotheses</a><a class="" href="method.html">Method &amp; gates</a><a class="" href="irregularities.html">Irregularities</a><a class="" href="claims.html">Claims</a><a class="" href="sources.html">Sources</a><a class="" href="leaderboard.html">Leaderboard</a></nav></div></header><main><div class="in"><div class="card">
-<h1>Strategy versus the leaders — the arithmetic of 0.3195, and what it takes to exceed it</h1>
-<p class="small mut">Sources for every external number are linked; every local number points at the
-evidence file that produced it. Where a quantity is inferred rather than measured it is labelled
-<strong>inference</strong> and the assumption is stated.</p>
+<title>Retired strategy analysis</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>
+  <a class="" href="how-to-submit.html">How to submit</a>
+  <a class="" href="method.html">Method</a>
+  <a class="" href="hypotheses.html">Hypotheses</a>
+  <a class="" href="holdout.html">Holdout</a>
+  <a class="active" href="analysis.html">Analysis</a>
+  <a class="" href="sources.html">Sources</a>
+  <a class="" href="leaderboard.html">Leaderboard</a>
+  <a class="" href="irregularities.html">Irregularities</a>
+  <a class="" href="claims.html">Claims</a>
+</nav>
+</div></header>
+<main class="wrap">
 
-<h2>1. The decision equation, derived</h2>
-<pre>Official metric (page 967):   DTI = TP_w / (TP_w + 0.2 FP_w + 0.8 FN_w + eps)
-Exact identity, verified in tests/test_metric.py against the published worked example:
-   FN_w = K - T        K = number of truth pixels, T = TP_w
-   FP_w = M - C        M = total emitted mass, C = mass sitting on the visible candidate
-Working form used everywhere below:
-   DTI = T / (0.2 T + 0.2 F + 0.8 K)          F = FP_w,  0 <= F <= M
-Solving for the credit a target score requires:
-   T = DTI * (0.2 F + 0.8 K) / (1 - 0.2 DTI)</pre>
-<p>Two consequences drive everything: (i) <strong>credit saturates per truth pixel</strong> — a truth
-pixel pays its best dot once, no matter how many dots crowd it, so extra mass cannot buy the same
-pixel twice; (ii) <strong>mass that misses costs 0.2 per unit</strong>, which is why an over-massive
-file needs proportionally more credit for the same score.</p>
+<h2>Legacy strategy page retired</h2>
+<p>This URL is preserved for old links, but the former strategy narrative is not current evidence.
+It incorrectly attributed a public score of 0.2778 to GEMSDOE32 H33-2-B2 and used that unverified
+file identity in downstream arithmetic. The attribution has been withdrawn: the 2026-10-07 public
+leaderboard displayed 0.2778 for participant <code>extradr19</code> and 0.3774 for
+<code>xiaofanhu</code>, but neither row identifies a TIFF or method. GEMSDOE32's own report labels
+H33-2-B2 UNSCORED with a modelled projection of 0.2747.</p>
+<p>Use the current <a href="analysis.html">score analysis</a>,
+<a href="holdout.html">separate Stage-1/Stage-2 holdout report</a>,
+<a href="hypotheses.html">hypothesis slate</a>, and
+<a href="irregularities.html">irregularity register</a>. No public score is attributed to a local
+artifact, and no local proxy result is a leaderboard score.</p>
 
-<h2>2. What a 0.3195-class score requires (inference, assumption-stated)</h2>
-<p>The hidden label set is bigger than the visible catalogue in the final round, but the live
-leaderboard is scored on a set the family's own calibration places near <strong>K ≈ 12,200 px</strong>
-(the sibling's calibrated hidden-truth scale, used here only as a sensitivity anchor — not as a
-measurement). The table gives the credit T a file of mass M must earn at F = M (worst case,
-i.e. all mass wasted) to reach <strong>0.3195</strong>, and what fraction of the hidden set that is:</p>
-<table><thead><tr><th>file mass</th><th>hidden truth size</th><th>credit needed T</th><th>T as share of K</th><th>credit per dot</th></tr></thead><tbody><tr><td>M = 20,000 dots</td><td>K = 12,200 px</td><td>T = 4,696</td><td>38.5 % of K</td><td>0.235</td></tr><tr><td>M = 20,000 dots</td><td>K = 24,000 px</td><td>T = 7,918</td><td>33.0 % of K</td><td>0.396</td></tr><tr><td>M = 20,000 dots</td><td>K = 60,894 px</td><td>T = 17,992</td><td>29.5 % of K</td><td>0.900</td></tr><tr><td>M = 37,654 dots</td><td>K = 12,200 px</td><td>T = 5,902</td><td>48.4 % of K</td><td>0.157</td></tr><tr><td>M = 37,654 dots</td><td>K = 24,000 px</td><td>T = 9,123</td><td>38.0 % of K</td><td>0.242</td></tr><tr><td>M = 37,654 dots</td><td>K = 60,894 px</td><td>T = 19,197</td><td>31.5 % of K</td><td>0.510</td></tr><tr><td>M = 67,200 dots</td><td>K = 12,200 px</td><td>T = 7,918</td><td>64.9 % of K</td><td>0.118</td></tr><tr><td>M = 67,200 dots</td><td>K = 24,000 px</td><td>T = 11,140</td><td>46.4 % of K</td><td>0.166</td></tr><tr><td>M = 67,200 dots</td><td>K = 60,894 px</td><td>T = 21,214</td><td>34.8 % of K</td><td>0.316</td></tr><tr><td>M = 95,927 dots</td><td>K = 12,200 px</td><td>T = 9,879</td><td>81.0 % of K</td><td>0.103</td></tr><tr><td>M = 95,927 dots</td><td>K = 24,000 px</td><td>T = 13,101</td><td>54.6 % of K</td><td>0.137</td></tr><tr><td>M = 95,927 dots</td><td>K = 60,894 px</td><td>T = 23,175</td><td>38.1 % of K</td><td>0.242</td></tr></tbody></table>
-<p>Read the first two rows: for the 37,654-dot file that sits on today's leaderboard, beating 0.3195
-requires covering roughly <strong>half</strong> of the hidden set within 300 m; for a 95,927-dot file
-like the one this repository ships, the same score requires covering <strong>four fifths</strong> of it.
-<strong>Mass is a liability unless the extra dots earn their 0.2.</strong> That single inequality
-explains why the family's results improved every time mass was removed, and it is the reason the
-density test below is the most consequential experiment left.</p>
-
-<h2>3. Why the 0.2778-class file leads its own family — evidence, not legend</h2>
-<ul>
-<li>Spec of <span class="mono">gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</span>:
-float32, EPSG:32611, 3292×3730, all-finite, values 0–1, no nodata tag, <strong>37,654 emitting
-pixels</strong>, <strong>0 px within 200 m of the visible catalogue</strong> (read from the sibling's own
-published description, class UNVERIFIED-LIVE).</li>
-<li>It is the family's 0.2708-scoring emission with dots within 2 px of the catalogue deleted; in the
-sibling's live-mirror holdout that deletion measured <strong>+0.00487</strong> mean paired credit in 4/4
-folds, projecting 0.2747 — a model, not a score.</li>
-<li>Mass-arithmetic check (inference): 37,654 dots with ≥ 200 m clearance and a 0.2778-class score
-implies T ≈ 5,086 credit units — about
-42 % of a 12,200-px hidden set, i.e. the file does not
-need to be brilliant, only <em>efficient</em>: ~0.14 credit units
-per dot.</li>
-<li>Rank context on the 2026-10-06 read: 0.2778 sits at rank 13; rank 1 is 0.3774, rank 3 is 0.3262,
-and the brief's stated target 0.3195 is rank 7 (DARD).</li>
-</ul>
-
-<h2>4. What this repository has measured that bears on beating it</h2>
-<table><thead><tr><th>Measurement</th><th>Result</th></tr></thead><tbody><tr><td>Belief field, blocked 4-fold AUC</td><td>0.7268 — beats both sibling out-of-fold fields on 4/4 folds (evidence/auc_comparison.json)</td></tr><tr><td>Matched-mass DTI vs the best sibling field</td><td>+0.0482 over 8 fold×budget rows, positive in 8/8 (work/detector_contrast.json)</td></tr><tr><td>Mass experiment — full (visible) catalogue as truth</td><td>optimum at 4 % of the candidate area: 0.005→0.1796, 0.01→0.2318, 0.02→0.2803, 0.04→0.2997, 0.08→0.2585 (work/detector_contrast.json)</td></tr><tr><td>Mass experiment — density-matched truth</td><td>with the truth thinned toward the hidden set's density (K ≈ 12,200 px), the optimum MOVES DOWN in mass and the win shifts to coverage lattices (strategy_sweep.json)</td></tr><tr><td>Off-catalogue (faithful) instrument</td><td>shipped thin rule 0.0812 mean DTI vs uniform random 0.0601 and the halo control 0.0009 — the coverage lattice that wins the density-matched experiment LOSES here (IR-51-05)</td></tr></tbody></table>
-<p><strong>The contradiction in that table is the honest state of the art.</strong> The visible
-catalogue is five times denser than the presumed hidden set, so a rule tuned on it prefers mass; the
-density-matched proxy prefers coverage; and the only instrument that withholds entire fault systems
-(the off-catalogue A/B) prefers the sparse thin-dot rule that ships. Rather than pick the instrument
-that flatters the file, the density question is being settled on the faithful instrument itself —
-varying only the mass of the shipped rule and pairing every arm per fold against it.</p>
-
-<h2>5. The density test that decides the next submission</h2>
-<p>Same A/B instrument, same detector, same folds, same 200 m off-catalogue rule, same 3 px spacing:
-only the number of dots changes. Promotion requires the pre-registered bar — mean paired DTI > 0
-<em>and</em> ≥ 3/4 folds — which is the rule that already killed the lattice (IR-51-05).</p>
-<table><tr><th>arm</th><th>dots</th><th>mean DTI on B_far</th><th>paired vs shipped</th><th>verdict</th></tr><tr><td class='mono'>thin_d0.01_s3.0</td><td>6,065</td><td>0.0698</td><td>-0.0113</td><td>not promoted</td></tr><tr><td class='mono'>thin_d0.02_s3.0</td><td>12,131</td><td>0.0859</td><td>+0.0047</td><td>CLEARS THE PRE-REGISTERED BAR</td></tr><tr><td class='mono'>thin_d0.03_s3.0</td><td>18,197</td><td>0.0844</td><td>+0.0033</td><td>CLEARS THE PRE-REGISTERED BAR</td></tr><tr><td class='mono'>thin_d0.04_s3.0</td><td>24,264</td><td>0.0812</td><td>&mdash;</td><td>baseline (shipped mass)</td></tr><tr><td class='mono'>thin_d0.06_s3.0</td><td>36,395</td><td>0.0733</td><td>-0.0078</td><td>not promoted</td></tr><tr><td class='mono'>thin_d0.08_s3.0</td><td>48,527</td><td>0.0671</td><td>-0.0141</td><td>not promoted</td></tr></table>
-
-<h2>6. What the density test found, and what happens next</h2>
-<p>Two arms cleared the pre-registered bar on the faithful instrument: <strong>thin d0.02 s3.0</strong>
-(12,131 dots, +0.0047 paired, 3/4 folds; best mean DTI of any arm at 0.0859) and
-<strong>thin d0.03 s3.0</strong> (+0.0033, 3/4 folds). Everything heavier was worse
-(d0.06 −0.0078, d0.08 −0.0141, both 0/4 folds) and the coverage lattice that won the
-density-matched proxy still loses here (q0.10, −0.0104). That is the mass curve the metric's own
-arithmetic predicted, measured on the only instrument that withholds whole fault systems.</p>
-<p><strong>Consequence, stated plainly:</strong> the shipped file is at the baseline density
-(d0.04 → 95,927 dots), which the instrument now says is heavier than optimal, and the promoted
-arms imply roughly 48,000–72,000 dots at production scale (d0.02–0.03 of the same candidate area).
-Rebuilding at a promoted density changes the artifact, so it is a separate, fully re-run change
-with new receipts — not something to slip into a merge. The shipped file here is the one whose
-bytes were verified end to end; the lower-mass rebuild is the next change, and it ships only after
-the same 8-stage run reproduces its bytes (that run also refreshes this table automatically).</p>
-
-<h2>7. Verdict: can we beat 0.3195?</h2>
-<ol>
-<li><strong>Not provable offline, and this repository does not claim it.</strong> The only instrument
-that decides is the leaderboard, and no file here has ever been scored.</li>
-<li><strong>But the two binding constraints are both attacked with measurements.</strong> The belief
-field is better than the best sibling field on every fold and budget that can be scored offline; the
-emission discipline (≥ 200 m clearance, sparse dots, uniqueness margin 0.0322) matches or exceeds the
-leading artifact's.</li>
-<li><strong>The remaining risk is mass, not ranking.</strong> Section 2 shows that at 95,927 dots the
-file must cover ~4/5 of the hidden set to reach 0.3195; at ~30–40k dots it must cover ~1/2. If the
-faithful instrument says a lower-mass arm is not worse, shipping the lower-mass arm strictly raises
-the ceiling. That decision is made by the table in section 5, not by preference.</li>
-<li><strong>The next two ideas with the highest expected P(Win) per unit of cost</strong> are, in order:
-H52-1 horsetail/step-over geometry completion (internal data only, targets the settings that host
-~57 % of the region's known systems — Faulds &amp; Hinz 2015) and H52-2 paleo-geothermal sinter/travertine
-proximity (GDR-1391, CC-BY, 19.85 MB, obtainable through a GitHub Actions runner). Both must clear the
-off-catalogue instrument before consuming a slot.)</li>
-</ol>
-</div></div></main>
-<footer><div class="in">Repository: <a href="https://github.com/buffedlizard55-lab/GEMSDOE51">github.com/buffedlizard55-lab/GEMSDOE51</a>.
-No leaderboard score is claimed for any file here. Provenance limitation: organiser bytes are behind
-a login wall, so inputs come from owner-published mirrors pinned by sha256 — the pins prove mirror
-consistency, not organiser authentication.</div></footer></body></html>
+</main>
+<footer><div class="wrap">
+<p>Evidence is labelled throughout. Public leaderboard rows are organizer-posted observations
+of participant scores, but the board does not identify submission files. No GEMSDOE51 TIFF has an
+organizer-verified score; all local holdout values are proxy diagnostics against the visible
+catalogue.</p>
+</div></footer>
+</body></html>

@@ -18,15 +18,18 @@ Two algebraic identities used throughout this repository (both proved in
     (I2)  DTI  = TP_w / ( a*(TP_w + FP_w) + b*|G| + eps )
           because TP + a FP + b(|G| - TP) = (1-b) TP + a FP + b|G| and 1-b = a.
 
-(I2) is the single most useful fact in the competition: the score is a *budget*.
-|G| is fixed by the hidden truth, so a submission is decided by the ratio of
-credit earned (TP_w) to mass emitted (TP_w + FP_w).  Differentiating (I2) with
-respect to adding one pixel of value p that earns credit c gives the
-**break-even credit bar** for the marginal emitted pixel:
+(I2) is a useful budget identity, but ``TP_w + FP_w`` is an effective
+weighted cost, not the raw number of emitted pixels. For an added prediction,
+let ``c`` be its incremental weighted true-positive credit and ``f`` its
+incremental weighted false-positive cost. The exact condition for improving
+the current score is
 
-    c = a * DTI          ( = 0.2 * DTI ; e.g. 0.0556 at DTI = 0.278 )
+    c * (1 - a*DTI) > a*DTI*f
 
-A pixel whose expected kernel credit is below that bar *lowers* the score.
+The familiar ``c > a*DTI`` is only the special case ``c + f = 1`` (one unit of
+effective weighted cost, e.g. one isolated unit-valued prediction affecting only
+one previously uncovered truth pixel). Redundant or overlapping predictions,
+or one prediction covering several truth pixels, need the general condition.
 
 Known-fault masking
 -------------------
@@ -177,8 +180,26 @@ def dti_bruteforce(pred, truth, valid=None, known=None, alpha=ALPHA, beta=BETA, 
 
 
 def breakeven_credit_bar(dti_value: float, alpha: float = ALPHA) -> float:
-    """Expected credit a marginal pixel must earn to break even (c = alpha * DTI)."""
+    """Special-case threshold c=alpha*DTI when an increment adds one unit to TP+FP.
+
+    For a general prediction, use the exact paired changes (delta_tp, delta_fp):
+    it improves DTI iff delta_tp*(1-alpha*DTI) > alpha*DTI*delta_fp.
+    """
     return alpha * float(dti_value)
+
+
+def marginal_dti_improves(dti_value: float, delta_tp: float, delta_fp: float,
+                          alpha: float = ALPHA) -> bool:
+    """Exact first-step test for whether a prediction increment raises DTI.
+
+    ``delta_tp`` and ``delta_fp`` are the changes in the competition's weighted
+    TP and FP terms; adding one prediction does not generally add one unit to
+    either term.
+    """
+    d = float(dti_value)
+    c = float(delta_tp)
+    f = float(delta_fp)
+    return c * (1.0 - alpha * d) > alpha * d * f
 
 
 def implied_truth_size(tp: float, fp: float, dti_value: float, alpha=ALPHA, beta=BETA):
