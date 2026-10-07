@@ -21,7 +21,7 @@
       "id": "C51-003",
       "class": "MEASURED",
       "claim": "The competition template grid is EPSG:32611, 100 m, 3730 x 3292; sample_submission.tif defines the output grid and finite footprint in this checkout. The raw training-feature raster and prepared arrays used by the current primary are restored and hash-recorded in data/restore_receipt.json; owner mirrors remain not organizer-authenticated.",
-      "evidence": "data/sample_submission.tif; src/gems51/grid.py; data/restore_receipt.json; data/prepared/prepared_manifest.json",
+      "evidence": "data/sample_submission.tif; src/gems51/grid.py; data/restore_receipt.json",
       "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
     },
     {
