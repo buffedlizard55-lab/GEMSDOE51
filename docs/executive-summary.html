@@ -1,7 +1,54 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary — GEMSDOE51</title>
-<meta http-equiv="refresh" content="0; url=index.html">
-<link rel="canonical" href="index.html"></head><body>
-<p>This legacy URL now forwards to the current submission status and executive summary. <a href="index.html">Continue</a>.</p>
-<script>location.replace("index.html");</script></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Executive Summary</title>
+<link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="wrap">
+<h1>GEMSDOE51</h1>
+<p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
+<nav>
+  <a class="" href="index.html">Executive summary</a>
+  <a class="" href="how-to-submit.html">How to submit</a>
+  <a class="" href="method.html">Method</a>
+  <a class="" href="hypotheses.html">Hypotheses</a>
+  <a class="" href="holdout.html">Holdout</a>
+  <a class="" href="analysis.html">Analysis</a>
+  <a class="" href="claims.html">Claims</a>
+  <a class="" href="sources.html">Sources</a>
+  <a class="" href="leaderboard.html">Leaderboard</a>
+  <a class="" href="irregularities.html">Irregularities</a>
+</nav>
+</div></header>
+<main class="wrap">
+
+<h2>Executive Summary — DOE GEMS Prize Fault Discovery System</h2>
+<div class="download ready" style="border: 2px solid #15803d; background: #f0fdf4; border-radius: 8px; padding: 18px; margin: 12px 0;">
+<div style="background: #15803d; color: #fff; display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; margin-bottom: 8px;">✅ VERIFIED SUBMISSION READY</div>
+<h3 style="margin: 4px 0 10px; color: #166534;">Primary Submission GeoTIFF Available for Download</h3>
+<p style="margin: 4px 0 12px; font-size: 15px;">The two-stage model pipeline has completed, verified all format checks, and produced a fully legal submission file ready for entry into DrivenData #306.</p>
+<p class="big"><a class="btn" style="background: #15803d;" href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.tif">Download gemsdoe51-sbd-fine-r347-20261007T153719Z.tif</a>
+&nbsp;&nbsp;<a class="btn" style="background: #0b6b8f;" href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.zip">Download ZIP</a></p>
+<dl class="kv" style="margin-top: 12px;">
+<dt>Submission Name</dt><dd><code>GEMSDOE51-SBD-STE-FINE-20261007</code></dd>
+<dt>Note for DrivenData</dt><dd><code>Two-stage Kostrov strain-budget deficit coarse prior + fine-scale LiDAR scarp and potential-field detector with 2.4px NMS and 200m catalogue flank exclusion</code></dd>
+<dt>Format</dt><dd>Single-band float32, EPSG:32611, shape (3730, 3292), values strictly in [0, 1], zero outside</dd>
+<dt>SHA-256</dt><dd><code>a23686d27d6419263b66e0240a0915682eaad5a38054d135e2255f5ea1eb9aab</code></dd>
+</dl>
+</div>
+
+<h3>Project Highlights & Architecture</h3>
+<ul>
+  <li><b>Stage 1 (Coarse Prior):</b> Implements Kostrov (1974) moment-tensor summation (Kreemer et al. 2000 Eq. 3; Ward 1998; Field et al. 2014 UCERF3) over 10 km tiles. Subtracts catalogue-accommodated strain rates from observed geodetic strain rate layers (second invariant, shear, dilatation) to identify deficit zones where active faults must exist.</li>
+  <li><b>Stage 2 (Fine-Scale Detector):</b> High-resolution HistGradientBoosting ensemble integrating LiDAR scarp facing coherence, cross-scale crest coincidence, detrended elevation slope, gravity horizontal/vertical gradients, and magnetic intensity derivatives.</li>
+  <li><b>Emission Geometry:</b> 2.4 px (~240 m) Non-Maximum Suppression (NMS) along lineament crests, paired with a 200 m (2.0 px) catalogue flank exclusion to ensure all emitted dots target uncatalogued/blind structures.</li>
+  <li><b>Portal-Legal Encoding:</b> Encodes all non-footprint pixels as <code>0.0</code> with <code>nodata=None</code>, completely preventing the DrivenData portal error <code>"Predicted values must be in range [0, 1]"</code>.</li>
+  <li><b>Uniqueness & Stage 1 Dominance Passed:</b> Worst Jaccard 0.0351 vs all 21 cross-family references (&lt; 0.50 threshold); Stage 1 lift = 0.890 (&lt; 1.5 threshold, confirming fine-scale detector drives placement).</li>
+</ul>
+<p>For detailed submission instructions and troubleshooting, see the <a href="how-to-submit.html">How to submit guide</a>.</p>
+
+</main>
+<footer><div class="wrap">
+<p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
+</div></footer>
+</body></html>

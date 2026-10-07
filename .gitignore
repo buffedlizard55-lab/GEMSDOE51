@@ -44,3 +44,4 @@ submissions/*.zip
 
 work/
 *.npy
+*.egg-info
