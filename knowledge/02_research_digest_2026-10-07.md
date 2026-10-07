@@ -16,14 +16,15 @@ session, labelled as such). Nothing is recalled from memory without a check.
 
 ## 0. What changed this session, in one paragraph
 
-A later repository synchronization recorded auto-context and strike-coherent emission screens,
-plus an H-M cross-scale-crest screen. These are local known-catalogue proxy measurements, not
-independent labels or organizer scores. H-M recorded mean proxy DTI 0.282603 versus H-D 0.281663,
-but only 3/6 paired folds were higher (paired SD 0.003036; approximate paired 95% t interval
-−0.002246 to +0.004127). The STE mean was 0.283603 versus isotropic NMS 0.281639, 4/6 folds
-higher (approximate interval −0.00166 to +0.00559). Both are noisy point-estimate leads, not
-promotion-grade wins. The H-G+H-D matched add-on was lower than H-D (−0.000606, 3/6 higher),
-although its scoped public-corpus uniqueness audit passed. Its q70 diagnostic was non-dominant on the archived prior field used to create that experiment, but the current signed/rate-selectable Stage-1 map was not regenerated. No slot is authorized; see the evidence ledger and `data/submission_manifest.json`.
+A later repository synchronization recorded auto-context, strike-coherent emission, and H-M
+screens. The completed H-H model arm was then evaluated in the predeclared fixed 50/50 H-H/H-D
+blend with STE: mean visible-known-fault proxy DTI **0.2853406** versus H-D **0.2816627**, paired
+Δ **+0.0036779**, positive in **4/6** folds. A new full-catalogue GeoTIFF passed the local format,
+scoped uniqueness, and Stage-1 non-dominance gates. It is the current primary artifact, but it has
+not been uploaded and no DrivenData score or portal acceptance is claimed. This result is for the
+blend; it is not evidence that pure H-H alone caused the gain. Stage 1 remains diagnostic only with
+weight 0.0. H-M and the old STE-only screen remain noisy research leads, and H-G+H-D remains below
+H-D.
 
 ---
 
@@ -247,3 +248,21 @@ on an unrestricted machine before it can be used.
 | GeoDAWN magnetic/radiometric **grids** at native resolution | the competition's 100 m stack is already resampled; maxspot tracking wants the native grid | <https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7> |
 | USGS SGMC (state geologic map compilation) | lithology, to normalise radiometric ratios per unit | <https://mrdata.usgs.gov/geology/state/> |
 | NGDB / NURE radiometric | independent check on the K/Th alteration ratio | <https://mrdata.usgs.gov/nure/> |
+
+---
+
+## 8. Current primary and Stage-1 residual reconciliation — measured here
+
+The current primary is [`docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif`](../docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif), with a matching one-file ZIP and receipt in `docs/downloads/`. Its SHA-256 is `9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777`; it contains 44,069 predicted pixels, is a single-band float32 EPSG:32611 GeoTIFF, and passes the local `[0,1]`/NaN-outside checks. The fixed 50/50 H-H/H-D blend plus STE passed the frozen six-fold local promotion rule. This is a local visible-known-fault proxy result; no organizer upload, score, or acceptance is claimed.
+
+The current trace-held-out Stage-1 runner now reports the requested dilatation and shear controls. Held-out trace rows are removed from the catalogue-derived budget before every field is calculated. Because the scalar geodetic layers and the fault-tensor invariant do not have a source-verified shared convention, the controls are rank residuals `rank(observed scalar) - rank(fault tensor second invariant)`, not absolute strain subtraction. Mean results from `data/stage1_trace_holdout.json` are:
+
+| field | mean Spearman rank | mean q70 lift |
+|---|---:|---:|
+| second-invariant deficit | 0.0402 | 1.0929 |
+| dilatation rank residual | 0.0204 | 1.0653 |
+| shear rank residual | 0.0306 | 1.0722 |
+| combined residual diagnostic | 0.0353 | 1.1477 |
+| geodetic-only control | 0.0993 | 1.2469 |
+
+The combined residual is an auditable diagnostic, not an approved fine-scale prior. The promoted artifact uses `stage1_weight=0.0`; Stage 1 remains coarse/non-dominant and does not hard-gate Stage 2. The reconciliation is recorded in [`evidence/stage1_reconciliation_20261007.json`](../evidence/stage1_reconciliation_20261007.json).

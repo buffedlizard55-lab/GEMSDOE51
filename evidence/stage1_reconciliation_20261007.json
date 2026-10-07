@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "status": "CURRENT_FORMULA_CODE_PRESENT_BUT_NO_VALID_CURRENT_STAGE1_HOLDOUT_AVAILABLE",
+  "schema_version": 2,
+  "status": "CURRENT_FORMULA_TRACE_HOLDOUT_COMPLETED_STAGE1_REMAINS_DIAGNOSTIC",
   "date_utc": "2026-10-07",
   "current_method": {
     "implementation": "src/gems51/strain_budget.py",
@@ -45,9 +45,40 @@
     }
   ],
   "current_holdout_status": {
-    "stage1_trace_holdout": "NOT AVAILABLE: current-formula, held-row-excluded rerun not completed.",
+    "stage1_trace_holdout": "COMPLETED: five trace-held-out splits; held-out trace rows excluded from the catalogue-derived budget before field construction.",
+    "stage1_receipt": "data/stage1_trace_holdout.json",
+    "configuration": {
+      "n_splits": 5,
+      "tile_px": 100,
+      "thresholds": "40,50,60,70,80",
+      "ratio": 3.47,
+      "g_hidden": 12700,
+      "rate_convention": "vertical",
+      "assume_unknown_normal": true,
+      "output": "data/stage1_trace_holdout.json",
+      "seed": 3,
+      "min_heldout": 2000
+    },
     "stage2_spatial_holdout": "Reported separately in data/holdout_H_D.json and candidate-specific files; these are visible-catalogue proxies and are not altered by this Stage-1 code reconciliation.",
-    "raw_inputs": "The current checkout lacks raw training-feature rasters, prepared arrays, and the local QFaults slip-rate CSV required for rerunning Stage 1."
+    "raw_inputs": "The current checkout contained the required raw/prepared/reference inputs for this rerun; source mirrors remain hash-checked but not organizer-authenticated."
   },
-  "decision": "Do not claim that the geodetic deficit improves Stage-1 holdout performance under the current formula. Retain it only as a coarse prior candidate; restore inputs, run a leakage-controlled trace split across the explicit rate/sense scenarios, and report it separately from Stage 2 before assigning any operational weight."
+  "decision": "The current leakage-controlled trace holdout is now reported, but it does not authorize Stage-1 dominance or a positive fine-scale weight. Deficit, dilatation residual, shear residual, and their combined diagnostic remain coarse prior measurements; the promoted artifact uses stage1_weight=0.0. Keep Stage 1 separate from Stage 2 and do not claim hidden-label or organizer-score validation.",
+  "current_results": {
+    "spearman_mean": {
+      "deficit": 0.04021934019532978,
+      "dilatation_residual": 0.020365418768274655,
+      "shear_residual": 0.030587628268371518,
+      "combined_residual_prior": 0.035265739041506185,
+      "geodetic_only": 0.0992971254632764
+    },
+    "q70_lift_mean": {
+      "deficit": 1.09292726461786,
+      "dilatation_residual": 1.0653124572583699,
+      "shear_residual": 1.0722355867205908,
+      "combined_residual_prior": 1.147655958089665,
+      "geodetic_only": 1.2469427396166288
+    },
+    "uniform_dti_mean": 0.04996070404187038,
+    "interpretation": "Dilatation and shear are reported as rank(observed scalar) - rank(fault tensor second invariant), not absolute strain subtraction. The combined prior is a diagnostic maximum of the three residual fields. These fields were not used to place the promoted Stage-2 points."
+  }
 }

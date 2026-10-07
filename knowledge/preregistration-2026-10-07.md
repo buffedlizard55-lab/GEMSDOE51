@@ -78,16 +78,16 @@ criterion above.
   0.6666622. This partial test fails the frozen promotion rule and is not
   eligible for a submission build; it does not falsify every version of the
   broader preregistered layer-family hypothesis.
-- **Historical Stage-1 results are not current-formula validation.** The mainline
-  five-split trace holdout recorded deficit Spearman 0.03916 and top-50% lift
-  1.08290, weaker than geodetic-only (0.09930; 1.23864); its runner excluded
-  held-out trace rows, but it predates the explicit signed-shear and rate-
-  convention audit. The separate four-scenario formula audit used a runner that
-  failed to exclude held-out trace attributes from the catalogue-derived budget,
-  so it is not a valid holdout. Six-fold Stage-1-only DTI (0.14810 vs 0.18615
-  uniform) and the q50 hard-gate harm (Stage 2 0.18153 vs 0.28164 ungated) are
-  archived measurements tied to the prior Stage-1 field. No current-formula,
-  leakage-controlled Stage-1 rerun is available; see
+- **Current Stage-1 rerun is now available, but it is diagnostic rather than promotional.**
+  The five-split trace holdout removes held-out trace rows from the catalogue-derived budget.
+  It records mean deficit Spearman 0.04022 and q70 lift 1.09293; rank-space dilatation
+  residual 0.02037 and 1.06531; rank-space shear residual 0.03059 and 1.07224; and a
+  combined residual diagnostic 0.03527 and 1.14766. The geodetic-only control is 0.09930
+  and 1.24694. The scalar layers do not have source-verified common units/signs with the
+  fault tensor, so these are rank residuals, not absolute strain subtraction. Stage 1 remains
+  a coarse prior, and the current primary locks its weight to 0.0. The separate four-scenario
+  formula audit remains invalid because its runner retained held-out trace attributes.
+  See [`data/stage1_trace_holdout.json`](../data/stage1_trace_holdout.json) and
   [`evidence/stage1_reconciliation_20261007.json`](../evidence/stage1_reconciliation_20261007.json).
 - A separate historical soft-weight sweep gives `w=0.10` mean proxy DTI 0.28213
   (3/6 positive) and `w=0.20` 0.28212 (+0.000483 paired mean; 4/6 positive)
@@ -95,17 +95,23 @@ criterion above.
   formula implementation. The `w=0.20` proposal failed uniqueness against the
   archived soft-`w=0.10` artifact (Jaccard 0.86130; candidate containment
   0.92548, above limits 0.50 and 0.60); the build stopped before writing it.
-- **No new model prediction was generated and no competition slot was used.** A
-  prior H-G+H-D output has only been re-encoded with NaN outside the footprint
-  for research inspection; it loses its matched holdout and is not a submission
-  recommendation. The guarded H-D `w=0.20` preflight did not write a TIFF. Old
+- **A new model prediction was generated, but no competition slot was used.** The
+  fixed H-H/H-D blend passed the frozen local gates and is the current primary. The
+  prior H-G+H-D output remains research-only because it loses its matched holdout;
+  the guarded H-D `w=0.20` preflight still failed uniqueness before writing. Old
   zero-outside files remain archived and fail the official null/NaN-outside
   requirement.
 
 Measured results: [`data/holdout_H_X1.json`](../data/holdout_H_X1.json),
-[`data/stage1_trace_holdout.json`](../data/stage1_trace_holdout.json) (historical formula),
+[`data/stage1_trace_holdout.json`](../data/stage1_trace_holdout.json) (current rank-residual trace holdout),
 [`evidence/stage1_reconciliation_20261007.json`](../evidence/stage1_reconciliation_20261007.json),
 [`data/two_stage_results.json`](../data/two_stage_results.json) (historical prior field), and
 [`data/gate_sweep.json`](../data/gate_sweep.json) (historical prior field). Official format and AI
 narrative requirements are at the [problem page](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
 and in §3.2 of the [GEMS Prize rules](https://docs.nlr.gov/docs/fy26osti/96647.pdf).
+
+## Outcome addendum — 2026-10-07 current primary and Stage-1 rerun
+
+The H-H model arm was implemented as the predeclared potential-field edge-termination/conductive-relay feature family. The guarded candidate evaluated here is not pure H-H: it is the fixed 50/50 H-H/H-D probability blend with STE L9, continuity weight 0.35, and spacing 2.4 pixels. On the six-fold visible-known-fault proxy holdout it records mean DTI 0.2853406 versus H-D 0.2816627, paired mean delta +0.0036779, and is higher on 4/6 folds. It passed the frozen local promotion rule and produced the unique primary file recorded in `data/submission_manifest.json`. No organizer upload, score, or portal acceptance is claimed.
+
+The current trace-held-out Stage-1 runner has also been completed with held-out trace rows removed from the catalogue-derived budget. It reports second-invariant deficit, rank-space dilatation residual, rank-space shear residual, and a combined diagnostic. Mean q70 lifts are 1.0929, 1.0653, 1.0722, and 1.1477 respectively; the geodetic-only control is 1.2469. Since the source scalar conventions are not verified against the fault tensor units/signs, these are rank diagnostics, not dimensional strain-rate differences. Stage 1 remains coarse and non-dominant; the primary locks `stage1_weight=0.0`. Full output is `data/stage1_trace_holdout.json`, with reconciliation in `evidence/stage1_reconciliation_20261007.json`.

@@ -21,49 +21,26 @@
 </nav>
 </div></header>
 <main class="wrap">
-<h2>GEMSDOE32 In-Depth Case Study — Mathematical & Physical Analysis</h2>
-
-<p>The highest reported score among previous submissions in the GEMSDOE series was achieved by <b>GEMSDOE32</b>:
-<code>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros: 0.2778</code> (with 37,654 emitted points).
-To advance past 0.2778 and reach top-of-leaderboard performance (&gt; 0.3195), we must analyze both the mathematical properties of the competition metric and the geophysical characteristics of the Great Basin tectonic environment.</p>
-
-<h3>1. Mathematical Analysis of the Distance-Weighted Tversky Index (DTI)</h3>
-<p>The official competition evaluation metric is defined as:</p>
-<pre>DTI = TP_w / (TP_w + 0.2 * FP_w + 0.8 * FN_w)</pre>
-<p>where the distance credit kernel is triangular: <code>k(d) = max(1 - d / 300m, 0)</code>, reaching zero at 300 meters (3 pixels on the 100 m grid). In the binary prediction regime, since false-negative mass is algebraically linked to the total ground-truth length by <code>FN_w = |G| - TP_w</code>, the metric simplifies to:</p>
-<pre>DTI = TP_w / (0.2 * (TP_w + FP_w) + 0.8 * |G|)</pre>
-
-<p>This formulation demonstrates two key operational dynamics:</p>
+<h2>GEMSDOE32 result review — attribution kept within the evidence</h2>
+<p>The GEMSDOE32 owner page presents H33-2-B2 with a <b>modelled projection of 0.2747</b> and explicitly labels it <b>UNSCORED</b>; it says no organizer score exists for that artifact. A prior draft linked a public 0.2778 result to H33-2-B2, but that attribution is <b>unsupported and contradicted</b> by the sibling's own status. No verified file-to-score mapping exists. Because of the official Terms of Use, this repository does not store or monitor leaderboard standings.</p>
 <ul>
-  <li><b>Extreme False-Positive Penalty for Diffuse / "Habitat" Models:</b> When an algorithm outputs continuous or area-based probabilities over broad regions (e.g. 5–10 km wide zones), almost every emitted pixel outside the immediate 300 m corridor of a true fault line incurs a full false-positive penalty (<code>FP_w</code>). This explains why regional habitat-style submissions scored worst in the entire competition (<b>0.0041, 0.1223, 0.1352</b>).</li>
-  <li><b>High Efficiency of Sparse Point-Dotted Ridges:</b> A single predicted dot at a true fault location provides non-zero credit to up to 5–6 contiguous 100 m pixels along the fault trace via the triangular kernel. By placing sparse discrete points spaced at <code>r ≈ 2.4 - 2.8 px</code> (240–280 m), an algorithm covers the fault network without internal redundancy or wasted mass.</li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32 executive summary and artifact status</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/research.html">GEMSDOE32 research, metric, and instrument limitations</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/hypotheses.html">GEMSDOE32 ranked hypotheses</a></li>
+<li><a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/irregularities.html">GEMSDOE32 irregularities and provenance ledger</a></li>
 </ul>
+<p>The official metric is the distance-weighted Tversky index:
+<code>DTI = TP_w / (0.2*(TP_w + FP_w) + 0.8*|G|)</code>, with a triangular 300 m distance-credit kernel. That equation explains how an authenticated prediction would be scored; it does not reveal which raster or geology produced an unauthenticated participant row. Without the exact scored TIFF, hidden fault geometry, and weighted TP/FP terms, the geological cause of a public score cannot be identified.</p>
+<p><b>What can be hypothesized:</b> under the official metric, emitted mass has false-positive cost. Removing dots near mapped faults could improve credit per emitted unit if those dots are less likely to receive hidden-fault credit. The official problem defines the initial hidden test set as expert-identified faults not present in the existing public database. This motivates a falsifiable catalogue-flank-pruning experiment, but it does not show that such a mechanism caused H33-2-B2's projection or any organizer result.</p>
+<p><b>What cannot be claimed:</b> H33-2-B2 has no organizer-returned score, no independently reproduced hidden-label result, and no controlled official comparison linked to the exact file. Do not call 0.2747 a leaderboard result, do not attribute 0.2778 to H33-2-B2, and do not claim a causal gain from the reported prune. The artifact documents a design idea, not performance proof.</p>
 
-<h3>2. Why Did GEMSDOE32 Achieve 0.2778?</h3>
-<p>GEMSDOE32's top result was driven by four critical design decisions:</p>
-<ol>
-  <li><b>Catalogue Flank Pruning (B=2, 200m buffer):</b> In DrivenData's competition rules, known mapped faults from the USGS and INGENIOUS databases are <i>masked out of the evaluation set</i>. Any prediction placed directly on or within 200 m of a mapped catalogue fault cannot receive credit for an unmapped fault, but risks being penalized if no new structure exists. By pruning dots within 200 m of the catalogue, GEMSDOE32 redirected mass to purely unmapped ground.</li>
-  <li><b>Steerable Non-Maximum Suppression (NMS):</b> Using <code>radius = 2.4 px</code> along topographic and potential-field lineament ridges guaranteed that emitted dots were strictly localized to sharp physical discontinuity crests.</li>
-  <li><b>Optimal Dot Mass Budget:</b> Calibrated around <code>M / |G| ≈ 3.0 - 3.47</code> (~37,000–44,000 points), matching the estimated scale of unmapped faulting in the Northwestern Great Basin.</li>
-  <li><b>Compliant Zero-Outside Encoding:</b> Non-footprint pixels were encoded as <code>0.0</code> with no NaNs, ensuring all values were strictly in <code>[0, 1]</code> and passing DrivenData's web portal validation.</li>
-</ol>
+<h2>GEMSDOE51 evidence — Stage 1 and Stage 2 reported separately</h2>
+<p><b>Stage 1:</b> the Kreemer et al. (2000) Eq. 3 fault-slip tensor is intended only as a coarse tile prior. The current five-split trace receipt removes held-out trace rows from the catalogue-derived budget and reports rank-space residual controls: mean q70 lift 1.0929 for the second-invariant deficit, 1.0653 for dilatation, 1.0722 for shear, 1.1477 for their combined diagnostic, and 1.2469 for geodetic-only. The scalar source conventions are not verified against the fault tensor, so these are rank diagnostics rather than absolute strain subtraction. Stage 1 remains a broad diagnostic with zero operational weight in the primary. See the <a href="method.html">method and formula page</a>, <a href="downloads/stage1_trace_holdout.json">current trace receipt</a>, and <a href="downloads/stage1_reconciliation_20261007.json">reconciliation</a>.</p>
+<p><b>Stage 2:</b> H-D has mean proxy DTI 0.2816627 and mean AUC 0.6726183 across six blocked folds at M/|G|=3.47. The narrowed H51-X1 implementation (rank-normalized total magnetic and isostatic-gravity bands only; planned RTP/HG/VG derivatives were not inputs to the new transform) returned 0.2796713 mean proxy DTI, delta -0.0019913, and won 3/6 folds; it failed promotion. This partial test does not falsify every version of the broader preregistered family.</p>
+<p>The current primary is the substantively new fixed 50/50 H-H/H-D probability blend with STE L9, w=0.35, spacing 2.4. It records mean proxy DTI 0.2853406 versus H-D 0.2816627 (paired delta +0.0036779; 4/6 folds higher), passes the local format/uniqueness/non-dominance gates, and is linked on the <a href="index.html">executive summary</a>. This is a blend result on visible known-fault proxy labels, not a pure-H-H causal claim or organizer score. The H-G+H-D, H-M, and STE-only artifacts remain research/audit files and are not current-primary substitutes.</p>
 
-<h3>3. How GEMSDOE51 Advances Beyond GEMSDOE32: Two-Stage Geodetic Strain Budgeting</h3>
-<p>While GEMSDOE32 achieved 0.2778, it had a fundamental geological and physical limitation: <b>it lacked a tectonic strain budget</b>. It treated all off-catalogue areas as equally likely to host missing faults, relying purely on empirical distance pruning.</p>
-
-<p>In <b>GEMSDOE51</b>, we resolve this through a physically grounded two-stage architecture:</p>
-<ul>
-  <li><b>Stage 1: Geodetic Strain-Budget Deficit (Kostrov Summation):</b>
-    Following the precedent of UCERF3 (Field et al. 2014, doi:10.1785/0120130164) and crustal deformation budgeting (Ward 1998; Kreemer et al. 2000), we convert mapped fault slip rates from the GDR/INGENIOUS database into horizontal strain-rate tensors per 10 km tile via the Kostrov (1974) moment-tensor summation:
-    <pre>eps_dot_ij = (1 / (2 * A_tile)) * sum_k [ L_k * u_dot_k / sin(delta_k) ] * m_ij^k</pre>
-    We subtract this fault-accommodated strain rate from the observed geodetic strain rate (second invariant, dilatation, shear). <b>Where the geodetic strain rate significantly exceeds what the catalogue faults can accommodate, tectonic deformation dictates that uncatalogued or blind structures MUST exist</b> to balance the regional strain budget.
-  </li>
-  <li><b>Stage 2: Fine-Scale Detector & Steerable Ridge Placement:</b>
-    Inside the approved high-deficit tiles, our high-resolution detector integrates multi-scale LiDAR scarp facing coherence, cross-scale crest coincidence, detrended elevation slope, gravity gradient, and magnetic vertical derivatives. Points are placed via 2.4 px NMS and 200 m catalogue flank exclusion.
-  </li>
-</ul>
-
-<p><b>Non-Dominance Verification:</b> As required, Stage 1 serves strictly as a coarse tile prior. The emission lift inside approved tiles is <b>0.890 &lt; 1.5</b>, confirming that fine-scale physical features determine exact point placement rather than the coarse prior footprint.</p>
+<h2>Bottom line</h2>
+<p>The defensible lesson from the GEMSDOE32 page is to test sparse, credit-efficient emissions and explain their mechanism—not to assign an unscored projection a cause. GEMSDOE51 has a locally eligible, clearly linked primary, but it has not been uploaded and makes no organizer-score claim. Local spatial holdouts are visible-catalogue proxies, not hidden-label validation. See the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and metric page</a> and <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>. This site does not copy or monitor leaderboard standings.</p>
 
 </main>
 <footer><div class="wrap">

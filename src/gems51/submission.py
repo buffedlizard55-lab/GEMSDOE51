@@ -49,7 +49,7 @@ def write_tif(path: Path, values: np.ndarray, footprint: np.ndarray,
               outside: float = 0.0, nodata: float | None = None,
               compress: str = "deflate") -> dict:
     """Write a single-band float32 GeoTIFF.
-    
+
     Default outside=0.0 and nodata=None ensures all values are in [0, 1],
     preventing the DrivenData validator error: 'Predicted values must be in range [0, 1]'.
     """

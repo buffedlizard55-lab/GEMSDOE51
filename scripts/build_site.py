@@ -111,18 +111,25 @@ def artifact_table(arts, s1stats):
     rows = []
     for a in arts:
         u = a.get("uniqueness", {})
-        j = u.get("support_jaccard", {})
+        staged = u.get("staged", {}) if isinstance(u.get("staged", {}), dict) else {}
+        prewrite = u.get("prewrite", {}) if isinstance(u.get("prewrite", {}), dict) else {}
+        j = u.get("support_jaccard", {}) or staged.get("support_jaccard", {})
+        if not j and prewrite.get("max_jaccard") is not None:
+            j = {"prewrite_max": prewrite["max_jaccard"]}
+        uniqueness_verdict = u.get("verdict") or staged.get("verdict", "")
         supplements = [label + ": " + link(a.get(key, ""))
                        for key, label in (("zip", "zip"), ("nan_twin", "NaN twin"))
                        if a.get(key)]
+        cost = a.get("holdout_cost_vs_ungated")
+        cost_text = f"{float(cost):+.4f}" if isinstance(cost, (int, float)) else "n/a"
         rows.append([a["role"],
                      link(a.get("file", "")) + ("<br><span class='ev'>" +
                      " &middot; ".join(supplements) + "</span>" if supplements else ""),
                      html.escape(a.get("gate_mode", "")),
                      html.escape(a.get("description", "")),
-                     f'{a.get("holdout_cost_vs_ungated", 0):+.4f}',
-                     f'{max(j.values()):.3f}' if j else "n/a",
-                     html.escape(u.get("verdict", ""))])
+                     cost_text,
+                     f'{max(float(v) for v in j.values()):.3f}' if j else "n/a",
+                     html.escape(uniqueness_verdict)])
     return tbl(["role", "file", "gate", "what it is", "holdout cost vs ungated",
                 "max Jaccard vs prior submissions", "uniqueness"], rows)
 
@@ -184,7 +191,8 @@ def stage1_table():
     s = d["summary"]
     rows = []
     for q in ("50", "70", "80"):
-        for nm in ("deficit", "geodetic_only"):
+        for nm in ("deficit", "dilatation_residual", "shear_residual",
+                   "combined_residual_prior", "geodetic_only"):
             if f"{nm}_lift_q{q}" in s:
                 rows.append([nm, f"top {100 - float(q):.0f}% of tiles",
                              f"{s[f'{nm}_area_q{q}']['mean']:.3f}",
@@ -199,7 +207,12 @@ def stage1_table():
             + "<p class='ev'>Spearman rank correlation between each tile field and the density of "
             + "held-out faults: "
             + ", ".join(f"{k.replace('spearman_', '')} = {v:+.3f}" for k, v in rho.items())
-            + "</p>")
+            + "</p>"
+            + "<p class='ev'>Dilatation and shear rows use rank-space residuals "
+            + "q(observed scalar) - q(fault tensor second invariant); their source units "
+            + "and conventions are unresolved, so these are diagnostics only. The combined "
+            + "row is the pixelwise maximum of the three residual fields and was not used "
+            + "to place the primary Stage-2 points.</p>")
 
 
 def emission_table():
@@ -283,6 +296,24 @@ def build():
     archive_s2 = archive_review.get("stage2_emission_geometry", {})
     archive_s1 = archive_review.get("stage1_prior", {})
     archive_hm = archive_review.get("secondary_h_m", {})
+    # Older manifests did not carry the research comparison table. Reconstruct
+    # only the already-recorded archive values; never invent a new score.
+    research_comparisons.setdefault("H_M_cross_scale_crest", {
+        "mean_proxy_dti": archive_hm.get("mean_proxy_dti"),
+        "incumbent_H_D_mean": archive_hm.get("h_d_isotropic_baseline_mean_proxy_dti"),
+        "paired_delta": archive_hm.get("delta_vs_h_d_isotropic_baseline"),
+        "folds_higher": 0, "folds_total": 6,
+        "approx_95pct_t_interval": [float("nan"), float("nan")],
+    })
+    research_comparisons.setdefault("STE_L9_w035_s24", {
+        "rule": archive_s2.get("best_rule", "STE L9"),
+        "mean_proxy_dti": archive_s2.get("mean_proxy_dti"),
+        "comparator_iso_nms_r24_mean": archive_s2.get("incumbent_isotropic_mean_proxy_dti"),
+        "paired_delta": archive_s2.get("mean_delta_vs_incumbent"),
+        "folds_higher": archive_s2.get("folds_better", 0),
+        "folds_total": archive_s2.get("folds", 6),
+        "approx_95pct_t_interval": [float("nan"), float("nan")],
+    })
 
     # ------------------------------------------------------------ index
     dl = sub
@@ -295,33 +326,29 @@ def build():
         if zip_name and (Path(zip_name).name != zip_name
                          or not (DOCS / "downloads" / zip_name).is_file()):
             raise SystemExit("eligible manifest names a missing/unsafe ZIP download")
-        zip_note = (f'<p class="zip" style="margin-top:6px;">or download the <a href="downloads/{html.escape(zip_name)}" style="font-weight:600;">'
-                    "ZIP archive containing the single GeoTIFF</a></p>" if zip_name else "")
-        u_info = dl.get("uniqueness", {})
-        worst_j = u_info.get("worst_jaccard", 0.0351)
-        worst_c = u_info.get("worst_containment", 0.1678)
-        s1_area = dl.get("stage1_approved_area_share", 0.40) * 100
-        s1_emitted = dl.get("stage1_emitted_share", 0.356) * 100
-        s1_lift = dl.get("stage1_lift", 0.890)
+        zip_note = (f'<p class="zip">or the <a href="downloads/{html.escape(zip_name)}">'
+                    "ZIP containing the same single GeoTIFF</a></p>" if zip_name else "")
+        format_value = dl.get("format", "")
+        if isinstance(format_value, dict):
+            checks = format_value.get("checks", {})
+            format_text = (f"one-band {format_value.get('dtype', 'unknown')}, "
+                           f"{format_value.get('crs', 'unknown')}, "
+                           f"shape {format_value.get('shape', 'unknown')}, "
+                           f"format_valid={checks.get('format_valid', False)}")
+        else:
+            format_text = str(format_value)
         card = f"""
-<section class="download ready" style="border: 3px solid #15803d; background: #f0fdf4; border-radius: 10px; padding: 22px; margin: 12px 0 20px;">
-<div style="background: #15803d; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: 700; font-size: 14px; margin-bottom: 10px;">✅ VERIFIED SUBMISSION READY — OK TO DOWNLOAD AND SUBMIT</div>
-<h2 style="margin: 4px 0 10px; color: #166534; border-bottom: 2px solid #bbf7d0;">⬇ Official Competition Submission File</h2>
-<p style="font-size: 15px; margin: 8px 0 14px; color: #14532d;"><b>Status: OK to download and submit into DrivenData DOE GEMS Prize Challenge.</b>
-This GeoTIFF artifact implements the required two-stage architecture: a coarse geodetic strain-budget deficit prior (Kostrov 1974 moment-tensor summation)
-combined with a fine-scale LiDAR scarp facing coherence and potential-field lineament detector (2.4 px NMS, 200 m catalogue flank exclusion).
-All pixel values across the entire raster are strictly in range <code>[0.0, 1.0]</code> with <code>0.0</code> outside the footprint (no NaNs),
-guaranteed to pass DrivenData's web validator without the range error.</p>
-<p class="big"><a class="btn" style="background: #15803d; font-size: 19px; padding: 14px 28px;" href="downloads/{html.escape(name)}">Download {html.escape(name)}</a></p>
+<section class="download">
+<h2>⬇ One-click submission file</h2>
+<p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download {html.escape(name)}</a></p>
 {zip_note}
-<dl class="kv" style="margin-top: 14px;">
-<dt>Submission Name (paste into competition form)</dt><dd><code>{html.escape(dl.get('submission_name',''))}</code></dd>
-<dt>Note (optional) (short comment to paste)</dt><dd><code>{html.escape(dl.get('note',''))}</code></dd>
-<dt>Format Verification</dt><dd><b>PASS</b> — Single-band float32, EPSG:32611, shape (3730, 3292), values strictly in [0, 1], zero outside (100% portal legal, no NaNs)</dd>
-<dt>SHA-256 Checksum</dt><dd><code>{html.escape(dl.get('sha256',''))}</code></dd>
-<dt>Uniqueness Gate</dt><dd><b>{html.escape(u_info.get('verdict', 'PASS'))}</b> — Worst Jaccard <b>{worst_j:.4f}</b> (&lt; 0.50 limit), Worst Containment <b>{worst_c:.4f}</b> (&lt; 0.60 limit) against all 21 cross-family prior references.</dd>
-<dt>Stage 1 Dominance Check</dt><dd>Approved tile area: {s1_area:.1f}%; Emitted share: {s1_emitted:.1f}%; <b>Lift: {s1_lift:.3f} (&lt; 1.5 limit)</b>. Placement is driven by fine-scale physical features, not dominated by Stage 1 footprint.</dd>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>{html.escape(dl.get('submission_name',''))}</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>{html.escape(dl.get('note',''))}</code></dd>
+<dt>Format</dt><dd>{html.escape(format_text)}</dd>
+<dt>sha256</dt><dd><code>{html.escape(dl.get('sha256',''))}</code></dd>
 </dl>
+<p class="ev">{html.escape(dl.get('evidence',''))}</p>
 </section>"""
     else:
         d = subm.get("decision", {})
@@ -439,7 +466,8 @@ of genuinely new faults or predict an organizer score. Local source rasters are 
 mirrors, not organizer-authenticated.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
 by experts for the expanded label set. Any future emission should therefore be geologically
-justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
+justifiable as well as holdout-tested. The current primary is linked above; it is locally
+validated and holdout-promoted, but has not been uploaded and has no organizer score claim.</p>
 <h2>What this is</h2>
 <p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
 a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
@@ -447,7 +475,8 @@ fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 
 suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
 rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
 must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
-proxy holdouts. No current artifact clears all promotion and uniqueness checks.</p>
+proxy holdouts. The H-H/H-D blend above clears the recorded local promotion, uniqueness,
+non-dominance, and format gates; it remains unscored by the organizer.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -482,164 +511,144 @@ to a live DTI. It is <b>not</b> a score.</p>
 
     # ------------------------------------------------------------ how to submit
     if sub:
-        sub_name = sub.get("file", "")
-        sub_zip = sub.get("zip", "")
-        sub_title = sub.get("submission_name", "GEMSDOE51-SBD-STE-FINE-20261007")
-        sub_note = sub.get("note", "")
-        sub_sha = sub.get("sha256", "")
-        body = f"""
-<h2>How to Submit into the DrivenData DOE GEMS Competition</h2>
-<div class="download ready" style="border: 2px solid #15803d; background: #f0fdf4; border-radius: 8px; padding: 16px; margin: 12px 0;">
-<div style="background: #15803d; color: #fff; display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; margin-bottom: 8px;">✅ SUBMISSION READY FOR DOWNLOAD</div>
-<p style="margin: 4px 0 10px; font-size: 15px; color: #14532d;"><b>An authorized, fully verified submission GeoTIFF is ready for download:</b></p>
-<p class="big"><a class="btn" style="background: #15803d;" href="downloads/{html.escape(sub_name)}">Download {html.escape(sub_name)}</a>
-&nbsp;&nbsp;<a class="btn" style="background: #0b6b8f;" href="downloads/{html.escape(sub_zip)}">Download ZIP</a></p>
-<p style="font-size: 13px; color: #334155; margin-top: 8px;">SHA-256: <code>{html.escape(sub_sha)}</code></p>
-</div>
-
-<h3>Step-by-Step Submission Instructions</h3>
+        primary_file = Path(sub.get("file", "")).name
+        primary_zip = Path(sub.get("zip", "")).name if sub.get("zip") else ""
+        primary_fmt = sub.get("format", {})
+        primary_checks = primary_fmt.get("checks", {}) if isinstance(primary_fmt, dict) else {}
+        primary_status = sub.get("status", subm.get("status", ""))
+        primary_link = f'<a class="btn" href="downloads/{html.escape(primary_file)}">Download {html.escape(primary_file)}</a>'
+        primary_zip_link = (f'<p class="zip">or download the <a href="downloads/{html.escape(primary_zip)}">'
+                            "single-file ZIP</a></p>" if primary_zip else "")
+        primary_format = (f"one-band {primary_fmt.get('dtype', 'unknown')}, "
+                          f"EPSG:{primary_fmt.get('crs_epsg', 'unknown')}, "
+                          f"shape {primary_fmt.get('shape', 'unknown')}, "
+                          f"format_valid={primary_checks.get('format_valid', False)}")
+        status_block = f"""
+<p class="download"><b>Current primary: {html.escape(primary_status)}.</b>
+This candidate passed the frozen six-fold local promotion rule, scoped reference-aware
+uniqueness, q70 Stage-1 non-dominance, and the written GeoTIFF checks. It has not been
+uploaded and no DrivenData score or portal acceptance is claimed.</p>
+<p class="big">{primary_link}</p>
+{primary_zip_link}
+<dl class="kv">
+<dt>Unique submission name</dt><dd><code>{html.escape(str(sub.get('submission_name', '')))}</code></dd>
+<dt>Note</dt><dd><code>{html.escape(str(sub.get('note', '')))}</code></dd>
+<dt>Format receipt</dt><dd>{html.escape(primary_format)}</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(str(sub.get('sha256', '')))}</code></dd>
+</dl>
+"""
+    else:
+        status_block = """
+<p class="warn"><b>There is no current upload-eligible artifact.</b> Do not upload an archived
+or research-only file. This block is generated from the submission manifest.</p>
+"""
+    body = f"""
+<h2>Submission guide — current status first</h2>
+{status_block}
+<h3>Before any upload</h3>
 <ol class="steps">
-<li><b>Download the submission file:</b> Click the download button above to get <code>{html.escape(sub_name)}</code> (or its single-TIFF ZIP <code>{html.escape(sub_zip)}</code>).</li>
-<li><b>Open the official DrivenData submission form:</b> Navigate to <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">DrivenData GEMS Submissions</a> (log into your account).</li>
-<li><b>Attach File:</b> Under <em>"File to submit"</em>, click <em>"Choose File"</em> and select the downloaded <code>{html.escape(sub_name)}</code> (or <code>{html.escape(sub_zip)}</code>).</li>
-<li><b>Fill Note (optional):</b> In the <em>"Note (optional)"</em> text field, enter:
-<pre class="note" style="margin: 6px 0;">{html.escape(sub_note)}</pre></li>
-<li><b>Submit:</b> Click the Submit button on DrivenData. The platform validator will verify the CRS, shape, transform, and value range [0, 1].</li>
+<li>Return to the <a href="index.html">executive summary</a> and download only the current
+primary GeoTIFF shown there. If using the ZIP, confirm it contains exactly that one TIFF.</li>
+<li>Recheck the displayed SHA-256 and the local receipt. The local verifier checks one band,
+float32 values in [0,1], the template grid and CRS EPSG:32611, finite in-footprint values,
+and NaN outside the footprint. A local pass does not prove portal acceptance.</li>
+<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a>
+(requires the participant's own login), choose the current file, and paste the exact unique
+name and note shown above. Do not reuse an archived name or relabel a previous TIFF.</li>
+<li>Include the required narrative with an accurate generative-AI disclosure. Read the current
+official rules and verify the final file, scientific claims, provenance, and license position
+before submitting.</li>
 </ol>
 
-<h3>Why Previous Submissions Failed with "Predicted values must be in range [0, 1]"</h3>
-<p>DrivenData's submission portal verifies that <b>every pixel in the uploaded raster</b> satisfies <code>0.0 &lt;= value &lt;= 1.0</code>.
-When past submissions used <code>NaN</code> outside the survey footprint (as with <code>-nan.tif</code> files), the check <code>NaN &gt;= 0.0</code> evaluates to False in IEEE floating-point math,
-triggering the error: <i>"Predicted values must be in range [0, 1]"</i>.</p>
-<p>Our verified submission solves this: all non-footprint / background pixels are encoded as <code>0.0</code> with <code>nodata=None</code>.
-Every single pixel in the 3730&times;3292 raster is strictly finite and in <code>[0.0, 1.0]</code>, guaranteeing portal acceptance.</p>
+<h3>Current artifact interpretation</h3>
+<p>The primary is a substantively new fixed 50/50 H-H/H-D probability blend emitted with STE
+line length 9, continuity weight 0.35, and spacing 2.4 pixels. Stage 1 is retained as a
+coarse diagnostic only and has <code>stage1_weight=0.0</code>; it does not dominate fine-scale
+placement. The local holdout truth is the visible known-fault catalogue, not hidden organizer
+labels, so “holdout-promoted” is not a competition-score claim.</p>
 
-<h3>Official Format Verification Checklist</h3>
-<ul>
-  <li><b>File format:</b> Single-band GeoTIFF (.tif) or ZIP containing a single .tif</li>
-  <li><b>Coordinate Reference System (CRS):</b> EPSG:32611 (UTM Zone 11N)</li>
-  <li><b>Grid dimensions:</b> Shape (3730, 3292), 100 m resolution</li>
-  <li><b>Geotransform:</b> (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)</li>
-  <li><b>Value Range:</b> All values strictly in [0.0, 1.0] (no NaNs)</li>
-  <li><b>Uniqueness:</b> Max Jaccard 0.0351 vs all 21 cross-family references (&lt; 0.50 threshold)</li>
-  <li><b>Stage 1 Dominance Check:</b> Lift = 0.890 (&lt; 1.5 threshold; fine-scale detector drives placement)</li>
-</ul>
-
-<h3>Generative-AI Narrative Disclosure (Section 3.2 Compliance)</h3>
-<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">September 2026 GEMS Prize Rules</a>
-requires a narrative disclosure of generative AI use. Adapt this text for your submission:</p>
-<pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source scientific literature (Kostrov 1974; UCERF3 Field et al. 2014; Kreemer et al. 2000), formulate and rank candidate geological hypotheses, edit and debug geospatial code, and draft project documentation. The competition-format GeoTIFF predictions were generated entirely by the documented physical feature-engineering and machine-learning pipeline (HistGradientBoosting ensemble with LiDAR scarp facing coherence, cross-scale crest coincidence, and two-stage geodetic strain budget deficit prior). No organizer score is claimed unless returned for the submitted artifact.</pre>
+<h3>Generative-AI narrative disclosure</h3>
+<p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">GEMS Prize Rules</a>
+requires a narrative, outside the word count, that states the extent to which generative AI was
+used and how it contributed to the submission elements. Adapt this text to the actual final
+process and verify every statement:</p>
+<pre class="note">Generative AI tools were used as research and coding assistants to analyze public-source material, generate and rank hypotheses, edit and debug code, and draft project documentation. The geospatial predictions are produced by the documented feature-engineering and machine-learning pipeline, not by a generative model. The person submitting is responsible for checking the data provenance, code, scientific claims, predictions, and all representations in this narrative. No organizer score is claimed unless returned for the submitted artifact.</pre>
+<p>This is a draft disclosure, not a substitute for the entrant's own accurate narrative. Include
+all actual AI use across the eventual submission materials.</p>
 
 <h3>Leaderboard and Terms of Use</h3>
 <p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
 <a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit automated monitoring/copying
 and manual monitoring/copying without prior written consent. No such consent is on record.</p>
 """
-    else:
-        body = """
-<h2>Submission guide — current status first</h2>
-<p class="warn"><b>There is no eligible file to upload today.</b></p>
-"""
     (DOCS / "how-to-submit.html").write_text(page("How to submit", body, "how-to-submit.html"))
 
-    # ------------------------------------------------------------ executive summary subpage
-    exec_body = f"""
-<h2>Executive Summary — DOE GEMS Prize Fault Discovery System</h2>
-<div class="download ready" style="border: 2px solid #15803d; background: #f0fdf4; border-radius: 8px; padding: 18px; margin: 12px 0;">
-<div style="background: #15803d; color: #fff; display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; margin-bottom: 8px;">✅ VERIFIED SUBMISSION READY</div>
-<h3 style="margin: 4px 0 10px; color: #166534;">Primary Submission GeoTIFF Available for Download</h3>
-<p style="margin: 4px 0 12px; font-size: 15px;">The two-stage model pipeline has completed, verified all format checks, and produced a fully legal submission file ready for entry into DrivenData #306.</p>
-<p class="big"><a class="btn" style="background: #15803d;" href="downloads/{html.escape(sub.get('file',''))}">Download {html.escape(sub.get('file',''))}</a>
-&nbsp;&nbsp;<a class="btn" style="background: #0b6b8f;" href="downloads/{html.escape(sub.get('zip',''))}">Download ZIP</a></p>
-<dl class="kv" style="margin-top: 12px;">
-<dt>Submission Name</dt><dd><code>{html.escape(sub.get('submission_name','GEMSDOE51-SBD-STE-FINE-20261007'))}</code></dd>
-<dt>Note for DrivenData</dt><dd><code>{html.escape(sub.get('note',''))}</code></dd>
-<dt>Format</dt><dd>Single-band float32, EPSG:32611, shape (3730, 3292), values strictly in [0, 1], zero outside</dd>
-<dt>SHA-256</dt><dd><code>{html.escape(sub.get('sha256',''))}</code></dd>
-</dl>
-</div>
-
-<h3>Project Highlights & Architecture</h3>
-<ul>
-  <li><b>Stage 1 (Coarse Prior):</b> Implements Kostrov (1974) moment-tensor summation (Kreemer et al. 2000 Eq. 3; Ward 1998; Field et al. 2014 UCERF3) over 10 km tiles. Subtracts catalogue-accommodated strain rates from observed geodetic strain rate layers (second invariant, shear, dilatation) to identify deficit zones where active faults must exist.</li>
-  <li><b>Stage 2 (Fine-Scale Detector):</b> High-resolution HistGradientBoosting ensemble integrating LiDAR scarp facing coherence, cross-scale crest coincidence, detrended elevation slope, gravity horizontal/vertical gradients, and magnetic intensity derivatives.</li>
-  <li><b>Emission Geometry:</b> 2.4 px (~240 m) Non-Maximum Suppression (NMS) along lineament crests, paired with a 200 m (2.0 px) catalogue flank exclusion to ensure all emitted dots target uncatalogued/blind structures.</li>
-  <li><b>Portal-Legal Encoding:</b> Encodes all non-footprint pixels as <code>0.0</code> with <code>nodata=None</code>, completely preventing the DrivenData portal error <code>"Predicted values must be in range [0, 1]"</code>.</li>
-  <li><b>Uniqueness & Stage 1 Dominance Passed:</b> Worst Jaccard 0.0351 vs all 21 cross-family references (&lt; 0.50 threshold); Stage 1 lift = 0.890 (&lt; 1.5 threshold, confirming fine-scale detector drives placement).</li>
-</ul>
-<p>For detailed submission instructions and troubleshooting, see the <a href="how-to-submit.html">How to submit guide</a>.</p>
-"""
-    (DOCS / "executive-summary.html").write_text(page("Executive Summary", exec_body, "executive-summary.html"))
-
-
     # ------------------------------------------------------------ method
-    body = """
-<h2>Method — Two-Stage Strain-Budget Deficit & Fine-Scale Detection</h2>
-
-<h3>Stage 1: Geodetic Strain-Budget Deficit (Coarse Prior Only)</h3>
-<p>Precedent for balancing geodetic and geologic deformation exists in the UCERF3 deformation models
-(Field et al., <i>Bulletin of the Seismological Society of America</i> 104(3), 1122–1180, 2014, doi:10.1785/0120130164),
-which invert geodetic and geologic data together and model off-fault strain explicitly, as well as crustal deformation
-moment rate studies (Ward, <i>Geophys. J. Int.</i> 134, 172–186, 1998).</p>
-
-<p><b>Exact Kostrov Moment-Tensor Summation Formula:</b><br>
-Kostrov (1974, <i>Izv. Acad. Sci. USSR Phys. Solid Earth</i> 1, 23–40) established the fundamental relationship connecting
-strain rate in a crustal volume to the sum of seismic and geologic fault moment rates. Kreemer et al. (2000, Eq. 3) write
-the horizontal strain-rate tensor components as:</p>
-
-<pre>eps_dot_ij = (1 / (2 * A_tile)) * sum_k [ L_k * u_dot_k / sin(delta_k) ] * m_ij^k
+    trace_receipt = load("stage1_trace_holdout.json", {})
+    trace_cfg = trace_receipt.get("config", {})
+    trace_summary = trace_receipt.get("summary", {})
+    def trace_mean(key):
+        return trace_summary.get(key, {}).get("mean", float("nan"))
+    body = f"""
+<h2>Method, with Stage 1 and Stage 2 kept separate</h2>
+<h3>Stage 1 — geodetic strain-budget residuals (coarse prior only)</h3>
+<p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
+<pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
 m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
+<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code>
+supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault
+normal/slip direction. A total fault-plane rate for pure normal slip yields
+<code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient
+is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields
+<code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are
+still unresolved: the implementation exposes vertical versus total-plane rates, defaults
+provisionally to vertical, assumes a 60-degree normal dip, and converts source values
+provisionally as mm/yr. Absolute strain values remain source-sensitive.</p>
+<p>The implementation is approximate rather than a full inversion: it rasterizes local trace
+directions, assigns slip rates from trace associations, simplifies slip-sense/dip categories,
+and uses partial-footprint support area. The Stage-1 runner now performs a valid five-split
+trace holdout with held-out trace rows removed from the catalogue-derived budget before each
+field is computed (<code>n_splits={trace_cfg.get('n_splits', 'unknown')}</code>,
+rate convention <code>{html.escape(str(trace_cfg.get('rate_convention', 'unknown')))}</code>,
+planning constant <code>g_hidden={trace_cfg.get('g_hidden', 'unknown')}</code>; this is not
+an organizer truth count).</p>
+<p><b>Residual convention:</b> the supplied dilatation and shear scalar layers are not
+source-verified to share units, signs, or tensor definitions with the fault second invariant.
+The reported controls therefore use rank-space residuals
+<code>rank(observed scalar) - rank(fault tensor II)</code>, not absolute-number subtraction.
+The combined residual prior is the pixelwise maximum of the second-invariant, dilatation, and
+shear rank residuals. These are coarse diagnostics, not dimensional strain rates and not fine
+point placers.</p>
+{tbl(['field','mean Spearman rank','mean q70 lift'], [
+    ['geodetic second-invariant deficit', f"{trace_mean('spearman_deficit'):.4f}", f"{trace_mean('deficit_lift_q70'):.4f}"],
+    ['dilatation rank residual', f"{trace_mean('spearman_dilatation_residual'):.4f}", f"{trace_mean('dilatation_residual_lift_q70'):.4f}"],
+    ['shear rank residual', f"{trace_mean('spearman_shear_residual'):.4f}", f"{trace_mean('shear_residual_lift_q70'):.4f}"],
+    ['combined residual diagnostic', f"{trace_mean('spearman_combined_residual_prior'):.4f}", f"{trace_mean('combined_residual_prior_lift_q70'):.4f}"],
+    ['geodetic-only control', f"{trace_mean('spearman_geodetic_only'):.4f}", f"{trace_mean('geodetic_only_lift_q70'):.4f}"],
+])}
+<p class="warn">The rerun shows the geodetic-only control has the strongest mean q70 lift
+({trace_mean('geodetic_only_lift_q70'):.4f}); the combined residual is only a diagnostic
+({trace_mean('combined_residual_prior_lift_q70'):.4f}) and was not selected for the primary.
+The promoted artifact sets <code>stage1_weight=0.0</code>. Stage 1 therefore remains a broad,
+non-dominant prior and does not hard-gate or dominate Stage 2. Full per-split results and
+configuration are in <a href="downloads/stage1_trace_holdout.json">the trace receipt</a>;
+the formula caveat and decision are in <a href="downloads/stage1_reconciliation_20261007.json">the reconciliation</a>.</p>
 
-<p>where:
-<ul>
-  <li><code>L_k</code> = fault trace length of segment <code>k</code> inside tile <code>A_tile</code> (10 km &times; 10 km = 100 &times; 100 pixels)</li>
-  <li><code>u_dot_k</code> = slip rate from the GDR/INGENIOUS compilation (QFaults database)</li>
-  <li><code>delta_k</code> = fault dip (default 60&deg; for Basin and Range normal faults, 90&deg; for strike slip)</li>
-  <li><code>n_k, s_k</code> = unit fault normal and slip direction vectors</li>
-</ul>
-</p>
-
-<p><b>Horizontal Strain Tensor Components:</b>
-<ul>
-  <li><b>Normal Dip-Slip:</b> Horizontal extension rate is <code>eps_dot_nn = L_k * u_dot_vert * cot(delta) / A_tile</code>.</li>
-  <li><b>Strike-Slip:</b> Strike-normal shear rate is <code>eps_dot_sn = L_k * u_dot / (2 * A_tile)</code>, with right-lateral (+) and left-lateral (&minus;) opposite signs.</li>
-  <li><b>Second Invariant:</b> <code>II = sqrt(eps_xx^2 + eps_yy^2 + 2 * eps_xy^2)</code>.</li>
-</ul>
-</p>
-
-<p><b>Strain Budget Deficit:</b>
-The fault-accommodated strain rate tensor is evaluated against observed geodetic strain rates (second invariant, dilatation rate, shear rate).
-The rank-space residual:
-<pre>Deficit = Q(observed geodetic strain) - Q(fault-accommodated strain)</pre>
-isolates tiles where observed tectonic strain accumulation significantly outpaces what mapped structures accommodate.
-<b>Crucial constraint:</b> As required, Stage 1 is used <i>strictly as a coarse first stage over broad 10 km tiles</i>.
-It approves high-deficit tiles (q &ge; 60%) and provides a soft tile prior; it never places fine-scale points directly.</p>
-
-<h3>Stage 2: Fine-Scale Lineament & Ridge Detector</h3>
-<p>To avoid the disastrous false-positive penalties of diffuse habitat models (which scored 0.0041 to 0.1352),
-Stage 2 employs a high-resolution machine learning detector evaluated separately on the spatial holdout:</p>
-<ul>
-  <li><b>Feature Stack:</b> Integrates 60 baseline physical channels with high-resolution LiDAR scarp facing coherence
-      (<code>lidrel_facecoh09</code>, <code>lidrel_facecoh21</code>), detrended elevation coherence (<code>detelev_facecoh09</code>, <code>detelev_facecoh21</code>),
-      cross-scale crest coincidence (<code>xscale_coincide_det</code>, <code>xscale_coincide_lid</code>), detrended elevation slope,
-      and potential field derivatives (gravity horizontal/vertical gradient, magnetic intensity vertical gradient).</li>
-  <li><b>Ensemble Model:</b> Bagged <code>HistGradientBoostingClassifier</code> trained on catalogue positives and background negatives.</li>
-  <li><b>Catalogue Flank Exclusion (B=2, 200 m buffer):</b> In DrivenData, known USGS/INGENIOUS faults are masked out of hidden test scoring.
-      A 200 m buffer (<code>dist &le; 2.0 px</code>) around catalogue faults is excluded from emission, guaranteeing predictions target uncatalogued ground.</li>
-  <li><b>Steerable Non-Maximum Suppression (NMS):</b> Points are placed along lineament ridge crests with <code>radius = 2.4 px</code> (~240 m) spacing,
-      optimally matched to the competition's 300 m triangular credit kernel.</li>
-  <li><b>Mass Budget:</b> Calibrated at <code>M / |G| = 3.47</code> (44,069 dots), balancing true-positive coverage against false-positive penalties.</li>
-</ul>
-
-<h3>Separation and Non-Dominance Verification</h3>
-<p>Both stages are evaluated and reported separately:
-<ul>
-  <li><b>Stage 1 Holdout:</b> Deficit Spearman correlation with held-out fault density = <b>0.448</b>; approved tile area share = <b>40.0%</b>; truth recall = <b>35.6%</b>.</li>
-  <li><b>Stage 2 Holdout:</b> Mean proxy DTI = <b>0.2826 - 0.2836</b> (beating H-D incumbent 0.2817); mean AUC = <b>0.6747</b>.</li>
-  <li><b>Stage 1 Non-Dominance:</b> Emitted share inside approved tiles is 35.6% vs 40.0% area share, giving <b>Lift = 0.890 &lt; 1.5</b>.
-      This proves the submission is driven by fine-scale physical features and is <i>not dominated by Stage 1's footprint</i>.</li>
-</ul>
-</p>
+<h3>Stage 2 — fine-scale detector and sparse emission</h3>
+<p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
+features. A 3×3 spatial holdout removes a 1.2 km boundary band from training; each fold's
+Stage-2 field is scored against held-out known-fault labels at matched mass ratio
+<code>M/|G|=3.47</code>. H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183.
+These are measurements on the visible known-fault proxy, not organizer scores.</p>
+<p>Distance-to-catalogue is not used as a predictive shortcut because it directly encodes the
+known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression
+or STE at approximately 2.4 pixels. The official metric gives a marginal-pixel credit bar
+near <code>0.2*DTI</code>; this motivates sparse dots, but does not prove any individual
+prediction is a real fault.</p>
+<p>The current primary is the fixed 50/50 H-H/H-D probability blend emitted with STE line length
+9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its matched six-fold
+proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher).
+This is a local promotion result only; no organizer score or acceptance is claimed.</p>
 """
     (DOCS / "method.html").write_text(page("Method", body, "method.html"))
 
@@ -735,12 +744,14 @@ checks are unavailable for these two candidates, so neither is slot-eligible. Se
 <a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>. These are repository-local
 visible-catalogue measurements, not organizer scores or evidence of hidden-fault performance.</p>
 
-<h3>Stage 1 — trace-held-out prior test, reported separately</h3>
-<p>Five splits hold out complete trace-table rows associated with held-out catalogue pixels before
-building the mapped-fault budget; this historical receipt predates the current signed-shear and
-selectable-rate formula. The separate four-scenario formula audit did not exclude held-out rows and
-is not a valid holdout. A current-formula, leakage-controlled rerun is unavailable because source
-rasters and prepared arrays are missing. See the <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
+<h3>Stage 1 — trace-held-out residual diagnostics, reported separately</h3>
+<p>The current runner holds out complete trace-table rows associated with held-out catalogue pixels
+before building the mapped-fault budget. It reports the geodetic second-invariant deficit and
+rank-space dilatation/shear residual controls. Mean q70 lifts are 1.0929 for the deficit, 1.0653
+for dilatation, 1.0722 for shear, and 1.1477 for their combined diagnostic maximum; geodetic-only
+is 1.2469. These are coarse prior diagnostics, not fine-scale emission scores. The promoted
+primary uses <code>stage1_weight=0.0</code>. See the <a href="downloads/stage1_trace_holdout.json">trace receipt</a>
+and <a href="downloads/stage1_reconciliation_20261007.json">Stage-1 reconciliation</a>.
 These proxy comparisons are not tests against hidden expert labels.</p>
 {_STAGE1}
 
@@ -856,6 +867,9 @@ and anything a reader should check by hand before trusting. Nothing here is hidd
 <p>{html.escape(note)} <a href=\"{safe_target}\">Continue</a>.</p>
 <script>location.replace({json.dumps(target)});</script></body></html>"""
 
+    (DOCS / "executive-summary.html").write_text(redirect_page(
+        "Executive summary", "index.html",
+        "This legacy URL now forwards to the current submission status and executive summary."))
     (DOCS / "strategy.html").write_text(redirect_page(
         "Strategy", "analysis.html",
         "This legacy URL now forwards to the source-linked case study and current analysis."))

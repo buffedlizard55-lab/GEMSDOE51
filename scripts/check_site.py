@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check local links and the no-current-download state in the built docs site."""
+"""Check local links and that the built download state matches the manifest."""
 from __future__ import annotations
 
 import html.parser
@@ -49,33 +49,45 @@ def main() -> int:
     except (OSError, json.JSONDecodeError) as exc:
         failures.append(f"cannot read current submission manifest: {exc}")
         manifest = {}
-    if manifest.get("status") == "NO_ELIGIBLE_CANDIDATE" and not manifest.get("primary"):
-        download_dir = DOCS / "downloads"
-        public_downloads = set()
-        if download_dir.exists():
-            public_downloads = {p.name for p in download_dir.iterdir()
-                                if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}}
-        allowed_research = set()
-        for record in manifest.get("research_only_artifacts", []):
-            for key in ("file", "zip"):
-                value = record.get(key)
-                if value:
-                    allowed_research.add(Path(value).name)
-        if public_downloads != allowed_research:
-            failures.append(f"public TIFF/ZIPs do not match research-only manifest: "
-                            f"found={sorted(public_downloads)}, allowed={sorted(allowed_research)}")
-        index = (DOCS / "index.html").read_text(encoding="utf-8")
+    download_dir = DOCS / "downloads"
+    public_downloads = ({p.name for p in download_dir.iterdir()
+                         if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}}
+                        if download_dir.exists() else set())
+    allowed_current = set()
+    for record in ([manifest.get("primary")] if manifest.get("primary") else []):
+        for key in ("file", "zip"):
+            value = record.get(key)
+            if value:
+                allowed_current.add(Path(value).name)
+    allowed_research = set()
+    for record in manifest.get("research_only_artifacts", []):
+        for key in ("file", "zip"):
+            value = record.get(key)
+            if value:
+                allowed_research.add(Path(value).name)
+    allowed_downloads = allowed_current | allowed_research
+    if public_downloads != allowed_downloads:
+        failures.append(f"public TIFF/ZIPs do not match manifest: found={sorted(public_downloads)}, "
+                        f"allowed={sorted(allowed_downloads)}")
+    index = (DOCS / "index.html").read_text(encoding="utf-8")
+    if manifest.get("primary"):
+        for name in allowed_current:
+            if f'href="downloads/{name}"' not in index:
+                failures.append(f"primary artifact is not linked from index: {name}")
+        if "One-click submission file" not in index:
+            failures.append("eligible primary is not prominently marked in index")
+    else:
         if ("No eligible submission file" not in index
                 and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
-        if allowed_research:
-            if "NOT FOR SUBMISSION" not in index:
-                failures.append("research-only download is not prominently marked NOT FOR SUBMISSION")
-            for name in allowed_research:
-                if f'href="downloads/{name}"' not in index:
-                    failures.append(f"research-only artifact is not linked from index: {name}")
-        elif 'href="downloads/' in index:
-            failures.append("index page links to a download despite an empty artifact manifest")
+    if allowed_research:
+        if "NOT FOR SUBMISSION" not in index:
+            failures.append("research-only download is not prominently marked NOT FOR SUBMISSION")
+        for name in allowed_research:
+            if f'href="downloads/{name}"' not in index:
+                failures.append(f"research-only artifact is not linked from index: {name}")
+    elif not manifest.get("primary") and 'href="downloads/' in index:
+        failures.append("index page links to a download despite an empty artifact manifest")
 
     for rel in ("data/leaderboard.json", "registry/leaderboard.json",
                 "registry/leaderboard_reads.json", "registry/leaderboard_snapshot.json",

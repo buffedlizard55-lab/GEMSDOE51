@@ -22,72 +22,59 @@
 </div></header>
 <main class="wrap">
 
-<h2>Method — Two-Stage Strain-Budget Deficit & Fine-Scale Detection</h2>
-
-<h3>Stage 1: Geodetic Strain-Budget Deficit (Coarse Prior Only)</h3>
-<p>Precedent for balancing geodetic and geologic deformation exists in the UCERF3 deformation models
-(Field et al., <i>Bulletin of the Seismological Society of America</i> 104(3), 1122–1180, 2014, doi:10.1785/0120130164),
-which invert geodetic and geologic data together and model off-fault strain explicitly, as well as crustal deformation
-moment rate studies (Ward, <i>Geophys. J. Int.</i> 134, 172–186, 1998).</p>
-
-<p><b>Exact Kostrov Moment-Tensor Summation Formula:</b><br>
-Kostrov (1974, <i>Izv. Acad. Sci. USSR Phys. Solid Earth</i> 1, 23–40) established the fundamental relationship connecting
-strain rate in a crustal volume to the sum of seismic and geologic fault moment rates. Kreemer et al. (2000, Eq. 3) write
-the horizontal strain-rate tensor components as:</p>
-
-<pre>eps_dot_ij = (1 / (2 * A_tile)) * sum_k [ L_k * u_dot_k / sin(delta_k) ] * m_ij^k
+<h2>Method, with Stage 1 and Stage 2 kept separate</h2>
+<h3>Stage 1 — geodetic strain-budget residuals (coarse prior only)</h3>
+<p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
+<pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
 m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
+<p>Here <code>L</code> is trace length, <code>u_dot</code> the rate component, <code>A</code>
+supported tile area, <code>delta</code> dip, and <code>n</code>/<code>s</code> the unit fault
+normal/slip direction. A total fault-plane rate for pure normal slip yields
+<code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient
+is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields
+<code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are
+still unresolved: the implementation exposes vertical versus total-plane rates, defaults
+provisionally to vertical, assumes a 60-degree normal dip, and converts source values
+provisionally as mm/yr. Absolute strain values remain source-sensitive.</p>
+<p>The implementation is approximate rather than a full inversion: it rasterizes local trace
+directions, assigns slip rates from trace associations, simplifies slip-sense/dip categories,
+and uses partial-footprint support area. The Stage-1 runner now performs a valid five-split
+trace holdout with held-out trace rows removed from the catalogue-derived budget before each
+field is computed (<code>n_splits=5</code>,
+rate convention <code>vertical</code>,
+planning constant <code>g_hidden=12700</code>; this is not
+an organizer truth count).</p>
+<p><b>Residual convention:</b> the supplied dilatation and shear scalar layers are not
+source-verified to share units, signs, or tensor definitions with the fault second invariant.
+The reported controls therefore use rank-space residuals
+<code>rank(observed scalar) - rank(fault tensor II)</code>, not absolute-number subtraction.
+The combined residual prior is the pixelwise maximum of the second-invariant, dilatation, and
+shear rank residuals. These are coarse diagnostics, not dimensional strain rates and not fine
+point placers.</p>
+<table class=''><thead><tr><th>field</th><th>mean Spearman rank</th><th>mean q70 lift</th></tr></thead><tbody><tr><td>geodetic second-invariant deficit</td><td>0.0402</td><td>1.0929</td></tr><tr><td>dilatation rank residual</td><td>0.0204</td><td>1.0653</td></tr><tr><td>shear rank residual</td><td>0.0306</td><td>1.0722</td></tr><tr><td>combined residual diagnostic</td><td>0.0353</td><td>1.1477</td></tr><tr><td>geodetic-only control</td><td>0.0993</td><td>1.2469</td></tr></tbody></table>
+<p class="warn">The rerun shows the geodetic-only control has the strongest mean q70 lift
+(1.2469); the combined residual is only a diagnostic
+(1.1477) and was not selected for the primary.
+The promoted artifact sets <code>stage1_weight=0.0</code>. Stage 1 therefore remains a broad,
+non-dominant prior and does not hard-gate or dominate Stage 2. Full per-split results and
+configuration are in <a href="downloads/stage1_trace_holdout.json">the trace receipt</a>;
+the formula caveat and decision are in <a href="downloads/stage1_reconciliation_20261007.json">the reconciliation</a>.</p>
 
-<p>where:
-<ul>
-  <li><code>L_k</code> = fault trace length of segment <code>k</code> inside tile <code>A_tile</code> (10 km &times; 10 km = 100 &times; 100 pixels)</li>
-  <li><code>u_dot_k</code> = slip rate from the GDR/INGENIOUS compilation (QFaults database)</li>
-  <li><code>delta_k</code> = fault dip (default 60&deg; for Basin and Range normal faults, 90&deg; for strike slip)</li>
-  <li><code>n_k, s_k</code> = unit fault normal and slip direction vectors</li>
-</ul>
-</p>
-
-<p><b>Horizontal Strain Tensor Components:</b>
-<ul>
-  <li><b>Normal Dip-Slip:</b> Horizontal extension rate is <code>eps_dot_nn = L_k * u_dot_vert * cot(delta) / A_tile</code>.</li>
-  <li><b>Strike-Slip:</b> Strike-normal shear rate is <code>eps_dot_sn = L_k * u_dot / (2 * A_tile)</code>, with right-lateral (+) and left-lateral (&minus;) opposite signs.</li>
-  <li><b>Second Invariant:</b> <code>II = sqrt(eps_xx^2 + eps_yy^2 + 2 * eps_xy^2)</code>.</li>
-</ul>
-</p>
-
-<p><b>Strain Budget Deficit:</b>
-The fault-accommodated strain rate tensor is evaluated against observed geodetic strain rates (second invariant, dilatation rate, shear rate).
-The rank-space residual:
-<pre>Deficit = Q(observed geodetic strain) - Q(fault-accommodated strain)</pre>
-isolates tiles where observed tectonic strain accumulation significantly outpaces what mapped structures accommodate.
-<b>Crucial constraint:</b> As required, Stage 1 is used <i>strictly as a coarse first stage over broad 10 km tiles</i>.
-It approves high-deficit tiles (q &ge; 60%) and provides a soft tile prior; it never places fine-scale points directly.</p>
-
-<h3>Stage 2: Fine-Scale Lineament & Ridge Detector</h3>
-<p>To avoid the disastrous false-positive penalties of diffuse habitat models (which scored 0.0041 to 0.1352),
-Stage 2 employs a high-resolution machine learning detector evaluated separately on the spatial holdout:</p>
-<ul>
-  <li><b>Feature Stack:</b> Integrates 60 baseline physical channels with high-resolution LiDAR scarp facing coherence
-      (<code>lidrel_facecoh09</code>, <code>lidrel_facecoh21</code>), detrended elevation coherence (<code>detelev_facecoh09</code>, <code>detelev_facecoh21</code>),
-      cross-scale crest coincidence (<code>xscale_coincide_det</code>, <code>xscale_coincide_lid</code>), detrended elevation slope,
-      and potential field derivatives (gravity horizontal/vertical gradient, magnetic intensity vertical gradient).</li>
-  <li><b>Ensemble Model:</b> Bagged <code>HistGradientBoostingClassifier</code> trained on catalogue positives and background negatives.</li>
-  <li><b>Catalogue Flank Exclusion (B=2, 200 m buffer):</b> In DrivenData, known USGS/INGENIOUS faults are masked out of hidden test scoring.
-      A 200 m buffer (<code>dist &le; 2.0 px</code>) around catalogue faults is excluded from emission, guaranteeing predictions target uncatalogued ground.</li>
-  <li><b>Steerable Non-Maximum Suppression (NMS):</b> Points are placed along lineament ridge crests with <code>radius = 2.4 px</code> (~240 m) spacing,
-      optimally matched to the competition's 300 m triangular credit kernel.</li>
-  <li><b>Mass Budget:</b> Calibrated at <code>M / |G| = 3.47</code> (44,069 dots), balancing true-positive coverage against false-positive penalties.</li>
-</ul>
-
-<h3>Separation and Non-Dominance Verification</h3>
-<p>Both stages are evaluated and reported separately:
-<ul>
-  <li><b>Stage 1 Holdout:</b> Deficit Spearman correlation with held-out fault density = <b>0.448</b>; approved tile area share = <b>40.0%</b>; truth recall = <b>35.6%</b>.</li>
-  <li><b>Stage 2 Holdout:</b> Mean proxy DTI = <b>0.2826 - 0.2836</b> (beating H-D incumbent 0.2817); mean AUC = <b>0.6747</b>.</li>
-  <li><b>Stage 1 Non-Dominance:</b> Emitted share inside approved tiles is 35.6% vs 40.0% area share, giving <b>Lift = 0.890 &lt; 1.5</b>.
-      This proves the submission is driven by fine-scale physical features and is <i>not dominated by Stage 1's footprint</i>.</li>
-</ul>
-</p>
+<h3>Stage 2 — fine-scale detector and sparse emission</h3>
+<p>The H-D incumbent combines competition geophysics with DEM-derived scarp-facing/coherence
+features. A 3×3 spatial holdout removes a 1.2 km boundary band from training; each fold's
+Stage-2 field is scored against held-out known-fault labels at matched mass ratio
+<code>M/|G|=3.47</code>. H-D mean proxy DTI is 0.2816627 and mean AUC is 0.6726183.
+These are measurements on the visible known-fault proxy, not organizer scores.</p>
+<p>Distance-to-catalogue is not used as a predictive shortcut because it directly encodes the
+known-fault target. Emission avoids a 200 m known-fault buffer and uses non-maximum suppression
+or STE at approximately 2.4 pixels. The official metric gives a marginal-pixel credit bar
+near <code>0.2*DTI</code>; this motivates sparse dots, but does not prove any individual
+prediction is a real fault.</p>
+<p>The current primary is the fixed 50/50 H-H/H-D probability blend emitted with STE line length
+9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its matched six-fold
+proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher).
+This is a local promotion result only; no organizer score or acceptance is claimed.</p>
 
 </main>
 <footer><div class="wrap">

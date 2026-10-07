@@ -3,7 +3,7 @@
 
 Usage: python scripts/check_submission.py path/to/candidate.tif
 This verifies bytes against the local template and footprint only; it does not
-predict acceptance by DrivenData. No candidate is currently cleared for upload.
+predict acceptance by DrivenData.
 """
 from __future__ import annotations
 
@@ -17,10 +17,15 @@ from gems51.grid import footprint  # noqa: E402
 from gems51.submission import verify  # noqa: E402
 
 
-def _passes(name: str, value: object) -> bool:
-    """Interpret count-valued checks by their zero-is-good semantics."""
+def _passes(name: str, value: object, checks: dict) -> bool:
+    """Interpret count-valued and alternative footprint checks."""
     if name == "values_outside_0_1":
         return value == 0
+    if name == "outside_footprint_zeros":
+        # The current contract accepts either finite zero outside or explicit
+        # NaN/NoData outside; this diagnostic is not a failure when the NaN
+        # alternative is the one present on disk.
+        return bool(value) or bool(checks.get("outside_footprint_nan"))
     return bool(value)
 
 
@@ -41,7 +46,10 @@ def main() -> int:
     for name, value in checks.items():
         if name in {"min_value", "max_value", "predicted_px", "total_mass", "nan_cells"}:
             continue
-        print(f"  {'PASS' if _passes(name, value) else 'FAIL'}  {name}: {value}")
+        display = value
+        if name == "outside_footprint_zeros" and not value and checks.get("outside_footprint_nan"):
+            display = "False (NaN outside is the accepted alternative)"
+        print(f"  {'PASS' if _passes(name, value, checks) else 'FAIL'}  {name}: {display}")
     print(f"  file  {report['file']}")
     print(f"  sha256  {report['sha256']}")
     print("  note  local byte-level format checks only; portal acceptance is not inferred")

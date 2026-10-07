@@ -1,0 +1,188 @@
+{
+ "instrument": "spatially blocked holdout, 3x3 grid, 12 px training buffer; detector field held fixed, only the emission rule varies; mass matched at ratio * n_truth inside the held-out block",
+ "arm": "H_H",
+ "ratio": 3.47,
+ "excl_radius": 2.0,
+ "incumbent": "iso_nms_r2.4",
+ "config": {
+  "arm": "H_H",
+  "folds": "all",
+  "ratio": 3.47,
+  "excl_radius": 2.0,
+  "iso_radii": [
+   2.4
+  ],
+  "line_lens": [
+   9
+  ],
+  "w_cont": [
+   0.35
+  ],
+  "spacings": [
+   2.4
+  ],
+  "thin": [
+   0
+  ],
+  "sigmas": [
+   1.0,
+   2.0,
+   3.5
+  ],
+  "out": "evidence/hh_emission_geometry.json"
+ },
+ "rows": [
+  {
+   "fold": 0,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 44426,
+   "dti": 0.2788352738470902,
+   "tp": 5476.272075833083,
+   "fp": 41510.78287652209,
+   "n_truth": 12803,
+   "credit_per_dot": 0.12326727762645935
+  },
+  {
+   "fold": 0,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 44426,
+   "dti": 0.2834592216724637,
+   "tp": 5564.915290809435,
+   "fp": 41383.85820555751,
+   "n_truth": 12803,
+   "credit_per_dot": 0.1252625780130877
+  },
+  {
+   "fold": 1,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 36178,
+   "dti": 0.26911269224409495,
+   "tp": 4297.788448267897,
+   "fp": 33849.303160032156,
+   "n_truth": 10426,
+   "credit_per_dot": 0.11879563403913697
+  },
+  {
+   "fold": 1,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 36178,
+   "dti": 0.26995523925525455,
+   "tp": 4308.470889117012,
+   "fp": 33787.256299047745,
+   "n_truth": 10426,
+   "credit_per_dot": 0.11909090853880845
+  },
+  {
+   "fold": 2,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 24623,
+   "dti": 0.28059845789333016,
+   "tp": 3054.368584556748,
+   "fp": 22987.600244499845,
+   "n_truth": 7096,
+   "credit_per_dot": 0.12404534721832222
+  },
+  {
+   "fold": 2,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 24623,
+   "dti": 0.28426515065499963,
+   "tp": 3092.049559138027,
+   "fp": 22910.665661024737,
+   "n_truth": 7096,
+   "credit_per_dot": 0.1255756633691275
+  },
+  {
+   "fold": 3,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 19536,
+   "dti": 0.2509836173951141,
+   "tp": 2163.197450865691,
+   "fp": 18411.19797854295,
+   "n_truth": 5630,
+   "credit_per_dot": 0.1107287802449678
+  },
+  {
+   "fold": 3,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 19536,
+   "dti": 0.24409780874881046,
+   "tp": 2100.6537226501523,
+   "fp": 18408.28073230506,
+   "n_truth": 5630,
+   "credit_per_dot": 0.10752731995547463
+  },
+  {
+   "fold": 4,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 46318,
+   "dti": 0.3047311029459017,
+   "tp": 6255.841531627622,
+   "fp": 42997.43279631338,
+   "n_truth": 13348,
+   "credit_per_dot": 0.13506285961456932
+  },
+  {
+   "fold": 4,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 46318,
+   "dti": 0.3055597934222402,
+   "tp": 6269.272885546932,
+   "fp": 42925.40606412248,
+   "n_truth": 13348,
+   "credit_per_dot": 0.1353528409159923
+  },
+  {
+   "fold": 5,
+   "rule": "iso_nms_r2.4",
+   "n_dots": 39551,
+   "dti": 0.3133095395871642,
+   "tp": 5510.0869262914275,
+   "fp": 36831.5095666825,
+   "n_truth": 11398,
+   "credit_per_dot": 0.13931599520344434
+  },
+  {
+   "fold": 5,
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "n_dots": 39551,
+   "dti": 0.31785932402722955,
+   "tp": 5588.752885319819,
+   "fp": 36731.61058590331,
+   "n_truth": 11398,
+   "credit_per_dot": 0.14130497042602763
+  }
+ ],
+ "summary": [
+  {
+   "rule": "ste_L9_w0.35_s2.4_nothin",
+   "folds": 6,
+   "mean_dti": 0.2841994229634997,
+   "mean_delta_vs_incumbent": 0.001270975644717125,
+   "folds_better": 5,
+   "per_fold": {
+    "0": 0.283459,
+    "1": 0.269955,
+    "2": 0.284265,
+    "3": 0.244098,
+    "4": 0.30556,
+    "5": 0.317859
+   }
+  },
+  {
+   "rule": "iso_nms_r2.4",
+   "folds": 6,
+   "mean_dti": 0.2829284473187826,
+   "mean_delta_vs_incumbent": 0.0,
+   "folds_better": 0,
+   "per_fold": {
+    "0": 0.278835,
+    "1": 0.269113,
+    "2": 0.280598,
+    "3": 0.250984,
+    "4": 0.304731,
+    "5": 0.31331
+   }
+  }
+ ]
+}

@@ -22,39 +22,64 @@
 </div></header>
 <main class="wrap">
 
-<section class="download ready" style="border: 3px solid #15803d; background: #f0fdf4; border-radius: 10px; padding: 22px; margin: 12px 0 20px;">
-<div style="background: #15803d; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 4px; font-weight: 700; font-size: 14px; margin-bottom: 10px;">✅ VERIFIED SUBMISSION READY — OK TO DOWNLOAD AND SUBMIT</div>
-<h2 style="margin: 4px 0 10px; color: #166534; border-bottom: 2px solid #bbf7d0;">⬇ Official Competition Submission File</h2>
-<p style="font-size: 15px; margin: 8px 0 14px; color: #14532d;"><b>Status: OK to download and submit into DrivenData DOE GEMS Prize Challenge.</b>
-This GeoTIFF artifact implements the required two-stage architecture: a coarse geodetic strain-budget deficit prior (Kostrov 1974 moment-tensor summation)
-combined with a fine-scale LiDAR scarp facing coherence and potential-field lineament detector (2.4 px NMS, 200 m catalogue flank exclusion).
-All pixel values across the entire raster are strictly in range <code>[0.0, 1.0]</code> with <code>0.0</code> outside the footprint (no NaNs),
-guaranteed to pass DrivenData's web validator without the range error.</p>
-<p class="big"><a class="btn" style="background: #15803d; font-size: 19px; padding: 14px 28px;" href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.tif">Download gemsdoe51-sbd-fine-r347-20261007T153719Z.tif</a></p>
-<p class="zip" style="margin-top:6px;">or download the <a href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.zip" style="font-weight:600;">ZIP archive containing the single GeoTIFF</a></p>
-<dl class="kv" style="margin-top: 14px;">
-<dt>Submission Name (paste into competition form)</dt><dd><code>GEMSDOE51-SBD-STE-FINE-20261007</code></dd>
-<dt>Note (optional) (short comment to paste)</dt><dd><code>Two-stage Kostrov strain-budget deficit coarse prior + fine-scale LiDAR scarp and potential-field detector with 2.4px NMS and 200m catalogue flank exclusion</code></dd>
-<dt>Format Verification</dt><dd><b>PASS</b> — Single-band float32, EPSG:32611, shape (3730, 3292), values strictly in [0, 1], zero outside (100% portal legal, no NaNs)</dd>
-<dt>SHA-256 Checksum</dt><dd><code>a23686d27d6419263b66e0240a0915682eaad5a38054d135e2255f5ea1eb9aab</code></dd>
-<dt>Uniqueness Gate</dt><dd><b>PASS</b> — Worst Jaccard <b>0.0351</b> (&lt; 0.50 limit), Worst Containment <b>0.1678</b> (&lt; 0.60 limit) against all 21 cross-family prior references.</dd>
-<dt>Stage 1 Dominance Check</dt><dd>Approved tile area: 40.0%; Emitted share: 35.6%; <b>Lift: 0.890 (&lt; 1.5 limit)</b>. Placement is driven by fine-scale physical features, not dominated by Stage 1 footprint.</dd>
+<section class="download">
+<h2>⬇ One-click submission file</h2>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed.</code></dd>
+<dt>Format</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
 </dl>
+<p class="ev">evidence/hh_blend_holdout.json; local format/uniqueness receipts were measured from the final bytes; no DrivenData score or acceptance is claimed</p>
+</section>
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
+visible-catalogue proxy DTI is 0.281056 versus
+0.281663 for H-D
+(Δ -0.000606;
+3/6 folds higher).</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif">Download research TIFF</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (not a submission name)</dt><dd><code>GEMSDOE51-HG-HD-XING-R347-EXP-20261007</code></dd>
+<dt>Short note</dt><dd><code>Research-only H-G magnetic-gravity crossing add-on to H-D; matched blocked proxy DTI is below H-D; NOT SLOT-ELIGIBLE; no organizer score claimed.</code></dd>
+<dt>Measured format</dt><dd>PASS — one-band float32,
+EPSG:32611, shape [3730, 3292],
+inside values [0.0, 1.0],
+NaN outside with NaN NoData tag.</dd>
+<dt>SHA-256</dt><dd><code>4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f</code></dd>
+<dt>Scoped uniqueness</dt><dd>PASS —
+365 SHA-verified payloads,
+364 comparisons, 0 matches;
+max Jaccard 0.3216, cosine
+0.4867.</dd>
+<dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
+30.046%; emissions inside
+19.728%; lift
+0.657 — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
+</dl>
+<p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
+Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>;
+<a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
 </section>
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>STE L9</code> recorded
-proxy DTI nan versus
-nan for isotropic NMS
-(Δ +nan;
-0/0 folds; approximate paired 95% t interval
-[+nan,
-+nan]).
-H-M recorded nan versus
-nan for H-D
-(Δ +nan;
-0/0 folds; approximate paired 95% t interval
-[+nan,
-+nan]).
+proxy DTI 0.283603 versus
+0.281639 for isotropic NMS
+(Δ +0.001963;
+4/6 folds; approximate paired 95% t interval
+[-0.00166,
++0.00559]).
+H-M recorded 0.282603 versus
+0.281663 for H-D
+(Δ +0.000940;
+3/6 folds; approximate paired 95% t interval
+[-0.00225,
++0.00413]).
 Both are visible-catalogue proxy scores. Refreshed full-corpus audits fail for packaged H-M and
 STE because same-prediction NaN twins are present; H-M also exceeds the Jaccard limit against its
 hard-q20 variant. A current q70 Stage-1 map diagnostic has not been rerun for either arm.
@@ -62,7 +87,7 @@ They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_sof
 <a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
 <a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
-<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.tif">gemsdoe51-sbd-fine-r347-20261007T153719Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-sbd-fine-r347-20261007T153719Z.zip">gemsdoe51-sbd-fine-r347-20261007T153719Z.zip</a></span></td><td>two_stage_soft_w015</td><td>Stage-1 Kostrov strain-budget deficit coarse prior + Stage-2 fine-scale ridge detector</td><td>+0.0010</td><td>0.035</td><td>PASS</td></tr></tbody></table>
+<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>PRIMARY</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and
@@ -72,7 +97,8 @@ of genuinely new faults or predict an organizer score. Local source rasters are 
 mirrors, not organizer-authenticated.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
 by experts for the expanded label set. Any future emission should therefore be geologically
-justifiable as well as holdout-tested. There is no eligible file linked here today.</p>
+justifiable as well as holdout-tested. The current primary is linked above; it is locally
+validated and holdout-promoted, but has not been uploaded and has no organizer score claim.</p>
 <h2>What this is</h2>
 <p>GEMSDOE51 studies fault indications in the GeoDAWN region. Its intended design is two-stage:
 a 10&nbsp;km geodetic strain-budget statistic is only a <b>coarse-tile prior</b> (Stage&nbsp;1); a
@@ -80,7 +106,8 @@ fine-scale detector supplies point locations (Stage&nbsp;2). Historical Stage-1 
 suggest weak enrichment and show hard-gate harm, but they do not validate the current signed,
 rate-selectable formula; a current leakage-controlled Stage-1 rerun is unavailable. Stage&nbsp;1
 must not dictate fine-scale placement. Stage&nbsp;2 is reported separately on blocked known-fault
-proxy holdouts. No current artifact clears all promotion and uniqueness checks.</p>
+proxy holdouts. The H-H/H-D blend above clears the recorded local promotion, uniqueness,
+non-dominance, and format gates; it remains unscored by the organizer.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
