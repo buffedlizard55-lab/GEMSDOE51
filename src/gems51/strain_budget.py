@@ -59,24 +59,21 @@ fault assumption. Unknown-sense contributions can be treated as normal only by a
 explicit configurable fallback. The implementation uses raster-trace local strike
 and nearest-centroid slip-rate assignment; it is not a full geodetic inversion.
 
-Unit convention is provisional: the locally mirrored CSV's `slip_rate` field is
-interpreted as mm/yr and converted to m/yr, but the retained NBMG service schema
-for `SLIPRTNUM` does not state units and the accompanying GDR field-definition file
-has not been audited locally. Raw nanostrain/yr values are therefore not
-source-validated. Quantile ranking is invariant to a uniform rate rescaling, but
-not to mixed units, categorical encodings, record-specific errors, or changing the
-rate-component/sense assumptions.
+Source audit update (2026-10-07)
+--------------------------------
+The official v2 shapefile field definitions now verify SLIPRT2023 as mm/year
+and SLIPRTNUM as its numeric portion. All 1,126 mirrored records match the
+source DBF by record index/name/rate/sense. Slip component and per-trace dip
+remain assumptions. See registry/official and evidence/official_attribute_audit_20261007.json.
 
-What we can and cannot verify
------------------------------
-The three geodetic layers shipped with the competition are mutually consistent
-to r = 0.993 but satisfy **no exact algebraic identity** (tested: sqrt(dil^2 +
-shear^2), sqrt((dil^2+shear^2)/2), |dil| + |shear| all miss by >30% in places),
-so they were gridded/smoothed independently and the exact invariant convention
-used for ``geod_2ndinv`` is not recoverable from the data.  We therefore state
-the deficit in **quantile (rank) space**, which is invariant to any monotone
-rescaling of either side.  The raw nanostrain/yr numbers are reported too, and
-compared, but no absolute claim rests on them.
+The official geodetic README defines II=sqrt(e1^2+e2^2), dilation=e1+e2,
+and shear=min(abs(e1),abs(e2)) for opposite-signed eigenvalues, otherwise zero.
+The earlier inference that no scalar identity exists was incorrect: under that
+convention II^2=dilation^2+2*shear*(abs(dilation)+shear). Interpolation can still
+break exact equality. The legacy rank-space prior below is kept unchanged for
+frozen holdout reproducibility. It is NOT a physical dilation/shear subtraction.
+The new vector_budget module and audit_official_budget.py use actual clipped
+source trace lengths and source-matched scalar summaries for a separate audit.
 """
 
 from __future__ import annotations
@@ -113,8 +110,8 @@ class BudgetConfig:
 # ------------------------------------------------------------------ inputs
 def load_slip_rates(raw_dir: Path) -> pd.DataFrame:
     df = pd.read_csv(raw_dir / "external" / "gdr_qfaults_traces.csv")
-    # Provisional unit interpretation; the local numeric field's source unit and
-    # rate component are not fully authenticated. Keep that caveat in every audit.
+    # Units verified against official v2 DBF and field definitions.
+    # Slip component (vertical vs fault-plane) remains an assumption.
     df["slip_rate_m_yr"] = df["slip_rate"].astype(float) * 1e-3   # working mm/yr -> m/yr
     sense = df["slip_sense"].fillna("").astype(str).str.strip().str.upper()
     df["slip_sense_clean"] = sense

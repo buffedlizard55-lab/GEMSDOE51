@@ -1,0 +1,127 @@
+{
+  "scope": "Committed 54-repository inventory: docs/downloads and submissions; unique Git blobs",
+  "expected": 365,
+  "downloaded": 353,
+  "failures": [
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gems51-sbd-hridge-44090-20261006.tif",
+        "size": 753085,
+        "git_blob_sha": "50b86b69c33e16f837519aa91d85e75c4c0978d5"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif",
+        "size": 367022,
+        "git_blob_sha": "1536245a0533bd38b06ee8381e7d2e0842484b4e"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
+        "size": 223096,
+        "git_blob_sha": "3e64f7e343e0bb24ca9e53d43eb01e2f30ccd58d"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+        "size": 377874,
+        "git_blob_sha": "de2b519042d567535b0fafe0fc8bc251f11b39c1"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+        "size": 233040,
+        "git_blob_sha": "47fd816a86b2dbcd2873a7f09edea0e2a920529f"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+        "size": 367218,
+        "git_blob_sha": "ce98bf8c94810489dc639cf6f924f20cea6fd930"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+        "size": 223192,
+        "git_blob_sha": "5ee3426d0f05c0d2aea024f86ee05bae570f157f"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+        "size": 378062,
+        "git_blob_sha": "8f2726df916fc8d4c4e83444aac69a8b289685b9"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+        "size": 232804,
+        "git_blob_sha": "6943da78dabe33aa98f457e80ff80a5d8c18343c"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
+        "size": 382210,
+        "git_blob_sha": "a9a5c1e2633aa0fc6c8da8c364371dbd3a7358f8"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+        "size": 237016,
+        "git_blob_sha": "081fd4e16105f165f910c5c7bd18597dbcb1aab7"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    },
+    {
+      "source": {
+        "repo": "GEMSDOE51",
+        "branch": "main",
+        "path": "docs/downloads/gemsdoe51-strainbudget-s1-v1.tif",
+        "size": 390791,
+        "git_blob_sha": "23ff31cf7832f25616bc47d435eaec9fe796d3bb"
+      },
+      "error": "gh: Not Found (HTTP 404)\n"
+    }
+  ]
+}

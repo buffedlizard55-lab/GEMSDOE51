@@ -137,3 +137,96 @@ PYTHONPATH=src .venv/bin/python scripts/check_site.py
 ```
 
 `evidence/hk1_spatial_holdout_20261007.json` is the authoritative K1 outcome. It is `NOT_PROMOTED_NO_TIFF`; do not rerun the same configuration to shop for a passing result. Any new candidate requires a new preregistration and must clear every holdout, Stage-1 allowed-domain/non-dominance, uniqueness, format, portal-range, and provenance gate before it can produce a submission artifact.
+
+---
+
+## Standing user prompt — 2026-10-07 intake supplement
+
+Read this brief **every session before implementation**, along with the full working brief above and the latest evidence. Repeated verification boilerplate is consolidated here; this is an operational transcription, not an organizer statement or a verbatim chat export.
+
+> **THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!**
+>
+> **MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. DO NOT COPY A PREVIOUS SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION. BUT WE MUST GENERATE A UNIQUE TIF SUBMISSION. IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED TIF SUBMISSION.**
+>
+> There should be an easy to download submission tif file as described by the prompt. Read the entire prompt.
+>
+> Geodetic strain-budget deficit, used strictly as a coarse first stage. Hypothesis: where the geodetic strain rate exceeds what the mapped faults' slip rates can accommodate, the catalogue is likelier to be missing structures. Precedent for balancing geodetic and geologic deformation exists in the UCERF3 deformation models (Field et al., Bulletin of the Seismological Society of America 104(3), 1122–1180, 2014, doi:10.1785/0120130164). Three of those models invert geodetic and geologic data together, and UCERF3 also models off-fault strain explicitly. A related USGS-listed paper ("A fault-based model for crustal deformation, fault slip-rates and off-fault strain rate in California") estimates off-fault moment rates separately. Convert each mapped fault's slip rate (the INGENIOUS compilation is reported to hold slip rates; confirm in the shapefile attributes) and trace length into an equivalent tile strain rate using a documented moment-tensor summation. State the exact formula and cite its source, because I haven't verified one. Subtract that from the dilatation and shear strain-rate layers, and keep the residual only as a prior over broad tiles. Strain rates are coarse, and the deficit can be distributed off-fault, aseismic or caused by wrong catalogue slip rates. Habitat-style statements scored worst in this project (0.0041, 0.1223, 0.1352), so a second, separately holdout-scored fine-scale model must place points only inside approved tiles. Report both stages' holdout results separately. Normalize, write the GeoTIFF, run the uniqueness gate, and confirm the submission isn't dominated by stage one's footprint.
+>
+> Study GEMSDOE32 H33-2-B2, reported score0.2778, and whether a unique submission can exceed it and the stated leaderboard high0.3195. Use PhD-level scientific judgment, official checked sources and links. Do not infer causation from a score alone. Before implementing, generate3–5 previously untried geological hypotheses, each naming layers, physical signature/operator, missing-catalogue rationale, differences from existing code, expected DTI benefit and implementation cost. Rank and validate the top candidate on spatially blocked holdouts. **Do not spend a submission slot on an idea that hasn't beaten the current holdout best.** If new data are needed, identify free official sources and verify availability before calling the idea viable.
+>
+> Work autonomously without requesting manual data placement; review the repo and next steps from previous sessions first. Research official scientific literature and data, organize an auditable knowledge base with manual-review links, propose distinct grounded approaches, and keep the project useful and current. Do not hallucinate or claim unperformed verification. Flag irregularities and explain limitations/access blockers. The long-term geothermal-discovery goal must not be confused with the actual fault-pixel competition target.
+>
+> Build a clean, simple, user-friendly GitHub Pages site. The first screen/executive summary must make the new TIFF download and submission-readiness decision obvious. Include a uniquely identifiable filename and short comment for the optional submission note. Add an executive-summary/instructions subpage. Address the reported portal error **“Predicted values must be in range [0, 1]”**. Portal accepts a single-band GeoTIFF or ZIP containing one GeoTIFF matching required CRS, shape and geotransform; values must be[0,1]. Local checks and actual portal acceptance are separate evidence.
+>
+> Understand official competition overview, problem description, rules, datasets, reference solution and metric; obtain data, train, infer, normalize and validate. Use free public third-party sources with appropriate rights. The previous “single blocker is data placement / GPU needed” assertion must be tested rather than repeated. No DrivenData authentication is supplied; do not invent access. Use available authorized mirrors and official downloads autonomously where possible.
+>
+> **Core Values — Maximize P(Win):** weigh tradeoffs and risks, choose the path maximizing the probability of success, set aside attachment to a favored idea. **Own the Outcome:** own results end to end, fix problems without waiting for permission, treat failure and success as signals, and remain accountable for the final outcome.
+>
+> **Three passes required.** Pass1 implement and verify; Pass2 review bugs, missing requirements, incorrect assumptions and edge cases, fixing findings; Pass3 recheck against the original request and improve accuracy, reliability, completeness and quality. Do not stop at pass1. Create a pull request, merge onto main, and leave explicit next-session work and limitations. Never claim a leaderboard improvement or fully satisfied scientific requirement without evidence.
+
+### User-supplied score/site inventory (unverified claims, not a leaderboard feed)
+
+Sites below are starting points for studying prior methods, not permissible sources of a copied “new” submission. Blank scores mean no result supplied. The existing sibling audit inventories54 repositories; it does not establish organizer score-to-file attribution.
+
+| Repository/site | User-supplied identifiers and scores |
+|---|---|
+| [GEMSDOE](https://buffedlizard55-lab.github.io/GEMSDOE/docs/index.html) | gems-submission-20260925T001403Z-7f00890a:0.1563 |
+| [6GEMSDOE](https://buffedlizard55-lab.github.io/6GEMSDOE/) | gems6_hgb88-topk03_33cec71ff0:0.0286 |
+| [GEMSDOE3](https://buffedlizard55-lab.github.io/GEMSDOE3/docs/index.html) | pindrop-v4-nodes:0.1193; discovery:0.0830; ridge:0.1152 |
+| [GEMSDOE2](https://buffedlizard55-lab.github.io/GEMSDOE2/docs/index.html) | dual-family-union-f68e590f:0.1560 |
+| [GEMSDOE4](https://buffedlizard55-lab.github.io/GEMSDOE4/) | gems-submission-20260926T163915Z-237f0063:0.0343 |
+| [5GEMSDOE](https://buffedlizard55-lab.github.io/5GEMSDOE/docs/index.html) | gems-submission-20260926T175114Z-7f00890a:0.1563 |
+| [7GEMSDOE](https://buffedlizard55-lab.github.io/7GEMSDOE/) | lidarscarp-ridge-top2pct-36c3a3f341c8:0.1461 |
+| [8GEMSDOE](https://buffedlizard55-lab.github.io/8GEMSDOE/) | Hedge-v2_submission:0.1563 |
+| [GEMSDOE9](https://buffedlizard55-lab.github.io/GEMSDOE9/docs/index.html) | 2314b599:0.0107 |
+| [11GEMSDOE](https://buffedlizard55-lab.github.io/11GEMSDOE/docs/index.html) | gems-structural-area06-v1:0.0202 |
+| [12GEMSDOE](https://buffedlizard55-lab.github.io/12GEMSDOE/docs/index.html) | r7-nms3-dem10-scarp_0c9199f14e62 and allfinite twin:0.1294 |
+| [15GEMSDOE](https://buffedlizard55-lab.github.io/15GEMSDOE/docs/index.html) | gems-tso1-conj_alteration_mag:0.0782 |
+| [14GEMSDOE](https://buffedlizard55-lab.github.io/14GEMSDOE/docs/index.html) | GEMS_r5-geom-horse-ensemble:0.0020 |
+| [17GEMSDOE](https://buffedlizard55-lab.github.io/17GEMSDOE/) | F-ensemble-2pct:0.0187 |
+| [18GEMSDOE](https://buffedlizard55-lab.github.io/18GEMSDOE/) | H19-C_c11e495e:0.0297 |
+| [19GEMSDOE](https://buffedlizard55-lab.github.io/19GEMSDOE/docs/index.html) | h19-4-691e4dfa:0.1894; h19-5-e27054cf:0.1922 |
+| [GEMSDOE10](https://buffedlizard55-lab.github.io/GEMSDOE10/) | h16-continuation:0.0461; h20-dem10-scarp-thin:0.0921; H25-ctx-ridge:0.1280; h28-dotted-ridge:0.1839 |
+| [13GEMSDOE](https://buffedlizard55-lab.github.io/13GEMSDOE/) | r13-lattice-s5_v2_nan-outside:0.0904 |
+| [16GEMSDOE](https://buffedlizard55-lab.github.io/16GEMSDOE/docs/index.html) | h16-1-df20f65e:0.1855; h18-3a-c502dfab:0.0976; h18-4-aef8f42c:0.0360 |
+| [GEMSDOE21](https://buffedlizard55-lab.github.io/GEMSDOE21/) | h19-4-reference:0.1894 |
+| [20GEMSDOE](https://buffedlizard55-lab.github.io/20GEMSDOE/docs/index.html) | h20-1-be0e8f6b:0.1890; h20-5-824ce73a:0.1859 |
+| [GEMSDOE22](https://buffedlizard55-lab.github.io/GEMSDOE22/docs/index.html) | h23-a-e2ec4b49:0.1002; h23-b-86176698:0.0748 |
+| [GEMSDOE23](https://buffedlizard55-lab.github.io/GEMSDOE23/) | h30-arrangement-matched-habitat:0.1352 |
+| [GEMSDOE24](https://buffedlizard55-lab.github.io/GEMSDOE24/) | h25-1-dotted-h19-5-d1-5-989f59505db1:0.2477 |
+| [GEMSDOE25](https://buffedlizard55-lab.github.io/GEMSDOE25/) | dotted-h19-5-d2-8-e56ea318af89:0.2600 |
+| [GEMSDOE26](https://buffedlizard55-lab.github.io/GEMSDOE26/) | dilcond-oof-v1-47629f496133:0.1223 |
+| [GEMSDOE27](https://buffedlizard55-lab.github.io/GEMSDOE27/) | topo-gap-closure-t-v2-on-d1-5:0.2449 |
+| [GEMSDOE28](https://buffedlizard55-lab.github.io/GEMSDOE28/) | h27-4-r1-solo-d2-8:0.2708; h32-1-prethin-tip-euler:0.2649; h36-1-rung30-blind-r1:0.2710; h38-1-hf-euler-r30-r1:unreported |
+| [GEMSDOE29](https://buffedlizard55-lab.github.io/GEMSDOE29/docs/index.html) | efd28-repro:0.2600; repo-c0-habitat-emission:0.0041; sgmc-off-catalogue-44k:0.0512; wormrank-d28, wormsurv-filter, xfit-c0-habitat, xfit-h41-union-qfaults:unreported |
+| [GEMSDOE30](https://buffedlizard55-lab.github.io/GEMSDOE30/) | d28-poisson300m-offcat-44090:0.2600 |
+| [GEMSDOE31](https://buffedlizard55-lab.github.io/GEMSDOE31/docs/) | h27-4-solo-d28:0.2708 |
+| [GEMSDOE32](https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html) | h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros:0.2778 (user report; owner site UNSCORED) |
+| [GEMSDOE33](https://buffedlizard55-lab.github.io/GEMSDOE33/) | h33d-analog-tip-stepover-r30:0.2632 |
+| [GEMSDOE34](https://buffedlizard55-lab.github.io/GEMSDOE34/docs/index.html) | h34-scatter-q50-arr-matched:0.0778 |
+| [GEMSDOE35](https://buffedlizard55-lab.github.io/GEMSDOE35/docs/index.html) | h35-06-aaa86efb25-candidate:0.0418 |
+| [GEMSDOE36](https://buffedlizard55-lab.github.io/GEMSDOE36/docs/) | anderson-geothermal-pinn-38854:0.2750 |
+| [GEMSDOE37](https://buffedlizard55-lab.github.io/GEMSDOE37/) | h6-physics-dotted-80k:0.1193 |
+| [GEMSDOE38](https://buffedlizard55-lab.github.io/GEMSDOE38/docs/index.html) | D-step-3p0-07pct-tipProt:0.0763 |
+| [GEMSDOE39](https://buffedlizard55-lab.github.io/GEMSDOE39/) | h40-e-disc-h40e-30k-zeros:unreported |
+| [GEMSDOE40](https://buffedlizard55-lab.github.io/GEMSDOE40/docs/index.html) | h8-euler-lineament-depthcluster (soft/hard), h45-eulerdepthreadcluster:unreported |
+| [GEMSDOE41](https://buffedlizard55-lab.github.io/GEMSDOE41/docs/index.html) | h42-submission-primary:unreported |
+| [GEMSDOE42](https://buffedlizard55-lab.github.io/GEMSDOE42/docs/index.html) | xscale-worm-persistence:0.0581 |
+| [GEMSDOE43](https://buffedlizard55-lab.github.io/GEMSDOE43/docs/index.html) | sup01-hgb21-sep40-n40000:0.0424 |
+| [GEMSDOE44](https://buffedlizard55-lab.github.io/GEMSDOE44/docs/) | h46-twostageAB:unreported |
+| [GEMSDOE45](https://buffedlizard55-lab.github.io/GEMSDOE45/) | h51-km-faultzone:0.0106 |
+| [GEMSDOE46](https://buffedlizard55-lab.github.io/GEMSDOE46/) | r11f-scarp-radiometric-fusion:0.1589; r12-scarp-rad-concordance:unreported |
+| [GEMSDOE47](https://buffedlizard55-lab.github.io/GEMSDOE47/) | unreported |
+| [GEMSDOE48](https://buffedlizard55-lab.github.io/GEMSDOE48/docs/index.html) | unreported |
+| [GEMSDOE49](https://buffedlizard55-lab.github.io/GEMSDOE49/) | gate_ortho_w0.25-40k:0.2376 |
+| [GEMSDOE50](https://buffedlizard55-lab.github.io/GEMSDOE50/) | unreported |
+| [GEMSDOE51](https://buffedlizard55-lab.github.io/GEMSDOE51/) | unreported |
+| [GEMSDOE52](https://buffedlizard55-lab.github.io/GEMSDOE52/) | unreported |
+| 53GEMSDOE,54GEMSDOE | unreported; no explicit site URLs supplied |
+
+### Competition/data links supplied with the task
+
+- [Competition](https://www.drivendata.org/competitions/306/competition-doe-gems/), [problem/format/metric](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/), [about](https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/), [data](https://www.drivendata.org/competitions/306/competition-doe-gems/data/), [leaderboard — link only](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
+- [Official reference solution](https://github.com/drivendataorg/gems-prize-reference-solution), [rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf), [EPSG32611](https://epsg.io/32611), [Tversky index](https://en.wikipedia.org/wiki/Tversky_index)
+- [USGS GeoDAWN](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and), [INGENIOUS project](https://gbcge.org/current-projects/ingenious/), [GDR1391](https://gdr.openei.org/submissions/1391)
+- User mirrors, not independently authenticated official downloads: [GEMS PDF](https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&st=wz4kofki&dl=0), [example submission](https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&st=8junzdyw&dl=0), [existing faults](https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&st=rnino7ya&dl=0), [numerical features](https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&st=zj1lag1r&dl=0), [DEM links PDF](https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&st=srhhir10&dl=0)

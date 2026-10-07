@@ -1,0 +1,244 @@
+{
+  "candidate": "P1 odd/even topographic normal profiles",
+  "status": "RESEARCH_ONLY_NOT_PROMOTED",
+  "promoted": false,
+  "gates": {
+    "six_folds": true,
+    "baseline_reproduced": false,
+    "beats_frozen": false,
+    "beats_paired": false,
+    "positive_folds": false,
+    "stage1_broad": true,
+    "confinement": true
+  },
+  "rows": [
+    {
+      "fold": 0,
+      "n_truth": 12803,
+      "requested_dots": 44426,
+      "stage1": {
+        "held_trace_rows": 100,
+        "budget_trace_rows": 1026,
+        "threshold": -0.5180102915951973,
+        "approved_area_share": 0.9006108132701084
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "emitted_inside_allowed": 44426
+        },
+        "baseline_gated": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "emitted_inside_allowed": 44426
+        },
+        "candidate_gated": {
+          "dti": 0.28096816064032093,
+          "dots": 44426,
+          "tp": 5514.200100103248,
+          "fp": 41402.358088420566,
+          "emitted_inside_allowed": 44426
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "n_truth": 10426,
+      "requested_dots": 36178,
+      "stage1": {
+        "held_trace_rows": 60,
+        "budget_trace_rows": 1066,
+        "threshold": -0.42710120068610635,
+        "approved_area_share": 0.9036063392365908
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.27178387428750844,
+          "dots": 36178,
+          "tp": 4337.245785853802,
+          "fp": 33750.938302036855,
+          "emitted_inside_allowed": 36178
+        },
+        "baseline_gated": {
+          "dti": 0.2704360700961979,
+          "dots": 36178,
+          "tp": 4315.222093183762,
+          "fp": 33763.443208245444,
+          "emitted_inside_allowed": 36178
+        },
+        "candidate_gated": {
+          "dti": 0.27444129487905095,
+          "dots": 36178,
+          "tp": 4381.120449420934,
+          "fp": 33733.77946051677,
+          "emitted_inside_allowed": 36178
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "n_truth": 7096,
+      "requested_dots": 24623,
+      "stage1": {
+        "held_trace_rows": 42,
+        "budget_trace_rows": 1084,
+        "threshold": -0.37907375643224694,
+        "approved_area_share": 0.9016813765911615
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.29027025890966246,
+          "dots": 24623,
+          "tp": 3159.244821283902,
+          "fp": 22875.778904242135,
+          "emitted_inside_allowed": 24623
+        },
+        "baseline_gated": {
+          "dti": 0.28911907633343786,
+          "dots": 24623,
+          "tp": 3146.4058537071924,
+          "fp": 22883.261580649098,
+          "emitted_inside_allowed": 24623
+        },
+        "candidate_gated": {
+          "dti": 0.28857019958415453,
+          "dots": 24623,
+          "tp": 3139.42756595198,
+          "fp": 22872.82628278338,
+          "emitted_inside_allowed": 24623
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "n_truth": 5630,
+      "requested_dots": 19536,
+      "stage1": {
+        "held_trace_rows": 38,
+        "budget_trace_rows": 1088,
+        "threshold": -0.490566037735849,
+        "approved_area_share": 0.9007849830078068
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "emitted_inside_allowed": 19536
+        },
+        "baseline_gated": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "emitted_inside_allowed": 19536
+        },
+        "candidate_gated": {
+          "dti": 0.23695202185204925,
+          "dots": 19536,
+          "tp": 2037.821641753782,
+          "fp": 18442.90115912992,
+          "emitted_inside_allowed": 19536
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "n_truth": 13348,
+      "requested_dots": 46318,
+      "stage1": {
+        "held_trace_rows": 108,
+        "budget_trace_rows": 1018,
+        "threshold": -0.5385934819897085,
+        "approved_area_share": 0.9006108132701084
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "emitted_inside_allowed": 46318
+        },
+        "baseline_gated": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "emitted_inside_allowed": 46318
+        },
+        "candidate_gated": {
+          "dti": 0.3055000806741138,
+          "dots": 46318,
+          "tp": 6266.418775035634,
+          "fp": 42901.59955962747,
+          "emitted_inside_allowed": 46318
+        }
+      }
+    },
+    {
+      "fold": 5,
+      "n_truth": 11398,
+      "requested_dots": 39551,
+      "stage1": {
+        "held_trace_rows": 96,
+        "budget_trace_rows": 1030,
+        "threshold": -0.5317324185248714,
+        "approved_area_share": 0.9007849830078068
+      },
+      "scores": {
+        "baseline_ungated": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "emitted_inside_allowed": 39551
+        },
+        "baseline_gated": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "emitted_inside_allowed": 39551
+        },
+        "candidate_gated": {
+          "dti": 0.3174897958728194,
+          "dots": 39551,
+          "tp": 5580.0807846429725,
+          "fp": 36706.03147566807,
+          "emitted_inside_allowed": 39551
+        }
+      }
+    }
+  ],
+  "summary": {
+    "baseline_ungated": 0.28531515486970865,
+    "baseline_gated": 0.28489865707511947,
+    "candidate_gated": 0.2839869255837515,
+    "paired_delta": -0.0009117314913680055,
+    "positive_folds": 2,
+    "frozen_best": 0.285340602656319,
+    "baseline_drift": -2.5447786610344192e-05
+  },
+  "protocol": "knowledge/next-candidates-20261007.md",
+  "stage1_holdout": "evidence/stage1_q10_trace_holdout_20261007.json",
+  "versions": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "sklearn": "1.9.1"
+  },
+  "runtime_seconds": 702.141063451767,
+  "slot_used": false,
+  "limitations": [
+    "Visible-catalogue proxy, not hidden expert truth.",
+    "Repeated use of folds is selection-biased; no independent lockbox.",
+    "Stage1 approximate centroid rate assignment; source units reviewed separately; do not infer physical residual from ranks."
+  ]
+}

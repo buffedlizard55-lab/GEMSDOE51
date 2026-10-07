@@ -9,6 +9,7 @@
 <p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
 <nav>
   <a class="" href="index.html">Executive summary</a>
+  <a class="" href="latest.html">Latest experiment</a>
   <a class="active" href="how-to-submit.html">How to submit</a>
   <a class="" href="method.html">Method</a>
   <a class="" href="hypotheses.html">Hypotheses</a>
@@ -21,8 +22,10 @@
 </nav>
 </div></header>
 <main class="wrap">
+<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
 
 <h2>Submission guide — current status first</h2>
+
 
 <p class="download missing"><b>NO UPLOAD-ELIGIBLE ARTIFACT.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
 <p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
@@ -37,7 +40,7 @@
 <p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
 
 <h3>Do not upload now</h3>
-<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and outside encoding; the new P1 research file is all-finite zero-outside with no NoData tag. Neither encoding has been portal-validated here. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>

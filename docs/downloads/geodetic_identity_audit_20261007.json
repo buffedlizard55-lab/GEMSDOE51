@@ -1,0 +1,12 @@
+{
+  "formula": "II^2 = dil^2 + 2*shear*(abs(dil)+shear), with source-defined shear",
+  "sample_grid": [
+    467,
+    412
+  ],
+  "valid_samples": 81011,
+  "median_relative_error": 0.006863495153073881,
+  "p99_relative_error": 0.19354843919656936,
+  "max_relative_error": 0.24999998137354879,
+  "interpretation": "resampling/interpolation can break exact equality; no inference of independent original smoothing"
+}

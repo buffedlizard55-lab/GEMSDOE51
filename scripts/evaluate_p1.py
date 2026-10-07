@@ -20,6 +20,8 @@ FROZEN = .285340602656319
 
 def main():
     import sklearn, scipy
+    if OUT.exists() and "promoted" in json.loads(OUT.read_text()):
+        raise SystemExit("P1 is a completed fixed experiment; do not rerun to shop for a passing result")
     t = time.time()
     fp, cat = np.load(P/'footprint.npy'), np.load(P/'catalogue.npy')
     stack = Stack(P)
