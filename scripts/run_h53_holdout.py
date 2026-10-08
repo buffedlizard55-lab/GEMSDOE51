@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Preregistered H53 holdout: top candidate H53-A + H53-F operating-point sweep.
 
-Frozen protocol: ``registry/preregistration_h53.json`` and
-``evidence/candidate_hypotheses_prereg_20261008.json`` (both written before this
-script ran for the first time).  Receipt: ``evidence/h53_holdout_20261008.json``.
+Frozen protocol: ``registry/preregistration_h53sr_20261008.json`` and
+``evidence/candidate_hypotheses_prereg_h53sr_20261008.json`` (both written before this
+script ran for the first time).  Receipt: ``evidence/h53sr_holdout_20261008.json``.
 
 This script NEVER writes a submission TIFF and never consumes a competition
 slot.  It re-fits, per fold of the frozen six-fold spatially blocked holdout:
@@ -281,8 +281,8 @@ def main() -> int:
         schema_version=1,
         status="COMPLETE" if promoted else "COMPLETE_NOT_PROMOTED",
         candidate="H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm",
-        preregistration="registry/preregistration_h53.json",
-        slate="evidence/candidate_hypotheses_prereg_20261008.json",
+        preregistration="registry/preregistration_h53sr_20261008.json",
+        slate="evidence/candidate_hypotheses_prereg_h53sr_20261008.json",
         instrument="six-fold 3x3 spatial holdout; visible known-fault catalogue proxy truth",
         protocol=dict(
             buffer_px=12, negative_samples=250000, negative_seed="1000 + fold.index",

@@ -1,7 +1,7 @@
 """H53-A: fine-scale geodetic strain-residual ridge features.
 
-Preregistered in ``evidence/candidate_hypotheses_prereg_20261008.json`` and
-``registry/preregistration_h53.json`` BEFORE any validation run.
+Preregistered in ``evidence/candidate_hypotheses_prereg_h53sr_20261008.json`` and
+``registry/preregistration_h53sr_20261008.json`` BEFORE any validation run.
 
 Physical hypothesis (the user brief's central Stage-1 hypothesis, taken to
 fine scale): where the geodetic strain rate exceeds what the mapped faults'

@@ -38,7 +38,7 @@ Hard rules enforced in code, not by inspection:
 Outputs (all under ``docs/downloads/`` so the site links them directly):
     <name>.tif / <name>.zip / <name>-checks.json
     data/submission_manifest.json   (primary demoted, candidate recommended)
-    registry/submission_build_h53.json
+    registry/submission_build_h53sr.json
 
 Usage:
     .venv/bin/python scripts/build_submission_h53.py [--dry-run]
@@ -113,7 +113,7 @@ def fit_full_field(stack, footprint, catalogue, extras, seed, neg=250_000,
 def require_h53_gate() -> dict:
     """Fail closed unless the frozen H53 holdout receipt licenses this build."""
     if not HOLDOUT.is_file():
-        raise SystemExit("REFUSING to build: evidence/h53_holdout_20261008.json is "
+        raise SystemExit("REFUSING to build: evidence/h53sr_holdout_20261008.json is "
                          "missing; run scripts/run_h53_holdout.py first")
     rec = json.loads(HOLDOUT.read_text())
     if rec.get("status") not in ("COMPLETE", "COMPLETE_NOT_PROMOTED"):
@@ -399,7 +399,7 @@ def main() -> int:
                         "buffer); visible known-fault proxy truth; STE emission "
                         "restricted to the held-out block at matched mass"),
             comparator=("fresh same-fold H-H/H-D 50/50 blend, q10-gated "
-                        "(evidence/h53_holdout_20261008.json)"),
+                        "(evidence/h53sr_holdout_20261008.json)"),
             folds_evaluated=6,
             baseline_mean=float(gated_base_mean),
             baseline_reproduces_archived=bool(base_h.get("reproduced")),
@@ -419,7 +419,7 @@ def main() -> int:
             h53a_promoted=bool(promoted),
             preregistered_verdict=("PROMOTED_LOCAL_PROXY_ONLY" if promoted
                                    else "NOT_PROMOTED_REGENERATION_OF_PROMOTED_PROCEDURE"),
-            evidence="evidence/h53_holdout_20261008.json",
+            evidence="evidence/h53sr_holdout_20261008.json",
             note=("The candidate geometry is the q10-confined H53-A blend; its "
                   "measured proxy sits a small compliance cost below the frozen "
                   "UNGATED local best, which is itself not uploadable (fails q10 "
@@ -505,7 +505,7 @@ def main() -> int:
                       "H53-A NOT PROMOTED; artifact is the q10-confined regeneration of "
                       "the promoted H-H/H-D procedure"),
         "status": ("PROMOTED_LOCAL_PROXY_ONLY" if promoted else "NOT_PROMOTED_NO_H53A_TIFF"),
-        "evidence": "evidence/h53_holdout_20261008.json",
+        "evidence": "evidence/h53sr_holdout_20261008.json",
         "reason": (f"H53-A q10-gated mean {cand_mean:.6f} vs frozen best "
                    f"{rec.get('baseline', {}).get('frozen_mean_dti'):.6f}; paired gated "
                    f"delta {hold.get('paired_mean_delta_vs_stage1_gated_hd_hh'):+.6f}; "
@@ -515,7 +515,7 @@ def main() -> int:
         "decision": ("H53-A PROMOTED; submission build authorized" if promoted else
                      "H53-A NOT PROMOTED; submission is the regeneration of the "
                      "promoted H-H/H-D procedure under the brief's constraints"),
-        "rule": ("frozen registry/preregistration_h53.json; fresh ungated baseline "
+        "rule": ("frozen registry/preregistration_h53sr_20261008.json; fresh ungated baseline "
                  "reproduces frozen mean within 1e-5; q10-gated candidate beats "
                  "frozen best with >= 4/6 folds; 100% confinement; lift <= 1.5"),
         "h53_a_promoted": promoted,
@@ -583,7 +583,7 @@ def main() -> int:
         emitted_px=int(support_mask.sum()), on_catalogue_px=int(leak["on_catalogue_px"]),
         stage1_area_share=area_share, stage1_lift=lift,
         uniqueness_verdict=gate.verdict,
-        holdout_receipt="evidence/h53_holdout_20261008.json",
+        holdout_receipt="evidence/h53sr_holdout_20261008.json",
         notes=("Two-stage H53 submission: coarse rank-space strain-budget prior "
                "(Stage 1, tiles only, q10 approved domain) + blended belief-field "
                "STE emission (Stage 2, every point inside the approved tiles). Local "

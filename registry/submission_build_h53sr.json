@@ -24,6 +24,6 @@
  "stage1_area_share": 0.900925673451481,
  "stage1_lift": 1.1099694785796939,
  "uniqueness_verdict": "PASS",
- "holdout_receipt": "evidence/h53_holdout_20261008.json",
+ "holdout_receipt": "evidence/h53sr_holdout_20261008.json",
  "notes": "Two-stage H53 submission: coarse rank-space strain-budget prior (Stage 1, tiles only, q10 approved domain) + blended belief-field STE emission (Stage 2, every point inside the approved tiles). Local format and uniqueness checks only \u2014 no organizer score is claimed."
 }

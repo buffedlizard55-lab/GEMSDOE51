@@ -1,131 +1,240 @@
 {
- "schema_version": 1,
- "date_utc": "2026-10-08",
- "status": "frozen_before_running",
- "target": "DOE GEMS Prize (DrivenData #306): discover newly identified faults in the GeoDAWN region absent from the existing USGS/INGENIOUS catalogue; the scored object is fault pixels, not geothermal vents",
- "current_best_proxy": {
-  "mean_dti": 0.285340602656319,
-  "configuration": "H-H/H-D fixed 50/50 probability blend + STE L9 w=0.35 spacing=2.4, ungated, ratio 3.47, flank 2.0 px",
-  "receipt": "evidence/hh_blend_holdout.json",
-  "uploadable": false,
-  "why_not_uploadable": "Predates the q10 all-points-inside-approved requirement (86.71% inside) and encodes NaN outside the footprint (unresolved portal range hazard IR-51-21)."
- },
- "common_holdout": {
-  "folds": "six contiguous 3x3 spatial blocks of the visible catalogue; 12 px training buffer; block = fold truth, rest of catalogue = known/masked",
-  "negatives": "250,000 sampled per fold, seed 1000 + fold.index",
-  "model": "HistGradientBoostingClassifier, max_iter=250, seed=fold.index",
-  "emission": "STE ridge scales 1/2/3.5 px, line length 9, continuity exponent 0.35, greedy spacing 2.4 px, catalogue flank 2.0 px, mass 3.47 x n_truth",
-  "stage1": "fold-specific rank-space strain-budget deficit over 10 km tiles (Kreemer et al. 2000 Eq. 3), held-out trace rows removed; approved = tiles at/above q10; all Stage-2 points confined; lift limit 1.5; approved area >= 2/3",
-  "truth": "visible known-fault catalogue proxy; not the hidden expert labels"
- },
- "ranked_hypotheses": [
-  {
-   "rank": 1,
-   "id": "H53-A",
-   "name": "Fine-scale geodetic strain-residual ridge (off-fault strain locator)",
-   "status": "TOP CANDIDATE; validated on the six-fold blocked holdout this session",
-   "layers": [
-    "geod_2ndinv",
-    "geod_shearrate",
-    "geod_dilaterate",
-    "fault-predicted strain tensor II from strain_budget.kostrov_tiles (Kreemer et al. 2000 Eq. 3) at 2.5 km tiles, fold-visible catalogue only"
-   ],
-   "operator": "Per geodetic band: rank-space residual q(observed 2.5 km tile mean) - q(fault tensor II 2.5 km tile); upsample to 100 m; Gaussian smooth sigma=4 px; crest/ridge response max(0,-lambda_min)*sigma^2 at sigma=1.5 and 4.0 px (existing lineament-bank Hessian). 6 features: {ii, shear, dil} x {crest_s15, crest_s40}.",
-   "physical_signature": "A thin positive off-fault strain-residual ridge: distributed deformation the mapped faults' slip rates cannot accommodate.",
-   "why_missing_fault": "Blind or distributed deformation produces no surface scarp, so a scarp-built catalogue misses it, but it does produce geodetic strain. UCERF3 models off-fault strain explicitly (Field et al. 2014, doi:10.1785/0120130164).",
-   "difference_from_repo": "Stage 1 uses the same residual at 10 km tiles as raw rank values and only as a q10 hard gate with zero soft score weight; H53-A uses 2.5 km tiles, a smoothed ridge response, and feeds the Stage-2 HGB as features. No implemented arm turns the strain residual into a fine-scale ridge feature.",
-   "expected_benefit": "Uncertain; the tile-level deficit measured weak (Spearman 0.039) while raw geodetic fields measured stronger (0.099-0.24), so the subtraction is a genuine test. No numeric uplift forecast.",
-   "implementation_cost": "Medium; new module src/gems51/strain_residual.py plus one extra six-fold arm.",
-   "external_data": "None; all inputs are hash-pinned competition bands plus the restored INGENIOUS slip-rate table.",
-   "sources": [
-    "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-    "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
-    "doi:10.1785/0120130164 (Field et al. 2014, UCERF3)"
-   ]
+  "schema_version": 1,
+  "preregistered_utc_date": "2026-10-08",
+  "status": "PREREGISTERED_BEFORE_IMPLEMENTATION",
+  "target": "Fault pixels absent from the supplied catalogue; no direct vent-probability claim.",
+  "current_best_local_proxy": {
+    "candidate": "H-H/H-D fixed 50/50 blend + STE L9/w=0.35/spacing=2.4",
+    "mean_dti": 0.285340602656319,
+    "folds": 6,
+    "receipt": "evidence/hh_blend_holdout.json",
+    "truth": "visible known-fault catalogue only"
   },
-  {
-   "rank": 2,
-   "id": "H53-B",
-   "name": "Detrended-basement curvature hinge (blind range-front locator)",
-   "status": "Proposed; not validated this session",
-   "layers": ["depth_to_base_surf"],
-   "operator": "Detrend with Gaussian sigma=50 px; ridge response max(0,-lambda_min)*sigma^2 at sigma=2 and 4 px of the detrended surface.",
-   "physical_signature": "The fault trace is where the basement surface bends (hinge), not where it dips fastest; a blind range-front fault under alluvium bends the basement surface without a scarp.",
-   "why_missing_fault": "The catalogue is scarp-based; buried range-front faults leave no scarp but do bend the basement surface.",
-   "difference_from_repo": "H-E's base_s15/s40_edge are first-derivative (|grad|) edge banks on the same layer, peaking on the basinward dip away from the trace; H53-B uses the second derivative of the detrended surface, peaking at the hinge.",
-   "expected_benefit": "Low-to-moderate, uncertain; no numeric forecast.",
-   "implementation_cost": "Low-medium; existing competition layer plus the lineament-bank Hessian.",
-   "external_data": "None.",
-   "sources": ["https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"]
+  "baseline_reproduction_warning": {
+    "last_fresh_mean": 0.28531515486970865,
+    "frozen_mean": 0.285340602656319,
+    "absolute_difference": 2.544778661034192e-05,
+    "tolerance": 1e-05,
+    "source": "evidence/hk1_spatial_holdout_20261007.json",
+    "rule": "recompute; do not widen tolerance after seeing the new outcome"
   },
-  {
-   "rank": 3,
-   "id": "H53-C",
-   "name": "Conductivity lineament along-strike persistence",
-   "status": "Proposed; not validated this session",
-   "layers": ["cond_surf"],
-   "operator": "Normalized-convolution edge response at sigma=2 and 5 px, then along-strike line accumulation (trace_emission.line_accumulate, length 9, 12 orientations), rank-normalized.",
-   "physical_signature": "A basin-bounding fault juxtaposes resistive bedrock against conductive basin fill; the contact is a long, continuous conductivity lineament persisting for kilometres even where the scarp is eroded or buried.",
-   "why_missing_fault": "Scarp-based catalogues miss buried or eroded range fronts that keep their conductivity contact.",
-   "difference_from_repo": "H-D is scarp-facing coherence on lidar/det_elev; H-H is potential-field endpoint/bridge topology; H-E has cond_s* edge banks but no along-strike continuity operator. H53-C measures continuity of the conductivity edge itself.",
-   "expected_benefit": "Low-to-moderate, uncertain; no numeric forecast.",
-   "implementation_cost": "Low; reuses the lineament bank and line accumulator.",
-   "external_data": "None.",
-   "sources": ["https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"]
+  "stage1_separate_audit": {
+    "method": "official QFault vector segments clipped to 10-km tiles; documented Kostrov tensor summation; whole trace records held out in five splits",
+    "receipt": "evidence/official_vector_budget_20261007.json",
+    "mean_approved_area": 0.901527139612333,
+    "mean_trace_recall": 0.9601245840459715,
+    "mean_lift": 1.0650105093454951,
+    "interpretation": "weak broad enrichment only; not Stage-2 DTI and not a predictor of the hidden organizer score",
+    "required_reporting": [
+      "approved area",
+      "held-out trace recall",
+      "lift",
+      "units/component/dip assumptions",
+      "off-fault/aseismic/catalogue-error alternatives"
+    ]
   },
-  {
-   "rank": 4,
-   "id": "H53-D",
-   "name": "Radiometric alteration asymmetry across independent edges",
-   "status": "Proposed; not validated this session",
-   "layers": ["rad_K", "rad_Th", "independent edge banks from comp_tmi and comp_iso_grav_anom"],
-   "operator": "Mean K/Th contrast between the two sides within a +/-5 px window centred on independent geophysical edges, plus along-edge elongation of the ratio anomaly.",
-   "physical_signature": "Hydrothermal alteration along a fault zone produces a narrow, elongate K/Th (or K-depletion) anomaly that follows the fault trace, not the scarp.",
-   "why_missing_fault": "Alteration halos are narrow and follow the fault; surface mapping and scarp catalogues miss them.",
-   "difference_from_repo": "H51-K3 (preregistered, untested) proposed ratio lineaments conditional on structural edges; H53-D measures the side-to-side contrast across the edge, which a lineament detector cannot express. Radiometric bands sit in the base stack only as raw values.",
-   "expected_benefit": "Low-to-moderate, speculative for fault pixels; no numeric forecast.",
-   "implementation_cost": "Medium; ratio transform plus windowed asymmetry operator.",
-   "external_data": "None; radiometric bands are hash-pinned owner mirrors of the USGS GeoDAWN surveys (https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and).",
-   "sources": ["https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and"]
-  },
-  {
-   "rank": 5,
-   "id": "H53-E",
-   "name": "Manifestation-aligned thin corridor (geothermal pathway proxy)",
-   "status": "Proposed; not validated this session",
-   "layers": [
-    "ext_gdr_wellspring_in_footprint.csv (GDR 1391, 27,092 rows, restored and hash-pinned)",
-    "ext_gdr_volcanic_vents_in_footprint.csv (21 rows)",
-    "independent lineament bank (tmi / iso_grav_anom edges)"
-   ],
-   "operator": "For each thermal manifestation, locate the nearest independent lineament pixel; rasterize a thin corridor (Gaussian sigma=2 px) around those pixels; rank-normalize.",
-   "physical_signature": "Warm springs/vents cluster along permeable fault corridors; the hidden labels are newly identified faults in a geothermal field, so corridors hosting manifestations are likelier to be faults experts would identify.",
-   "why_missing_fault": "Manifestation-hosting faults may have subtle surface expression; alignment of thermal points with an independent geophysical lineament is more fault-specific than generic geothermal favorability.",
-   "difference_from_repo": "H51-X3 (preregistered, untested) proposed point-to-lineament distance/orientation features; H53-E rasterizes a thin corridor around the lineaments nearest manifestations -- deliberately not a broad habitat surface (the 0.0041 / 0.1223 / 0.1352 failure mode). No current feature uses well/spring temperature or chemistry.",
-   "expected_benefit": "Low for the fault-pixel metric; moderate for the long-term geothermal-vent goal. No numeric forecast.",
-   "implementation_cost": "Medium; point joins plus provenance audit.",
-   "external_data": "GDR submission 1391 (https://gdr.openei.org/submissions/1391, CC-BY 4.0) -- already restored and SHA-256-pinned in this checkout (data/restore_receipt.json); availability verified, not assumed.",
-   "sources": ["https://gdr.openei.org/submissions/1391"]
-  }
- ],
- "engineering_calibration": {
-  "id": "H53-F",
-  "name": "Emission operating-point sweep (mass ratio x catalogue flank) on cached fold fields",
-  "arms": "ratio in {2.96, 3.47} x flank in {2.0, 2.24} px; STE L9 w=0.35 spacing 2.4; q10-gated; paired vs the (3.47, 2.0) gated baseline",
-  "rationale": "The official metric's marginal rule (emit a unit dot iff kernel credit > 0.2 x DTI, ~0.056 at DTI 0.28) and the owner-reported family ladder (0.2600 at 44,090 dots vs 0.2778 at 37,654 dots, the latter also deleting the <=200 m catalogue band) suggest the current 44,069-dot mass may over-emit.",
-  "adoption_rule": "Adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds positive; otherwise the build keeps ratio 3.47, flank 2.0 px (44,069 dots)."
- },
- "promotion_rule_H53_A": {
-  "candidate_field": "0.5 x H-D + 0.5 x (H-H + H53-A features), per-fold fit, same seeds as baseline",
-  "baseline_field": "0.5 x H-D + 0.5 x H-H (fresh, same folds)",
-  "requires": [
-   "fresh ungated baseline reproduces frozen mean 0.285340602656319 within 1e-5",
-   "candidate q10-gated mean > 0.285340602656319",
-   "paired q10-gated candidate-vs-baseline mean delta > 0 with >= 4/6 folds positive",
-   "100% of candidate points inside fold-specific q10 approved tiles",
-   "approved area >= 2/3 of footprint every fold; Stage-1 lift <= 1.5"
+  "ranked_untried_candidates": [
+    {
+      "id": "H53-K2x",
+      "rank": 1,
+      "name": "Structure-conditioned conductive-ribbon anisotropy",
+      "layers": [
+        "cond_surf",
+        "depth_to_base_surf",
+        "iso_grav_anom",
+        "tmi",
+        "supplied potential-field gradients"
+      ],
+      "operator": "At sigma 2 and 5 px, estimate an unoriented independent structural edge tangent from basement/potential-field gradients. Project the conductivity gradient into edge-normal and edge-parallel components. Feature = structural edge strength times positive cross-edge minus along-edge conductivity gradient energy, scale-normalized; combine the two scales with their pixelwise minimum.",
+      "physical_signature": "Narrow conductive damage/alteration ribbon parallel to an independent basement or potential-field boundary, with greater cross-edge than along-edge variation.",
+      "missing_fault_rationale": "A faulted and fluid-altered corridor under cover may form a narrow conductive ribbon even when the surface scarp is weak; independent structure-axis conditioning aims to reject broad conductive basin fill.",
+      "confounds": [
+        "clay-rich or saline basin fill",
+        "lithologic contacts",
+        "3-D MT effects",
+        "interpolation or edge-location error",
+        "conductivity is non-unique"
+      ],
+      "difference_from_implemented": "H-E tests local conductivity/basement/gravity co-location; H-H uses conductivity as a bridge between paired geophysical edge terminations. Neither projects conductivity-gradient energy into parallel/perpendicular components of an independent edge axis. Earlier K2/I descriptions were proposals only and have no measured outcome.",
+      "expected_benefit": "Qualitative low-to-moderate, uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Medium; existing layers, directional transform, one six-fold paired run.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+        "https://gdr.openei.org/submissions/1391",
+        "https://pubs.usgs.gov/publication/70204785",
+        "https://pubs.usgs.gov/publication/70250909",
+        "https://doi.org/10.1029/2004JB003030"
+      ],
+      "authorized_for_test": true
+    },
+    {
+      "id": "H53-LID",
+      "rank": 2,
+      "name": "Paired high-resolution scarp-face polarity balance",
+      "layers": [
+        "lid_upface_max",
+        "lid_downface_max",
+        "lid_step_max",
+        "lid_cross_max",
+        "lid_relief",
+        "lid_coh100"
+      ],
+      "operator": "Normalized paired-face asymmetry (up-down)/(up+down+epsilon), absolute asymmetry, and adjacent-scale persistence conditioned on a coherent narrow lineament.",
+      "physical_signature": "One-sided displacement scarp with paired up/down-facing slopes and persistent trace geometry.",
+      "missing_fault_rationale": "Weathered fault scarps may preserve one-sided step morphology after absolute relief weakens.",
+      "confounds": [
+        "drainage banks",
+        "terraces",
+        "dunes",
+        "landslides",
+        "DEM processing/interpolation"
+      ],
+      "difference_from_implemented": "H-D uses gradient-direction coherence, H-M cross-scale crest coincidence, and P1 odd/even detrended-elevation profiles at 200/500 m; this uses paired 1-m-DEM-derived face statistics. The related H51-X2 was proposed but not implemented or measured.",
+      "expected_benefit": "Qualitative low-to-moderate, uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Low-medium.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+        "https://gdr.openei.org/submissions/1391"
+      ],
+      "authorized_for_test": false
+    },
+    {
+      "id": "H53-RAD",
+      "rank": 3,
+      "name": "Radiometric-composition break conditional on independent structure",
+      "layers": [
+        "rad_K",
+        "rad_Th",
+        "rad_U",
+        "rad_TC",
+        "depth_to_base_surf",
+        "tmi_hg",
+        "iso_grav_anom_hg"
+      ],
+      "operator": "After explicit finite/positive mask audit, compute local log(K/Th) and log(U/Th) cross-edge changes relative to along-edge changes at independent structure axes; missing/zero values are unknown, not absence.",
+      "physical_signature": "A narrow surface radiometric-composition boundary co-located with an independent subsurface structural edge.",
+      "missing_fault_rationale": "Hydrothermal alteration can modify near-surface radioelement distributions around fluid pathways, but radiometric data chiefly respond to surface composition and are not fault-specific.",
+      "confounds": [
+        "lithology",
+        "soil/moisture",
+        "erosion/cover",
+        "survey corrections",
+        "unstable ratios near zero"
+      ],
+      "difference_from_implemented": "No model feature uses a radiometric-ratio cross-versus-along contrast conditioned on a separate structural axis; earlier K3 ratio-lineament wording is unimplemented and not globally novel.",
+      "expected_benefit": "Qualitative low and highly uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Medium-high; units, masks, ratio controls, and spatially blocked ablation.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+        "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+        "https://doi.org/10.1016/j.gexplo.2006.07.002"
+      ],
+      "authorized_for_test": false
+    },
+    {
+      "id": "H53-GEO",
+      "rank": 4,
+      "name": "Sparse warm-water/geochemistry alignment with independent structure",
+      "layers": [
+        "GDR 1391 well/spring temperature and chemistry records",
+        "independent gravity/magnetic/basement edge axis"
+      ],
+      "operator": "Validate source identifiers and units; test whether multiple independently sampled warm/geochemically anomalous sites align along a narrow external edge more than matched controls. Do not rasterize a broad geothermal-habitat score.",
+      "physical_signature": "Sparse, source-verified geothermal-fluid manifestations aligned with an independent structural corridor.",
+      "missing_fault_rationale": "Faults may transmit geothermal fluids to springs or wells, but data collection and exploration are spatially selective.",
+      "confounds": [
+        "survey/exploration bias",
+        "known-fault rediscovery",
+        "mixing/seasonality/depth",
+        "duplicate and missing records"
+      ],
+      "difference_from_implemented": "Broad thermal/habitat layers and models exist; this is a point-conditioned alignment test. Earlier H51-X3 was proposed but not implemented or measured.",
+      "expected_benefit": "Qualitative low and uncertain; no numeric DTI forecast.",
+      "implementation_cost": "High; provenance, units, deduplication, selection-bias controls, spatially blocked joins.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://gdr.openei.org/submissions/1391"
+      ],
+      "authorized_for_test": false
+    }
   ],
-  "on_failure": "H53-A recorded NOT PROMOTED; no H53-A TIFF; the submission artifact is the regeneration of the promoted H-H/H-D procedure under the brief's constraints, validated by its own paired six-fold receipt for the exact built geometry. A failed candidate never consumes a competition slot."
- },
- "stage1_source_audit": "Kreemer, Haines, Holt & Blewitt (2000), Eq. 3, https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf: eps_ij = 1/2 sum_k [L_k u_dot_k / (A sin(delta_k))] m_ij^k with m_ij^k = n_i^k s_j^k + n_j^k s_i^k. Rank-space residuals only; source units/component remain provisional (IR-51-12). Stage 1 keeps zero soft score weight; it is a coarse allowed-domain prior."
+  "frozen_stage2_protocol": {
+    "authorized_candidate": "H53-K2x",
+    "folds": "same six contiguous 3x3 spatial blocks; truth-bearing blocks only",
+    "training_buffer_px": 12,
+    "negative_samples_per_fold": 250000,
+    "negative_seed": "1000 + fold.index",
+    "model_seed": "fold.index",
+    "hgb_max_iter": 250,
+    "ratio": 3.47,
+    "known_catalogue_exclusion_px": 2.0,
+    "blend": "0.5 fresh H-D + 0.5 fresh H-H+H53-K2x probability",
+    "emission": "STE scales 1,2,3.5 px; L9; continuity exponent .35; spacing 2.4 px",
+    "stage1_gate": "source-corrected official-vector q10 10-km tile deficit, recomputed per fold with held-out trace records excluded",
+    "score_truth": "visible known-fault catalogue only; not hidden organizer labels"
+  },
+  "promotion_rule": {
+    "fresh_ungated_baseline_reproduces_frozen_mean_within": 1e-05,
+    "candidate_gated_mean_must_exceed_frozen_best": 0.285340602656319,
+    "paired_mean_delta_vs_same_fold_gated_HH_HD_must_be_positive": true,
+    "minimum_positive_folds": 4,
+    "n_folds": 6,
+    "minimum_q10_approved_area_share": 0.6666666666666666,
+    "maximum_stage1_lift": 1.5,
+    "all_candidate_points_inside_fold_specific_approved_tiles": true,
+    "no_post_result_tuning": true,
+    "competition_slot_if_any_gate_fails": false,
+    "research_only_tiff_after_completed_failure": "allowed only if genuinely generated from candidate predictions; prominently NOT FOR SUBMISSION; no upload recommendation",
+    "minimum_q10_approved_area_share_aggregation": "Each fold-specific full-footprint mask must independently meet the area and lift limits; report the six values and the mean."
+  },
+  "stage1_reference_holdout": {
+    "separate_receipt": "evidence/official_vector_budget_20261007.json",
+    "method": "five complete-trace splits; recall/lift only; not Stage-2 DTI",
+    "mean_area": 0.901527139612333,
+    "mean_recall": 0.9601245840459715,
+    "mean_lift": 1.0650105093454951,
+    "limitations": [
+      "source slip rate component unresolved",
+      "per-record dip/rake assumptions",
+      "geodetic unit notation has two plausible readings",
+      "residual may be off-fault, aseismic, or catalogue-rate error"
+    ]
+  },
+  "external_data_availability": {
+    "need_for_top_candidate": "none",
+    "official_public_sources_checked": [
+      "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+      "https://gdr.openei.org/submissions/1391",
+      "https://www.usgs.gov/publications/electrical-conductivity-images-active-and-fossil-fault-zones"
+    ],
+    "status": "Top candidate uses already supplied/pinned inputs; no external acquisition blocker. Local data mirrors are hash-pinned but not organizer-authenticated."
+  },
+  "uniqueness_and_submission_policy": "No weekly submission slot until every promotion, current-inventory uniqueness, format, provenance, and Stage-1 confinement/non-dominance gate passes. No portal acceptance inferred from local byte checks.",
+  "input_audit": "evidence/h53_k2x_input_audit_20261008.json",
+  "locked_implementation_spec": {
+    "feature_name": "h53_k2x_min_s2s5",
+    "candidate_model_arm": "H-H plus exactly one H53-K2x feature; candidate prediction is 0.5 fresh H-D probability + 0.5 fresh H-H+K2x probability",
+    "input_layers": [
+      "comp_cond_surf",
+      "comp_depth_to_base_surf",
+      "comp_iso_grav_anom",
+      "comp_tmi"
+    ],
+    "input_semantics": "Use existing globally empirical-rank-transformed competition feature layers, not physical-unit values. The cond_surf unit/depth/source are undocumented in the local GeoTIFF and organizer data download is login-walled. Do not claim S/m, resistivity, depth, salinity, alteration, or temperature.",
+    "scales_sigma_pixels": [
+      2.0,
+      5.0
+    ],
+    "derivatives": "Use the repository normalised-convolution Gaussian derivative at each scale and the common finite mask of all four source layers and footprint.",
+    "edge_axis": "For each of depth-to-base, isostatic gravity anomaly, and TMI, calculate gradient magnitude. Normalize each by its own deterministic row-major sampled 95th-percentile magnitude (sample at most approximately 200000 common valid pixels) and clip to [0,1]. Form a 2x2 unoriented gradient-normal tensor J=sum_j w_j*u_j*u_j^T, where u_j is the unit gradient vector, zero for magnitude <=1e-12. The normal angle is 0.5*atan2(2*Jxy,Jxx-Jyy), with tangent perpendicular.",
+    "edge_strength": "Mean of the three clipped normalized magnitudes times axial tensor coherence sqrt((Jxx-Jyy)^2+4*Jxy^2)/(Jxx+Jyy+1e-12).",
+    "conductivity_contrast": "Project the conductivity gradient onto the normal and tangent. Let anis=max(normal_projection^2-tangent_projection^2,0)/(gradient_magnitude^2+1e-12); let amplitude=clip(gradient_magnitude/q95_cond,0,1), where q95_cond uses the same deterministic sample rule. Per-scale feature=edge_strength*anis*amplitude.",
+    "scale_combination": "Pixelwise minimum of the sigma=2 and sigma=5 per-scale features; NaN outside the intersection of their finite derivative masks. If a normalization q95 is <=1e-12, corresponding normalized strength is zero.",
+    "labels_used_by_feature": "none; fold-safe static feature, computed from inputs only.",
+    "parameters_frozen_before_holdout": "All scale, normalization, orientation, clipping, mask, and combination decisions above; no candidate-outcome tuning."
+  },
+  "input_audit_status": "Source/page review and local GeoTIFF semantic audit complete before feature code; see input audit receipt. Unit/depth/provenance unknown is handled by rank-only operator and explicit caveat, not inferred."
 }

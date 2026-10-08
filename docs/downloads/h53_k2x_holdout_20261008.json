@@ -1,0 +1,556 @@
+{
+  "schema_version": 1,
+  "candidate": "H53-K2x structure-conditioned conductive-ribbon anisotropy",
+  "status": "NOT_PROMOTED_NO_SLOT",
+  "instrument": "six-fold 3x3 spatial holdout; visible known-fault catalogue proxy truth",
+  "feature_build": {
+    "feature_name": "h53_k2x_min_s2s5",
+    "shape": [
+      3730,
+      3292
+    ],
+    "footprint_pixels": 5167373,
+    "finite_footprint_pixels": 5164312,
+    "nan_outside_footprint_pixels": 7111787,
+    "nonzero_fraction_of_finite": 0.2741009838290173,
+    "min": 0.0,
+    "max": 0.999970018863678,
+    "quantiles": {
+      "0": 0.0,
+      "0.25": 0.0,
+      "0.5": 0.0,
+      "0.75": 1.3957595911051612e-05,
+      "0.9": 0.01919999159872532,
+      "0.95": 0.06490091979503632,
+      "0.99": 0.3371351659297943,
+      "1": 0.999970018863678
+    },
+    "sha256": "d91ab0e4807b8a8494545e28c05490916b648494821023891effb265cfbb77a4",
+    "build_command": ".venv/bin/python scripts/build_arm_extras.py --group h53_k2x",
+    "labels_read": false
+  },
+  "protocol": {
+    "buffer_px": 12,
+    "negative_samples": 250000,
+    "negative_seed": "1000 + fold.index",
+    "model_seed": "fold.index",
+    "max_iter": 250,
+    "mass_ratio": 3.47,
+    "blend": "0.5 * fresh H-D probability field + 0.5 * (fresh H-H+H53-K2x probability field)",
+    "emission": "STE ridge scales 1/2/3.5 px, line length 9, continuity exponent 0.35, greedy spacing 2.4 px",
+    "candidate_features": [
+      "h53_k2x_min_s2s5"
+    ],
+    "candidate_feature_source": "globally empirical-rank-transformed cond_surf, depth_to_base_surf, isostatic gravity anomaly, and TMI; one fixed q95-normalized axial anisotropy feature at sigma 2/5 px",
+    "feature_definition": "evidence/candidate_hypotheses_prereg_20261008.json#locked_implementation_spec",
+    "band_semantics_audit": "evidence/h53_k2x_input_audit_20261008.json",
+    "scale_sigmas_px": [
+      2.0,
+      5.0
+    ],
+    "stage1_gate": {
+      "field": "source-corrected official-vector q10 geodetic second-invariant deficit",
+      "tile_px": 100,
+      "fold_specific_known_catalogue": "yes; held-out trace rows removed",
+      "heldout_stage1_source": "evidence/official_vector_budget_20261007.json",
+      "all_stage2_points_confined_to_approved_tiles": true
+    },
+    "spatial_truth": "held-out block only; known-trace exclusion radius 2 px"
+  },
+  "baseline": {
+    "frozen_candidate": "H-D/H-H 50/50 fixed blend + STE L9/w=0.35/spacing=2.4, ungated",
+    "frozen_mean_dti": 0.285340602656319,
+    "frozen_per_fold": [
+      0.28358474213082796,
+      0.27178387428750844,
+      0.29027025890966246,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ],
+    "fresh_ungated_mean_dti": 0.28531515486970865,
+    "fresh_ungated_per_fold": [
+      0.283432055411166,
+      0.27178387428750844,
+      0.29027025890966246,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ],
+    "fresh_minus_frozen_mean": -2.5447786610344192e-05,
+    "reproduction_tolerance": 1e-05,
+    "reproduced": false,
+    "stage1_q10_gated_mean_dti": 0.28489865707511947,
+    "stage1_q10_gated_per_fold": [
+      0.283432055411166,
+      0.2704360700961979,
+      0.28911907633343786,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ]
+  },
+  "stage1_holdout": {
+    "separately_evaluated": true,
+    "trace_split_evidence": "evidence/official_vector_budget_20261007.json",
+    "trace_split_instrument": "Five whole-official-trace splits; recall/lift only, not DTI; distinct from legacy P1 Stage1",
+    "trace_splits": [
+      {
+        "split": 0,
+        "held_trace_rows": 226,
+        "truth_pixels": 11084,
+        "area": 0.9036715561272624,
+        "recall": 0.9595813785636954,
+        "lift": 1.0618696273633286
+      },
+      {
+        "split": 1,
+        "held_trace_rows": 225,
+        "truth_pixels": 15533,
+        "area": 0.9004023901506626,
+        "recall": 0.9699993562093607,
+        "lift": 1.0772954034995983
+      },
+      {
+        "split": 2,
+        "held_trace_rows": 225,
+        "truth_pixels": 9217,
+        "area": 0.9021228001152617,
+        "recall": 0.9493327546924162,
+        "lift": 1.0523320711671655
+      },
+      {
+        "split": 3,
+        "held_trace_rows": 225,
+        "truth_pixels": 13456,
+        "area": 0.9012159563476451,
+        "recall": 0.9382431629013079,
+        "lift": 1.041085831085063
+      },
+      {
+        "split": 4,
+        "held_trace_rows": 225,
+        "truth_pixels": 12036,
+        "area": 0.9002229953208333,
+        "recall": 0.9834662678630774,
+        "lift": 1.0924696136123215
+      }
+    ],
+    "trace_split_mean_area": 0.901527139612333,
+    "heldout_trace_recall": 0.9601245840459715,
+    "heldout_trace_lift": 1.0650105093454951,
+    "spatial_fold_q10_domain": {
+      "mean_approved_area_share": 0.9013465513972637,
+      "mean_implied_lift_if_all_stage2_points_are_confined": 1.1094527606285027,
+      "approved_area_share_by_fold": [
+        0.9006108132701084,
+        0.9036063392365908,
+        0.9016813765911615,
+        0.9007849830078068,
+        0.9006108132701084,
+        0.9007849830078068
+      ],
+      "implied_lift_by_fold": [
+        1.1103575320942578,
+        1.1066766096891785,
+        1.1090392082628295,
+        1.1101428408152463,
+        1.1103575320942578,
+        1.1101428408152463
+      ],
+      "per_fold": [
+        {
+          "held_trace_rows": 100,
+          "budget_trace_rows": 1026,
+          "threshold": -0.5180102915951973,
+          "approved_area_share": 0.9006108132701084
+        },
+        {
+          "held_trace_rows": 60,
+          "budget_trace_rows": 1066,
+          "threshold": -0.42710120068610635,
+          "approved_area_share": 0.9036063392365908
+        },
+        {
+          "held_trace_rows": 42,
+          "budget_trace_rows": 1084,
+          "threshold": -0.37907375643224694,
+          "approved_area_share": 0.9016813765911615
+        },
+        {
+          "held_trace_rows": 38,
+          "budget_trace_rows": 1088,
+          "threshold": -0.490566037735849,
+          "approved_area_share": 0.9007849830078068
+        },
+        {
+          "held_trace_rows": 108,
+          "budget_trace_rows": 1018,
+          "threshold": -0.5385934819897085,
+          "approved_area_share": 0.9006108132701084
+        },
+        {
+          "held_trace_rows": 96,
+          "budget_trace_rows": 1030,
+          "threshold": -0.5317324185248714,
+          "approved_area_share": 0.9007849830078068
+        }
+      ]
+    },
+    "score_weight_in_stage2": 0.0,
+    "stage1_metric_is_not_stage2_dti": true,
+    "limitations": [
+      "Source unit notation 10E-9/yr is ambiguous: both 1e-9 and1e-8 scenarios retained.",
+      "Per-trace dip/rake/component missing; normal60deg, lateral90deg assumptions.",
+      "Scalar-summary subtraction is not subtraction of full observed tensors.",
+      "Tile size10km is bookkeeping, finer than geodetic resolving length; residual may be off-fault/aseismic/catalogue error.",
+      "Normal/LL/RL only; other senses omitted with segment count.",
+      "Bounds-qualified numeric rates are point assumptions, not precise measured values."
+    ]
+  },
+  "candidate_result": {
+    "ungated_mean_dti": 0.2855487305989322,
+    "ungated_per_fold": [
+      0.27994346355082117,
+      0.2742384258132767,
+      0.29125486757435753,
+      0.24793376907571937,
+      0.3059483508840731,
+      0.3139735066953458
+    ],
+    "stage1_q10_gated_mean_dti": 0.2850361457010805,
+    "stage1_q10_gated_per_fold": [
+      0.27994346355082117,
+      0.2731020719074524,
+      0.28931571209307144,
+      0.24793376907571937,
+      0.3059483508840731,
+      0.3139735066953458
+    ],
+    "paired_deltas_vs_stage1_gated_hd_hh": [
+      -0.0034885918603448363,
+      0.0026660018112544814,
+      0.00019663575963357882,
+      0.004574462012013697,
+      0.0008991841111581356,
+      -0.004022760077948717
+    ],
+    "paired_mean_delta_vs_stage1_gated_hd_hh": 0.00013748862596105657,
+    "positive_folds_vs_stage1_gated_hd_hh": 4
+  },
+  "stage1_non_dominance": {
+    "gate": "each fold-specific q10 broad-tile deficit mask; score weight 0.0",
+    "approved_area_share_by_fold": [
+      0.9006108132701084,
+      0.9036063392365908,
+      0.9016813765911615,
+      0.9007849830078068,
+      0.9006108132701084,
+      0.9007849830078068
+    ],
+    "mean_approved_area_share": 0.9013465513972637,
+    "minimum_allowed_area_share_each_fold": 0.6666666666666666,
+    "expected_emitted_share_inside_approved": 1.0,
+    "implied_lift_by_fold": [
+      1.1103575320942578,
+      1.1066766096891785,
+      1.1090392082628295,
+      1.1101428408152463,
+      1.1103575320942578,
+      1.1101428408152463
+    ],
+    "mean_implied_lift": 1.1094527606285027,
+    "maximum_allowed_lift_each_fold": 1.5,
+    "passed": true
+  },
+  "promotion_rule": "fresh ungated H-D/H-H baseline reproduces frozen mean within 1e-5; final q10-gated candidate mean > frozen ungated best 0.285340602656319; candidate also beats same-fold q10-gated H-D/H-H mean with paired delta > 0 and >=4/6 folds; all baseline and candidate points inside approved tiles; each fold-specific q10 area >=2/3 and Stage-1 implied lift <=1.5. This is only the local holdout gate; local artifact/uniqueness/provenance checks are separate and no slot is authorized by this receipt.",
+  "local_holdout_gate_passed": false,
+  "submission_slot_authorized": false,
+  "rows": [
+    {
+      "fold": 0,
+      "n_truth": 12803,
+      "n_dots": 44426,
+      "frozen_hh_hd_ste_dti": 0.28358474213082796,
+      "stage1_q10": {
+        "held_trace_rows": 100,
+        "budget_trace_rows": 1026,
+        "threshold": -0.5180102915951973,
+        "approved_area_share": 0.9006108132701084
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1103575320942578
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "emitted_inside_allowed": 44426
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.27994346355082117,
+          "dots": 44426,
+          "tp": 5493.419462184394,
+          "fp": 41411.16794631415,
+          "emitted_inside_allowed": 44426
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "emitted_inside_allowed": 44426
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.27994346355082117,
+          "dots": 44426,
+          "tp": 5493.419462184394,
+          "fp": 41411.16794631415,
+          "emitted_inside_allowed": 44426
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "n_truth": 10426,
+      "n_dots": 36178,
+      "frozen_hh_hd_ste_dti": 0.27178387428750844,
+      "stage1_q10": {
+        "held_trace_rows": 60,
+        "budget_trace_rows": 1066,
+        "threshold": -0.42710120068610635,
+        "approved_area_share": 0.9036063392365908
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1066766096891785
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.27178387428750844,
+          "dots": 36178,
+          "tp": 4337.245785853802,
+          "fp": 33750.938302036855,
+          "emitted_inside_allowed": 36178
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.2742384258132767,
+          "dots": 36178,
+          "tp": 4377.01702541955,
+          "fp": 33722.114363610715,
+          "emitted_inside_allowed": 36178
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.2704360700961979,
+          "dots": 36178,
+          "tp": 4315.222093183762,
+          "fp": 33763.443208245444,
+          "emitted_inside_allowed": 36178
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.2731020719074524,
+          "dots": 36178,
+          "tp": 4358.455973657474,
+          "fp": 33732.91033785201,
+          "emitted_inside_allowed": 36178
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "n_truth": 7096,
+      "n_dots": 24623,
+      "frozen_hh_hd_ste_dti": 0.29027025890966246,
+      "stage1_q10": {
+        "held_trace_rows": 42,
+        "budget_trace_rows": 1084,
+        "threshold": -0.37907375643224694,
+        "approved_area_share": 0.9016813765911615
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1090392082628295
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.29027025890966246,
+          "dots": 24623,
+          "tp": 3159.244821283902,
+          "fp": 22875.778904242135,
+          "emitted_inside_allowed": 24623
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.29125486757435753,
+          "dots": 24623,
+          "tp": 3169.0953883151815,
+          "fp": 22851.06641519715,
+          "emitted_inside_allowed": 24623
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.28911907633343786,
+          "dots": 24623,
+          "tp": 3146.4058537071924,
+          "fp": 22883.261580649098,
+          "emitted_inside_allowed": 24623
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.28931571209307144,
+          "dots": 24623,
+          "tp": 3147.2691520936414,
+          "fp": 22860.33525342824,
+          "emitted_inside_allowed": 24623
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "n_truth": 5630,
+      "n_dots": 19536,
+      "frozen_hh_hd_ste_dti": 0.24335930706370568,
+      "stage1_q10": {
+        "held_trace_rows": 38,
+        "budget_trace_rows": 1088,
+        "threshold": -0.490566037735849,
+        "approved_area_share": 0.9007849830078068
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1101428408152463
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "emitted_inside_allowed": 19536
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.24793376907571937,
+          "dots": 19536,
+          "tp": 2134.599353935801,
+          "fp": 18393.17428927233,
+          "emitted_inside_allowed": 19536
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "emitted_inside_allowed": 19536
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.24793376907571937,
+          "dots": 19536,
+          "tp": 2134.599353935801,
+          "fp": 18393.17428927233,
+          "emitted_inside_allowed": 19536
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "n_truth": 13348,
+      "n_dots": 46318,
+      "frozen_hh_hd_ste_dti": 0.30504916677291494,
+      "stage1_q10": {
+        "held_trace_rows": 108,
+        "budget_trace_rows": 1018,
+        "threshold": -0.5385934819897085,
+        "approved_area_share": 0.9006108132701084
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1103575320942578
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "emitted_inside_allowed": 46318
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.3059483508840731,
+          "dots": 46318,
+          "tp": 6276.158386446652,
+          "fp": 42900.761634056274,
+          "emitted_inside_allowed": 46318
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "emitted_inside_allowed": 46318
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.3059483508840731,
+          "dots": 46318,
+          "tp": 6276.158386446652,
+          "fp": 42900.761634056274,
+          "emitted_inside_allowed": 46318
+        }
+      }
+    },
+    {
+      "fold": 5,
+      "n_truth": 11398,
+      "n_dots": 39551,
+      "frozen_hh_hd_ste_dti": 0.3179962667732945,
+      "stage1_q10": {
+        "held_trace_rows": 96,
+        "budget_trace_rows": 1030,
+        "threshold": -0.5317324185248714,
+        "approved_area_share": 0.9007849830078068
+      },
+      "candidate_stage1": {
+        "emitted_share_inside_approved": 1.0,
+        "lift_over_area_share": 1.1101428408152463
+      },
+      "outputs": {
+        "fresh_hd_hh_blend_ungated": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "emitted_inside_allowed": 39551
+        },
+        "h53_k2x_blend_ungated": {
+          "dti": 0.3139735066953458,
+          "dots": 39551,
+          "tp": 5516.875309613531,
+          "fp": 36746.87034995027,
+          "emitted_inside_allowed": 39551
+        },
+        "fresh_hd_hh_blend_stage1_q10": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "emitted_inside_allowed": 39551
+        },
+        "h53_k2x_blend_stage1_q10": {
+          "dti": 0.3139735066953458,
+          "dots": 39551,
+          "tp": 5516.875309613531,
+          "fp": 36746.87034995027,
+          "emitted_inside_allowed": 39551
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "The known-fault catalogue is not the hidden expert truth; this is only a local ranking proxy and spatial folds have been reused across prior hypotheses.",
+    "The holdout does not establish organizer score, artifact acceptance, or geothermal-vent prediction.",
+    "The supplied cond_surf layer has no verified units, depth, calibration, or layer-specific source in the login-walled data release; this rank-space statistic makes no physical-unit or unique-cause claim.",
+    "Conductivity is non-unique; the site-specific fault-conductor literature is not a universal rule, and some active fault zones lack an observed conductor.",
+    "The local competition training raster is an owner-pinned mirror, not authenticated against the organizer download.",
+    "The Stage-1 q10 mask uses a documented rate/dip/component scenario with limitations in the separate receipt; it is only a broad hard domain gate and has zero Stage-2 score weight.",
+    "No competition slot is authorized here, even if the local holdout gate passes; current-inventory uniqueness, provenance, format, and portal acceptance remain separate."
+  ]
+}

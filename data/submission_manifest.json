@@ -906,6 +906,209 @@
  ],
  "research_only_artifacts": [
   {
+   "schema_version": 1,
+   "id": "H53_K2X_Q10_RESEARCH_20261008",
+   "role": "RESEARCH_ONLY",
+   "status": "RESEARCH_ONLY_NOT_FOR_SUBMISSION",
+   "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+   "zip": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip",
+   "checks_file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json",
+   "submission_name": "GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA",
+   "note": "RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.",
+   "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+   "bytes": 230888,
+   "support_sha256": "b9c0adee61ea30c00dde53d87b209e09a01759fbaa163119eac500bce7568340",
+   "format": {
+    "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+    "bytes": 230888,
+    "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+    "crs": "EPSG:32611",
+    "crs_epsg": 32611,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": [
+     3730,
+     3292
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "nodata": null,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "shape_matches_template": true,
+     "inside_footprint_finite": true,
+     "outside_footprint_nan": false,
+     "outside_footprint_zeros": true,
+     "nan_cells": 0,
+     "global_invalid_cells": 0,
+     "all_cells_finite_in_range": true,
+     "nodata_tag_safe": true,
+     "values_outside_0_1": 0,
+     "min_value": 0.0,
+     "max_value": 1.0,
+     "nodata_tag_is_nan": false,
+     "predicted_px": 44069,
+     "total_mass": 44069.0,
+     "portal_legal": true,
+     "format_valid": true
+    }
+   },
+   "holdout": {
+    "evidence": "evidence/h53_k2x_holdout_20261008.json",
+    "candidate_mean": 0.2850361457010805,
+    "baseline_mean": 0.28489865707511947,
+    "paired_delta": 0.00013748862596105657,
+    "folds_higher": 4,
+    "folds_total": 6,
+    "frozen_best": 0.285340602656319,
+    "candidate_minus_frozen_best": -0.0003044569552385079,
+    "fresh_baseline": 0.28531515486970865,
+    "frozen_baseline": 0.285340602656319,
+    "baseline_drift": -2.5447786610344192e-05,
+    "baseline_tolerance": 1e-05,
+    "baseline_reproduced": false,
+    "holdout_gate_passed": false
+   },
+   "stage1": {
+    "q": 10.0,
+    "tile_px": 100,
+    "approved_area_share": 0.900925673451481,
+    "implied_lift_if_all_points_inside": 1.1099694785796939,
+    "emitted_points": 44069,
+    "points_inside_approved": 44069,
+    "points_outside_approved": 0,
+    "emitted_share_inside_approved": 1.0,
+    "approved_pixel_occupancy": 0.00946617264740295,
+    "ungated_support_jaccard": 0.7220843672456576,
+    "fraction_gated_points_also_ungated": 0.8386167146974063,
+    "formula": "source-corrected official QFault vector budget; 10-km tile, q10 of ranked observed geodetic second-invariant minus ranked budget second invariant; broad hard domain, Stage-2 score weight zero",
+    "all_points_confined": true,
+    "receipt": "evidence/official_vector_budget_20261007.json"
+   },
+   "stage1_trace_holdout": {
+    "evidence": "evidence/official_vector_budget_20261007.json",
+    "instrument": "Five whole-official-trace splits; recall/lift only, not DTI; distinct from legacy P1 Stage1",
+    "mean_approved_area": 0.901527139612333,
+    "heldout_trace_recall": 0.9601245840459715,
+    "heldout_trace_lift": 1.0650105093454951,
+    "score_type": "separate Stage-1 trace-recall/lift; not Stage-2 DTI"
+   },
+   "model": {
+    "training": "all visible known-fault catalogue pixels; 250,000 sampled non-catalogue pixels",
+    "feature_arms": {
+     "H_D": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21"
+     ],
+     "H_H": [
+      "hh_endpoint",
+      "hh_bridge",
+      "hh_bridge_cond",
+      "hh_bridge_surface",
+      "hh_endpoint_concordance"
+     ],
+     "H53_K2x": [
+      "h53_k2x_min_s2s5"
+     ]
+    },
+    "negative_sample_seeds": [
+     20261008,
+     20261009
+    ],
+    "model_seeds": [
+     20261008,
+     20261009
+    ],
+    "hgb_max_iter": 250,
+    "blend": "0.5 H-D + 0.5 H-H+H53-K2x probabilities",
+    "emission": "STE scales 1/2/3.5 px, L9, continuity exponent 0.35, spacing 2.4 px",
+    "point_budget": 44069,
+    "point_budget_is_organizer_truth_count": false
+   },
+   "source": "Fresh fitted model predictions; no prior TIFF was used as input.",
+   "decision": "No competition slot authorized: candidate failed the frozen holdout and full-family uniqueness is NOT_CLEARED.",
+   "portal_acceptance": "NOT TESTED. Local grid/range checks do not establish organizer portal acceptance; official outside-footprint language and local all-finite zero encoding are not treated as reconciled.",
+   "elapsed_seconds": 192.7411024570465,
+   "limitations": [
+    "Visible known-fault labels are proxy training/holdout truth, not the hidden expert labels.",
+    "The fresh full-catalogue point map is not itself a holdout score; six-fold results belong to the separate receipt.",
+    "The supplied cond_surf unit, depth sensitivity, inversion and layer-specific source are undocumented in the local mirror; the feature operates on empirical ranks only.",
+    "Electrical conductivity is non-unique and the cited fault-conductor studies are site-specific.",
+    "The full-map Stage-1 q10 gate is a coarse hard domain; its physical assumptions and ambiguities remain in the separate receipt.",
+    "Local format validity is not portal acceptance; no upload, score or submission-slot use occurred."
+   ],
+   "zip_sha256": "ea475b62364f490b11e320ab969f52ebfdcd0c0f38110ba0c03be83bd24b5e02",
+   "zip_bytes": 189849,
+   "current_inventory_uniqueness": {
+    "receipt": "evidence/h53_k2x_current_uniqueness_20261008.json",
+    "verdict": "PASS",
+    "comparisons": 8,
+    "byte_duplicate_of": [],
+    "max_support_jaccard": 0.216804,
+    "max_support_containment": 0.35635,
+    "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof"
+   },
+   "family_inventory_uniqueness": {
+    "receipt": "evidence/h53_k2x_family_uniqueness_20261008.json",
+    "verdict": "NOT_CLEARED",
+    "expected_unique_blobs": 365,
+    "downloaded": 365,
+    "coverage_complete": false,
+    "valid_same_shape_comparisons": 364,
+    "invalid_comparisons": [
+     {
+      "source": {
+       "repo": "GEMSDOE36",
+       "branch": "main",
+       "path": "docs/downloads/GEMS36_FORMAT_TEST_NOT_SUBMISSION.tif",
+       "size": 1129,
+       "git_blob_sha": "a97c7b2a513225c9f9f2b35736afe5abf4d2a491"
+      },
+      "error": "different grid shape"
+     }
+    ],
+    "exact_duplicate": false,
+    "max_support_jaccard": 0.14956111176324816,
+    "max_support_containment": 1.0,
+    "thresholds": {
+     "jaccard": 0.5,
+     "containment": 0.6
+    },
+    "scope": "Committed 54-repository inventory: docs/downloads and submissions; unique Git blobs"
+   },
+   "uniqueness": {
+    "verdict": "NOT_CLEARED",
+    "pixel_comparisons": 364,
+    "references_sha_verified": 365,
+    "max_support_jaccard": 0.14956111176324816,
+    "max_support_containment": 1.0,
+    "exact_duplicate": false,
+    "current_inventory_verdict": "PASS",
+    "family_inventory_verdict": "NOT_CLEARED",
+    "note": "Local inventory gate passed, but full committed-family gate is NOT_CLEARED: one different-grid toy map cannot be compared and several dense same-grid references fully contain this sparse support (max containment 1.0); exact duplicate is false."
+   },
+   "evidence": {
+    "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json",
+    "input_audit": "evidence/h53_k2x_input_audit_20261008.json",
+    "feature_build": "evidence/h53_k2x_feature_build_20261008.json",
+    "pretest_lock": "evidence/h53_k2x_pretest_lock_20261008.json",
+    "holdout": "evidence/h53_k2x_holdout_20261008.json",
+    "current_uniqueness": "evidence/h53_k2x_current_uniqueness_20261008.json",
+    "family_uniqueness": "evidence/h53_k2x_family_uniqueness_20261008.json"
+   }
+  },
+  {
    "id": "H_G_PLUS_H_D_RESEARCH_ONLY",
    "status": "NOT_SLOT_ELIGIBLE_NEGATIVE_BLOCKED_HOLDOUT",
    "file": "gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
@@ -1462,11 +1665,699 @@
     "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof"
    },
    "not_for_submission_reason": "The candidate was built before the amended pass-2 rerun wrote a receipt. Its checks receipt has holdout=null, and the available score copied into its uniform-control metadata belongs to V7 STE q10 rather than the V4 NMS raster. The original pass-2 receipt also records harness_ok=false under the earlier clause. Arithmetic recheck supports the respecified harness but does not supply a new V4 holdout. Do not spend a slot."
+  },
+  {
+   "id": "R1_RESTRICT_20261008T031052Z",
+   "role": "RESEARCH_ONLY_HISTORICAL",
+   "status": "NOT_PROMOTED_HISTORICAL_DO_NOT_SUBMIT",
+   "ok_to_download_and_submit": false,
+   "file": "gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif",
+   "zip": "gemsdoe51-r1-restrict-20261008T031052Z-research-only.zip",
+   "submission_name": "GEMSDOE51-R1-RESTRICT-ALLFINITE-20261008",
+   "portal_note": "RESEARCH ONLY: promotion rule failed; do not submit.",
+   "note": "Historical R1 restrict-confinement regeneration from 2026-10-08. It failed its preregistered paired rule and is superseded by the later K2-08 research experiment; retain as prior art only. Do not submit.",
+   "sha256": "2a0707537962757e9aa8f856fd6d3fdfdc8d0e387b0eef6639eacf18fe2ba7b2",
+   "bytes": 227876,
+   "format": {
+    "file": "gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif",
+    "bytes": 227876,
+    "sha256": "2a0707537962757e9aa8f856fd6d3fdfdc8d0e387b0eef6639eacf18fe2ba7b2",
+    "crs": "EPSG:32611",
+    "crs_epsg": 32611,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": [
+     3730,
+     3292
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "nodata": null,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "shape_matches_template": true,
+     "inside_footprint_finite": true,
+     "outside_footprint_nan": false,
+     "outside_footprint_zeros": true,
+     "nan_cells": 0,
+     "global_invalid_cells": 0,
+     "all_cells_finite_in_range": true,
+     "nodata_tag_safe": true,
+     "values_outside_0_1": 0,
+     "min_value": 0.0,
+     "max_value": 1.0,
+     "nodata_tag_is_nan": false,
+     "predicted_px": 44069,
+     "total_mass": 44069.0,
+     "portal_legal": true,
+     "format_valid": true
+    }
+   },
+   "holdout": {
+    "receipt": "evidence/r1_holdout_20261008.json",
+    "rule": "PROMOTE iff base reproduces evidence/p1_holdout_20261007.json baseline_ungated within 1e-5 (Amendment A1; archived 0.2853406 fields were never committed and are continuity-only) AND mean(confined)-mean(base)>=0 AND wins>=4/6 folds AND 100% inside q10",
+    "frozen_best_mean_continuity_only": 0.285340602656319,
+    "instrument_max_dev": 0.0,
+    "variant": "restrict",
+    "variant_mean": 0.2839090821423992,
+    "mean_delta_vs_base": -0.0014060727273094709,
+    "folds_won": 0,
+    "base_per_fold": [
+     0.283432055411166,
+     0.27178387428750844,
+     0.29027025890966246,
+     0.24335930706370568,
+     0.30504916677291494,
+     0.3179962667732945
+    ],
+    "variant_per_fold": [
+     0.283432055411166,
+     0.26449862049987616,
+     0.28911907633343786,
+     0.24335930706370568,
+     0.30504916677291494,
+     0.3179962667732945
+    ],
+    "uniform_tiles_mean": 0.18800900161508474,
+    "proxy_truth": "visible known-fault catalogue; not hidden organizer labels"
+   },
+   "stage1": {
+    "q": 10.0,
+    "tile_px": 100,
+    "formula": "Kreemer et al. (2000), Eq. 3: eps_ij = 1/2 sum_k [L_k u_dot_k/(A sin(delta_k))] m_ij^k",
+    "residual_policy": "rank-space q(geodetic) - q(fault tensor II) is a coarse diagnostic only; no absolute dilation/shear subtraction is claimed because source conventions are unresolved",
+    "meta": {
+     "tile_px": 100,
+     "tile_shape": [
+      38,
+      33
+     ],
+     "h_seis_m": 15000.0,
+     "median_centroid_distance_px": 36.345563690772494,
+     "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+     "frac_catalogue_px_with_known_sense": 0.7436052994031612,
+     "rate_convention": "vertical",
+     "assume_unknown_normal": true,
+     "dip_assumptions": {
+      "normal_deg": 60.0,
+      "strike_slip_deg": 90.0
+     },
+     "regional_median_slip_rate_mm_yr": 0.1,
+     "total_mapped_trace_km": 6821.350197517395,
+     "area_mask_px": 5167373,
+     "slip_rate_unit_assumption": "mm/yr (provisional; verify source field definition)",
+     "tile_area_m2_min": 20000.0,
+     "tile_area_m2_max": 100000000.0
+    },
+    "approved_area_share": 0.900925673451481,
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1099694785796939,
+    "q70_diagnostic_share": 0.18191926297397262,
+    "role": "coarse domain constraint; stage1_weight=0.0; never places a point"
+   },
+   "uniqueness": {
+    "prewrite": {
+     "n_prior": 41,
+     "max_jaccard": 0.3443048014154109,
+     "max_jaccard_prior": "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+     "max_containment": 0.512242165694706,
+     "max_containment_prior": "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+     "limits": {
+      "jaccard": 0.5,
+      "containment": 0.6
+     },
+     "prior_supports": [
+      {
+       "label": "data/prior/g25_dotted_prior.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/prior/g32_anchor_prior.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/prior/g32_h33b2_prior.tif",
+       "jaccard": 0.015583640905193305,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/13gems-r13-lattice-nan.tif",
+       "jaccard": 0.007575970483023322,
+       "containment": 0.04281921532142776
+      },
+      {
+       "label": "data/refs/8gemsdoe-hedge-v2.tif",
+       "jaccard": 0.015620851237289594,
+       "containment": 0.0947831809208287
+      },
+      {
+       "label": "data/refs/gems10-h25-ctx-ridge.tif",
+       "jaccard": 0.03157074000567054,
+       "containment": 0.15160316775964963
+      },
+      {
+       "label": "data/refs/gems10-h28-dotted-ridge.tif",
+       "jaccard": 0.022091974752028856,
+       "containment": 0.0555946356849486
+      },
+      {
+       "label": "data/refs/gems16-h16-1-baseline-nan.tif",
+       "jaccard": 0.023284709321801628,
+       "containment": 0.0867503233565545
+      },
+      {
+       "label": "data/refs/gems19-h19-4-thermalpop-allfinite.tif",
+       "jaccard": 0.023931676071374103,
+       "containment": 0.08901949216002178
+      },
+      {
+       "label": "data/refs/gems19-h19-5-powerlaw-allfinite.tif",
+       "jaccard": 0.024115057962928524,
+       "containment": 0.08827066645487758
+      },
+      {
+       "label": "data/refs/gems24-dotted-d1-5-allfinite.tif",
+       "jaccard": 0.017389945094667736,
+       "containment": 0.04039120470171776
+      },
+      {
+       "label": "data/refs/gems24-dotted-d2-8-allfinite.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/gems25-dotted-d2-8-zeros.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/gems32-bayesopt-dilation-zeros.tif",
+       "jaccard": 0.010998864926220204,
+       "containment": 0.02198824570559804
+      },
+      {
+       "label": "data/refs/gems32-probe-S1-anchor.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/gemsdoe-ens12-7f00890a.tif",
+       "jaccard": 0.019622673418958406,
+       "containment": 0.0947831809208287
+      },
+      {
+       "label": "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif",
+       "jaccard": 0.014429549508083539,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/gemsdoe32-h32a-dipstep-zeros.tif",
+       "jaccard": 0.014527163883512625,
+       "containment": 0.029294969252762714
+      },
+      {
+       "label": "data/refs/gemsdoe32-h32b-swarm-zeros.tif",
+       "jaccard": 0.014422643211547136,
+       "containment": 0.02902266899634664
+      },
+      {
+       "label": "data/refs/gemsdoe32-h32c-claycap-zeros.tif",
+       "jaccard": 0.014743040202138699,
+       "containment": 0.02965803626131748
+      },
+      {
+       "label": "data/refs/gemsdoe32-h32d-submodular-zeros.tif",
+       "jaccard": 0.014744116422244482,
+       "containment": 0.0297261113254215
+      },
+      {
+       "label": "data/refs/gemsdoe32-h33-2-b2-zeros.tif",
+       "jaccard": 0.015583640905193305,
+       "containment": 0.028455376795479815
+      },
+      {
+       "label": "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif",
+       "jaccard": 0.015423753809851538,
+       "containment": 0.028478068483514488
+      },
+      {
+       "label": "data/refs/gemsdoe9-2314b599.tif",
+       "jaccard": 0.004103028734144447,
+       "containment": 0.035966325534956545
+      },
+      {
+       "label": "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif",
+       "jaccard": 0.20184586581637876,
+       "containment": 0.313145294878486
+      },
+      {
+       "label": "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+       "jaccard": 0.1590242619501611,
+       "containment": 0.2744105834032994
+      },
+      {
+       "label": "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+       "jaccard": 0.14782450154322999,
+       "containment": 0.25757335088157207
+      },
+      {
+       "label": "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+       "jaccard": 0.3443048014154109,
+       "containment": 0.512242165694706
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif",
+       "jaccard": 0.0007255611128707912,
+       "containment": 0.004470262542830561
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif",
+       "jaccard": 0.14503598617715072,
+       "containment": 0.2533300052190883
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif",
+       "jaccard": 0.14503598617715072,
+       "containment": 0.2533300052190883
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif",
+       "jaccard": 0.1507618388583515,
+       "containment": 0.262020921736368
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif",
+       "jaccard": 0.1507618388583515,
+       "containment": 0.262020921736368
+      },
+      {
+       "label": "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif",
+       "jaccard": 0.02874695041298022,
+       "containment": 0.08876988359164038
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif",
+       "jaccard": 0.14782450154322999,
+       "containment": 0.25757335088157207
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif",
+       "jaccard": 0.1407530124380363,
+       "containment": 0.24677210737706778
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif",
+       "jaccard": 0.1407530124380363,
+       "containment": 0.24677210737706778
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif",
+       "jaccard": 0.14731648898087762,
+       "containment": 0.2568018334883932
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif",
+       "jaccard": 0.14731648898087762,
+       "containment": 0.2568018334883932
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif",
+       "jaccard": 0.14053158725639897,
+       "containment": 0.2464317320565477
+      },
+      {
+       "label": "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif",
+       "jaccard": 0.14053158725639897,
+       "containment": 0.2464317320565477
+      }
+     ],
+     "verdict": "PASS"
+    },
+    "staged": {
+     "candidate": "gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif",
+     "sha256": "2a0707537962757e9aa8f856fd6d3fdfdc8d0e387b0eef6639eacf18fe2ba7b2",
+     "byte_duplicate_of": [],
+     "support_jaccard": {
+      "data/prior/g25_dotted_prior.tif": 0.01443,
+      "data/prior/g32_anchor_prior.tif": 0.01443,
+      "data/prior/g32_h33b2_prior.tif": 0.015584,
+      "data/refs/13gems-r13-lattice-nan.tif": 0.007576,
+      "data/refs/8gemsdoe-hedge-v2.tif": 0.015621,
+      "data/refs/gems10-h25-ctx-ridge.tif": 0.031571,
+      "data/refs/gems10-h28-dotted-ridge.tif": 0.022092,
+      "data/refs/gems16-h16-1-baseline-nan.tif": 0.023285,
+      "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.023932,
+      "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.024115,
+      "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.01739,
+      "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.01443,
+      "data/refs/gems25-dotted-d2-8-zeros.tif": 0.01443,
+      "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.010999,
+      "data/refs/gems32-probe-S1-anchor.tif": 0.01443,
+      "data/refs/gemsdoe-ens12-7f00890a.tif": 0.019623,
+      "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.01443,
+      "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.014527,
+      "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.014423,
+      "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.014743,
+      "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.014744,
+      "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.015584,
+      "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.015424,
+      "data/refs/gemsdoe9-2314b599.tif": 0.004103,
+      "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.201846,
+      "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.159024,
+      "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.147825,
+      "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.344305,
+      "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.000726,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.145036,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.145036,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.150762,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.150762,
+      "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.028747,
+      "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.147825,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.140753,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.140753,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.147316,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.147316,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.140532,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.140532
+     },
+     "support_containment": {
+      "data/prior/g25_dotted_prior.tif": 0.028455,
+      "data/prior/g32_anchor_prior.tif": 0.028455,
+      "data/prior/g32_h33b2_prior.tif": 0.028455,
+      "data/refs/13gems-r13-lattice-nan.tif": 0.042819,
+      "data/refs/8gemsdoe-hedge-v2.tif": 0.094783,
+      "data/refs/gems10-h25-ctx-ridge.tif": 0.151603,
+      "data/refs/gems10-h28-dotted-ridge.tif": 0.055595,
+      "data/refs/gems16-h16-1-baseline-nan.tif": 0.08675,
+      "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.089019,
+      "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.088271,
+      "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.040391,
+      "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.028455,
+      "data/refs/gems25-dotted-d2-8-zeros.tif": 0.028455,
+      "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.021988,
+      "data/refs/gems32-probe-S1-anchor.tif": 0.028455,
+      "data/refs/gemsdoe-ens12-7f00890a.tif": 0.094783,
+      "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.028455,
+      "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.029295,
+      "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.029023,
+      "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.029658,
+      "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.029726,
+      "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.028455,
+      "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.028478,
+      "data/refs/gemsdoe9-2314b599.tif": 0.035966,
+      "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.313145,
+      "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.274411,
+      "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.257573,
+      "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.512242,
+      "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.00447,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.25333,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.25333,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.262021,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.262021,
+      "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.08877,
+      "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.257573,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.246772,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.246772,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.256802,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.256802,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.246432,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.246432
+     },
+     "stage1_dominance": {
+      "approved_area_share_of_footprint": 0.900925673451481,
+      "emitted_pixels_inside_approved": 44069,
+      "emitted_pixels_total": 44069,
+      "emitted_share_inside_approved": 1.0,
+      "lift_over_area_share": 1.1099694785796939,
+      "hard_confined": true,
+      "uniform_control": {
+       "candidate_mean": 0.2839090821423992,
+       "uniform_mean": 0.18800900161508474,
+       "margin": 0.002,
+       "excess": 0.09590008052731444,
+       "passed": true
+      }
+     },
+     "verdict": "PASS",
+     "notes": []
+    },
+    "reference_count": 21,
+    "verdict_scope": {
+     "verdict_priors": 41,
+     "excluded_benchmarks": [
+      "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif"
+     ],
+     "rationale": "gemsdoe51-hh-hd-blend-ste-r347-* is the never-submitted local predecessor of this exact promoted procedure; a regeneration overlaps it by construction and it is not a submission",
+     "benchmark_overlap": [
+      {
+       "label": "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+       "jaccard": 0.23980869320579548,
+       "containment": 0.3868478976151036,
+       "note": "never-submitted local benchmark of the same promoted procedure; overlap expected by construction; excluded from the verdict scope, reported for transparency"
+      }
+     ]
+    },
+    "scope": "locally archived artifacts, data/prior, and 21 pinned family references; not a global proof"
+   },
+   "model": {
+    "detector": "HistGradientBoostingClassifier",
+    "h_d_features": [
+     "lidrel_facecoh09",
+     "lidrel_facecoh21",
+     "detelev_facecoh09",
+     "detelev_facecoh21"
+    ],
+    "h_h_features": [
+     "lidrel_facecoh09",
+     "lidrel_facecoh21",
+     "detelev_facecoh09",
+     "detelev_facecoh21",
+     "hh_endpoint",
+     "hh_bridge",
+     "hh_bridge_cond",
+     "hh_bridge_surface",
+     "hh_endpoint_concordance"
+    ],
+    "blend_weight_hh": 0.5,
+    "negative_samples": 250000,
+    "max_iter": 250,
+    "seeds": {
+     "hd": 17,
+     "hh": 19
+    }
+   },
+   "emission": {
+    "method": "STE",
+    "line_length": 9,
+    "continuity_weight": 0.35,
+    "spacing_px": 2.4,
+    "sigmas": [
+     1.0,
+     2.0,
+     3.5
+    ],
+    "exclusion_radius_px": 2.0,
+    "requested_dots": 44069,
+    "placed_dots": 44069,
+    "confinement": "restrict",
+    "move_stats": null,
+    "all_points_inside_approved_tiles": true
+   },
+   "checks_file": "gemsdoe51-r1-restrict-20261008T031052Z-research-only-checks.json",
+   "decision": "Historical research-only download; no competition slot; do not submit."
+  },
+  {
+   "id": "K2_08_CONDUCTIVE_RIBBON_20261008",
+   "role": "RESEARCH_ONLY",
+   "status": "NOT_PROMOTED_AND_FAMILY_UNIQUENESS_NOT_CLEARED",
+   "file": "gemsdoe51-k2-08-research-only-20261008.tif",
+   "zip": null,
+   "submission_name": "GEMSDOE51-K2-08-conductive-ribbon",
+   "note": "RESEARCH ONLY \u2014 DO NOT SUBMIT: new K2 conductivity-contrast model; six-fold q10 proxy holdout failed and strict family uniqueness is NOT_CLEARED. Portal validation not performed.",
+   "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
+   "bytes": 375961,
+   "format": {
+    "file": "gemsdoe51-k2-08-research-only-20261008.tif",
+    "bytes": 375961,
+    "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
+    "crs": "EPSG:32611",
+    "crs_epsg": 32611,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": [
+     3730,
+     3292
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "nodata": "NaN",
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "shape_matches_template": true,
+     "inside_footprint_finite": true,
+     "outside_footprint_nan": true,
+     "outside_footprint_zeros": false,
+     "nan_cells": 7111787,
+     "global_invalid_cells": 7111787,
+     "all_cells_finite_in_range": false,
+     "nodata_tag_safe": true,
+     "values_outside_0_1": 0,
+     "min_value": 0.0,
+     "max_value": 1.0,
+     "nodata_tag_is_nan": true,
+     "predicted_px": 44069,
+     "total_mass": 44069.0,
+     "portal_legal": true,
+     "format_valid": true
+    }
+   },
+   "holdout": {
+    "frozen_best_ungated": 0.285340602656319,
+    "fresh_blend_ungated": 0.28531515486970865,
+    "fresh_blend_q10": 0.275543315661461,
+    "candidate_ungated": 0.2845354568960236,
+    "candidate_q10": 0.2748879325802242,
+    "paired_q10_delta": -0.000655383081236823,
+    "positive_folds": 2,
+    "n_folds": 6,
+    "promoted": false,
+    "proxy_truth": "visible catalogue; not hidden organizer labels",
+    "evidence": "evidence/k2_spatial_holdout_20261008.json"
+   },
+   "uniqueness": {
+    "scope": "Committed 54-repository inventory: docs/downloads and submissions; unique Git blobs",
+    "expected": 365,
+    "downloaded": 365,
+    "coverage_complete": false,
+    "exact_duplicate": false,
+    "max_jaccard": 0.15347266754786615,
+    "max_containment": 1.0,
+    "thresholds": {
+     "jaccard": 0.5,
+     "containment": 0.6
+    },
+    "verdict": "NOT_CLEARED",
+    "invalid_references": [
+     {
+      "source": {
+       "repo": "GEMSDOE36",
+       "branch": "main",
+       "path": "docs/downloads/GEMS36_FORMAT_TEST_NOT_SUBMISSION.tif",
+       "size": 1129,
+       "git_blob_sha": "a97c7b2a513225c9f9f2b35736afe5abf4d2a491"
+      },
+      "error": "different grid shape"
+     }
+    ],
+    "evidence": "evidence/k2_family_uniqueness_20261008.json"
+   },
+   "stage1_dominance": {
+    "approved_area_share_footprint": 0.9035355102099268,
+    "emitted_points_inside_approved": 44069,
+    "emitted_points_total": 44069,
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1067633631440348,
+    "interpretation": "broad, weak coarse q10 tile gate; not a fine-scale placer",
+    "evidence": "evidence/physical_stage1_holdout_20261008.json"
+   },
+   "model": {
+    "detector": "HistGradientBoostingClassifier",
+    "max_iter": 250,
+    "negative_samples": 250000,
+    "seeds": {
+     "hd": 17,
+     "hh_plus_k2": 19
+    },
+    "probability_blend": "0.5 H-D + 0.5 H-H+K2",
+    "h_d_features": [
+     "lidrel_facecoh09",
+     "lidrel_facecoh21",
+     "detelev_facecoh09",
+     "detelev_facecoh21"
+    ],
+    "h_h_features": [
+     "lidrel_facecoh09",
+     "lidrel_facecoh21",
+     "detelev_facecoh09",
+     "detelev_facecoh21",
+     "hh_endpoint",
+     "hh_bridge",
+     "hh_bridge_cond",
+     "hh_bridge_surface",
+     "hh_endpoint_concordance"
+    ],
+    "k2_features": [
+     "k2_cond_cross_rank_s20",
+     "k2_cond_sign_persist_s20",
+     "k2_cond_cross_rank_s50",
+     "k2_cond_sign_persist_s50"
+    ],
+    "k2_feature_metadata": "data/prepared/arm_k2_metadata.json",
+    "k2_source_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "k2_feature_store_sha256": "b06f17e3186e2ef8450a24c265e8d17e68b8b6ceacf22cabdf72c0e6ec5eb57c"
+   },
+   "emission": {
+    "method": "holdout-matched STE",
+    "sigmas": [
+     1.0,
+     2.0,
+     3.5
+    ],
+    "line_length": 9,
+    "continuity_exponent": 0.35,
+    "spacing_px": 2.4,
+    "catalogue_exclusion_px": 2.0,
+    "mass_ratio": 3.47,
+    "planning_hidden_mass_estimate": 12700,
+    "hidden_mass_is_organizer_published": false,
+    "requested_dots": 44069,
+    "emitted_dots": 44069
+   },
+   "portal_validation": "NOT_PERFORMED",
+   "evidence": [
+    "evidence/k2_research_artifact_20261008.json",
+    "evidence/k2_spatial_holdout_20261008.json",
+    "evidence/physical_stage1_holdout_20261008.json",
+    "evidence/k2_family_uniqueness_20261008.json"
+   ],
+   "decision": "Research-only download; no competition slot; do not submit.",
+   "limitations": [
+    "Visible-catalogue spatial holdout is not hidden-fault validation or an organizer score.",
+    "Fresh ungated baseline missed frozen-best reproduction tolerance by 0.00002545.",
+    "Strict family uniqueness audit is NOT_CLEARED; one reference grid was incompatible.",
+    "Local format/range checks are not portal validation.",
+    "Stage-1 trace splits are scattered by source record, not geographic lockbox."
+   ]
   }
  ],
  "promotion": {
   "decision": "H53-A NOT PROMOTED; submission is the regeneration of the promoted H-H/H-D procedure under the brief's constraints",
   "rule": "frozen registry/preregistration_h53.json; fresh ungated baseline reproduces frozen mean within 1e-5; q10-gated candidate beats frozen best with >= 4/6 folds; 100% confinement; lift <= 1.5",
+  "h51_n2": "NOT_PROMOTED: paired delta -0.0015468841, 0/6 folds",
+  "h52_v4": "NOT_PROMOTED: built V4 raster has no direct six-fold holdout; available 0.280821 is V7 STE q10, not V4; parent rule not met",
+  "portal_status": "NOT TESTED; no organizer upload or score claimed",
+  "k2_08": "NOT_PROMOTED: q10 paired delta -0.0006554, 2/6 folds; strict family uniqueness NOT_CLEARED (containment 1.0; one invalid grid)",
+  "r1_restrict_20261008": "Historical R1 restrict result: NOT_PROMOTED; mean paired delta -0.0014061, 0/6 folds; all-finite zeros-outside artifact retained as prior art; later K2-08 is current.",
   "h53_a_promoted": false,
   "h53_f": {
    "default_arm": "r3.47_f2.00",
@@ -1482,7 +2373,7 @@
    "rule": "adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds",
    "note": "no non-default point met the adoption bar; the build keeps ratio 3.47, flank 2.0 px"
   },
-  "portal_status": "NOT TESTED; no organizer upload or score claimed"
+  "preregistration": "registry/preregistration_h53sr_20261008.json (this session; parallel-session H53-A preregistration: registry/preregistration_h53.json)"
  },
  "stage1_stats": {
   "tile_px": 100,
@@ -1520,116 +2411,100 @@
   "rank_residual_convention": "rank(observed scalar) - rank(fault tensor II); diagnostic only, not an absolute strain subtraction"
  },
  "uniqueness": {
-  "candidate": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif",
-  "sha256": "5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e",
+  "candidate": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+  "sha256": "9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777",
   "byte_duplicate_of": [],
   "support_jaccard": {
-   "data/prior/g25_dotted_prior.tif": 0.015493,
-   "data/prior/g32_anchor_prior.tif": 0.015493,
-   "data/prior/g32_h33b2_prior.tif": 0.016733,
-   "data/refs/13gems-r13-lattice-nan.tif": 0.007398,
-   "data/refs/8gemsdoe-hedge-v2.tif": 0.015431,
-   "data/refs/gems10-h25-ctx-ridge.tif": 0.030903,
-   "data/refs/gems10-h28-dotted-ridge.tif": 0.021788,
-   "data/refs/gems16-h16-1-baseline-nan.tif": 0.02331,
-   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.024038,
-   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.024617,
-   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.017977,
-   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.015493,
-   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.015493,
-   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.011561,
-   "data/refs/gems32-probe-S1-anchor.tif": 0.015493,
-   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.019383,
-   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.015493,
-   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.015579,
-   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.015465,
-   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.015728,
-   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.015819,
-   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.016733,
-   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.016548,
-   "data/refs/gemsdoe9-2314b599.tif": 0.004246,
-   "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.120003,
-   "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.159344,
-   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.147033,
-   "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.139912,
-   "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.214005,
-   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.000681,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.145095,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.145095,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.151108,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.151108,
-   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.028452,
-   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.147033,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.139632,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.139632,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.146108,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.146108,
-   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.14198,
-   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.14198
+   "data/prior/g25_dotted_prior.tif": 0.017944,
+   "data/prior/g32_anchor_prior.tif": 0.017944,
+   "data/prior/g32_h33b2_prior.tif": 0.019384,
+   "data/refs/13gems-r13-lattice-nan.tif": 0.007228,
+   "data/refs/8gemsdoe-hedge-v2.tif": 0.016446,
+   "data/refs/gems10-h25-ctx-ridge.tif": 0.033833,
+   "data/refs/gems10-h28-dotted-ridge.tif": 0.023033,
+   "data/refs/gems16-h16-1-baseline-nan.tif": 0.028125,
+   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.0286,
+   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.028739,
+   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.021191,
+   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.017944,
+   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.017944,
+   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.012838,
+   "data/refs/gems32-probe-S1-anchor.tif": 0.017944,
+   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.020663,
+   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.017944,
+   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.017849,
+   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.017878,
+   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.018223,
+   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.018171,
+   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.019384,
+   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.019194,
+   "data/refs/gemsdoe9-2314b599.tif": 0.00375,
+   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.197983,
+   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.000729,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.157669,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.157669,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.199793,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.199793,
+   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.026582,
+   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.197983,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.15453,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.15453,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.193732,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.193732,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.247689,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.247689
   },
   "support_containment": {
-   "data/prior/g25_dotted_prior.tif": 0.03052,
-   "data/prior/g32_anchor_prior.tif": 0.03052,
-   "data/prior/g32_h33b2_prior.tif": 0.03052,
-   "data/refs/13gems-r13-lattice-nan.tif": 0.041821,
-   "data/refs/8gemsdoe-hedge-v2.tif": 0.093649,
-   "data/refs/gems10-h25-ctx-ridge.tif": 0.148494,
-   "data/refs/gems10-h28-dotted-ridge.tif": 0.054846,
-   "data/refs/gems16-h16-1-baseline-nan.tif": 0.086841,
-   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.089405,
-   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.090063,
-   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.04173,
-   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.03052,
-   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.03052,
-   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.0231,
-   "data/refs/gems32-probe-S1-anchor.tif": 0.03052,
-   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.093649,
-   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.03052,
-   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.031383,
-   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.031088,
-   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.03161,
-   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.031859,
-   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.03052,
-   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.03052,
-   "data/refs/gemsdoe9-2314b599.tif": 0.037214,
-   "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.199778,
-   "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.274887,
-   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.256371,
-   "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.245479,
-   "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.352561,
-   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.004198,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.253421,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.253421,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.262543,
-   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.262543,
-   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.087885,
-   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.256371,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.245048,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.245048,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.254964,
-   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.254964,
-   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.248656,
-   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.248656
+   "data/prior/g25_dotted_prior.tif": 0.035263,
+   "data/prior/g32_anchor_prior.tif": 0.035263,
+   "data/prior/g32_h33b2_prior.tif": 0.035263,
+   "data/refs/13gems-r13-lattice-nan.tif": 0.040868,
+   "data/refs/8gemsdoe-hedge-v2.tif": 0.099707,
+   "data/refs/gems10-h25-ctx-ridge.tif": 0.162109,
+   "data/refs/gems10-h28-dotted-ridge.tif": 0.057909,
+   "data/refs/gems16-h16-1-baseline-nan.tif": 0.104291,
+   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.105902,
+   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.104722,
+   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.049037,
+   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.035263,
+   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.035263,
+   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.025619,
+   "data/refs/gems32-probe-S1-anchor.tif": 0.035263,
+   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.099707,
+   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.035263,
+   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.035876,
+   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.035853,
+   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.036534,
+   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.036511,
+   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.035263,
+   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.035308,
+   "data/refs/gemsdoe9-2314b599.tif": 0.03288,
+   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.330527,
+   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.004493,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.272391,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.272391,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.333046,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.333046,
+   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.082257,
+   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.330527,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.267694,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.267694,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.324582,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.324582,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.397036,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.397036
   },
   "stage1_dominance": {
-   "approved_area_share_of_footprint": 0.900925673451481,
-   "emitted_pixels_inside_approved": 44069,
+   "approved_area_share_of_footprint": 0.3005457511969815,
+   "emitted_pixels_inside_approved": 7207,
    "emitted_pixels_total": 44069,
-   "emitted_share_inside_approved": 1.0,
-   "lift_over_area_share": 1.1099694785796939,
-   "hard_confined": true,
-   "uniform_control": {
-    "candidate_mean": 0.2849241048617298,
-    "uniform_mean": 0.18695605434530682,
-    "uniform_block_mean": 0.1861495253548243,
-    "margin": 0.002,
-    "passed": true,
-    "note": "the fine model must beat a uniform random fill of the same approved tiles at the same mass; this is the dominance control for the 'not dominated by stage one' requirement",
-    "excess": 0.09796805051642299
-   }
+   "emitted_share_inside_approved": 0.1635389956658876,
+   "lift_over_area_share": 0.5441401018465972
   },
   "verdict": "PASS",
-  "notes": []
+  "notes": [
+   "emission is under-represented inside the Stage 1 approved tiles (lift 0.54): the fine-scale model is placing points by its own criteria, so Stage 1 does not dominate -- but note the two stages are mildly anti-correlated at the point level"
+  ]
  },
  "limitations": [
   "Holdout truth is the visible known-fault catalogue, not hidden expert labels.",
@@ -1638,7 +2513,12 @@
   "The Stage-1 rate field is provisionally interpreted as mm/yr; source component and dip are unresolved.",
   "The H51-N2 zero-outside artifact passes local format/uniqueness checks but fails its paired six-fold holdout and is research-only.",
   "The H52 V4 zero-outside artifact passes local format/uniqueness checks but has no direct holdout receipt for its actual NMS geometry; the nearby V7 STE q10 metric is not transferable.",
-  "No new candidate is authorized for a competition slot; existing local benchmark remains not portal-validated and violates the all-points-inside-q10 constraint."
+  "Slip-rate component (vertical vs fault-plane) and per-trace dips remain assumptions.",
+  "Portal acceptance of the zeros-outside encoding is inferred from the published format, not from an accepted upload.",
+  "The separate earlier H53-K2x candidate was measured and not promoted; its research TIFF is not cleared for submission.",
+  "The H53-K2x broader family uniqueness gate is NOT_CLEARED and outside-footprint portal behavior remains unresolved.",
+  "The recommended upload candidate (gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif) passed every local gate but has NOT been uploaded: portal acceptance and any organizer score are unproven, and the entrant decides whether to spend a weekly competition slot.",
+  "Parallel-session experiments recorded on main (H53-A finite-lag edge pairing blocked at the baseline-reproduction gate; H53-K2x, K2-08 and R1 not promoted) remain research-only; their holdout numbers are not attributed to this candidate."
  ],
  "research_comparisons": {
   "H_M_cross_scale_crest": {
@@ -1678,8 +2558,9 @@
  "candidate_screen": {
   "candidate": "H53-A NOT PROMOTED; artifact is the q10-confined regeneration of the promoted H-H/H-D procedure",
   "status": "NOT_PROMOTED_NO_H53A_TIFF",
-  "evidence": "evidence/h53_holdout_20261008.json",
-  "reason": "H53-A q10-gated mean 0.284001 vs frozen best 0.285341; paired gated delta -0.000923; 3/6 folds"
+  "evidence": "evidence/h53sr_holdout_20261008.json",
+  "reason": "H53-A q10-gated mean 0.284001 vs frozen best 0.285341; paired gated delta -0.000923; 3/6 folds",
+  "note": "Two parallel sessions both preregistered an 'H53-A' on 2026-10-08. This slate's H53-A (fine-scale geodetic strain-residual ridge) is documented in registry/preregistration_h53sr_20261008.json and validated in evidence/h53sr_holdout_20261008.json; it is distinct from the parallel session's H53-A (finite-lag cross-physics edge pairing, registry/preregistration_h53.json), which was blocked before Stage-2 scoring. Do not conflate the two IDs or receipts."
  },
  "latest_experiment": {
   "id": "H53_H53-TWOSTAGE_20261008T040951Z",
@@ -2561,7 +3442,7 @@
    "measured_cost_vs_frozen_ungated_best": -0.0004164977945891879,
    "h53a_promoted": false,
    "preregistered_verdict": "NOT_PROMOTED_REGENERATION_OF_PROMOTED_PROCEDURE",
-   "evidence": "evidence/h53_holdout_20261008.json",
+   "evidence": "evidence/h53sr_holdout_20261008.json",
    "note": "H53-A was not promoted; the artifact regenerates the freshly validated H-H/H-D procedure with new seeds, so artifact_mean equals the fresh q10-gated baseline (zero delta, 0 folds won) and measured_cost_vs_frozen_ungated_best is the honest compliance cost of q10 confinement vs the frozen ungated best. The H53-A hypothesis numbers are reported separately under h53a_*. Local proxy numbers are not organizer scores."
   },
   "model": {
@@ -2621,5 +3502,70 @@
    "The Stage-1 rate field is provisionally interpreted as mm/yr; source component and dip are unresolved.",
    "No organizer upload, portal acceptance, or score is claimed."
   ]
- }
+ },
+ "latest_h53_experiment": {
+  "id": "GEMSDOE51-H53-A-STAGE1-AND-BASELINE-AUDIT-20261008",
+  "hypothesis_id": "H53-A",
+  "role": "RESEARCH_AUDIT_NO_PREDICTION_ARTIFACT",
+  "status": "STAGE1_COMPLETE_STAGE2_BLOCKED_BASELINE_REPRODUCTION_FAILED",
+  "research_identifier": "GEMSDOE51-H53-A-20261008",
+  "research_identifier_is_submission_name": false,
+  "file": null,
+  "zip": null,
+  "submission_name": null,
+  "short_submission_note": null,
+  "prediction_tiff_generated": false,
+  "stage1": {
+   "status": "COMPLETE_STAGE1_ONLY",
+   "evidence": "evidence/h53a_stage1_holdout_20261008.json",
+   "split_count": 5,
+   "mean_approved_area_share": 0.901904429968574,
+   "mean_heldout_trace_pixel_recall": 0.9290894120384197,
+   "mean_recall_area_lift": 1.0301461034883945,
+   "mean_uniform_matched_mass_dti_in_approved_tiles": 0.04839029619807429,
+   "mean_uniform_matched_mass_dti_full_footprint": 0.04902479022212286,
+   "truth": "visible-catalogue proxy only; not hidden expert labels or organizer score"
+  },
+  "baseline_reproduction": {
+   "status": "BASELINE_REPRODUCTION_FAILED_STAGE2_BLOCKED",
+   "evidence": "evidence/h53a_baseline_provenance_20261008.json",
+   "fresh_canonical_mean_dti": 0.28531515486970865,
+   "frozen_cached_field_mean_dti": 0.285340602656319,
+   "fresh_minus_frozen": -2.5447786610344192e-05,
+   "absolute_tolerance": 1e-05,
+   "reproduced": false,
+   "legacy_field_files_present": false,
+   "mismatch_cause_established": false
+  },
+  "stage2": {
+   "status": "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING",
+   "candidate_score": null,
+   "candidate_tiff": null,
+   "reason": "Frozen baseline reproduction gate failed; fail-closed preregistered runner blocked candidate scoring."
+  },
+  "decision": "H53-A download for research: NO H53-A TIFF exists. Earlier H53-K2x TIFF download: YES, research only. Submit neither: NO. No competition slot used.",
+  "no_organizer_upload_or_score_claimed": true,
+  "preregistration": "registry/preregistration_h53.json",
+  "ranked_hypothesis_slate": "knowledge/hypothesis-slate-20261008.md",
+  "earlier_research_context": "A distinct earlier H53-K2x six-fold screen produced a fresh TIFF for research only. It failed promotion and is not an H53-A result or substitute."
+ },
+ "historical_completed_research_screens": [
+  {
+   "id": "H53-K2x",
+   "status": "NOT_PROMOTED_RESEARCH_TIFF_AVAILABLE",
+   "evidence": "evidence/h53_k2x_holdout_20261008.json",
+   "artifact": "evidence/h53_k2x_artifact_20261008.json",
+   "candidate_gated_mean": 0.2850361457010805,
+   "same_fold_gated_baseline_mean": 0.28489865707511947,
+   "paired_gated_delta": 0.00013748862596105657,
+   "positive_folds": 4,
+   "frozen_best": 0.285340602656319,
+   "candidate_below_frozen_best": 0.0003044569552385079,
+   "fresh_baseline_drift": -2.5447786610344192e-05,
+   "reproduction_tolerance": 1e-05,
+   "promotion_passed": false,
+   "competition_slot_authorized": false,
+   "note": "Separate earlier four-hypothesis slate and six-fold test; not H53-A. New TIFF is research-only. Broader family uniqueness NOT_CLEARED; portal outside-footprint semantics unresolved."
+  }
+ ]
 }

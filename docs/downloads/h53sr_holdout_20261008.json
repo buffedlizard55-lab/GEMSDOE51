@@ -2,8 +2,8 @@
  "schema_version": 1,
  "status": "COMPLETE_NOT_PROMOTED",
  "candidate": "H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm",
- "preregistration": "registry/preregistration_h53.json",
- "slate": "evidence/candidate_hypotheses_prereg_20261008.json",
+ "preregistration": "registry/preregistration_h53sr_20261008.json",
+ "slate": "evidence/candidate_hypotheses_prereg_h53sr_20261008.json",
  "instrument": "six-fold 3x3 spatial holdout; visible known-fault catalogue proxy truth",
  "protocol": {
   "buffer_px": 12,

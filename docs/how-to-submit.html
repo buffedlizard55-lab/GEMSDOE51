@@ -22,12 +22,16 @@
 </nav>
 </div></header>
 <main class="wrap">
-<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
+<p class="ev">Current as of 2026-10-08 (merged sessions): the H53-SR two-stage artifact is the RECOMMENDED UPLOAD CANDIDATE below (local gates passed; not yet portal-validated). The parallel session's K2-08 candidate failed spatial promotion and family uniqueness and remains research-only. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
 
 <h2>Submission guide — current status first</h2>
 <section class="download">
-<p class="eyebrow">LATEST EXPERIMENT · H53 · 8 OCTOBER 2026</p>
-<h2>H53 two-stage submission artifact — unique new TIFF</h2>
+<p class="eyebrow">LATEST EXPERIMENT · H53-SR (STRAIN-RESIDUAL SLATE) · 8 OCTOBER 2026</p>
+<h2>H53-SR two-stage submission artifact — unique new TIFF</h2>
+<p class="ev">H53-SR denotes this session's slate (H53-A = fine-scale geodetic
+strain-residual ridge). A parallel session preregistered a different H53-A (finite-lag
+cross-physics edge pairing), which was blocked before Stage-2 scoring — see
+<a href="irregularities.html">IR-H53-05</a>. The two H53-A records must not be conflated.</p>
 <p class="warn"><strong>DOWNLOAD: YES. SUBMIT: THIS IS THE COMPETITION SUBMISSION CANDIDATE.</strong><br>
 A newly trained, uniquely seeded prediction map — not a renamed or re-encoded prior submission.
 Every local gate passed: official grid/CRS/transform/dtype, all cells finite in [0, 1] with zeros
@@ -44,7 +48,31 @@ portal acceptance and any organizer score are unproven.</p>
 <dt>Stage-1 confinement</dt><dd>100% of points inside approved tiles; approved area 90.13%; lift 1.109 (limit 1.5)</dd>
 <dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag</dd>
 <dt>SHA-256</dt><dd><code>5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e</code></dd></dl>
-<p><a href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json">Final-byte checks and scoped uniqueness gate</a> · <a href="downloads/h53_holdout_20261008.json">H53 six-fold holdout receipt</a> · <a href="downloads/candidate_hypotheses_prereg_20261008.json">preregistered H53 slate</a>. Format/range safety is not portal acceptance.</p>
+<p><a href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json">Final-byte checks and scoped uniqueness gate</a> · <a href="downloads/h53sr_holdout_20261008.json">H53 six-fold holdout receipt</a> · <a href="downloads/candidate_hypotheses_prereg_h53sr_20261008.json">preregistered H53 slate</a>. Format/range safety is not portal acceptance.</p>
+</section><section class="download missing">
+<p class="eyebrow">PARALLEL-SESSION EXPERIMENT · K2-08 · 8 OCTOBER 2026 · RESEARCH ONLY</p>
+<h2>New feature-model GeoTIFF — research only</h2>
+<p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
+The K2 map was newly fitted from feature data, not copied or re-encoded from an earlier TIFF, but it failed the frozen spatial holdout and the strict family uniqueness audit. No competition slot was used; portal validation was not performed.</p>
+<p><a class="btn" download href="downloads/gemsdoe51-k2-08-research-only-20261008.tif">Download K2-08 research TIFF</a> · <a href="downloads/k2-08-results-2026-10-08.md">Full methods and results</a></p>
+<dl class="kv">
+<dt>Candidate / support</dt><dd><code>GEMSDOE51-K2-08-conductive-ribbon</code> · 44,069 unit-valued fault-point pixels</dd>
+<dt>SHA-256</dt><dd><code>3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e</code></dd>
+<dt>Local format and range</dt><dd>One-band float32 · EPSG:32611 · 3730 × 3292 · exact template transform · finite in-footprint values [0, 1] · NaN/NoData outside. Serialized range guard passed; this is not portal acceptance.</dd>
+<dt>Stage 2 proxy DTI</dt><dd>K2 q10 0.274888 vs fresh H-H/H-D q10 0.275543; paired Δ -0.000655; 2/6 folds positive. <b>NOT PROMOTED.</b></dd>
+<dt>Stage 1, separate holdout</dt><dd>20 km physical q10 tile prior; 90.33% area approved, 91.00% trace recall, lift 1.007. Approved-area uniform DTI 0.063356 vs support 0.063645 (Δ -0.000289); broad and weak.</dd>
+<dt>Family uniqueness</dt><dd><b>NOT_CLEARED.</b> 365/365 pinned payloads; exact duplicate False; max Jaccard 0.15347; max containment 1.0000; coverage complete False.</dd>
+<dt>Portal status</dt><dd>NOT PERFORMED. The prior range-error trigger is unknown; do not upload.</dd>
+</dl>
+<p><a href="downloads/k2_research_artifact_20261008.json">Artifact receipt</a> · <a href="downloads/k2_spatial_holdout_20261008.json">Stage-2 receipt</a> · <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 receipt</a> · <a href="downloads/k2_family_uniqueness_20261008.json">Family audit</a> · <a href="downloads/k2-08-candidate-hypotheses-2026-10-08.md">Ranked hypotheses</a>.</p>
+</section><section class="download missing">
+<p class="eyebrow">H53 FAMILY — PARALLEL-SESSION RECORDS: H53-A (FINITE-LAG, STAGE 2 BLOCKED) · EARLIER SEPARATE SCREEN: H53-K2x</p>
+<h2>Do not conflate the two H53 experiments</h2>
+<p><b>H53-A is the parallel session's latest experiment within the H53 family</b> (finite-lag
+cross-physics edge pairing — a different hypothesis from this session's H53-SR H53-A
+strain-residual ridge; see <a href="irregularities.html">IR-H53-05</a>). Stage 1 was measured separately (five whole-record splits; q10 area 90.19%, trace recall 92.91%, lift 1.0301). Stage 2 status: <b>NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING</b>; candidate scoring was blocked because the fresh baseline 0.285315155 vs frozen 0.285340603; drift -0.000025448 exceeded the 1e-5 tolerance. <b>No H53-A TIFF exists</b> (the H53-SR two-stage artifact at the top of this page is a different record) <b>and no candidate score was produced. H53-A download for research: NO. SUBMIT TO THE COMPETITION: NO.</b> See <a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a> and <a href="downloads/h53a_baseline_provenance_20261008.json">baseline blocker</a>.</p>
+<p><b>Earlier H53-K2x:</b> a distinct, completed six-fold screen, NOT PROMOTED. q10 mean 0.2850361 vs same-fold gated baseline 0.2848987; paired Δ +0.0001375, 4/6; 0.0003045 below frozen best. Fresh-baseline drift -0.00002545 exceeded tolerance. Its separate TIFF is <b>downloadable for research only; submit: NO</b>. <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif">K2x research TIFF</a> · <a href="index.html#h53-k2x-research">full download card</a> · <a href="downloads/h53_k2x_holdout_20261008.json">six-fold receipt</a>.</p>
+<p>These H53 results are separate from the K2-08 experiment above. The H53-SR artifact card at the top of this page is the recommended upload candidate; every experiment below it is research-only. No portal acceptance or organizer score is claimed.</p>
 </section><section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
 <h2>New, independently generated TIFF</h2>

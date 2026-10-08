@@ -22,9 +22,27 @@
 </nav>
 </div></header>
 <main class="wrap">
-<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
+<p class="ev">Current as of 2026-10-08 (merged sessions): the H53-SR two-stage artifact is the RECOMMENDED UPLOAD CANDIDATE below (local gates passed; not yet portal-validated). The parallel session's K2-08 candidate failed spatial promotion and family uniqueness and remains research-only. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
 
-<h2>Spatial holdout — proxy evidence, not a competition score</h2>
+<h2>K2-08 spatial holdout — proxy evidence, NOT PROMOTED</h2>
+<p>The candidate was compared with a fresh 50:50 H-D/H-H blend (not only H-D) using fixed six-fold 3×3 spatial blocks, 12-pixel buffer, 250,000 negatives, fixed HGB/emitter settings, 3.47 mass ratio, 200 m catalogue exclusion, and fold-specific physical q10 masks. Labels are the visible known-fault catalogue, not hidden expert faults.</p>
+<table class=''><thead><tr><th>model / comparison</th><th>mean proxy DTI</th></tr></thead><tbody><tr><td>frozen historical H-H/H-D best (ungated)</td><td>0.2853406</td></tr><tr><td>fresh H-H/H-D reconstruction (ungated)</td><td>0.2853152</td></tr><tr><td>fresh H-H/H-D physical q10</td><td>0.2755433</td></tr><tr><td>K2 blend ungated</td><td>0.2845355</td></tr><tr><td>K2 blend physical q10</td><td>0.2748879</td></tr><tr><td>paired K2 minus fresh blend q10</td><td>-0.0006554</td></tr></tbody></table>
+<p>K2 q10 is below the fresh comparator and frozen best, with 2/6 paired folds positive. The fresh ungated reconstruction differs from frozen by -0.00002545, beyond the 1e-5 tolerance; this harness irregularity is disclosed, not relaxed. Status: <b>NOT_PROMOTED_NO_SUBMISSION</b>.</p>
+<table class=''><thead><tr><th>fold</th><th>fresh blend ungated</th><th>fresh blend q10</th><th>K2 ungated</th><th>K2 q10</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283944</td><td>0.282429</td><td>0.282939</td><td>-0.001005</td></tr><tr><td>1</td><td>0.271784</td><td>0.271674</td><td>0.272861</td><td>0.272738</td><td>+0.001063</td></tr><tr><td>2</td><td>0.290270</td><td>0.231571</td><td>0.293812</td><td>0.234605</td><td>+0.003034</td></tr><tr><td>3</td><td>0.243359</td><td>0.244631</td><td>0.239233</td><td>0.240600</td><td>-0.004031</td></tr><tr><td>4</td><td>0.305049</td><td>0.305005</td><td>0.304426</td><td>0.304521</td><td>-0.000484</td></tr><tr><td>5</td><td>0.317996</td><td>0.316435</td><td>0.314452</td><td>0.313924</td><td>-0.002511</td></tr></tbody></table>
+<h3>Stage 1 — separate physical whole-trace holdout</h3>
+<p>The 20 km physical q10 tile prior approves 90.33% mean area, recalls 91.00% of held traces (lift 1.007), and has Spearman 0.142. Uniform DTI in approved area is 0.063356 vs 0.063645 on support (Δ -0.000289). The q10 gate is broad/weak, not a fine-scale locator; the trace splits are scattered, not geographic. See <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 receipt</a> and <a href="downloads/k2-08-results-2026-10-08.md">full K2 report</a>.</p>
+
+<h2>Latest H53-family experiment — H53-A baseline blocker</h2>
+<p>Stage 1 is separate: five whole-record splits, q10 area 0.9019, held-out trace-pixel recall 0.9291, lift 1.0301. The fresh canonical H-D/H-H baseline mean 0.285315155 vs frozen 0.285340603; delta -0.000025448 exceeded tolerance. H53-A Stage 2 was <b>NOT RUN — BLOCKED before candidate scoring</b>; no H53-A score or TIFF exists. H53-A is the latest experiment within the H53 family, but K2-08 above is the later overall experiment. <a href="downloads/h53a_stage1_holdout_20261008.json">Stage 1</a> · <a href="downloads/h53a_baseline_provenance_20261008.json">baseline receipt</a>.</p>
+
+<h2>Earlier H53-K2x six-fold screen — completed once; NOT PROMOTED</h2>
+<p>Separate from H53-A and the later K2-08 experiment, K2x q10-gated mean 0.2850361 vs same-fold gated baseline 0.2848987 (paired Δ +0.0001375; 4/6 folds). It was 0.0003045 below frozen best; baseline drift -0.00002545 exceeded the locked 1e-5 tolerance. No post-result tuning was performed.</p>
+<table class=''><thead><tr><th>fold</th><th>fresh baseline ungated</th><th>K2x ungated</th><th>baseline q10</th><th>K2x q10</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.279943</td><td>0.283432</td><td>0.279943</td><td>-0.003489</td></tr><tr><td>1</td><td>0.271784</td><td>0.274238</td><td>0.270436</td><td>0.273102</td><td>+0.002666</td></tr><tr><td>2</td><td>0.290270</td><td>0.291255</td><td>0.289119</td><td>0.289316</td><td>+0.000197</td></tr><tr><td>3</td><td>0.243359</td><td>0.247934</td><td>0.243359</td><td>0.247934</td><td>+0.004574</td></tr><tr><td>4</td><td>0.305049</td><td>0.305948</td><td>0.305049</td><td>0.305948</td><td>+0.000899</td></tr><tr><td>5</td><td>0.317996</td><td>0.313974</td><td>0.317996</td><td>0.313974</td><td>-0.004023</td></tr></tbody></table>
+<p>Stage 1, separately: five whole-trace splits, mean area 90.15%, held-out trace recall 96.01%, lift 1.0650. Fold-specific q10 masks excluded held-out trace rows; all scored points were inside approved tiles, and Stage-1 score weight was zero. <a href="downloads/h53_k2x_holdout_20261008.json">Full six-fold receipt</a> · <a href="downloads/candidate-hypotheses-2026-10-08.md">ranked slate</a>.</p>
+<table class=''><thead><tr><th>fold</th><th>approved q10 area</th><th>implied lift</th></tr></thead><tbody><tr><td>0</td><td>90.061%</td><td>1.1104</td></tr><tr><td>1</td><td>90.361%</td><td>1.1067</td></tr><tr><td>2</td><td>90.168%</td><td>1.1090</td></tr><tr><td>3</td><td>90.078%</td><td>1.1101</td></tr><tr><td>4</td><td>90.061%</td><td>1.1104</td></tr><tr><td>5</td><td>90.078%</td><td>1.1101</td></tr></tbody></table>
+<p><b>Download for research: YES. Submit: NO.</b> Current-inventory uniqueness and local byte checks pass; broader family uniqueness is <b>NOT CLEARED</b>, and portal outside-footprint behavior remains unverified. <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif">research TIFF</a> · <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip">one-TIFF ZIP</a> · <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json">local checks</a> · <a href="downloads/h53_k2x_current_uniqueness_20261008.json">current-inventory audit</a> · <a href="downloads/h53_k2x_family_uniqueness_20261008.json">family audit</a>.</p>
+
+<h2>Historical holdouts — earlier candidates, not the current K2 experiment</h2>
 <p>The detector holdout uses a 3×3 spatial blocking design, removes a 1.2 km boundary band from
 training, and scores each held-out region at matched emitted-mass ratio. Its labels are the existing
 known-fault catalogue; the official test target is expert-identified new faults. This measures
@@ -117,10 +135,10 @@ all scored K1 points were in approved tiles, and lift was
 <p class="ev">Full receipts: <a href="downloads/hk1_spatial_holdout_20261007.json">K1 six-fold outcome</a> and
 <a href="downloads/stage1_q10_trace_holdout_20261007.json">separate Stage-1 q10 trace holdout</a>.</p>
 
-<h3>H53 Stage-2 spatial holdout — top preregistered candidate, validated before any build (2026-10-08)</h3>
+<h3>H53-SR Stage-2 spatial holdout — top preregistered candidate, validated before any build (2026-10-08)</h3>
 <p>H53-A (six fine-scale geodetic strain-residual ridge features added to the H-H arm, blended 50/50
 with freshly fitted H-D) was validated on the frozen six-fold splits under the rule frozen in
-<a href="downloads/preregistration_h53.json">registry/preregistration_h53.json</a> before any
+<a href="downloads/preregistration_h53sr_20261008.json">registry/preregistration_h53sr_20261008.json</a> before any
 submission artifact was built. The fresh ungated baseline reproduced the frozen receipt exactly
 (max per-fold deviation 0.0),
 so the comparison is paired and reproducible. H53-A q10-gated mean was
@@ -147,8 +165,8 @@ share was 0.901,
 1.109 (limit 1.5).
 Stage 1's own holdout is the trace-held-out section above — reported separately, never conflated with
 the Stage-2 score.</p>
-<p class="ev">Full receipts: <a href="downloads/h53_holdout_20261008.json">H53 six-fold outcome</a>,
-<a href="downloads/candidate_hypotheses_prereg_20261008.json">preregistered H53 slate</a>, and
+<p class="ev">Full receipts: <a href="downloads/h53sr_holdout_20261008.json">H53-SR six-fold outcome</a>,
+<a href="downloads/candidate_hypotheses_prereg_h53sr_20261008.json">preregistered H53-SR slate</a>, and
 <a href="downloads/stage1_q10_trace_holdout_20261007.json">separate Stage-1 q10 trace holdout</a>.</p>
 
 <h3>Interpretation limit</h3>
