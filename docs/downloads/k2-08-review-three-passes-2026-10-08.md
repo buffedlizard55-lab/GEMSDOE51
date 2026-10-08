@@ -31,15 +31,15 @@
 
 - `py_compile` — new/changed K2, Stage-1, audit, site and core modules passed.
 - `scripts/check_repo_health.py --json /tmp/gems51_repo_health.json` — PASS.
-- Full pytest suite: **104 passed, 6 skipped**.
-- `scripts/check_submission.py docs/downloads/gemsdoe51-k2-08-research-only-20261008.tif` — local format checks PASS; tool explicitly does not infer portal acceptance.
-- `scripts/build_site.py` and `scripts/check_site.py` — PASS; 13 pages, local links resolve, public TIFF/ZIP set matches the manifest.
+- Full merged-branch pytest suite: **121 passed, 6 skipped**.
+- `scripts/check_submission.py` on the K2-08 NaN-outside TIFF and the historical R1 all-finite/zero-outside TIFF — both local format checks PASS; the tool explicitly does not infer portal acceptance.
+- `scripts/build_site.py` and `scripts/check_site.py` — PASS; 13 pages, local links resolve, public TIFF/ZIP set matches the manifest, and K2 is current while R1/H53 are historical.
 - `git diff --check` — PASS.
 
 ## Decision and remaining work
 
 The artifact is a genuinely new fitted research experiment and hash-distinct, but the strict family support audit is **not cleared**. The candidate also fails the paired holdout, so it must not be submitted. The official portal has not validated it. Maintain the TIFF and receipts as evidence, not as an upload-ready candidate.
 
-PR creation, CI and merge are intentionally recorded only after GitHub confirms each action; the work must stay on `arena/55b7ede4-gemsdoe51` and only that branch may be pushed. No merge or portal action is claimed in this review file.
+PR #19 was created from `arena/55b7ede4-gemsdoe51` and pushed only to that session branch. During review, `main` advanced through PR #17 while this branch was in progress. Its R1 research TIFF, H53-A audit and receipts are retained as historical prior art; K2-08 remains the later, current experiment. The upstream merge is being incorporated into this session branch before the PR merge attempt. PR #19's final CI state and merge are recorded only after GitHub confirms them. No portal action is claimed.
 
 Next scientific work should first resolve the baseline reproduction irregularity and acquire a genuinely untouched spatial/trace-family lockbox. Do not retune K2 on the reused folds. Clarify slip-component and geodetic unit semantics with source documentation before another physical Stage-1/Stage-2 candidate. Preserve the failed K2 experiment as negative evidence.

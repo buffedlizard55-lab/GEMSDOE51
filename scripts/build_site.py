@@ -325,6 +325,16 @@ def build():
         "k2-08-candidate-hypotheses-2026-10-08.md",
         "preregistration_k2_stage1_20261008.json",
         "k2-08-review-three-passes-2026-10-08.md",
+        "r1_holdout_20261008.json",
+        "preregistration-2026-10-08.md",
+        "x5_screen_20261008.json",
+        "h53a_stage1_holdout_20261008.json",
+        "h53a_baseline_provenance_20261008.json",
+        "h53_hypothesis_slate_20261008.json",
+        "hypothesis-slate-20261008.md",
+        "preregistration_h53.json",
+        "h53-session-results-2026-10-08.md",
+        "review-three-passes-20261008.md",
     )
     expected_downloads.update(supporting_files)
     for item in downloads.iterdir():
@@ -338,7 +348,7 @@ def build():
             source = ROOT / "data" / name
         elif name.endswith(".md"):
             source = ROOT / "knowledge" / name
-        elif name == "preregistration_k2_stage1_20261008.json":
+        elif name in {"preregistration_k2_stage1_20261008.json", "preregistration_h53.json"}:
             source = ROOT / "registry" / name
         else:
             source = ROOT / "evidence" / name

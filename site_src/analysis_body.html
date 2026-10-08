@@ -16,10 +16,36 @@
 <p><b>Stage 2:</b> the newly fitted K2 directional conductivity-contrast model is compared to a fresh 50:50 H-D/H-H blend on six spatial folds. Frozen best 0.2853406; fresh ungated reproduction 0.2853152 (−0.00002545, beyond the 1e-5 tolerance); fresh q10 baseline 0.2755433; K2 q10 0.2748879 (paired Δ −0.0006554; 2/6 folds positive). Ungated K2 is 0.2845355, below frozen best. Status <b>NOT PROMOTED</b>; no slot.</p>
 <p>The K2 diagnostic GeoTIFF has 44,069 points and passes local serialized format/range/confinement checks, but strict family uniqueness is <b>NOT_CLEARED</b> (no exact duplicate, max Jaccard 0.15347, max containment 1.0, one invalid-grid reference). Portal validation was not performed. See <a href="downloads/k2-08-results-2026-10-08.md">full report</a>, <a href="downloads/k2_spatial_holdout_20261008.json">Stage-2 holdout</a>, <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 holdout</a>, and <a href="downloads/k2_family_uniqueness_20261008.json">uniqueness audit</a>.</p>
 
+
 <h2>Historical GEMSDOE51 evidence through 2026-10-07</h2>
 <p><b>Stage 1:</b> the Kreemer et al. (2000) Eq. 3 fault-slip tensor is intended only as a coarse tile prior. The five-split trace receipt removes held-out trace rows and reports q70 rank-residual controls: mean lift 1.0929 for the second-invariant deficit, 1.0653 for dilatation, 1.0722 for shear, 1.1477 for their combined diagnostic, and 1.2469 for geodetic-only. The q10 deficit trace holdout approved 90.06% of area, retained 95.39% of held-out trace pixels (lift 1.059), and had uniform-in-mask DTI 0.05063 versus 0.04856 full-footprint uniform. In the separate K1 Stage-2 spatial folds, q10 masks were recomputed with held-out trace rows excluded; they covered 90.13% of area on average, had implied lift 1.109, and confined every K1 point. Stage 1's soft score weight was zero; this is a broad allowed-domain constraint, not a strong score. Slip-rate units and source tensor conventions remain provisional. See the <a href="method.html">method page</a>, <a href="downloads/stage1_trace_holdout.json">q40–q80 receipt</a>, and <a href="downloads/stage1_q10_trace_holdout_20261007.json">q10 receipt</a>.</p>
 <p><b>Stage 2:</b> H-D has mean proxy DTI 0.2816627 and mean AUC 0.6726183 across six blocked folds at M/|G|=3.47. The narrowed H51-X1 implementation (rank-normalized total magnetic and isostatic-gravity bands only; planned RTP/HG/VG derivatives were not inputs to the new transform) returned 0.2796713 mean proxy DTI, delta -0.0019913, and won 3/6 folds; it failed promotion. This partial test does not falsify every version of the broader preregistered family.</p>
 <p>The earlier local H-H/H-D blend records mean proxy DTI 0.2853406 versus H-D 0.2816627 (paired delta +0.0036779; 4/6 folds higher), but it is an audit benchmark only: it uses NaN outside and only 86.71% of its points are inside the later q10 approved domain. It is not upload-eligible. The preregistered H51-K1 candidate had ungated mean 0.2855703 but q10-gated mean 0.2850766, below the frozen best; paired gain over the same-fold gated baseline was +0.000178 with 3/6 folds better, and fresh-baseline reproduction missed tolerance. K1 was not promoted, and no new TIFF was written. All these values are visible-known-fault proxies, not organizer scores. See the <a href="downloads/hk1_spatial_holdout_20261007.json">K1 receipt</a>.</p>
 
-<h2>Bottom line</h2>
-<p>The defensible lesson from the GEMSDOE32 page is to test sparse, credit-efficient emissions and explain their mechanism—not to assign an unscored projection a cause. GEMSDOE51 has no upload-eligible artifact: K2-08 failed its frozen holdout and strict family uniqueness is not cleared. The previous local best is audit-only. The user-reported portal range error remains unresolved and its triggering file is unknown. Local spatial holdouts are visible-catalogue proxies, not hidden-label validation. GEMSDOE32's owner-reported H33-2-B2 projection and the user-reported 0.2778/0.3195 figures are not organizer-verified; no gain is promised. See the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and metric page</a> and <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>. This site links to, but does not copy or monitor, leaderboard standings.</p>
+<h2>Bottom line — K2-08 is the latest experiment and is research-only</h2>
+<p>The defensible lesson from the GEMSDOE32 page is to test sparse, credit-efficient emissions and explain their mechanism—not to assign an unscored projection a cause. K2-08 failed its paired physical-q10 holdout and its strict family uniqueness gate; its TIFF is downloadable for research only and must not be submitted. The previous H-H/H-D local best and the earlier R1 artifact are audit-only. The user-reported portal range error remains unresolved and its triggering file is unknown; local format checks do not establish portal acceptance. Local spatial holdouts are visible-catalogue proxies, not hidden-label validation. GEMSDOE32's owner-reported H33-2-B2 projection and the user-reported 0.2778/0.3195 figures are not organizer-verified; no gain is promised. See the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and metric page</a> and <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>. This site links to, but does not copy or monitor, leaderboard standings.</p>
+
+<h2>Historical R1 regeneration result (2026-10-08; before K2-08)</h2>
+<p><b>Question:</b> can the promoted H-H/H-D blend be made upload-legal — 100 % of points inside
+Stage-1 q10 strain-budget tiles, all-finite [0,1] zeros-outside encoding — without losing the
+six-fold proxy performance? The rule was frozen in
+<a href="downloads/preregistration-2026-10-08.md">preregistration-2026-10-08.md</a> before any run.</p>
+<p><b>Measurement</b> (<a href="downloads/r1_holdout_20261008.json">receipt</a>): on the paired
+six-fold instrument, the unrestricted base reproduces the 2026-10-07 P1 baseline with deviation
+0.0 on every fold (the archived 0.2853406 fields were never committed — see
+<a href="irregularities.html">IR-R1-01</a>). Confinement via <i>restrict</i> costs −0.0014061 mean
+proxy DTI (0/6 folds won); <i>relocate</i> costs −0.0015905. The cost concentrates on folds 1–2,
+where 0.5–0.8 % of dots sit inside disapproved 10 km tiles; on four folds confinement is free.
+The frozen rule requires mean Δ ≥ 0, so the verdict is <b>NOT_PROMOTED</b> and the session artifact
+is marked <b>RESEARCH ONLY / DO NOT SUBMIT</b> — the front page and the manifest key
+<code>ok_to_download_and_submit=false</code> are generated from that verdict.</p>
+<p><b>Why this still matters:</b> (1) the uniform-tiles dominance control passes decisively
+(confined 0.2839091 vs uniform fill 0.1880090), so Stage 1 is not steering placement; (2) the
+measured cost is small and local — a future operator that re-emits only the disapproved dots by
+continuing the greedy STE search on the approved domain (preregister as R2) is the obvious next
+step; (3) the all-finite zeros-outside encoding is implemented and gate-verified. This mitigates one
+potential local range hazard but does not prove portal acceptance or identify the error trigger.</p>
+<p><b>New-hypothesis screen:</b> H53-X5 (radiometric K/Th concordance on magnetic lineaments,
+off-catalogue) was screened on the S/L instruments and <b>REJECTED</b> (fusion S=0.0114 vs random
+control 0.0281; <a href="downloads/x5_screen_20261008.json">receipt</a>). The ranked slate and the
+blocked X4 data need are in <a href="hypotheses.html">hypotheses</a>.</p>

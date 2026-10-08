@@ -110,6 +110,8 @@ The K2 map was newly fitted from feature data, not copied or re-encoded from an 
 <li><a href="downloads/k2-08-candidate-hypotheses-2026-10-08.md">Four ranked hypotheses</a></li>
 <li><a href="downloads/k2_research_artifact_20261008.json">Artifact receipt</a> · <a href="downloads/k2_spatial_holdout_20261008.json">Stage-2 holdout</a> · <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 holdout</a> · <a href="downloads/k2_family_uniqueness_20261008.json">Family audit</a></li>
 <li><a href="downloads/k2-08-review-three-passes-2026-10-08.md">Three-pass review and handoff</a></li>
+<li>Historical R1 restrict artifact (failed paired rule; do not submit): <a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif">TIFF</a> · <a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.zip">ZIP</a> · <a href="downloads/r1_holdout_20261008.json">holdout</a>.</li>
+<li>Historical H53-A baseline gate (Stage 2 blocked): <a href="downloads/h53a_baseline_provenance_20261008.json">provenance receipt</a> · <a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a>.</li>
 <li><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Historical P1 research TIFF (prior art)</a></li>
 </ul>"""
     return banner, detail
