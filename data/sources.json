@@ -3,25 +3,25 @@
   "id": "problem",
   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
   "what": "Official task description, hidden-new-fault target, metric, data description, and GeoTIFF format",
-  "status": "Fetched 2026-10-07. The page states that expert-identified faults absent from the existing USGS database form the initial test set; format requires EPSG:32611, 100 m, matching bounds, one float32 band in [0,1], null/NaN outside."
+  "status": "Fetched 2026-10-08. The task is fault structures (not direct vents); official format specifies the supplied raster grid and values in [0,1]. Organizer score/portal validation remains separate from local checks."
  },
  {
   "id": "rules_pdf",
   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
   "what": "Official GEMS Prize Rules, September 2026",
-  "status": "Fetched 2026-10-07; §3.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
+  "status": "Fetched 2026-10-07; \u00a73.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
  },
  {
   "id": "terms_of_use",
   "url": "https://www.drivendata.org/termsofuse/",
   "what": "DrivenData Terms of Use",
-  "status": "Fetched 2026-10-07; terms prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No leaderboard snapshot or monitoring feed is maintained here."
+  "status": "Fetched 2026-10-08. The page displays Last Modified: August 7, 2014 and prohibits automated monitoring/copying; manual monitoring/copying requires prior written consent. No leaderboard snapshot or monitor is maintained."
  },
  {
   "id": "official_leaderboard",
   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
   "what": "Official leaderboard source link only",
-  "status": "Not mirrored or monitored; consult the official page subject to DrivenData Terms of Use. No standings are stored in this repository."
+  "status": "Official link only; manually checked once on 2026-10-08 for the user-requested comparison (0.3195 was not the page high). No row snapshot or standings are stored; no ongoing/manual monitoring workflow."
  },
  {
   "id": "data_page",
@@ -63,37 +63,43 @@
   "id": "gdr_1391",
   "url": "https://gdr.openei.org/submissions/1391",
   "what": "INGENIOUS Great Basin Regional Dataset Compilation, DOI 10.15121/1881483",
-  "status": "Official GDR record and QFault v2 field definitions reviewed for the 2026-10-08 physical Stage-1 test. The DBF/definition audit verifies SLIPRT2023 in mm/year and SLIPRTNUM as its numeric portion; all 1,126 mirrored records matched source names, rates, and senses. Slip component and fault-specific dip/rake remain unresolved; local mirrors are not organizer-authenticated."
+  "status": "Official GDR/QFault v2 field definitions were checked for the H53 and K2 work. SLIPRT2023 is defined in mm/year and SLIPRTNUM is its numeric portion; all 1,126 mirrored records matched source names, rates, and senses, and the H53 source audit reports 84,331 clipped segment pieces. Vertical versus total fault-plane rate, fault-specific dip/rake, and local-mirror authentication remain unresolved. See evidence/official_attribute_audit_20261008.json."
+ },
+ {
+  "id": "attribute_audit_20261008",
+  "url": "https://gdr.openei.org/submissions/1391",
+  "what": "H53-A official attribute audit receipt (local evidence) and source-attribute scope",
+  "status": "The official field definitions were checked against the preserved DBF export and clipped trace-segment table. mm/year is verified; component/dip/rake and stale/missing slip-sense code documentation remain unresolved. Receipt: evidence/official_attribute_audit_20261008.json."
  },
  {
   "id": "siler_2022",
   "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
   "what": "USGS Siler slip-/dilation-tendency release, DOI 10.5066/P9YL58W6",
-  "status": "Archive record reviewed; downloadable shapefile and field units were not validated locally. H51-X4 remains blocked pending acquisition and inspection."
+  "status": "Official USGS ScienceBase metadata reviewed 2026-10-08; lists full-study and INGENIOUS-area shapefile/KMZ downloads. No archive was downloaded or field-audited for this candidate, so it remains a possible future source, not evidence used for H53-A."
  },
  {
   "id": "kreemer_2000",
   "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
   "what": "Kreemer et al. (2000), On the determination of a global strain rate model, Eq. 3",
-  "status": "Eq. 3 supplies the documented fault-slip tensor summation. It does not justify interpreting every residual as an unmapped fault; the new 20 km tile prior and its limitations are recorded in the K2-08 result."
+  "status": "Eq. 3 supplies the documented fault-slip tensor summation used by the separate H53 and K2 physical Stage-1 diagnostics. It does not justify interpreting every scalar residual as an unmapped fault; source-component, dip/rake, geodetic-scale, and model limitations remain explicit in the experiment records."
  },
  {
   "id": "gemsdoe32_index",
   "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
   "what": "Sibling-project owner page describing H33-2-B2 artifact and its status",
-  "status": "Fetched 2026-10-07. Owner page calls the 0.2747 value projected and the artifact UNSCORED; not organizer verification."
+  "status": "Fetched 2026-10-08. Owner page labels H33-2-B2 UNSCORED and describes 0.2747 as modeled projection; user-reported 0.2778 file-to-score attribution remains unverified and is not organizer evidence."
  },
  {
   "id": "gemsdoe32_research",
   "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/research.html",
   "what": "Sibling-project owner research and limitations",
-  "status": "Fetched 2026-10-07; claims are attributed to the owner and not treated as organizer results."
+  "status": "Fetched 2026-10-08; owner-reported proxy/instrument interpretations are attributed to the owner and not treated as organizer scores."
  },
  {
   "id": "nbmg_qfaults_ingenious",
   "url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
   "what": "NBMG QFaults INGENIOUS ArcGIS layer schema and field names",
-  "status": "Schema lists field names but not units. The unit interpretation is superseded by the separately audited official GDR QFault v2 definitions; slip component and per-fault dip/rake remain assumptions."
+  "status": "Fetched 2026-10-06. The ArcGIS schema lists SLIPRTNUM but does not establish its units. Units are checked against the separate official GDR QFault v2 field definitions; rate component and fault-specific dip/rake remain unresolved."
  },
  {
   "id": "usgs_ofr_2013_1165",

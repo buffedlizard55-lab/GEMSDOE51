@@ -24,7 +24,7 @@
 - The K2 holdout reports both H-H/H-D and candidate, gated and ungated, per fold. No promotion: q10 mean 0.2748879 vs 0.2755433, paired Δ −0.0006554, 2/6 positive; frozen best 0.2853406. The independent fresh-baseline discrepancy is disclosed.
 - Stage 1 and Stage 2 are separately reported. Stage 1 mean area is 90.3288%, trace recall 90.9983%, lift 1.00747, Spearman 0.14227; uniform DTI in approved area is 0.0633556 vs 0.0636448 over support (Δ −0.0002892). It is weak/broad and does not dominate the fine-scale emission.
 - Four distinct hypotheses include layers, geological signature, why faults may be uncatalogued, prior-code differences, qualitative expected benefit and cost. Full operator/source details are versioned in the hypothesis slate and preregistration.
-- GEMSDOE32 H33-2-B2 remains explicitly owner-reported **UNSCORED** (owner projection 0.2747); the 0.2778 attribution and 0.3195 high are unverified and not promised. The task remains fault mapping, not vent prediction.
+- GEMSDOE32 H33-2-B2 remains explicitly owner-reported **UNSCORED** (owner projection 0.2747); the 0.2778 attribution is unverified. A one-time official leaderboard check on 2026-10-08 found the user-reported 0.3195 was not the page high; treat it as stale, not current. No standings snapshot or automatic monitoring is maintained. The task remains fault mapping, not vent prediction.
 - Research report, copied site receipts, claims ledger, submission manifest and official source table are refreshed. No prior TIFF is reissued. No leaderboard standings are scraped or stored.
 
 ## Verification recorded

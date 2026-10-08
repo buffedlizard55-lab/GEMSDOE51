@@ -61,9 +61,9 @@
  },
  {
   "id": "IR-51-10",
-  "summary": "Historical repository files contained copied leaderboard standings and an automated/manual monitoring plan inconsistent with the current DrivenData Terms of Use.",
-  "evidence": "DrivenData Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No written consent is on record. Snapshot/feed JSONs, stale pages, and monitoring instructions were removed from the current tree; only the official source link and policy statement remain.",
-  "status": "CLOSED IN CURRENT TREE - no scraper, scheduled monitor, standings mirror, or manual-copy workflow is implemented. Earlier commits in Git history were not rewritten; this change removes those materials from the current branch contents."
+  "summary": "Historical repository files contained copied leaderboard standings and monitoring instructions; the current project maintains a link-only, no-automatic-monitoring policy pending permission review.",
+  "evidence": "The official Terms of Use page was reviewed; it displays a 2014 last-modified date and the checked section limits use of site materials. No leaderboard rows or standings snapshot are stored in the current tree. No permission is established for an automated monitor.",
+  "status": "CLOSED IN CURRENT TREE - no scraper, scheduled monitor, standings mirror, or monitoring workflow is implemented. Earlier Git history was not rewritten; this change only removes standings and monitoring instructions from current branch contents."
  },
  {
   "id": "IR-51-11",
@@ -244,5 +244,11 @@
   "summary": "Two parallel sessions both preregistered an 'H53-A' on 2026-10-08 for DIFFERENT hypotheses: this repo's session preregistered H53-A = fine-scale geodetic strain-residual ridge (validated, NOT PROMOTED; artifact = q10-confined regeneration of the promoted H-H/H-D procedure), while the parallel session (merged first as PR #18) preregistered H53-A = finite-lag cross-physics edge pairing (Stage-2 blocked at the baseline-reproduction gate). The colliding file names were disambiguated on merge: this session's preregistration, slate receipt, slate note and session results now carry the 'h53sr' suffix (registry/preregistration_h53sr_20261008.json, evidence/candidate_hypotheses_prereg_h53sr_20261008.json, knowledge/candidate-hypotheses-h53sr-2026-10-08.md, knowledge/h53sr-session-results-2026-10-08.md, evidence/h53sr_holdout_20261008.json, registry/submission_build_h53sr.json); the parallel session's files keep their original names.",
   "evidence": "registry/preregistration_h53.json (parallel-session H53-A, finite-lag) vs registry/preregistration_h53sr_20261008.json (this session's H53-A, strain-residual ridge); evidence/h53sr_holdout_20261008.json candidate='H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm' vs evidence/h53a_stage1_holdout_20261008.json / evidence/h53a_baseline_provenance_20261008.json (parallel session, Stage-2 BLOCKED). The two IDs must not be conflated in any receipt, site page, or claim.",
   "status": "CLOSED by file-level disambiguation (h53sr suffix) at merge; hypothesis-ID collision documented here and in the manifest candidate_screen note"
+ },
+ {
+  "id": "IR-H53-06",
+  "summary": "A THIRD parallel session (merged as PR #20, branch arena/922033c2-gemsdoe51) also preregistered an 'H53-A' on 2026-10-08 \u2014 a componentwise budget-q10 Stage-1 residual operationalization with confinement-only Stage 2 \u2014 producing a three-way H53-A identifier collision across parallel sessions (this session's H53-SR strain-residual ridge, PR #18's finite-lag edge pairing, PR #20's budget-q10 variant). All three are distinct hypotheses with distinct receipts; this session's records carry the 'h53sr' file-name disambiguator, the others keep their original names.",
+  "evidence": "registry/preregistration_h53sr_20261008.json (this session, strain-residual ridge, validated NOT PROMOTED, evidence/h53sr_holdout_20261008.json); registry/preregistration_h53.json (PR #18, finite-lag, Stage 2 BLOCKED, evidence/h53a_baseline_provenance_20261008.json); evidence/candidate_hypotheses_budget_q10_prereg_20261008.json (PR #20, budget-q10, NOT PROMOTED, research-only TIFF gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif, evidence/h53_stage1_holdout_20261008.json + evidence/h53_stage2_holdout_20261008.json). The manifest candidate_screen note and README/AGENTS.md disambiguate all three; no numbers are cross-attributed.",
+  "status": "CLOSED by file-level disambiguation (h53sr suffix for this session) and documentation in the manifest, README, AGENTS.md and site; the three H53-A records remain distinct in every receipt and page"
  }
 ]
