@@ -9,7 +9,7 @@
   "id": "rules_pdf",
   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
   "what": "Official GEMS Prize Rules, September 2026",
-  "status": "Fetched 2026-10-07; \u00a73.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
+  "status": "Fetched 2026-10-07; §3.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
  },
  {
   "id": "terms_of_use",
@@ -63,7 +63,7 @@
   "id": "gdr_1391",
   "url": "https://gdr.openei.org/submissions/1391",
   "what": "INGENIOUS Great Basin Regional Dataset Compilation, DOI 10.15121/1881483",
-  "status": "Official repository record; local tables are owner-mirrored and not authenticated against the organizer download. GDR lists a Quaternary Faults v2 archive with field definitions, but that companion text was not locally audited for the unit of the copied slip-rate field."
+  "status": "Official GDR record and QFault v2 field definitions reviewed for the 2026-10-08 physical Stage-1 test. The DBF/definition audit verifies SLIPRT2023 in mm/year and SLIPRTNUM as its numeric portion; all 1,126 mirrored records matched source names, rates, and senses. Slip component and fault-specific dip/rake remain unresolved; local mirrors are not organizer-authenticated."
  },
  {
   "id": "siler_2022",
@@ -75,7 +75,7 @@
   "id": "kreemer_2000",
   "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
   "what": "Kreemer et al. (2000), On the determination of a global strain rate model, Eq. 3",
-  "status": "Public PDF reviewed for the tensor formula used in Stage 1; implementation limitations are recorded in the research note."
+  "status": "Eq. 3 supplies the documented fault-slip tensor summation. It does not justify interpreting every residual as an unmapped fault; the new 20 km tile prior and its limitations are recorded in the K2-08 result."
  },
  {
   "id": "gemsdoe32_index",
@@ -93,6 +93,18 @@
   "id": "nbmg_qfaults_ingenious",
   "url": "https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
   "what": "NBMG QFaults INGENIOUS ArcGIS layer schema and field names",
-  "status": "Fetched 2026-10-06. Layer metadata lists the numeric SLIPRTNUM field but exposes no unit; do not treat the local slip_rate-to-mm/yr interpretation as source-validated until the GDR v2 field-definition text is checked."
+  "status": "Schema lists field names but not units. The unit interpretation is superseded by the separately audited official GDR QFault v2 definitions; slip component and per-fault dip/rake remain assumptions."
+ },
+ {
+  "id": "usgs_ofr_2013_1165",
+  "url": "https://pubs.usgs.gov/of/2013/1165/pdf/ofr2013-1165_appendixC.pdf",
+  "what": "USGS UCERF3 deformation-model Appendix C; context for geologic/geodetic constraints and off-fault deformation",
+  "status": "Official USGS report cited as methodological context, not as the source of the Kreemer tensor formula."
+ },
+ {
+  "id": "zeng_shen_2016",
+  "url": "https://pubs.usgs.gov/publication/70160311",
+  "what": "USGS publication record for off-fault moment-rate estimation",
+  "status": "Official publication record used as context for the distinction between mapped-fault budgets and off-fault deformation."
  }
 ]
