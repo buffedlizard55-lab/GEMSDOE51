@@ -44,21 +44,11 @@
 <a href="how-to-submit.html">submission instructions</a>.</p>
 </section>
 
-
-<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only (HISTORICAL_PROXY_BENCHMARK_BASELINE_REPRODUCTION_UNRESOLVED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
-<p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
-<dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>Historical H-H/H-D 50/50 + STE local visible-catalogue proxy benchmark (frozen mean DTI 0.2853406027). A fresh canonical reconstruction missed the frozen mean by -0.000025448, beyond the 1e-5 tolerance; no cause is assigned. It predates the all-points-inside-q10 rule, portal range validation is unresolved, and it is NOT uploadable. No organizer score claimed.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
-</dl>
-<p>Latest: H53-A Stage 1 was measured separately, but H53 Stage 2 was <b>not run</b> because the fresh canonical baseline failed its frozen reproduction tolerance; no H53 TIFF exists. See <a href="downloads/h53a_baseline_provenance_20261008.json">baseline audit</a> and <a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a>. Earlier H51-K1 was tested but not promoted; its receipt is <a href="downloads/hk1_spatial_holdout_20261007.json">here</a>.</p>
+<p class="warn"><b>There is no current upload-eligible artifact.</b> Do not upload an archived
+or research-only file. This block is generated from the submission manifest.</p>
 
 <h3>What to upload, and what not to upload</h3>
-<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> All listed TIFFs are research/audit-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. H53-A has no TIFF because its Stage-2 candidate was blocked before scoring. Do not upload any current file. Wait for a future candidate to beat the holdout incumbent under a valid frozen comparison, then recheck the exact final bytes and portal format before considering a slot.</p>
+<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable research TIFFs are marked RESEARCH ONLY; their local format/uniqueness checks do not override a failed or missing preregistered holdout. H53-A has no TIFF because its Stage-2 candidate was blocked before scoring. Do not upload any current file. Wait for a future candidate to beat the holdout incumbent under a valid frozen comparison, then recheck the exact final bytes and portal format before considering a slot.</p>
 <p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">

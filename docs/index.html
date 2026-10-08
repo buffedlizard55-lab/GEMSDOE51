@@ -42,17 +42,41 @@
 <a href="how-to-submit.html">submission instructions</a>.</p>
 </section>
 <section class="download missing">
-<h2>⬇ NO UPLOAD-ELIGIBLE ARTIFACT — existing local benchmark NOT CLEARED FOR UPLOAD</h2>
-<p><b>No file has passed the current holdout promotion rule; no weekly competition slot is authorized. This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<h2>⬇ 🚫 RESEARCH ONLY — DO NOT SUBMIT THIS FILE</h2>
+<p class="warn">The preregistered promotion rule was NOT met for this geometry. There is NO UPLOAD-ELIGIBLE ARTIFACT in this session and this file is NOT CLEARED FOR UPLOAD. It is published for inspection and reproducibility only. Do not paste its name into the competition portal and do not spend a weekly slot on it.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif">Download the GeoTIFF</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>Historical H-H/H-D 50/50 + STE local visible-catalogue proxy benchmark (frozen mean DTI 0.2853406027). A fresh canonical reconstruction missed the frozen mean by -0.000025448, beyond the 1e-5 tolerance; no cause is assigned. It predates the all-points-inside-q10 rule, portal range validation is unresolved, and it is NOT uploadable. No organizer score claimed.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+<dt>Submission name (paste only if marked OK above)</dt><dd><code>GEMSDOE51-R1-RESTRICT-ALLFINITE-20261008</code></dd>
+<dt>Note for the portal's <em>Note (optional)</em> field</dt><dd><code>RESEARCH ONLY: promotion rule failed; do not submit.</code></dd>
+<dt>Final-byte format (local receipt)</dt><dd>one-band float32
+ EPSG:32611 shape [3730, 3292];
+ nan_cells=0; all_cells_finite_in_range=True;
+ values [0.0, 1.0];
+ format_valid=True</dd>
+<dt>Stage 2 holdout (six-fold proxy, paired)</dt><dd>variant restrict
+ mean 0.283909 vs frozen best 0.285341 (Δ
+ -0.001406; 0/6 folds won);
+ instrument reproduction max deviation 0.00e+00 (tolerance 1e-5).
+ <a href="downloads/r1_holdout_20261008.json">Full receipt</a>.</dd>
+<dt>Stage 1 (coarse prior, reported separately)</dt><dd>q10 tiles:
+ approved area 90.09% of footprint;
+ 100% of points inside approved tiles; lift 1.110;
+ uniform-fill dominance control mean 0.1880.
+ Formula: Kreemer et al. (2000), Eq. 3: eps_ij = 1/2 sum_k [L_k u_dot_k/(A sin(delta_k))] m_ij^k</dd>
+<dt>Emission</dt><dd>44069 dots; STE L9
+ w0.35 spacing 2.4 px;
+ confinement operator restrict</dd>
+<dt>Uniqueness (local scope)</dt><dd>PASS —
+ max support Jaccard 0.3443 (limit 0.50);
+ max containment 0.5122 (limit 0.60);
+ 41 priors compared (21 family references)</dd>
+<dt>SHA-256</dt><dd><code>2a0707537962757e9aa8f856fd6d3fdfdc8d0e387b0eef6639eacf18fe2ba7b2</code></dd>
 </dl>
-<p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
+<p class="ev">Receipts: <a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only-checks.json">final-byte checks</a>,
+ <a href="downloads/r1_holdout_20261008.json">six-fold holdout</a>,
+ <a href="downloads/preregistration-2026-10-08.md">preregistration</a>,
+ <a href="holdout.html">Stage 1 / Stage 2 holdouts separately</a>.</p>
 </section>
 <section class="download missing">
 <h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
@@ -143,6 +167,27 @@ This is a scoped local gate, not a global proof of novelty.</dd>
 </dl>
 <p class="ev">Evidence: <a href="downloads/h52_emission_pass2_20261007T212644Z.json">pass-2 instrument ledger</a>; <a href="downloads/h52_harness_recheck_20261007T235024Z.json">harness arithmetic recheck</a>; <a href="downloads/uniqueness_recheck_h52_20261007.json">current-inventory uniqueness audit</a>; <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json">final-byte checks</a>. A format or uniqueness pass does not override the failed/missing preregistered holdout.</p>
 </section>
+
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Superseded audit benchmark — do not upload or spend a slot.</b>
+Superseded by the R1 regeneration. Never upload-eligible: NaN outside the footprint and only 86.71% of points inside the q10 approved domain; baseline reproduction of its frozen mean is unresolved (IR-R1-01). Downloadable for audit only. Its six-fold visible-catalogue proxy mean
+DTI was 0.285341 (the value later recorded as 0.2853406 with
+per-fold STE fields that were never committed; the rebuilt-pipeline base is 0.2853152 — see
+<a href="irregularities.html">IR-R1-01</a>). It is retained for continuity and comparison only.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download benchmark TIFF (audit only)</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (do not paste into the portal)</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Note (research description only)</dt><dd><code>Historical H-H/H-D 50/50 + STE local visible-catalogue proxy benchmark (frozen mean DTI 0.2853406027). A fresh canonical reconstruction missed the frozen mean by -0.000025448, beyond the 1e-5 tolerance; no cause is assigned. It predates the all-points-inside-q10 rule, portal range validation is unresolved, and it is NOT uploadable. No organizer score claimed.</code></dd>
+<dt>q10 domain audit</dt><dd>38211/44069 points
+inside the full-map q10 approved domain (86.71%);
+outside encoding NaN. Not eligible under the all-points-inside requirement.</dd>
+<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+</dl>
+<p class="ev">Evidence: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z-checks.json">final-byte checks</a>,
+ <a href="downloads/r1_holdout_20261008.json">R1 holdout that superseded it</a>.</p>
+</section>
 <p class="warn"><b>Historical six-fold point estimates are research leads, not robust wins.</b> H53-A is the current hypothesis, but its candidate Stage-2 score is not available because the frozen-baseline provenance gate failed.
 The archived STE rule <code>STE L9</code> recorded
 proxy DTI 0.283603 versus
@@ -164,7 +209,7 @@ They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_sof
 <a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
 <a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
-<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>EXISTING_LOCAL_BEST_NOT_UPLOADABLE</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
+<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>RESEARCH_ONLY</td><td><a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif">gemsdoe51-r1-restrict-20261008T031052Z-research-only.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-r1-restrict-20261008T031052Z-research-only.zip">gemsdoe51-r1-restrict-20261008T031052Z-research-only.zip</a></span></td><td></td><td></td><td>n/a</td><td>0.344</td><td>PASS</td></tr></tbody></table>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and

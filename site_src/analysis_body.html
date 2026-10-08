@@ -18,3 +18,28 @@
 
 <h2>Bottom line</h2>
 <p>The defensible lesson from the GEMSDOE32 page is to test sparse, credit-efficient emissions and explain their mechanism—not to assign an unscored projection a cause. GEMSDOE51 currently has no upload-eligible artifact. The old local best is audit-only; H51-K1 failed promotion and produced no TIFF. The user-reported portal range error remains unresolved and its triggering file is unknown. Local spatial holdouts are visible-catalogue proxies, not hidden-label validation. See the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem and metric page</a> and <a href="https://www.drivendata.org/termsofuse/">DrivenData Terms of Use</a>. This site links to, but does not copy or monitor, leaderboard standings.</p>
+
+<h2>2026-10-08 — R1 regeneration result (preregistered, fail-closed)</h2>
+<p><b>Question:</b> can the promoted H-H/H-D blend be made upload-legal — 100 % of points inside
+Stage-1 q10 strain-budget tiles, all-finite [0,1] zeros-outside encoding — without losing the
+six-fold proxy performance? The rule was frozen in
+<a href="downloads/preregistration-2026-10-08.md">preregistration-2026-10-08.md</a> before any run.</p>
+<p><b>Measurement</b> (<a href="downloads/r1_holdout_20261008.json">receipt</a>): on the paired
+six-fold instrument, the unrestricted base reproduces the 2026-10-07 P1 baseline with deviation
+0.0 on every fold (the archived 0.2853406 fields were never committed — see
+<a href="irregularities.html">IR-R1-01</a>). Confinement via <i>restrict</i> costs −0.0014061 mean
+proxy DTI (0/6 folds won); <i>relocate</i> costs −0.0015905. The cost concentrates on folds 1–2,
+where 0.5–0.8 % of dots sit inside disapproved 10 km tiles; on four folds confinement is free.
+The frozen rule requires mean Δ ≥ 0, so the verdict is <b>NOT_PROMOTED</b> and the session artifact
+is marked <b>RESEARCH ONLY / DO NOT SUBMIT</b> — the front page and the manifest key
+<code>ok_to_download_and_submit=false</code> are generated from that verdict.</p>
+<p><b>Why this still matters:</b> (1) the uniform-tiles dominance control passes decisively
+(confined 0.2839091 vs uniform fill 0.1880090), so Stage 1 is not steering placement; (2) the
+measured cost is small and local — a future operator that re-emits only the disapproved dots by
+continuing the greedy STE search on the approved domain (preregister as R2) is the obvious next
+step; (3) the all-finite zeros-outside encoding is implemented and gate-verified, resolving the
+class of hazard behind the user-reported portal range error.</p>
+<p><b>New-hypothesis screen:</b> H53-X5 (radiometric K/Th concordance on magnetic lineaments,
+off-catalogue) was screened on the S/L instruments and <b>REJECTED</b> (fusion S=0.0114 vs random
+control 0.0281; <a href="downloads/x5_screen_20261008.json">receipt</a>). The ranked slate and the
+blocked X4 data need are in <a href="hypotheses.html">hypotheses</a>.</p>

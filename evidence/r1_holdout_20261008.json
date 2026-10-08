@@ -1,0 +1,393 @@
+{
+ "instrument": "six-fold contiguous spatial holdout (3x3, 12 px buffer); visible known-fault proxy truth; emission and scoring restricted to the held-out block at matched mass M/|G|=3.47",
+ "preregistration": "knowledge/preregistration-2026-10-08.md",
+ "rule": "PROMOTE iff base reproduces archived frozen-best within 1e-5 AND mean(best confined)-mean(base)>=0 AND best confined wins >=4/6 folds AND 100% dots inside approved q10 tiles",
+ "frozen_mean": 0.285340602656319,
+ "frozen_per_fold": [
+  0.28358474213082796,
+  0.27178387428750844,
+  0.29027025890966246,
+  0.24335930706370568,
+  0.30504916677291494,
+  0.3179962667732945
+ ],
+ "config": {
+  "folds": "0,1,2,3,4,5",
+  "ratio": 3.47,
+  "excl": 2.0,
+  "stage1_q": 10.0,
+  "tile_px": 100,
+  "neg": 250000,
+  "max_iter": 250,
+  "weight_hh": 0.5,
+  "out": "/home/user/GEMSDOE51/evidence/r1_holdout_20261008.json",
+  "force": false
+ },
+ "per_fold": {
+  "0": {
+   "fold": 0,
+   "n_truth": 12803,
+   "approved_area_share": 0.9007849830078068,
+   "rules": {
+    "base": {
+     "dti": 0.283432055411166,
+     "dots": 44426,
+     "tp": 5564.8029963030385,
+     "fp": 41391.39798982664,
+     "dots_inside_approved": 44426
+    },
+    "restrict": {
+     "dti": 0.283432055411166,
+     "dots": 44426,
+     "tp": 5564.8029963030385,
+     "fp": 41391.39798982664,
+     "dots_inside_approved": 44426
+    },
+    "relocate": {
+     "dti": 0.283432055411166,
+     "dots": 44426,
+     "tp": 5564.8029963030385,
+     "fp": 41391.39798982664,
+     "dots_inside_approved": 44426,
+     "move_stats": {
+      "moved": 0,
+      "failed": 0,
+      "n": 44426,
+      "mean_move_px": 0.0,
+      "p95_move_px": 0.0,
+      "max_move_px": 0.0
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.19046991694583917,
+     "dots": 44426,
+     "tp": 3712.2256203176794,
+     "fp": 42524.90650098378
+    }
+   }
+  },
+  "1": {
+   "fold": 1,
+   "n_truth": 10426,
+   "approved_area_share": 0.9002390576410877,
+   "rules": {
+    "base": {
+     "dti": 0.27178387428750844,
+     "dots": 36178,
+     "tp": 4337.245785853802,
+     "fp": 33750.938302036855,
+     "dots_inside_approved": 35893
+    },
+    "restrict": {
+     "dti": 0.26449862049987616,
+     "dots": 36178,
+     "tp": 4218.164998919273,
+     "fp": 33816.7196679905,
+     "dots_inside_approved": 36178
+    },
+    "relocate": {
+     "dti": 0.26385122191023846,
+     "dots": 36178,
+     "tp": 4207.634212536857,
+     "fp": 33823.34260648813,
+     "dots_inside_approved": 36178,
+     "move_stats": {
+      "moved": 285,
+      "failed": 0,
+      "n": 36178,
+      "mean_move_px": 28.487196516667982,
+      "p95_move_px": 58.958983581429585,
+      "max_move_px": 66.2872536767062
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.1526631315935558,
+     "dots": 36178,
+     "tp": 2417.7031571478656,
+     "fp": 35062.54820436165
+    }
+   }
+  },
+  "2": {
+   "fold": 2,
+   "n_truth": 7096,
+   "approved_area_share": 0.9016813765911615,
+   "rules": {
+    "base": {
+     "dti": 0.29027025890966246,
+     "dots": 24623,
+     "tp": 3159.244821283902,
+     "fp": 22875.778904242135,
+     "dots_inside_approved": 24446
+    },
+    "restrict": {
+     "dti": 0.28911907633343786,
+     "dots": 24623,
+     "tp": 3146.4058537071924,
+     "fp": 22883.261580649098,
+     "dots_inside_approved": 24623
+    },
+    "relocate": {
+     "dti": 0.2886601881743142,
+     "dots": 24623,
+     "tp": 3141.2477436213176,
+     "fp": 22885.57633795243,
+     "dots_inside_approved": 24623,
+     "move_stats": {
+      "moved": 177,
+      "failed": 0,
+      "n": 24623,
+      "mean_move_px": 8.666205866884054,
+      "p95_move_px": 17.23215541748977,
+      "max_move_px": 22.561028345356956
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.14111445788285346,
+     "dots": 24623,
+     "tp": 1518.5730155984543,
+     "fp": 23903.856119363096
+    }
+   }
+  },
+  "3": {
+   "fold": 3,
+   "n_truth": 5630,
+   "approved_area_share": 0.9007849830078068,
+   "rules": {
+    "base": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "tp": 2094.6587357974254,
+     "fp": 18421.68043427371,
+     "dots_inside_approved": 19536
+    },
+    "restrict": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "tp": 2094.6587357974254,
+     "fp": 18421.68043427371,
+     "dots_inside_approved": 19536
+    },
+    "relocate": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "tp": 2094.6587357974254,
+     "fp": 18421.68043427371,
+     "dots_inside_approved": 19536,
+     "move_stats": {
+      "moved": 0,
+      "failed": 0,
+      "n": 19536,
+      "mean_move_px": 0.0,
+      "p95_move_px": 0.0,
+      "max_move_px": 0.0
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.2026405974019804,
+     "dots": 19536,
+     "tp": 1738.9682594632732,
+     "fp": 18648.728464645323
+    }
+   }
+  },
+  "4": {
+   "fold": 4,
+   "n_truth": 13348,
+   "approved_area_share": 0.9006108132701084,
+   "rules": {
+    "base": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "tp": 6256.850743298708,
+     "fp": 42905.94082504608,
+     "dots_inside_approved": 46318
+    },
+    "restrict": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "tp": 6256.850743298708,
+     "fp": 42905.94082504608,
+     "dots_inside_approved": 46318
+    },
+    "relocate": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "tp": 6256.850743298708,
+     "fp": 42905.94082504608,
+     "dots_inside_approved": 46318,
+     "move_stats": {
+      "moved": 0,
+      "failed": 0,
+      "n": 46318,
+      "mean_move_px": 0.0,
+      "p95_move_px": 0.0,
+      "max_move_px": 0.0
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.219810501827318,
+     "dots": 46318,
+     "tp": 4475.81051611343,
+     "fp": 43942.850915104354
+    }
+   }
+  },
+  "5": {
+   "fold": 5,
+   "n_truth": 11398,
+   "approved_area_share": 0.9007849830078068,
+   "rules": {
+    "base": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "tp": 5590.243924873217,
+     "fp": 36715.70502901507,
+     "dots_inside_approved": 39551
+    },
+    "restrict": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "tp": 5590.243924873217,
+     "fp": 36715.70502901507,
+     "dots_inside_approved": 39551
+    },
+    "relocate": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "tp": 5590.243924873217,
+     "fp": 36715.70502901507,
+     "dots_inside_approved": 39551,
+     "move_stats": {
+      "moved": 0,
+      "failed": 0,
+      "n": 39551,
+      "mean_move_px": 0.0,
+      "p95_move_px": 0.0,
+      "max_move_px": 0.0
+     }
+    },
+    "uniform_tiles": {
+     "dti": 0.22135540403896165,
+     "dots": 39551,
+     "tp": 3856.153169241231,
+     "fp": 37655.05503981821
+    }
+   }
+  }
+ },
+ "summary": {
+  "folds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "folds_evaluated": 6,
+  "base": {
+   "per_fold": [
+    0.283432055411166,
+    0.27178387428750844,
+    0.29027025890966246,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "mean": 0.28531515486970865
+  },
+  "restrict": {
+   "per_fold": [
+    0.283432055411166,
+    0.26449862049987616,
+    0.28911907633343786,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "mean": 0.2839090821423992
+  },
+  "relocate": {
+   "per_fold": [
+    0.283432055411166,
+    0.26385122191023846,
+    0.2886601881743142,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "mean": 0.28372470101760566
+  },
+  "uniform_tiles": {
+   "per_fold": [
+    0.19046991694583917,
+    0.1526631315935558,
+    0.14111445788285346,
+    0.2026405974019804,
+    0.219810501827318,
+    0.22135540403896165
+   ],
+   "mean": 0.18800900161508474
+  },
+  "instrument": {
+   "base_reproduces_frozen": false,
+   "max_abs_dev": 0.00015268671966195413,
+   "tol": 1e-05
+  },
+  "candidates": {
+   "restrict": {
+    "mean_delta": -0.0014060727273094709,
+    "folds_won": 0,
+    "min_inside_share": 1.0
+   },
+   "relocate": {
+    "mean_delta": -0.001590453852102991,
+    "folds_won": 0,
+    "min_inside_share": 1.0
+   }
+  },
+  "selected_variant": "restrict",
+  "dominance_control": {
+   "confined_mean": 0.2839090821423992,
+   "uniform_tiles_mean": 0.18800900161508474,
+   "excess": 0.09590008052731444,
+   "margin": 0.002,
+   "passed": true
+  },
+  "verdict": "NOT_PROMOTED",
+  "promotion_note": "NOT_PROMOTED: the preregistered rule was not met in full. Any artifact from this session is RESEARCH ONLY / DO NOT SUBMIT.",
+  "instrument_amendment_A1": {
+   "anchor": "evidence/p1_holdout_20261007.json baseline_ungated",
+   "per_fold_base": [
+    0.283432055411166,
+    0.27178387428750844,
+    0.29027025890966246,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "per_fold_anchor": [
+    0.283432055411166,
+    0.27178387428750844,
+    0.29027025890966246,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "per_fold_deviation": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "max_abs_dev": 0.0,
+   "tol": 1e-05,
+   "passes": true,
+   "note": "Amendment A1 in knowledge/preregistration-2026-10-08.md section 6: archived frozen-best fields were never committed; the P1 receipt is the same procedure in the same pipeline state."
+  }
+ }
+}
