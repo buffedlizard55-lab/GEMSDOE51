@@ -37,20 +37,22 @@
 </dl>
 <p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
 </section><section class="download missing">
-<p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
-<h2>New, independently generated TIFF</h2>
-<p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
-This is a newly trained prediction map, not a renamed or re-encoded prior submission. It has not cleared every promotion gate. No competition slot was used.</p>
-<p><a class="btn" download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download new research TIFF</a></p>
-<p><a download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">Download ZIP containing one TIFF</a> · <a href="latest.html">Results, checks &amp; decision</a> · <a href="how-to-submit.html">Submission instructions</a></p>
-<dl class="kv"><dt>Unique identifier</dt><dd><code>GEMSDOE51-P1-Q10-2a687636c85e</code></dd>
-<dt>Short comment (research only)</dt><dd><code>RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.</code></dd>
-<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag.</dd>
-<dt>Stage2 proxy DTI</dt><dd>0.283987 vs paired gated baseline 0.284899; 2/6 folds improved. Not an organizer score.</dd>
-<dt>Stage1 confinement</dt><dd>44,069/44,069 points inside approved tiles; approved area 90.09%; lift 1.110.</dd>
-<dt>Uniqueness scope</dt><dd>Broader family gate: NOT_CLEARED; exact duplicate: False. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
-<dt>SHA-256</dt><dd><code>73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4</code></dd></dl>
-<p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
+<p class="eyebrow">LATEST EXPERIMENT · H53-A · 8 OCTOBER 2026</p>
+<h2>Fresh H53-A GeoTIFF — RESEARCH ONLY / DO NOT SUBMIT</h2>
+<p class="warn"><strong>Download for research and audit only. Do not submit, do not spend a competition slot.</strong><br>
+The full-map raster is a fresh model build, not a copied/re-encoded earlier prediction. It failed the frozen Stage-2 promotion rule and the pinned-family support-uniqueness gate. Its local format check passing does not make it eligible.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif">Download H53-A research TIFF</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip">download the ZIP containing one GeoTIFF</a> ·
+<a href="latest.html">Full results and checks</a> · <a href="how-to-submit.html">Submission guide — blocked</a></p>
+<dl class="kv">
+<dt>Research label (do not paste into portal)</dt><dd><code>GEMSDOE51-H53A-BUDGET-Q10-R44069-20261008T030347Z</code></dd>
+<dt>Research-only note</dt><dd><code>H53-A budget-q10 + fresh H-D/H-H; failed promotion and broad uniqueness gates; DO NOT SUBMIT.</code></dd>
+<dt>Local format</dt><dd>PASS — one-band float32, EPSG:32611, 3730 × 3292; finite values in [0,1], 44,069 points, zeros outside; one-file ZIP. This is not portal acceptance.</dd>
+<dt>Stage 1 / Stage 2</dt><dd>Stage-1 lift 1.000; Stage-2 q10 0.266510 vs frozen best 0.285341; 0/6 paired folds positive.</dd>
+<dt>Broad public-family gate</dt><dd><strong>FAIL</strong> — max containment 1.000 &gt; 0.6; local gate PASS. Not cleared as broadly unique.</dd>
+<dt>SHA-256</dt><dd><code>2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a</code></dd>
+</dl>
+<p><a href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT-checks.json">Artifact receipt / final-byte checks / gate status</a>. The GeoTIFF is explicitly research-only; <b>NOT SAFE TO SUBMIT.</b></p>
 </section>
 <section class="download missing">
 <h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
@@ -82,6 +84,20 @@ max Jaccard 0.3216, cosine
 <p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
 Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
 <a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>; <a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
+</section>
+
+<section class="download missing">
+<h2>⬇ Historical P1 research TIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a competition slot on this file.</b> Its q10-constrained
+six-fold mean was 0.283987 vs q10 baseline 0.284899 (Δ -0.000912;
+2/6 folds positive), below the frozen local best
+0.285341. The fresh-baseline drift was
+-0.00002545, outside the 1e-5 tolerance.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download historical P1 research TIFF</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">download the one-TIFF ZIP</a></p>
+<p>Research label (not a portal identifier): <code>GEMSDOE51-P1-Q10-2a687636c85e</code></p>
+<p>Final-byte checks: <a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json</a>.
+The old scoped uniqueness receipt is not a broad-family uniqueness clearance.</p>
 </section>
 
 <section class="download missing">
@@ -156,18 +172,20 @@ of genuinely new faults or predict an organizer score. Local source rasters are 
 mirrors, not organizer-authenticated.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
 by experts for the expanded label set. Any future emission must be geologically justifiable as well
-as holdout-tested. The earlier H-H/H-D blend is linked above for audit only. The new H51-K1
-candidate failed the preregistered final gated promotion rule, so no replacement TIFF was written.
-A user-reported portal range error is unresolved; no artifact is described as portal-ready.</p>
+as holdout-tested. The H53-A full-map TIFF is a newly built research diagnostic, but it failed both
+the frozen Stage-2 promotion rule and the broad pinned-family support-uniqueness gate. It is explicitly
+marked DO NOT SUBMIT; no competition slot was used. The historical H-H/H-D blend remains an audit
+benchmark only. A user-reported portal range error is unresolved; no artifact is described as portal-ready.</p>
 <h2>What this is</h2>
-<p>GEMSDOE51 studies fault indications in the GeoDAWN region. Stage 1 is a coarse 10&nbsp;km
-geodetic strain-budget diagnostic; Stage 2 is a fine-scale detector. The separately evaluated q10
-Stage-1 deficit mask approved about 90% of the footprint, with weak trace-holdout enrichment, and
-was used as a fold-specific allowed-domain constraint for the K1 comparison. Its soft score weight
-was zero; every scored K1 point was inside the fold-specific approved mask. The historical H-H/H-D
-benchmark predates this q10 condition and only 86.71% of its points fall inside the current full-map
-q10 mask, so it does not satisfy the all-points-inside constraint. H51-K1 was not promoted, and
-all local holdout values remain visible-catalogue proxies, not organizer scores.</p>
+<p>GEMSDOE51 studies fault indications in the GeoDAWN region. H53-A tested Stage 1 as a coarse,
+10&nbsp;km componentwise geodetic-minus-fault-budget residual prior and Stage 2 as a separate
+fine-scale H-D/H-H detector. Stage 1's primary q10 holdout lift was 0.9996 (no demonstrated residual
+enrichment); its geodetic-only control lift was 0.9961. Stage 2's q10 mean was 0.2665098 versus
+0.2853406 for the frozen local best, with 0/6 paired folds positive. The fresh baseline also exceeded
+the fixed reproduction tolerance. On the full-map artifact, the q10 mask covers 90.11% of the footprint
+and contains all points (support/area lift 1.110), so the global footprint diagnostic is not strongly
+concentrated by Stage 1; one holdout block's mask covered only 54.98%, however. All local holdout
+values are visible-catalogue proxies, not organizer scores.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>

@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-08",
+  "status": "STAGE1_COMPLETE; STAGE2_PROTOCOL_CLARIFIED_BEFORE_STAGE2_EVALUATION",
+  "protocol_amendments": [
+    {
+      "date_utc": "2026-10-08",
+      "scope": "Stage 2 only; recorded after Stage-1 holdout and before any Stage-2 score was inspected.",
+      "reason": "The initial draft did not state the exact STE transform domain; one contemplated same-model q10 comparator would be tautologically identical to the candidate.",
+      "resolution": "Keep the Stage-1 q10 mask and all fixed weights/thresholds unchanged. Compute STE on the ungated fold-valid domain, apply q10 only to legal emission pixels, and compare the candidate with the fresh same-fold ungated H-D/H-H blend, frozen ungated best, and seeded same-domain uniform emission.",
+      "no_outcome_tuning": true
+    }
+  ],
+  "target": "Fault geometry absent from the supplied known-fault catalogue; not direct geothermal-vent prediction.",
+  "novelty_scope": "Repository, archived hypothesis ledger, and bounded 54-repository public artifact/document inventory only; no global novelty claim.",
+  "current_best_proxy": {
+    "candidate": "H-D/H-H fixed 50:50 probability blend + STE L9/w=0.35/spacing=2.4",
+    "mean_proxy_dti": 0.285340602656319,
+    "folds": 6,
+    "evidence": "evidence/hh_blend_holdout.json",
+    "truth": "Visible known-fault catalogue; not hidden organizer labels."
+  },
+  "ranked_hypotheses": [
+    {
+      "rank": 1,
+      "id": "H53-A",
+      "name": "Componentwise physical strain-budget residual as a coarse prior",
+      "layers": ["geod_dilaterate", "geod_shearrate", "official trace_segments_utm11.csv", "SLIPRTNUM", "SLIPRT2023", "SLIPSENSE", "SECONDARY"],
+      "operator": "10 km source-geometry fault tensor using Kreemer et al. (2000) Eq. 3; subtract matching scalar modeled dilation/shear from observed source layers; combined prior = equal-weight mean of percentile ranks of the positive parts of the two raw residuals; fixed q10 allowed-domain threshold.",
+      "physical_signature": "Positive geodetic dilation/shear not accommodated by the mapped-fault tensor in a broad tile.",
+      "missing_fault_rationale": "Unaccommodated deformation may reflect unmapped structures, but can also be off-fault, aseismic, or source/model error; the scalar residual does not locate a fault.",
+      "difference_from_repo": "The older HK1 gate is rank(geodetic second invariant)-rank(fault second invariant), not separate dimensional dilation/shear subtraction. Existing vector_budget scalar residuals have not been evaluated under this buffered spatial holdout or paired Stage-2 q10 protocol.",
+      "expected_dti_direction": "Weak positive enrichment is plausible at Stage 1; Stage-2 DTI direction is unknown and must beat the frozen local best to promote.",
+      "implementation_cost": "Moderate-to-high; geometry-based held-block source-row exclusion, four physical unit/component sensitivity cases, six Stage-2 detector folds, then all final-byte gates.",
+      "external_data": "None; use restored source-verified INGENIOUS/QFault traces and geodetic layers.",
+      "promotion_status": "SELECTED; holdout pending; no submission slot unless preregistered Stage-2 rule passes.",
+      "sources": [
+        "https://gdr.openei.org/submissions/1391",
+        "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+        "https://doi.org/10.1785/0120130164"
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "H53-B",
+      "name": "Stress-favored independent basement edges",
+      "layers": ["USGS Siler slip-tendency/dilation-tendency shapefile", "TMI edges", "gravity edges", "conductivity", "depth to basement"],
+      "operator": "Project an independently derived local stress orientation onto candidate-edge orientations and test stress-favorability interactions against edge-only and stress-only controls; do not use known fault geometry as candidate truth.",
+      "physical_signature": "A subsurface contact/edge whose orientation is compatible with slip or dilation under a documented ambient stress tensor.",
+      "missing_fault_rationale": "A buried structure may be stress-favored but lack a surface scarp; lithologic contacts and interpolated stress are alternatives.",
+      "difference_from_repo": "H-H uses edge endpoints and conductive relays; no current arm projects stress tendency onto candidate lineaments. The USGS release reports tendencies on mapped fault segments, so transfer to new edges needs independent justification.",
+      "expected_dti_direction": "Low-to-moderate positive only if label-independent stress extrapolation is defensible; otherwise no-go.",
+      "implementation_cost": "High; official metadata lists 34.25 MB full-study and 27.35 MB INGENIOUS shapefiles, but archive download, field audit, stress semantics, projection, and spatial validation remain outstanding.",
+      "external_data": "Free official USGS ScienceBase data release; availability verified in the item metadata, not yet downloaded/field-audited.",
+      "promotion_status": "UNTESTED; blocked pending stress-field and field-semantics audit.",
+      "sources": [
+        "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+        "https://doi.org/10.5066/P9YL58W6"
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "H53-C",
+      "name": "Cross-catchment knickzone alignment",
+      "layers": ["restored detrended elevation", "lidar relief", "depth to basement", "gravity edge"],
+      "operator": "Extract hydrologically conditioned longitudinal profiles and score persistent stream-gradient breaks that recur in neighboring catchments and align with an independent potential-field/basement edge.",
+      "physical_signature": "A structural base-level/gradient break repeated across separate drainage systems at a consistent mapped coordinate.",
+      "missing_fault_rationale": "A concealed fault may offset channels or establish a persistent break without a clear scarp; lithologic, volcanic, capture, and base-level effects confound it.",
+      "difference_from_repo": "Existing code evaluates scarp coherence, odd/even profiles, and lineament endpoints, not longitudinal drainage profiles or cross-catchment recurrence.",
+      "expected_dti_direction": "Low-to-moderate positive, highly uncertain.",
+      "implementation_cost": "High; drainage conditioning, profile extraction, scale stability, and spatial holdout are required.",
+      "external_data": "No new acquisition assumed; uses restored DEM-derived layers. USGS 3DEP is the official source context.",
+      "promotion_status": "UNTESTED; lower priority than H53-A.",
+      "sources": [
+        "https://www.usgs.gov/3d-elevation-program",
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "H53-D",
+      "name": "Seismicity ridge interacting with an independent structure edge",
+      "layers": ["ieq_n100a15", "deq_n100a15", "TMI edge", "gravity edge", "depth-to-basement edge"],
+      "operator": "After exact density-band metadata verification, test persistent seismic-density ridges that intersect or parallel an independent geophysical edge against seismic-only and edge-only controls.",
+      "physical_signature": "A spatially coherent earthquake-density corridor co-located with an independently mapped subsurface discontinuity.",
+      "missing_fault_rationale": "Active concealed faults may organize seismicity; diffuse swarms, catalog incompleteness, and aseismic faults are alternatives.",
+      "difference_from_repo": "Seismicity layers are ordinary baseline predictors; no explicit cross-physics interaction is implemented. H51-K4 remains blocked on precise band semantics.",
+      "expected_dti_direction": "Low and uncertain; no numerical uplift claim.",
+      "implementation_cost": "Low-to-medium only after the layer parameter/source audit; otherwise blocked.",
+      "external_data": "No new data for the first screen; use supplied layers only after metadata review.",
+      "promotion_status": "BLOCKED pending exact layer metadata.",
+      "sources": [
+        "https://gdr.openei.org/submissions/1391",
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and"
+      ]
+    }
+  ],
+  "h53_a_preregistered_protocol": {
+    "stage1": {
+      "tile_px": 100,
+      "rate_convention_primary": "fault_plane",
+      "rate_component_status": "Unresolved by official field definition; vertical remains sensitivity case.",
+      "source_rate_field": "SLIPRTNUM; official field definitions say SLIPRT2023 is assigned mm/year and SLIPRTNUM its numeric portion.",
+      "source_rate_unit": "mm/year verified.",
+      "primary_sense_policy": "Use SLIPSENSE primary only. Do not add SECONDARY as a second full-rate component because no separate rate partition is documented; report local secondary-field counts/combos.",
+      "unknown_sense_policy": "Omit unsupported/blank primary senses and report count; no silent normal-fault imputation.",
+      "normal_dip_assumption_deg": 60,
+      "strike_slip_dip_assumption_deg": 90,
+      "geodetic_unit_factor_primary": 1e-8,
+      "geodetic_unit_sensitivity": [1e-9, 1e-8],
+      "geodetic_unit_note": "The source README says 10E-9/yr. 10E-9 equals 1e-8 arithmetically, but the notation may have been intended to mean 1e-9; retain both.",
+      "residuals": {
+        "dilatation": "observed geod_dilaterate tile mean minus modeled fault-tensor dilatation in matching source units",
+        "shear": "observed geod_shearrate tile mean minus source-defined principal-strain shear summary of modeled tensor",
+        "combined_prior": "equal-weight mean of rank(max(dilatation residual,0)) and rank(max(shear residual,0)) over valid tiles"
+      },
+      "holdout": "same six truth-bearing blocks as the 3x3 spatial Stage-2 split; exclude every official source record whose actual geometry intersects the held block plus 12-pixel buffer before calculating its Stage-1 budget",
+      "threshold": "q10; approve score >= 10th percentile; no threshold search",
+      "controls": ["geodetic-only equal-weight mean of positive dilation/shear ranks, without mapped-fault subtraction"],
+      "stage1_report": ["approved_area_share", "heldout_truth_recall", "recall_over_area_lift", "tile_rank_association", "geodetic-only control", "unit/component sensitivities"],
+      "limitations": [
+        "Visible catalogue truth is a proxy, not hidden expert truth.",
+        "A scalar residual may be off-fault, aseismic, or due to errors in slip rates, dip/rake assumptions, trace geometry, unit conversion, or geodetic smoothing.",
+        "A tile residual cannot locate a fine-scale fault.",
+        "Dilatation and shear scalar subtraction is not subtraction of full observed and modeled tensors."
+      ]
+    },
+    "stage2": {
+      "model": "Freshly refit H-D and H-H arms blended 50:50 by probability within each fold; no Stage-1 feature or labels enter either Stage-2 fit.",
+      "emission": "Compute the fixed STE score on the ungated fold-valid domain (ridge scales 1/2/3.5 px; line length 9; continuity exponent 0.35), then apply the q10-approved mask only as an emission constraint; spaced selection 2.4 px.",
+      "holdout": "six 3x3 spatial folds, 12 px training buffer, 250000 negatives, seed 1000+fold, HGB 250 iterations, mass ratio 3.47, 2 px known-catalogue exclusion",
+      "promotion_rule": [
+        "fresh ungated mean reproduces 0.285340602656319 within 1e-5",
+        "q10-constrained Stage-2 mean exceeds the frozen ungated local best and its fresh same-fold ungated baseline",
+        "paired q10-constrained versus ungated DTI is positive on at least 4/6 folds and in the six-fold mean",
+        "all Stage-2 points are confined to q10-approved tiles",
+        "mean approved area >= 2/3 and implied Stage-1 lift <= 1.5",
+        "q10-constrained Stage 2 exceeds seeded, same-domain uniform spaced emission by at least 0.002 mean proxy DTI"
+      ],
+      "full_map_diagnostic_mass": "44069 points, fixed only to match the existing local-best artifact's mass; not an estimate of hidden truth size.",
+      "failure_handling": "A diagnostic TIFF may be written only after holdout, marked RESEARCH ONLY / DO NOT SUBMIT. No competition slot is authorized by local proxy or format/uniqueness checks.",
+      "portal_acceptance": "Not inferred from local checks."
+    }
+  },
+  "score_attribution_policy": {
+    "h33_2_b2": "Owner page labels the file UNSCORED and 0.2747 as modeled projection. The user-reported 0.2778 file-score mapping is unsupported.",
+    "leaderboard": "One manual page read requested for 2026-10-08 found the user-supplied 0.3195 was not the current page high; no current rows/values are mirrored here and no automated monitoring is implemented.",
+    "local_scores": "Visible-catalogue holdout DTI is not comparable to organizer-scored leaderboard DTI."
+  },
+  "sources": {
+    "competition": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "gdr": "https://gdr.openei.org/submissions/1391",
+    "kreemer_2000_eq3": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "siler_2022_sciencebase": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+    "3dep": "https://www.usgs.gov/3d-elevation-program",
+    "terms_of_use": "https://www.drivendata.org/termsofuse/",
+    "official_leaderboard": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "gemsdoe32_owner_page": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html"
+  }
+}

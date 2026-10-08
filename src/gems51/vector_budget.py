@@ -3,10 +3,13 @@
 Kreemer et al. (2000), Eq.3: E_ij = 1/2 sum L*u/(A*sin(dip)) * (n_i m_j+n_j m_i).
 Assume faults span a common seismogenic thickness, so mu and thickness cancel.
 N: dip60°, plane-slip u -> positive normal extension L*u*cos(dip)/A.
-RL/LL: dip90°, signed shear L*u/(2*A). Unknown senses omitted, not imputed.
+RL/LL: dip90°, signed shear L*u/(2*A). Unknown primary senses are omitted.
 E is a horizontal tensor in east/north coordinates, in yr^-1. Actual trace
 vertices are clipped to each 10km tile, including fractional segments.
-Dips/rakes and slip component remain assumptions. This is NOT a geodetic inversion.
+Dips/rakes and slip component remain assumptions. The source SECONDARY field is
+retained for audit but is not added as a second full-rate component: no separate
+rate partition is documented, so summing it could double-count slip. This is
+NOT a geodetic inversion.
 """
 
 from __future__ import annotations

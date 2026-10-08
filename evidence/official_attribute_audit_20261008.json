@@ -1,0 +1,125 @@
+{
+  "generated_utc": "2026-10-08T02:23:10+00:00",
+  "source": {
+    "official_dbf_export": "registry/official/qfault_attributes.csv",
+    "field_definitions": "registry/official/qfaults_8_README_fielddefinitions_qfaults_ingenious_nad83conus117_2023-06-27.txt",
+    "clipped_trace_table": "data/raw/external/gdr_qfaults_traces.csv",
+    "clipped_geometry": "registry/official/trace_segments_utm11.csv",
+    "gdr_landing_page": "https://gdr.openei.org/submissions/1391"
+  },
+  "identity_checks": {
+    "rows": 1126,
+    "unique_source_record_ids": 1126,
+    "name_matches": 1126,
+    "sliprt2023_text_matches_segment_export": 84331,
+    "sliprt_num_matches_local_numeric_rate": 1126,
+    "primary_sense_matches_local": 1126,
+    "geometry_primary_sense_matches_source": 84331
+  },
+  "clipped_scope": {
+    "regional_dbf_records": 1126,
+    "source_record_index_basis": "trace_id/record_id are zero-based row positions in the preserved DBF export; no persistent OBJECTID is asserted",
+    "projected_segment_pieces": 84331,
+    "unique_geometry_records": 1126,
+    "segment_primary_sense_counts": {
+      "RL": 8448,
+      "N": 66861,
+      "LL": 7628,
+      "<blank>": 1394
+    },
+    "unsupported_or_blank_primary_sense_segments_omitted_by_vector_budget": 1394
+  },
+  "rate_audit": {
+    "official_definition": "SLIPRT2023 is the assigned slip rate in mm/year; SLIPRTNUM is its numeric portion.",
+    "rate_units": "mm/year; verified from the preserved official field-definition text",
+    "local_sliprt2023_markup_or_bound_rows": 0,
+    "local_sliprt2023_markup_note": "No <, >, <=, or >= text occurs in this clipped regional record set. The numeric field still supplies assigned rates, not uncertainty intervals.",
+    "component_convention": "Unresolved: the official field definition does not say whether the assigned rate is vertical displacement or total fault-plane slip.",
+    "dip_caution": "DIPDIRECT is a cardinal dip direction, not a numeric dip angle; the budget's 60-degree normal-dip and vertical strike-slip assumptions are not source measurements.",
+    "dip_direction_counts": {
+      "Unspecified": 411,
+      "W": 134,
+      "E": 104,
+      "SW": 25,
+      "NW": 73,
+      "NE": 33,
+      "SE": 64,
+      "N": 22,
+      "S": 5,
+      "<blank>": 255
+    },
+    "rate_matches": 1126
+  },
+  "sense_audit": {
+    "primary_slipsense_counts_by_source_record": {
+      "RL": 87,
+      "N": 868,
+      "LL": 76,
+      "<blank>": 95
+    },
+    "secondary_counts_by_source_record": {
+      "<blank>": 1089,
+      "RL": 17,
+      "N": 19,
+      "R": 1
+    },
+    "primary_secondary_combinations": {
+      "<blank>|<blank>": 95,
+      "LL|<blank>": 76,
+      "N|<blank>": 851,
+      "N|RL": 17,
+      "RL|<blank>": 67,
+      "RL|N": 19,
+      "RL|R": 1
+    },
+    "records_with_nonblank_secondary": 37,
+    "observed_primary_codes_not_listed_in_field_definition": [
+      "LL",
+      "RL"
+    ],
+    "observed_secondary_codes_not_listed_in_field_definition": [
+      "N",
+      "RL"
+    ],
+    "secondary_handling": "Preserved in qfault_attributes.csv and audited, but not summed into the tensor budget: the shapefile supplies no separate rate partition for the secondary mechanism; adding the full SLIPRTNUM to both could double-count.",
+    "blank_primary_sense_handling": "Omitted, not imputed as normal, in the actual-vector budget.",
+    "budgeted_primary_senses": [
+      "N",
+      "RL",
+      "LL"
+    ]
+  },
+  "interpretation": [
+    "All clipped primary names, numeric rates, and primary senses match the preserved official DBF export; all 84,331 segment pieces match official SLIPRT2023 text and SLIPSENSE by source-row index.",
+    "The field-definition code lists do not cover every value observed in the clipped source rows (notably RL and LL). Treat the definitions as incomplete or stale for those codes; no silent conversion is made.",
+    "The source unit and numeric field are verified, but rate component, individual dip, rake, and secondary rate partition remain unresolved assumptions.",
+    "The local clipped set has no textual rate bounds; this does not imply all records in the full Great Basin source are exact measurements.",
+    "Primary SLIPSENSE is used only; SECONDARY is not silently added. The blank-primary segment count remains visible as a budget omission."
+  ],
+  "field_definition_codes": {
+    "primary_documented": [
+      "NULL",
+      "unk",
+      "N",
+      "R",
+      "SS",
+      "T"
+    ],
+    "secondary_documented": [
+      "NULL",
+      "SS",
+      "T",
+      "R"
+    ],
+    "primary_observed_in_clip": [
+      "LL",
+      "N",
+      "RL"
+    ],
+    "secondary_observed_in_clip": [
+      "N",
+      "R",
+      "RL"
+    ]
+  }
+}

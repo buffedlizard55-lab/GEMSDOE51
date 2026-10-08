@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-08T02:54:24Z",
+  "candidate": "H53-A Stage-1 q10 physical residual gate + unchanged H-D/H-H Stage 2",
+  "status": "NOT_PROMOTED_NO_SUBMISSION_SLOT",
+  "instrument": "six contiguous 3x3 spatial blocks; visible known-fault catalogue proxy truth; not hidden organizer labels",
+  "stage1_evidence": "evidence/h53_stage1_holdout_20261008.json",
+  "stage2_protocol": {
+    "fold_count": 6,
+    "buffer_px": 12,
+    "negatives": 250000,
+    "negative_seed": "1000 + fold.index",
+    "HGB_iterations": 250,
+    "blend": "0.5 fresh H-D + 0.5 fresh H-H probabilities",
+    "score_domain": "ungated fold block minus 2px known-catalogue exclusion",
+    "stage1_role": "emission-domain constraint only; no Stage-1 score in model fit or STE rank field",
+    "STE": "max ridge scales 1/2/3.5px; line accumulator L9, 12 orientations; rank(field)^0.65 * rank(accumulator)^0.35; greedy spacing 2.4px",
+    "fixed_mass_ratio": 3.47,
+    "dot_budget": "round(3.47 * heldout visible-catalogue pixels)",
+    "known_exclusion_px": 2.0,
+    "uniform_control": "seeded uniform random rank on the same q10-allowed pixels with identical spacing and dot budget",
+    "features": {
+      "hd": [
+        "lidrel_facecoh09",
+        "lidrel_facecoh21",
+        "detelev_facecoh09",
+        "detelev_facecoh21"
+      ],
+      "hh": [
+        "lidrel_facecoh09",
+        "lidrel_facecoh21",
+        "detelev_facecoh09",
+        "detelev_facecoh21",
+        "hh_endpoint",
+        "hh_bridge",
+        "hh_bridge_cond",
+        "hh_bridge_surface",
+        "hh_endpoint_concordance"
+      ]
+    }
+  },
+  "baseline": {
+    "frozen_best_mean": 0.285340602656319,
+    "frozen_best_per_fold": [
+      0.28358474213082796,
+      0.27178387428750844,
+      0.29027025890966246,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ],
+    "reproduction_tolerance": 1e-05
+  },
+  "summary": {
+    "frozen_ungated_best_mean": 0.285340602656319,
+    "fresh_ungated_mean": 0.28531515486970865,
+    "fresh_minus_frozen_mean": -2.5447786610344192e-05,
+    "q10_constrained_mean": 0.2665097783484028,
+    "q10_minus_frozen_mean": -0.018830824307916216,
+    "q10_minus_fresh_ungated_mean": -0.018805376521305928,
+    "q10_minus_uniform_mean": 0.051443404089190604,
+    "uniform_spaced_mean": 0.21506637425921213,
+    "auc_mean": 0.6759024571765987,
+    "q10_approved_area_share_in_block_mean": 0.9163854995344326,
+    "q10_implied_confinement_lift": 1.0912438056997273,
+    "positive_paired_folds": 0,
+    "q10_per_fold": [
+      0.283432055411166,
+      0.2594768457774918,
+      0.18974502829184353,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ],
+    "ungated_per_fold": [
+      0.283432055411166,
+      0.27178387428750844,
+      0.29027025890966246,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+    ],
+    "uniform_per_fold": [
+      0.22442154445475368,
+      0.1702659856552897,
+      0.14754590303284637,
+      0.22603680657167927,
+      0.2628403321941903,
+      0.25928767364651356
+    ],
+    "paired_deltas": [
+      0.0,
+      -0.012307028510016638,
+      -0.10052523061781893,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "paired_uniform_deltas": [
+      0.059010510956412326,
+      0.08921086012220211,
+      0.04219912525899716,
+      0.01732250049202641,
+      0.04220883457872465,
+      0.05870859312678095
+    ]
+  },
+  "promotion_rules": {
+    "fresh_ungated_reproduces_frozen": false,
+    "q10_mean_beats_frozen_ungated_best": false,
+    "q10_mean_beats_fresh_ungated": false,
+    "paired_delta_positive_at_least_4_of_6": false,
+    "all_candidate_points_inside_stage1_mask": true,
+    "stage1_not_dominant": true,
+    "beats_same_domain_uniform_by_002": true
+  },
+  "promoted": false,
+  "per_fold": [
+    {
+      "fold": 0,
+      "heldout_truth_pixels": 12803,
+      "fixed_dots": 44426,
+      "frozen_best_dti": 0.28358474213082796,
+      "stage2_inblock_auc": 0.6662363149653696,
+      "stage1": {
+        "approved_area_share_in_block": 1.0,
+        "approved_area_share_full_footprint": 0.9012140211283374,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.0
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "fn": 7238.1970036969615
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.283432055411166,
+          "dots": 44426,
+          "tp": 5564.8029963030385,
+          "fp": 41391.39798982664,
+          "fn": 7238.1970036969615
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.22442154445475368,
+          "dots": 44426,
+          "tp": 4404.043003310301,
+          "fp": 42503.83702002262,
+          "fn": 8398.9569966897
+        }
+      },
+      "paired_delta_candidate_minus_ungated": 0.0,
+      "paired_delta_candidate_minus_uniform": 0.059010510956412326
+    },
+    {
+      "fold": 1,
+      "heldout_truth_pixels": 10426,
+      "fixed_dots": 36178,
+      "frozen_best_dti": 0.27178387428750844,
+      "stage2_inblock_auc": 0.7007338094241539,
+      "stage1": {
+        "approved_area_share_in_block": 0.948506334593619,
+        "approved_area_share_full_footprint": 0.9016018390776126,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.0542892161373314
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.27178387428750844,
+          "dots": 36178,
+          "tp": 4337.245785853802,
+          "fp": 33750.938302036855,
+          "fn": 6088.754214146198
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.2594768457774918,
+          "dots": 36178,
+          "tp": 4135.739296193936,
+          "fp": 33854.063127711735,
+          "fn": 6290.260703806064
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.1702659856552897,
+          "dots": 36178,
+          "tp": 2705.5156508824953,
+          "fp": 35040.16540167722,
+          "fn": 7720.484349117505
+        }
+      },
+      "paired_delta_candidate_minus_ungated": -0.012307028510016638,
+      "paired_delta_candidate_minus_uniform": 0.08921086012220211
+    },
+    {
+      "fold": 2,
+      "heldout_truth_pixels": 7096,
+      "fixed_dots": 24623,
+      "frozen_best_dti": 0.29027025890966246,
+      "stage2_inblock_auc": 0.7435340502711647,
+      "stage1": {
+        "approved_area_share_in_block": 0.549806662612977,
+        "approved_area_share_full_footprint": 0.9008083991614307,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.818821174787992
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.29027025890966246,
+          "dots": 24623,
+          "tp": 3159.244821283902,
+          "fp": 22875.778904242135,
+          "fn": 3936.755178716098
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.18974502829184353,
+          "dots": 24623,
+          "tp": 2043.520550732944,
+          "fp": 23421.599216185008,
+          "fn": 5052.479449267056
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.14754590303284637,
+          "dots": 24623,
+          "tp": 1588.6202598661594,
+          "fp": 23862.160212232186,
+          "fn": 5507.379740133841
+        }
+      },
+      "paired_delta_candidate_minus_ungated": -0.10052523061781893,
+      "paired_delta_candidate_minus_uniform": 0.04219912525899716
+    },
+    {
+      "fold": 3,
+      "heldout_truth_pixels": 5630,
+      "fixed_dots": 19536,
+      "frozen_best_dti": 0.24335930706370568,
+      "stage2_inblock_auc": 0.5951310214411845,
+      "stage1": {
+        "approved_area_share_in_block": 1.0,
+        "approved_area_share_full_footprint": 0.9011180342506725,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.0
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "fn": 3535.3412642025746
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.24335930706370568,
+          "dots": 19536,
+          "tp": 2094.6587357974254,
+          "fp": 18421.68043427371,
+          "fn": 3535.3412642025746
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.22603680657167927,
+          "dots": 19536,
+          "tp": 1951.074585498557,
+          "fp": 18687.263542939058,
+          "fn": 3678.925414501443
+        }
+      },
+      "paired_delta_candidate_minus_ungated": 0.0,
+      "paired_delta_candidate_minus_uniform": 0.01732250049202641
+    },
+    {
+      "fold": 4,
+      "heldout_truth_pixels": 13348,
+      "fixed_dots": 46318,
+      "frozen_best_dti": 0.30504916677291494,
+      "stage2_inblock_auc": 0.6690703329723221,
+      "stage1": {
+        "approved_area_share_in_block": 1.0,
+        "approved_area_share_full_footprint": 0.9011180342506725,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.0
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "fn": 7091.149256701292
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.30504916677291494,
+          "dots": 46318,
+          "tp": 6256.850743298708,
+          "fp": 42905.94082504608,
+          "fn": 7091.149256701292
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.2628403321941903,
+          "dots": 46318,
+          "tp": 5397.629368773307,
+          "fp": 43889.23509076212,
+          "fn": 7950.370631226693
+        }
+      },
+      "paired_delta_candidate_minus_ungated": 0.0,
+      "paired_delta_candidate_minus_uniform": 0.04220883457872465
+    },
+    {
+      "fold": 5,
+      "heldout_truth_pixels": 11398,
+      "fixed_dots": 39551,
+      "frozen_best_dti": 0.3179962667732945,
+      "stage2_inblock_auc": 0.6807092139853977,
+      "stage1": {
+        "approved_area_share_in_block": 1.0,
+        "approved_area_share_full_footprint": 0.9016525418234759,
+        "candidate_dots_inside_approved_share": 1.0,
+        "confinement_lift": 1.0
+      },
+      "outputs": {
+        "fresh_ungated_hh_hd": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "fn": 5807.756075126783
+        },
+        "stage1_q10_hh_hd_candidate": {
+          "dti": 0.3179962667732945,
+          "dots": 39551,
+          "tp": 5590.243924873217,
+          "fp": 36715.70502901507,
+          "fn": 5807.756075126783
+        },
+        "same_domain_uniform_spaced": {
+          "dti": 0.25928767364651356,
+          "dots": 39551,
+          "tp": 4553.641093255354,
+          "fp": 37664.95609431717,
+          "fn": 6844.358906744646
+        }
+      },
+      "paired_delta_candidate_minus_ungated": 0.0,
+      "paired_delta_candidate_minus_uniform": 0.05870859312678095
+    }
+  ],
+  "source_references": {
+    "competition_metric": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "kreemer_equation": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json"
+  },
+  "limitations": [
+    "The six-fold visible-catalogue proxy cannot establish hidden-label performance or organizer score.",
+    "The Stage-1 physical residual has weak/zero observed spatial enrichment in this catalogue proxy; Stage-2 is independently reported.",
+    "A pass on this holdout is a local research gate only, not portal acceptance or permission implied by any leaderboard score.",
+    "No TIFF is generated by this validation script. A later research artifact must pass fresh normalization, byte/grid checks, and the configured uniqueness gate."
+  ],
+  "reproducibility_note": {
+    "fresh_ungated_mean_differs_from_frozen_by": -2.5447786610344192e-05,
+    "tolerance": 1e-05,
+    "pass": false,
+    "inspection": "Five folds reproduce to displayed precision; fold 0 differs. The frozen receipt does not pin generated H-D/H-H arrays or model byte artifacts, so this report retains the discrepancy rather than relaxing tolerance."
+  }
+}

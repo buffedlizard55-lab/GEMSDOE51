@@ -1,0 +1,2683 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-08T02:27:42+00:00",
+  "candidate": "H53-A componentwise physical strain-budget residual prior",
+  "status": "STAGE1_SPATIAL_HOLDOUT_COMPLETED; STAGE2_PENDING",
+  "instrument": "Six truth-bearing contiguous blocks from the frozen 3x3 spatial split; visible known-fault catalogue proxy truth only.",
+  "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json",
+  "protocol": {
+    "tile_px": 100,
+    "buffer_px": 12,
+    "q_lower_percentile": 10.0,
+    "primary_rate_convention": "fault_plane",
+    "primary_unit_factor": 1e-08,
+    "sensitivities": [
+      {
+        "rate_convention": "fault_plane",
+        "unit_factor": 1e-08
+      },
+      {
+        "rate_convention": "vertical",
+        "unit_factor": 1e-08
+      },
+      {
+        "rate_convention": "fault_plane",
+        "unit_factor": 1e-09
+      },
+      {
+        "rate_convention": "vertical",
+        "unit_factor": 1e-09
+      }
+    ],
+    "residual": "observed scalar tile mean - source-matched modeled fault tensor scalar / unit_factor",
+    "combined_prior": "equal-weight empirical ranks of positive dilatation and shear residuals",
+    "control": "equal-weight positive ranks of observed dilatation and shear without modeled fault subtraction",
+    "heldout_budget_exclusion": "exclude the whole official trace record if any actual source segment intersects the held spatial block plus 12 pixels",
+    "stage1_only": true
+  },
+  "formula": {
+    "source": "Kreemer et al. (2000), Eq. 3",
+    "url": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+    "equation": "eps_dot_ij = (1/2) sum_k [L_k*u_dot_k/(A*sin(delta_k))] * (n_i*m_j+n_j*m_i)",
+    "source_scalar_definitions": "registry/official/geodetics_17_README.txt",
+    "interpretation": "Scalar dilation/shear summaries are compared separately; this is not subtraction of full observed/model tensors and not a localized-fault map."
+  },
+  "source_audit": "evidence/official_attribute_audit_20261008.json",
+  "segment_count": 84331,
+  "valid_tiles": 583,
+  "valid_tile_fraction": 0.4649122807017544,
+  "per_fold": [
+    {
+      "fold": 0,
+      "bounds_rc": [
+        0,
+        1244,
+        0,
+        1098
+      ],
+      "heldout_truth_pixels": 12803,
+      "buffered_source_records_excluded": 141,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        8,
+        9,
+        66,
+        67,
+        68,
+        69,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        321,
+        322,
+        323,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        378,
+        379,
+        399,
+        400,
+        401,
+        402,
+        442,
+        443,
+        445,
+        491,
+        517,
+        518,
+        519,
+        520,
+        630,
+        631,
+        645,
+        646,
+        647,
+        648,
+        682,
+        683,
+        717,
+        718,
+        719,
+        749,
+        750,
+        774,
+        775,
+        796,
+        797,
+        798,
+        801,
+        802,
+        803,
+        804,
+        805,
+        806,
+        807,
+        808,
+        809,
+        855,
+        856,
+        932,
+        933,
+        934,
+        935,
+        936,
+        967,
+        968,
+        974,
+        1068,
+        1127,
+        1142,
+        1143,
+        1144,
+        1147,
+        1148,
+        1149,
+        1154,
+        1158,
+        1159,
+        1192,
+        1200,
+        1201,
+        1202,
+        1208,
+        1209,
+        1210,
+        1211,
+        1212,
+        1213,
+        1214,
+        1215,
+        1224,
+        1225,
+        1229,
+        1230,
+        1231,
+        1232,
+        1233,
+        1234,
+        1235,
+        1241,
+        1242,
+        1243,
+        1244,
+        1516,
+        1517,
+        1518,
+        1537,
+        1539,
+        1540,
+        1541,
+        1578,
+        1657,
+        1658,
+        1659,
+        1660,
+        1661,
+        1965,
+        1966,
+        2104,
+        2105,
+        2106,
+        2333,
+        2637,
+        2638,
+        2640,
+        2641,
+        2642,
+        2643,
+        2652,
+        2653,
+        2654,
+        2655,
+        2656
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 14396671.917212728,
+          "omitted_segments": 1394,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.399301659917832,
+            "positive_fraction": 0.8662092624356775,
+            "p10": -1.1974638467231173,
+            "p90": 13.493159547349089
+          },
+          "shear_residual": {
+            "median": 9.388340306711196,
+            "positive_fraction": 0.8421955403087479,
+            "p10": 0.0,
+            "p90": 24.77834763525393
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.0661512017250061,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 12803,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": -0.1385824758472282
+          },
+          "shear_only": {
+            "threshold": 0.07817869633436203,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 12803,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.15341319131639228
+          },
+          "combined_residual_prior": {
+            "threshold": 0.21091066300868988,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9012140211283374,
+            "heldout_truth_pixels": 12803,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.024670231170788145
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 12803,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.020477534569277922
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 14396671.917212728,
+            "omitted_segments": 1394,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.3085921123052837,
+              "positive_fraction": 0.6809605488850772,
+              "p10": -14.227028157910619,
+              "p90": 11.957333202403134
+            },
+            "shear_residual": {
+              "median": 7.440545594323071,
+              "positive_fraction": 0.7855917667238422,
+              "p10": 0.0,
+              "p90": 23.467139279200147
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.15893471240997314,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.1385824758472282
+            },
+            "shear_only": {
+              "threshold": 0.10652920603752136,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.15341319131639228
+            },
+            "combined_residual_prior": {
+              "threshold": 0.20403780043125153,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9017164040606319,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.042902213957573175
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.020477534569277922
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 14396671.917212728,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.364063801003407,
+              "positive_fraction": 0.8627787307032591,
+              "p10": -1.5065430487917786,
+              "p90": 13.297332005195775
+            },
+            "shear_residual": {
+              "median": 9.388340306711196,
+              "positive_fraction": 0.8421955403087479,
+              "p10": 0.0,
+              "p90": 24.77835648130699
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.06786941736936569,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.1385824758472282
+            },
+            "shear_only": {
+              "threshold": 0.07817869633436203,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.15341319131639228
+            },
+            "combined_residual_prior": {
+              "threshold": 0.21048110723495483,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9011180342506725,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.024918823959031892
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.020477534569277922
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 14396671.917212728,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.1826357356548307,
+              "positive_fraction": 0.6449399656946827,
+              "p10": -15.974843998526742,
+              "p90": 11.94876951518275
+            },
+            "shear_residual": {
+              "median": 7.440545594323071,
+              "positive_fraction": 0.7855917667238422,
+              "p10": 0.0,
+              "p90": 23.55834549274475
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.17697595059871674,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.1385824758472282
+            },
+            "shear_only": {
+              "threshold": 0.10652920603752136,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.15341319131639228
+            },
+            "combined_residual_prior": {
+              "threshold": 0.20532646775245667,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9002075135663712,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.043218294759859874
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 12803,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.020477534569277922
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "bounds_rc": [
+        0,
+        1244,
+        1098,
+        2195
+      ],
+      "heldout_truth_pixels": 10426,
+      "buffered_source_records_excluded": 64,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        75,
+        76,
+        77,
+        78,
+        82,
+        83,
+        149,
+        189,
+        190,
+        192,
+        262,
+        263,
+        264,
+        267,
+        268,
+        274,
+        275,
+        280,
+        281,
+        282,
+        338,
+        405,
+        486,
+        728,
+        729,
+        730,
+        731,
+        774,
+        775,
+        776,
+        777,
+        801,
+        802,
+        856,
+        1070,
+        1201,
+        1258,
+        1259,
+        1412,
+        1413,
+        1458,
+        1459,
+        1465,
+        1466,
+        1475,
+        1521,
+        1581,
+        1582,
+        1583,
+        1584,
+        1585,
+        1586,
+        2644,
+        2645,
+        2646,
+        2647,
+        2648,
+        2649,
+        2661,
+        2662,
+        2663,
+        2664,
+        2667,
+        2668
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 15391092.134086654,
+          "omitted_segments": 1394,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.459431381177902,
+            "positive_fraction": 0.8679245283018868,
+            "p10": -1.1974638467231173,
+            "p90": 13.427929332814777
+          },
+          "shear_residual": {
+            "median": 9.206856775617599,
+            "positive_fraction": 0.8387650085763293,
+            "p10": 0.0,
+            "p90": 24.77834763525393
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.06529209762811661,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 10426,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.05730517859702276
+          },
+          "shear_only": {
+            "threshold": 0.07989690452814102,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 10426,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": -0.12255100356041633
+          },
+          "combined_residual_prior": {
+            "threshold": 0.21391752362251282,
+            "approved_area_share_in_held_block": 0.948506334593619,
+            "approved_area_share_full_footprint": 0.9016018390776126,
+            "heldout_truth_pixels": 10426,
+            "heldout_truth_recall": 0.953002110109342,
+            "recall_over_area_lift": 1.004739847644401,
+            "tile_rank_spearman": -0.04903361801214503
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 0.9223231148954592,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 10426,
+            "heldout_truth_recall": 0.9201035871858815,
+            "recall_over_area_lift": 0.9975935464765737,
+            "tile_rank_spearman": -0.05650858310402222
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 15391092.134086654,
+            "omitted_segments": 1394,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.749789696359634,
+              "positive_fraction": 0.7307032590051458,
+              "p10": -12.986969380274186,
+              "p90": 11.507143661865644
+            },
+            "shear_residual": {
+              "median": 6.858450455216948,
+              "positive_fraction": 0.7650085763293311,
+              "p10": 0.0,
+              "p90": 23.467139279200147
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1340206116437912,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.020802212156980714
+            },
+            "shear_only": {
+              "threshold": 0.1168384850025177,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.12255100356041633
+            },
+            "combined_residual_prior": {
+              "threshold": 0.23625428974628448,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9008438136747627,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.08692805938689069
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.9223231148954592,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 0.9201035871858815,
+              "recall_over_area_lift": 0.9975935464765737,
+              "tile_rank_spearman": -0.05650858310402222
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 15391092.134086654,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.383245091203955,
+              "positive_fraction": 0.8662092624356775,
+              "p10": -1.5065430487917786,
+              "p90": 13.284658003962956
+            },
+            "shear_residual": {
+              "median": 9.206856775617599,
+              "positive_fraction": 0.8387650085763293,
+              "p10": 0.0,
+              "p90": 24.77835648130699
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.0661512017250061,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.05627444941928922
+            },
+            "shear_only": {
+              "threshold": 0.07989690452814102,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.12255100356041633
+            },
+            "combined_residual_prior": {
+              "threshold": 0.21434707939624786,
+              "approved_area_share_in_held_block": 0.948506334593619,
+              "approved_area_share_full_footprint": 0.901776008815311,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 0.953002110109342,
+              "recall_over_area_lift": 1.004739847644401,
+              "tile_rank_spearman": -0.05140313766712182
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.9223231148954592,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 0.9201035871858815,
+              "recall_over_area_lift": 0.9975935464765737,
+              "tile_rank_spearman": -0.05650858310402222
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 15391092.134086654,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.668472272446559,
+              "positive_fraction": 0.6998284734133791,
+              "p10": -15.403521408022126,
+              "p90": 11.370637183971406
+            },
+            "shear_residual": {
+              "median": 6.858450455216948,
+              "positive_fraction": 0.7650085763293311,
+              "p10": 0.0,
+              "p90": 23.55834549274475
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1494845300912857,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.02127553576461818
+            },
+            "shear_only": {
+              "threshold": 0.1168384850025177,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.12255100356041633
+            },
+            "combined_residual_prior": {
+              "threshold": 0.23969072103500366,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9006696439370644,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.09262301467481318
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.9223231148954592,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 10426,
+              "heldout_truth_recall": 0.9201035871858815,
+              "recall_over_area_lift": 0.9975935464765737,
+              "tile_rank_spearman": -0.05650858310402222
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "bounds_rc": [
+        0,
+        1244,
+        2195,
+        3292
+      ],
+      "heldout_truth_pixels": 7096,
+      "buffered_source_records_excluded": 69,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        23,
+        24,
+        34,
+        35,
+        81,
+        82,
+        83,
+        98,
+        99,
+        119,
+        166,
+        167,
+        168,
+        169,
+        170,
+        179,
+        199,
+        200,
+        260,
+        330,
+        331,
+        364,
+        415,
+        486,
+        543,
+        547,
+        609,
+        610,
+        659,
+        660,
+        668,
+        669,
+        670,
+        671,
+        726,
+        728,
+        781,
+        782,
+        783,
+        784,
+        858,
+        859,
+        860,
+        862,
+        863,
+        876,
+        877,
+        905,
+        906,
+        907,
+        962,
+        1268,
+        1289,
+        1321,
+        1322,
+        1424,
+        1425,
+        1456,
+        1457,
+        1458,
+        1459,
+        1503,
+        1504,
+        1607,
+        1608,
+        1616,
+        1617,
+        1620,
+        1623
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 15355985.5023379,
+          "omitted_segments": 1394,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.373334368660772,
+            "positive_fraction": 0.8662092624356775,
+            "p10": -1.1974638467231173,
+            "p90": 13.427929332814777
+          },
+          "shear_residual": {
+            "median": 9.162991250271753,
+            "positive_fraction": 0.8387650085763293,
+            "p10": 0.0,
+            "p90": 24.77834763525393
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.0661512017250061,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 7096,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.07767551496297534
+          },
+          "shear_only": {
+            "threshold": 0.07989690452814102,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 7096,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.06661353264855668
+          },
+          "combined_residual_prior": {
+            "threshold": 0.21606528759002686,
+            "approved_area_share_in_held_block": 0.549806662612977,
+            "approved_area_share_full_footprint": 0.9008083991614307,
+            "heldout_truth_pixels": 7096,
+            "heldout_truth_recall": 0.5459413754227734,
+            "recall_over_area_lift": 0.9929697338118211,
+            "tile_rank_spearman": 0.11004485210655746
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 0.514976415790499,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 7096,
+            "heldout_truth_recall": 0.504086809470124,
+            "recall_over_area_lift": 0.9788541649938293,
+            "tile_rank_spearman": 0.12454134487354773
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 15355985.5023379,
+            "omitted_segments": 1394,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.293049820446968,
+              "positive_fraction": 0.7049742710120068,
+              "p10": -15.813172441202678,
+              "p90": 11.472792001423475
+            },
+            "shear_residual": {
+              "median": 6.400818664646149,
+              "positive_fraction": 0.758147512864494,
+              "p10": 0.0,
+              "p90": 23.467139279200147
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.14690721035003662,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06566557047400594
+            },
+            "shear_only": {
+              "threshold": 0.12027491629123688,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06661353264855668
+            },
+            "combined_residual_prior": {
+              "threshold": 0.27018898725509644,
+              "approved_area_share_in_held_block": 0.870950983806887,
+              "approved_area_share_full_footprint": 0.9011248075182496,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.8799323562570462,
+              "recall_over_area_lift": 1.0103121445605379,
+              "tile_rank_spearman": 0.06533193163605215
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.514976415790499,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.504086809470124,
+              "recall_over_area_lift": 0.9788541649938293,
+              "tile_rank_spearman": 0.12454134487354773
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 15355985.5023379,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.271073072052002,
+              "positive_fraction": 0.8627787307032591,
+              "p10": -1.5065430487917786,
+              "p90": 13.284658003962956
+            },
+            "shear_residual": {
+              "median": 9.162991250271753,
+              "positive_fraction": 0.8387650085763293,
+              "p10": 0.0,
+              "p90": 24.77835648130699
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.06786941736936569,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.07448215797510407
+            },
+            "shear_only": {
+              "threshold": 0.07989690452814102,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06661353264855668
+            },
+            "combined_residual_prior": {
+              "threshold": 0.2173539400100708,
+              "approved_area_share_in_held_block": 0.5605509082429616,
+              "approved_area_share_full_footprint": 0.9007302163013973,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.5629932356257046,
+              "recall_over_area_lift": 1.0043570126224546,
+              "tile_rank_spearman": 0.1094388632538484
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.514976415790499,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.504086809470124,
+              "recall_over_area_lift": 0.9788541649938293,
+              "tile_rank_spearman": 0.12454134487354773
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 15355985.5023379,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.235900490017759,
+              "positive_fraction": 0.6723842195540308,
+              "p10": -18.050637297962737,
+              "p90": 11.370637183971406
+            },
+            "shear_residual": {
+              "median": 6.400818664646149,
+              "positive_fraction": 0.758147512864494,
+              "p10": 0.0,
+              "p90": 23.55834549274475
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.16323024034500122,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06566557047400594
+            },
+            "shear_only": {
+              "threshold": 0.12027491629123688,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06661353264855668
+            },
+            "combined_residual_prior": {
+              "threshold": 0.2663230299949646,
+              "approved_area_share_in_held_block": 0.9289226827554857,
+              "approved_area_share_full_footprint": 0.9012534996022157,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.9340473506200676,
+              "recall_over_area_lift": 1.0055167862295928,
+              "tile_rank_spearman": 0.0649438211510855
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 0.514976415790499,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 7096,
+              "heldout_truth_recall": 0.504086809470124,
+              "recall_over_area_lift": 0.9788541649938293,
+              "tile_rank_spearman": 0.12454134487354773
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "bounds_rc": [
+        1244,
+        2487,
+        0,
+        1098
+      ],
+      "heldout_truth_pixels": 5630,
+      "buffered_source_records_excluded": 226,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        20,
+        21,
+        95,
+        96,
+        97,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        197,
+        198,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        256,
+        257,
+        320,
+        443,
+        444,
+        454,
+        455,
+        465,
+        466,
+        467,
+        510,
+        511,
+        512,
+        531,
+        532,
+        533,
+        534,
+        613,
+        614,
+        615,
+        616,
+        617,
+        618,
+        623,
+        624,
+        650,
+        651,
+        653,
+        676,
+        677,
+        682,
+        749,
+        750,
+        803,
+        804,
+        805,
+        806,
+        878,
+        879,
+        880,
+        884,
+        885,
+        886,
+        887,
+        888,
+        889,
+        890,
+        891,
+        892,
+        893,
+        894,
+        895,
+        896,
+        897,
+        898,
+        899,
+        900,
+        932,
+        933,
+        935,
+        1075,
+        1154,
+        1155,
+        1156,
+        1157,
+        1158,
+        1159,
+        1160,
+        1161,
+        1164,
+        1165,
+        1166,
+        1167,
+        1168,
+        1169,
+        1170,
+        1171,
+        1179,
+        1180,
+        1181,
+        1182,
+        1183,
+        1184,
+        1185,
+        1186,
+        1187,
+        1188,
+        1189,
+        1190,
+        1191,
+        1192,
+        1193,
+        1216,
+        1217,
+        1218,
+        1219,
+        1220,
+        1221,
+        1222,
+        1246,
+        1247,
+        1328,
+        1329,
+        1330,
+        1331,
+        1332,
+        1369,
+        1370,
+        1371,
+        1372,
+        1373,
+        1374,
+        1375,
+        1376,
+        1377,
+        1402,
+        1403,
+        1423,
+        1444,
+        1515,
+        1518,
+        1519,
+        1520,
+        1526,
+        1527,
+        1528,
+        1529,
+        1530,
+        1531,
+        1532,
+        1533,
+        1534,
+        1535,
+        1552,
+        1555,
+        1560,
+        1561,
+        1567,
+        1662,
+        1663,
+        1664,
+        1665,
+        1666,
+        1667,
+        1668,
+        1669,
+        1670,
+        1684,
+        1685,
+        1687,
+        1705,
+        1706,
+        1707,
+        1745,
+        1746,
+        1747,
+        1748,
+        1749,
+        1764,
+        1790,
+        1791,
+        1799,
+        1800,
+        1867,
+        1868,
+        1869,
+        1899,
+        1900,
+        1901,
+        1902,
+        1917,
+        1918,
+        1919,
+        2009,
+        2015,
+        2249,
+        2250,
+        2251,
+        2252,
+        2254,
+        2255,
+        2256,
+        2257,
+        2258,
+        2259,
+        2260,
+        2261,
+        2262,
+        2263,
+        2264,
+        2265,
+        2342,
+        2657,
+        2658,
+        2659,
+        2660
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 13523344.12273491,
+          "omitted_segments": 1301,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.3257126779611506,
+            "positive_fraction": 0.8765008576329331,
+            "p10": -0.8396073315508985,
+            "p90": 13.427929332814777
+          },
+          "shear_residual": {
+            "median": 9.180144810771942,
+            "positive_fraction": 0.8404802744425386,
+            "p10": 0.0,
+            "p90": 24.79662696128845
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.060996562242507935,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 5630,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.017456310774428236
+          },
+          "shear_only": {
+            "threshold": 0.07903780043125153,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 5630,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": -0.03721794427233946
+          },
+          "combined_residual_prior": {
+            "threshold": 0.20876288414001465,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9011180342506725,
+            "heldout_truth_pixels": 5630,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.005082393527943938
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 5630,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": -0.003851552265248602
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 13523344.12273491,
+            "omitted_segments": 1301,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 2.974144176721573,
+              "positive_fraction": 0.6723842195540308,
+              "p10": -10.084171124304088,
+              "p90": 11.873773258632061
+            },
+            "shear_residual": {
+              "median": 7.035134746113134,
+              "positive_fraction": 0.7718696397941681,
+              "p10": 0.0,
+              "p90": 23.594422187204437
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.16323024034500122,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.017456310774428236
+            },
+            "shear_only": {
+              "threshold": 0.11340206116437912,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.03721794427233946
+            },
+            "combined_residual_prior": {
+              "threshold": 0.21305841207504272,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9017164040606319,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.006379631395851302
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.003851552265248602
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 13523344.12273491,
+            "omitted_segments": 1301,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.24161040932802,
+              "positive_fraction": 0.8747855917667239,
+              "p10": -1.1209069992156202,
+              "p90": 13.284658003962956
+            },
+            "shear_residual": {
+              "median": 9.180144810771942,
+              "positive_fraction": 0.8404802744425386,
+              "p10": 0.0,
+              "p90": 24.79662696128845
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.06185567006468773,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.017456310774428236
+            },
+            "shear_only": {
+              "threshold": 0.07903780043125153,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.03721794427233946
+            },
+            "combined_residual_prior": {
+              "threshold": 0.20876288414001465,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9011180342506725,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.010165055834053529
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.003851552265248602
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 13523344.12273491,
+            "omitted_segments": 1301,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 2.679308347579547,
+              "positive_fraction": 0.6329331046312179,
+              "p10": -11.98043356883847,
+              "p90": 11.834382414247246
+            },
+            "shear_residual": {
+              "median": 7.035134746113134,
+              "positive_fraction": 0.7718696397941681,
+              "p10": 0.0,
+              "p90": 23.726588523912742
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1829896867275238,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.017456310774428236
+            },
+            "shear_only": {
+              "threshold": 0.11340206116437912,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.03721794427233946
+            },
+            "combined_residual_prior": {
+              "threshold": 0.21520617604255676,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9002075135663712,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.006366563995746676
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 5630,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": -0.003851552265248602
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "bounds_rc": [
+        1244,
+        2487,
+        1098,
+        2195
+      ],
+      "heldout_truth_pixels": 13348,
+      "buffered_source_records_excluded": 147,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        4,
+        5,
+        6,
+        7,
+        28,
+        29,
+        31,
+        32,
+        33,
+        36,
+        37,
+        40,
+        43,
+        47,
+        58,
+        59,
+        79,
+        80,
+        149,
+        183,
+        184,
+        189,
+        190,
+        191,
+        192,
+        263,
+        274,
+        275,
+        335,
+        373,
+        374,
+        375,
+        376,
+        384,
+        385,
+        409,
+        410,
+        411,
+        412,
+        438,
+        439,
+        440,
+        441,
+        446,
+        447,
+        463,
+        464,
+        468,
+        469,
+        470,
+        471,
+        472,
+        473,
+        474,
+        475,
+        476,
+        477,
+        544,
+        545,
+        546,
+        580,
+        596,
+        597,
+        599,
+        600,
+        604,
+        605,
+        699,
+        700,
+        701,
+        702,
+        703,
+        704,
+        705,
+        774,
+        775,
+        776,
+        803,
+        805,
+        810,
+        811,
+        812,
+        813,
+        902,
+        903,
+        930,
+        931,
+        1053,
+        1054,
+        1055,
+        1069,
+        1070,
+        1196,
+        1197,
+        1198,
+        1252,
+        1253,
+        1281,
+        1282,
+        1283,
+        1286,
+        1287,
+        1298,
+        1299,
+        1300,
+        1301,
+        1302,
+        1303,
+        1304,
+        1305,
+        1306,
+        1307,
+        1364,
+        1365,
+        1409,
+        1422,
+        1423,
+        1445,
+        1446,
+        1461,
+        1462,
+        1463,
+        1464,
+        1495,
+        1496,
+        1505,
+        1506,
+        1514,
+        1555,
+        1560,
+        1561,
+        1563,
+        1565,
+        1567,
+        1570,
+        1576,
+        1577,
+        1609,
+        1610,
+        1618,
+        1619,
+        2665,
+        2666,
+        2669,
+        2670,
+        2671,
+        2672
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 14254499.674644804,
+          "omitted_segments": 1394,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.366257554062631,
+            "positive_fraction": 0.8730703259005146,
+            "p10": -1.1216645338538505,
+            "p90": 13.818226129742547
+          },
+          "shear_residual": {
+            "median": 9.84163201379776,
+            "positive_fraction": 0.8404802744425386,
+            "p10": 0.0,
+            "p90": 24.77834763525393
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.06271477788686752,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 13348,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.02623626126595272
+          },
+          "shear_only": {
+            "threshold": 0.07903780043125153,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 13348,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.10251008223796874
+          },
+          "combined_residual_prior": {
+            "threshold": 0.20618557929992676,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9011180342506725,
+            "heldout_truth_pixels": 13348,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.06160151154604943
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 13348,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.06006029595522903
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 14254499.674644804,
+            "omitted_segments": 1394,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.493176048098322,
+              "positive_fraction": 0.6963979416809606,
+              "p10": -7.959506317935747,
+              "p90": 13.45055132329383
+            },
+            "shear_residual": {
+              "median": 8.339097854042054,
+              "positive_fraction": 0.8027444253859348,
+              "p10": 0.0,
+              "p90": 23.467139279200147
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1512027531862259,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.08352879139277217
+            },
+            "shear_only": {
+              "threshold": 0.09793814271688461,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.10251008223796874
+            },
+            "combined_residual_prior": {
+              "threshold": 0.19329896569252014,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9017164040606319,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.1416333650404603
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06006029595522903
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 14254499.674644804,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.291044034548708,
+              "positive_fraction": 0.8730703259005146,
+              "p10": -1.2526215142507688,
+              "p90": 13.784549856890097
+            },
+            "shear_residual": {
+              "median": 9.84163201379776,
+              "positive_fraction": 0.8404802744425386,
+              "p10": 0.0,
+              "p90": 24.77835648130699
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.06271477788686752,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.028208793124235524
+            },
+            "shear_only": {
+              "threshold": 0.07903780043125153,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.10251008223796874
+            },
+            "combined_residual_prior": {
+              "threshold": 0.20532646775245667,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9011180342506725,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06257353769234675
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06006029595522903
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 14254499.674644804,
+            "omitted_segments": 1394,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.293049820446968,
+              "positive_fraction": 0.6620926243567753,
+              "p10": -9.27268517417578,
+              "p90": 13.45055132329383
+            },
+            "shear_residual": {
+              "median": 8.339097854042054,
+              "positive_fraction": 0.8027444253859348,
+              "p10": 0.0,
+              "p90": 23.55834549274475
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1683848798274994,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.08932065095537865
+            },
+            "shear_only": {
+              "threshold": 0.09793814271688461,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.10251008223796874
+            },
+            "combined_residual_prior": {
+              "threshold": 0.19329896569252014,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9002075135663712,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.1445452678958105
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 13348,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.06006029595522903
+            }
+          }
+        }
+      }
+    },
+    {
+      "fold": 5,
+      "bounds_rc": [
+        2487,
+        3730,
+        1098,
+        2195
+      ],
+      "heldout_truth_pixels": 11398,
+      "buffered_source_records_excluded": 247,
+      "source_records_total": 1126,
+      "excluded_record_ids": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        33,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        150,
+        151,
+        152,
+        153,
+        154,
+        265,
+        266,
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        365,
+        377,
+        450,
+        451,
+        452,
+        453,
+        523,
+        535,
+        536,
+        537,
+        538,
+        539,
+        540,
+        541,
+        542,
+        558,
+        596,
+        597,
+        598,
+        599,
+        600,
+        601,
+        602,
+        603,
+        604,
+        605,
+        606,
+        607,
+        608,
+        697,
+        698,
+        712,
+        713,
+        778,
+        779,
+        780,
+        875,
+        1122,
+        1123,
+        1252,
+        1253,
+        1274,
+        1275,
+        1276,
+        1277,
+        1278,
+        1282,
+        1284,
+        1285,
+        1286,
+        1287,
+        1288,
+        1290,
+        1291,
+        1292,
+        1293,
+        1294,
+        1295,
+        1296,
+        1297,
+        1307,
+        1358,
+        1359,
+        1360,
+        1361,
+        1362,
+        1363,
+        1378,
+        1379,
+        1380,
+        1388,
+        1390,
+        1391,
+        1392,
+        1393,
+        1394,
+        1416,
+        1417,
+        1418,
+        1419,
+        1420,
+        1421,
+        1551,
+        1552,
+        1553,
+        1554,
+        1555,
+        1556,
+        1557,
+        1558,
+        1559,
+        1560,
+        1561,
+        1562,
+        1563,
+        1564,
+        1565,
+        1566,
+        1567,
+        1569,
+        1644,
+        1671,
+        1672,
+        1673,
+        1674,
+        1676,
+        1677,
+        1678,
+        1679,
+        1680,
+        1714,
+        1715,
+        1716,
+        1719,
+        1720,
+        1721,
+        1727,
+        1728,
+        1729,
+        1730,
+        1731,
+        1735,
+        1736,
+        1754,
+        1755,
+        1832,
+        1833,
+        1834,
+        1835,
+        1853,
+        1854,
+        1880,
+        1881,
+        1882,
+        1884,
+        1885,
+        1886,
+        1887,
+        1889,
+        1890,
+        1892,
+        1893,
+        1895,
+        1896,
+        1897,
+        1903,
+        1904,
+        1909,
+        1910,
+        1923,
+        1925,
+        1927,
+        1929,
+        1930,
+        1931,
+        1932,
+        1933,
+        1934,
+        1937,
+        1938,
+        1939,
+        1940,
+        1941,
+        1967,
+        1968,
+        1983,
+        1984,
+        1985,
+        2000,
+        2029,
+        2030,
+        2038,
+        2039,
+        2040,
+        2060,
+        2061,
+        2062,
+        2063,
+        2067,
+        2068,
+        2069,
+        2071,
+        2077,
+        2078,
+        2079,
+        2080,
+        2081,
+        2082,
+        2083,
+        2088,
+        2113,
+        2114,
+        2117,
+        2118,
+        2200,
+        2201,
+        2202,
+        2204,
+        2205,
+        2206,
+        2207,
+        2208,
+        2209,
+        2210,
+        2211,
+        2212,
+        2213,
+        2214,
+        2215,
+        2216,
+        2217,
+        2218,
+        2219,
+        2220,
+        2221
+      ],
+      "primary_scenario": {
+        "rate_convention": "fault_plane",
+        "geodetic_unit_factor": 1e-08,
+        "budget_metadata": {
+          "used_length_m": 13238252.008639896,
+          "omitted_segments": 644,
+          "convention": "fault_plane",
+          "tile_m": 10000.0,
+          "unknown_sense": "omitted"
+        },
+        "raw_residual_summary": {
+          "dilatation_residual": {
+            "median": 5.301475345534179,
+            "positive_fraction": 0.8919382504288165,
+            "p10": -0.2995916335682803,
+            "p90": 13.427929332814777
+          },
+          "shear_residual": {
+            "median": 9.837202290725708,
+            "positive_fraction": 0.8404802744425386,
+            "p10": 0.0,
+            "p90": 25.340787207877035
+          }
+        },
+        "metrics": {
+          "dilatation_only": {
+            "threshold": 0.05326460301876068,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 11398,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.11524953479818113
+          },
+          "shear_only": {
+            "threshold": 0.07903780043125153,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 1.0,
+            "heldout_truth_pixels": 11398,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.28775419010946324
+          },
+          "combined_residual_prior": {
+            "threshold": 0.20446735620498657,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9016525418234759,
+            "heldout_truth_pixels": 11398,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.21245327103236528
+          },
+          "geodetic_only_control": {
+            "threshold": 0.20360824465751648,
+            "approved_area_share_in_held_block": 1.0,
+            "approved_area_share_full_footprint": 0.9032781260419946,
+            "heldout_truth_pixels": 11398,
+            "heldout_truth_recall": 1.0,
+            "recall_over_area_lift": 1.0,
+            "tile_rank_spearman": 0.24163541589446036
+          }
+        }
+      },
+      "sensitivities": {
+        "fault_plane_1e-09": {
+          "rate_convention": "fault_plane",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 13238252.008639896,
+            "omitted_segments": 644,
+            "convention": "fault_plane",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.238425997776277,
+              "positive_fraction": 0.7032590051457976,
+              "p10": -6.795181657951363,
+              "p90": 12.074699458856921
+            },
+            "shear_residual": {
+              "median": 7.94016859292984,
+              "positive_fraction": 0.7993138936535163,
+              "p10": 0.0,
+              "p90": 25.250008412172168
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1477663218975067,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.11126961153545484
+            },
+            "shear_only": {
+              "threshold": 0.0996563583612442,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.288196824771581
+            },
+            "combined_residual_prior": {
+              "threshold": 0.1993127167224884,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9003555578434148,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.22256479975735535
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.24163541589446036
+            }
+          }
+        },
+        "vertical_1e-08": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-08,
+          "budget_metadata": {
+            "used_length_m": 13238252.008639896,
+            "omitted_segments": 644,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 5.2079385830651415,
+              "positive_fraction": 0.8902229845626072,
+              "p10": -0.48599506738983084,
+              "p90": 13.284658003962956
+            },
+            "shear_residual": {
+              "median": 9.837202290725708,
+              "positive_fraction": 0.8404802744425386,
+              "p10": 0.0,
+              "p90": 25.340787207877035
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.054123710840940475,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.11524953479818113
+            },
+            "shear_only": {
+              "threshold": 0.07903780043125153,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.28775419010946324
+            },
+            "combined_residual_prior": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9016525418234759,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.20948184529826896
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.24163541589446036
+            }
+          }
+        },
+        "vertical_1e-09": {
+          "rate_convention": "vertical",
+          "geodetic_unit_factor": 1e-09,
+          "budget_metadata": {
+            "used_length_m": 13238252.008639896,
+            "omitted_segments": 644,
+            "convention": "vertical",
+            "tile_m": 10000.0,
+            "unknown_sense": "omitted"
+          },
+          "raw_residual_summary": {
+            "dilatation_residual": {
+              "median": 3.020156436067517,
+              "positive_fraction": 0.6620926243567753,
+              "p10": -7.970753733567922,
+              "p90": 12.07402116779621
+            },
+            "shear_residual": {
+              "median": 7.94016859292984,
+              "positive_fraction": 0.7993138936535163,
+              "p10": 0.0,
+              "p90": 25.250008412172168
+            }
+          },
+          "metrics": {
+            "dilatation_only": {
+              "threshold": 0.1683848798274994,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.10598057216649494
+            },
+            "shear_only": {
+              "threshold": 0.0996563583612442,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 1.0,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.288196824771581
+            },
+            "combined_residual_prior": {
+              "threshold": 0.2010309249162674,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9007818866569145,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.23315673755201693
+            },
+            "geodetic_only_control": {
+              "threshold": 0.20360824465751648,
+              "approved_area_share_in_held_block": 1.0,
+              "approved_area_share_full_footprint": 0.9032781260419946,
+              "heldout_truth_pixels": 11398,
+              "heldout_truth_recall": 1.0,
+              "recall_over_area_lift": 1.0,
+              "tile_rank_spearman": 0.24163541589446036
+            }
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "fault_plane_1e-08": {
+      "dilatation_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.02589005409188867
+      },
+      "shear_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.07508700807993753
+      },
+      "combined_residual_prior": {
+        "approved_area_share_in_held_block": 0.9163854995344326,
+        "heldout_truth_recall": 0.9164905809220193,
+        "recall_over_area_lift": 0.999618263576037,
+        "tile_rank_spearman": 0.06080310689525987
+      },
+      "geodetic_only_control": {
+        "approved_area_share_in_held_block": 0.9062165884476597,
+        "heldout_truth_recall": 0.9040317327760009,
+        "recall_over_area_lift": 0.9960746185784005,
+        "tile_rank_spearman": 0.0643924093205407
+      },
+      "raw_residual_medians": {
+        "dilatation_residual": 5.370918831219078,
+        "shear_residual": 9.436194574649326
+      }
+    },
+    "fault_plane_1e-09": {
+      "dilatation_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.026690003414402284
+      },
+      "shear_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.07516078052362381
+      },
+      "combined_residual_prior": {
+        "approved_area_share_in_held_block": 0.9784918306344812,
+        "heldout_truth_recall": 0.979988726042841,
+        "recall_over_area_lift": 1.0017186907600897,
+        "tile_rank_spearman": 0.06318743660144983
+      },
+      "geodetic_only_control": {
+        "approved_area_share_in_held_block": 0.9062165884476597,
+        "heldout_truth_recall": 0.9040317327760009,
+        "recall_over_area_lift": 0.9960746185784005,
+        "tile_rank_spearman": 0.0643924093205407
+      },
+      "raw_residual_medians": {
+        "dilatation_residual": 3.342862975284676,
+        "shear_residual": 7.335702651211865
+      }
+    },
+    "vertical_1e-08": {
+      "dilatation_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.025514795040668333
+      },
+      "shear_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.07508700807993753
+      },
+      "combined_residual_prior": {
+        "approved_area_share_in_held_block": 0.91817620713943,
+        "heldout_truth_recall": 0.9193325576225077,
+        "recall_over_area_lift": 1.0015161433778093,
+        "tile_rank_spearman": 0.060862498061737956
+      },
+      "geodetic_only_control": {
+        "approved_area_share_in_held_block": 0.9062165884476597,
+        "heldout_truth_recall": 0.9040317327760009,
+        "recall_over_area_lift": 0.9960746185784005,
+        "tile_rank_spearman": 0.0643924093205407
+      },
+      "raw_residual_medians": {
+        "dilatation_residual": 5.2931624985335395,
+        "shear_residual": 9.436194574649326
+      }
+    },
+    "vertical_1e-09": {
+      "dilatation_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.026852694047949627
+      },
+      "shear_only": {
+        "approved_area_share_in_held_block": 1.0,
+        "heldout_truth_recall": 1.0,
+        "recall_over_area_lift": 1.0,
+        "tile_rank_spearman": 0.07516078052362381
+      },
+      "combined_residual_prior": {
+        "approved_area_share_in_held_block": 0.9881537804592476,
+        "heldout_truth_recall": 0.9890078917700112,
+        "recall_over_area_lift": 1.0009194643715988,
+        "tile_rank_spearman": 0.0644790904480355
+      },
+      "geodetic_only_control": {
+        "approved_area_share_in_held_block": 0.9062165884476597,
+        "heldout_truth_recall": 0.9040317327760009,
+        "recall_over_area_lift": 0.9960746185784005,
+        "tile_rank_spearman": 0.0643924093205407
+      },
+      "raw_residual_medians": {
+        "dilatation_residual": 3.17992051703553,
+        "shear_residual": 7.335702651211865
+      }
+    }
+  },
+  "saved_masks": "data/prepared/h53_stage1_fold_masks_20261008.npz",
+  "limitations": [
+    "The holdout recovers only visible known-fault pixels; it cannot validate hidden expert labels or off-catalogue discovery.",
+    "A residual may be off-fault, aseismic, due to slip-rate/dip/rake or source-unit errors, or geodetic/model error.",
+    "The source notation 10E-9/yr is ambiguous; both 1e-8 and 1e-9 unit-factor cases are retained.",
+    "Slip-rate component and per-trace dips/rakes are unresolved; primary SLIPSENSE is used, SECONDARY is not double-counted, and blank primary senses are omitted.",
+    "The combined scalar ranks are a Stage-1 prior only; no Stage-2 performance or submission eligibility is inferred here."
+  ]
+}

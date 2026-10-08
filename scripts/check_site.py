@@ -119,11 +119,23 @@ def main() -> int:
                 and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
     if allowed_research:
-        if "NOT FOR SUBMISSION" not in index:
-            failures.append("research-only download is not prominently marked NOT FOR SUBMISSION")
+        if "NOT FOR SUBMISSION" not in index and "DO NOT SUBMIT" not in index:
+            failures.append("research-only download is not prominently marked NOT FOR SUBMISSION / DO NOT SUBMIT")
         for name in allowed_research:
             if f'href="downloads/{name}"' not in index:
                 failures.append(f"research-only artifact is not linked from index: {name}")
+        h53 = next((r for r in manifest.get("research_only_artifacts", [])
+                    if r.get("id") == "H53A_BUDGET_Q10_20261008"), None)
+        if h53:
+            if h53.get("safe_to_submit") is not False:
+                failures.append("H53-A must remain explicitly marked safe_to_submit=false")
+            if not str(h53.get("uniqueness", {}).get("verdict", "")).startswith("FAIL"):
+                failures.append("H53-A public-family uniqueness failure is missing from the manifest")
+            latest = (DOCS / "latest.html").read_text(encoding="utf-8")
+            if "H53-A" not in latest or "DO NOT SUBMIT" not in latest:
+                failures.append("latest report does not prominently show H53-A DO NOT SUBMIT")
+            if "Stage 1" not in latest or "Stage 2" not in latest:
+                failures.append("latest report does not report Stage 1 and Stage 2 separately")
     elif not manifest.get("primary") and 'href="downloads/' in index:
         failures.append("index page links to a download despite an empty artifact manifest")
 
