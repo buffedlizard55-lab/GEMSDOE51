@@ -1,0 +1,708 @@
+{
+ "schema_version": 1,
+ "status": "COMPLETE_NOT_PROMOTED",
+ "candidate": "H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm",
+ "preregistration": "registry/preregistration_h53.json",
+ "slate": "evidence/candidate_hypotheses_prereg_20261008.json",
+ "instrument": "six-fold 3x3 spatial holdout; visible known-fault catalogue proxy truth",
+ "protocol": {
+  "buffer_px": 12,
+  "negative_samples": 250000,
+  "negative_seed": "1000 + fold.index",
+  "model_seed": "fold.index",
+  "max_iter": 250,
+  "mass_ratio": 3.47,
+  "blend_baseline": "0.5 * fresh H-D + 0.5 * fresh H-H",
+  "blend_candidate": "0.5 * fresh H-D + 0.5 * (fresh H-H + 6 H53-A features)",
+  "emission": "STE ridge scales 1/2/3.5 px, line length 9, continuity exponent 0.35, greedy spacing 2.4 px, catalogue flank 2.0 px",
+  "candidate_features": [
+   "h53a_geod_2ndinv_s15_crest",
+   "h53a_geod_2ndinv_s40_crest",
+   "h53a_geod_shearrate_s15_crest",
+   "h53a_geod_shearrate_s40_crest",
+   "h53a_geod_dilaterate_s15_crest",
+   "h53a_geod_dilaterate_s40_crest"
+  ],
+  "candidate_feature_source": "rank-space residual q(observed 2.5 km tile mean) - q(fault tensor II 2.5 km tile) per geodetic band, smoothed sigma=4 px, crest response at sigma 1.5/4.0 px (src/gems51/strain_residual.py)",
+  "stage1_gate": {
+   "field": "q10 geodetic second-invariant deficit over 10 km tiles",
+   "fold_specific_known_catalogue": "yes; held-out trace rows removed",
+   "all_stage2_points_confined_to_approved_tiles": true
+  },
+  "spatial_truth": "held-out block only; known-trace exclusion radius 2 px"
+ },
+ "baseline": {
+  "frozen_mean_dti": 0.285340602656319,
+  "frozen_per_fold": [
+   0.28358474213082796,
+   0.27178387428750844,
+   0.29027025890966246,
+   0.24335930706370568,
+   0.30504916677291494,
+   0.3179962667732945
+  ],
+  "fresh_ungated_mean_dti": 0.285340602656319,
+  "fresh_ungated_per_fold": [
+   0.28358474213082796,
+   0.27178387428750844,
+   0.29027025890966246,
+   0.24335930706370568,
+   0.30504916677291494,
+   0.3179962667732945
+  ],
+  "fresh_minus_frozen_mean": 0.0,
+  "fresh_max_abs_dev_vs_frozen": 0.0,
+  "reproduction_tolerance": 1e-05,
+  "reproduced": true,
+  "stage1_q10_gated_mean_dti": 0.2849241048617298,
+  "stage1_q10_gated_per_fold": [
+   0.28358474213082796,
+   0.2704360700961979,
+   0.28911907633343786,
+   0.24335930706370568,
+   0.30504916677291494,
+   0.3179962667732945
+  ]
+ },
+ "stage1_holdout": {
+  "separately_evaluated": true,
+  "trace_split_evidence": "evidence/stage1_q10_trace_holdout_20261007.json",
+  "trace_holdout_deficit_q10_dti": 0.05062738717100875,
+  "trace_holdout_uniform_dti": 0.04856426582063665,
+  "trace_holdout_deficit_q10_lift": 1.0591471679793076,
+  "spatial_fold_mean_approved_area_share": 0.9013465513972637,
+  "spatial_fold_mean_lift_if_all_points_approved": 1.1094511855066225,
+  "stage1_score_weight": 0.0
+ },
+ "candidate_result": {
+  "ungated_mean_dti": 0.2843985129520102,
+  "ungated_per_fold": [
+   0.2883653416002059,
+   0.27082359319209715,
+   0.291052368880227,
+   0.24881278995696843,
+   0.30358470551989303,
+   0.30375227856266945
+  ],
+  "stage1_q10_gated_mean_dti": 0.2840010514573334,
+  "stage1_q10_gated_per_fold": [
+   0.2883653416002059,
+   0.2700145139321978,
+   0.2894766791720659,
+   0.24881278995696843,
+   0.30358470551989303,
+   0.30375227856266945
+  ],
+  "paired_deltas_vs_stage1_gated_hd_hh": [
+   0.004780599469377922,
+   -0.0004215561640001364,
+   0.0003576028386280128,
+   0.005453482893262751,
+   -0.0014644612530219092,
+   -0.014243988210625058
+  ],
+  "paired_mean_delta_vs_stage1_gated_hd_hh": -0.000923053404396403,
+  "positive_folds_vs_stage1_gated_hd_hh": 3
+ },
+ "h53f_operating_point": {
+  "config": "sweep on the fresh H-H/H-D blend, q10-gated, STE emission",
+  "arms": {
+   "r3.47_f2.00": {
+    "mean_dti": 0.2849241048617298,
+    "per_fold": [
+     0.28358474213082796,
+     0.2704360700961979,
+     0.28911907633343786,
+     0.24335930706370568,
+     0.30504916677291494,
+     0.3179962667732945
+    ],
+    "ratio": 3.47,
+    "flank_px": 2.0
+   },
+   "r3.47_f2.24": {
+    "mean_dti": 0.28465547257575263,
+    "per_fold": [
+     0.2833508384822992,
+     0.270451446407391,
+     0.28911907633343786,
+     0.24282286547703025,
+     0.30479479813108007,
+     0.3173938106232775
+    ],
+    "ratio": 3.47,
+    "flank_px": 2.24
+   },
+   "r2.96_f2": {
+    "mean_dti": 0.2831753710382806,
+    "per_fold": [
+     0.27730414440712936,
+     0.2773640179778179,
+     0.2947098421893408,
+     0.2307451627250078,
+     0.30170971193140145,
+     0.31721934699898635
+    ],
+    "ratio": 2.96,
+    "flank_px": 2.0
+   },
+   "r2.96_f2.24": {
+    "mean_dti": 0.28294181218756553,
+    "per_fold": [
+     0.2770359016862809,
+     0.27749735360337857,
+     0.2947098421893408,
+     0.23026304698824623,
+     0.30145950171751856,
+     0.3166852269406282
+    ],
+    "ratio": 2.96,
+    "flank_px": 2.24
+   }
+  },
+  "decision": {
+   "default_arm": "r3.47_f2.00",
+   "default_mean": 0.2849241048617298,
+   "sweep_means": {
+    "r3.47_f2.00": 0.2849241048617298,
+    "r3.47_f2.24": 0.28465547257575263,
+    "r2.96_f2": 0.2831753710382806,
+    "r2.96_f2.24": 0.28294181218756553
+   },
+   "adopted_arm": "r3.47_f2.00",
+   "adopted_mean": 0.2849241048617298,
+   "rule": "adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds",
+   "note": "no non-default point met the adoption bar; the build keeps ratio 3.47, flank 2.0 px"
+  }
+ },
+ "stage1_non_dominance": {
+  "gate": "fold-specific q10 broad-tile deficit mask; score weight 0.0",
+  "approved_area_share_mean": 0.9013465513972637,
+  "expected_emitted_share_inside_approved": 1.0,
+  "lift_over_area_share": 1.1094511855066225,
+  "maximum_allowed_lift": 1.5,
+  "passed": true,
+  "uniform_control": {
+   "candidate_mean": 0.2849241048617298,
+   "uniform_mean": 0.18695605434530682,
+   "uniform_block_mean": 0.1861495253548243,
+   "margin": 0.002,
+   "passed": true,
+   "note": "the fine model must beat a uniform random fill of the same approved tiles at the same mass; this is the dominance control for the 'not dominated by stage one' requirement"
+  }
+ },
+ "promotion_rule": "fresh ungated baseline reproduces frozen mean within 1e-5; candidate q10-gated mean > frozen best 0.285340602656319; paired q10-gated delta > 0 with >= 4/6 folds; 100% of points inside approved tiles; approved area >= 2/3 and Stage-1 lift <= 1.5",
+ "gates": {
+  "six_folds": true,
+  "baseline_reproduced_within_1e5": true,
+  "beats_frozen_best": false,
+  "paired_delta_positive": false,
+  "positive_folds_ge_4_of_6": false,
+  "all_points_inside_q10": true,
+  "stage1_broad_and_non_dominant": true
+ },
+ "promoted": false,
+ "rows": [
+  {
+   "fold": 0,
+   "n_truth": 12803,
+   "n_dots": 44426,
+   "frozen_hh_hd_ste_dti": 0.28358474213082796,
+   "stage1_q10": {
+    "held_trace_rows": 100,
+    "budget_trace_rows": 1026,
+    "threshold": -0.5180102915951973,
+    "approved_area_share": 0.9006108132701084
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.28358474213082796,
+     "dots": 44426,
+     "tp": 5567.875112919252,
+     "fp": 41389.63624870735,
+     "emitted_inside_allowed": 44426
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.28358474213082796,
+     "dots": 44426,
+     "tp": 5567.875112919252,
+     "fp": 41389.63624870735,
+     "emitted_inside_allowed": 44426
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.2883653416002059,
+     "dots": 44426,
+     "tp": 5664.767400405965,
+     "fp": 41345.2895390803,
+     "emitted_inside_allowed": 44426
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.2883653416002059,
+     "dots": 44426,
+     "tp": 5664.767400405965,
+     "fp": 41345.2895390803,
+     "emitted_inside_allowed": 44426
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.28358474213082796,
+     "dots": 44426,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.2833508384822992,
+     "dots": 44426,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.27730414440712936,
+     "dots": 37897,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.2770359016862809,
+     "dots": 37897,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.19293028878246082,
+     "dots": 44426
+    },
+    "U_block": {
+     "dti": 0.19293028878246082,
+     "dots": 44426
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1103575320942578
+   }
+  },
+  {
+   "fold": 1,
+   "n_truth": 10426,
+   "n_dots": 36178,
+   "frozen_hh_hd_ste_dti": 0.27178387428750844,
+   "stage1_q10": {
+    "held_trace_rows": 60,
+    "budget_trace_rows": 1066,
+    "threshold": -0.42710120068610635,
+    "approved_area_share": 0.9036063392365908
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.27178387428750844,
+     "dots": 36178,
+     "tp": 4337.245785853802,
+     "fp": 33750.938302036855,
+     "emitted_inside_allowed": 36178
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.2704360700961979,
+     "dots": 36178,
+     "tp": 4315.222093183762,
+     "fp": 33763.443208245444,
+     "emitted_inside_allowed": 36178
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.27082359319209715,
+     "dots": 36178,
+     "tp": 4321.307769283283,
+     "fp": 33755.5510242515,
+     "emitted_inside_allowed": 36178
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.2700145139321978,
+     "dots": 36178,
+     "tp": 4308.156549277167,
+     "fp": 33764.23188514175,
+     "emitted_inside_allowed": 36178
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.2704360700961979,
+     "dots": 36178,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.270451446407391,
+     "dots": 36178,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.2773640179778179,
+     "dots": 30861,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.27749735360337857,
+     "dots": 30861,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.15002087103492898,
+     "dots": 36178
+    },
+    "U_block": {
+     "dti": 0.15066884234938846,
+     "dots": 36178
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1066766096891785
+   }
+  },
+  {
+   "fold": 2,
+   "n_truth": 7096,
+   "n_dots": 24623,
+   "frozen_hh_hd_ste_dti": 0.29027025890966246,
+   "stage1_q10": {
+    "held_trace_rows": 42,
+    "budget_trace_rows": 1084,
+    "threshold": -0.37907375643224694,
+    "approved_area_share": 0.9016813765911615
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.29027025890966246,
+     "dots": 24623,
+     "tp": 3159.244821283902,
+     "fp": 22875.778904242135,
+     "emitted_inside_allowed": 24623
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.28911907633343786,
+     "dots": 24623,
+     "tp": 3146.4058537071924,
+     "fp": 22883.261580649098,
+     "emitted_inside_allowed": 24623
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.291052368880227,
+     "dots": 24623,
+     "tp": 3168.031203784237,
+     "fp": 22871.700442391353,
+     "emitted_inside_allowed": 24623
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.2894766791720659,
+     "dots": 24623,
+     "tp": 3150.4727603888555,
+     "fp": 22882.22100229252,
+     "emitted_inside_allowed": 24623
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.28911907633343786,
+     "dots": 24623,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.28911907633343786,
+     "dots": 24623,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.2947098421893408,
+     "dots": 21004,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.2947098421893408,
+     "dots": 21004,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.14624519542865488,
+     "dots": 24623
+    },
+    "U_block": {
+     "dti": 0.1407580501713002,
+     "dots": 24623
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1090392082628295
+   }
+  },
+  {
+   "fold": 3,
+   "n_truth": 5630,
+   "n_dots": 19536,
+   "frozen_hh_hd_ste_dti": 0.24335930706370568,
+   "stage1_q10": {
+    "held_trace_rows": 38,
+    "budget_trace_rows": 1088,
+    "threshold": -0.490566037735849,
+    "approved_area_share": 0.9007849830078068
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "tp": 2094.6587357974254,
+     "fp": 18421.68043427371,
+     "emitted_inside_allowed": 19536
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "tp": 2094.6587357974254,
+     "fp": 18421.68043427371,
+     "emitted_inside_allowed": 19536
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.24881278995696843,
+     "dots": 19536,
+     "tp": 2141.777499520674,
+     "fp": 18378.16228595195,
+     "emitted_inside_allowed": 19536
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.24881278995696843,
+     "dots": 19536,
+     "tp": 2141.777499520674,
+     "fp": 18378.16228595195,
+     "emitted_inside_allowed": 19536
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.24335930706370568,
+     "dots": 19536,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.24282286547703025,
+     "dots": 19536,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.2307451627250078,
+     "dots": 16665,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.23026304698824623,
+     "dots": 16665,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.19584376127477565,
+     "dots": 19536
+    },
+    "U_block": {
+     "dti": 0.19584376127477565,
+     "dots": 19536
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1101428408152463
+   }
+  },
+  {
+   "fold": 4,
+   "n_truth": 13348,
+   "n_dots": 46318,
+   "frozen_hh_hd_ste_dti": 0.30504916677291494,
+   "stage1_q10": {
+    "held_trace_rows": 108,
+    "budget_trace_rows": 1018,
+    "threshold": -0.5385934819897085,
+    "approved_area_share": 0.9006108132701084
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "tp": 6256.850743298708,
+     "fp": 42905.94082504608,
+     "emitted_inside_allowed": 46318
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "tp": 6256.850743298708,
+     "fp": 42905.94082504608,
+     "emitted_inside_allowed": 46318
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.30358470551989303,
+     "dots": 46318,
+     "tp": 6225.242930645574,
+     "fp": 42911.68585686959,
+     "emitted_inside_allowed": 46318
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.30358470551989303,
+     "dots": 46318,
+     "tp": 6225.242930645574,
+     "fp": 42911.68585686959,
+     "emitted_inside_allowed": 46318
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.30504916677291494,
+     "dots": 46318,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.30479479813108007,
+     "dots": 46318,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.30170971193140145,
+     "dots": 39510,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.30145950171751856,
+     "dots": 39510,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.21929193226573848,
+     "dots": 46318
+    },
+    "U_block": {
+     "dti": 0.21929193226573848,
+     "dots": 46318
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1103575320942578
+   }
+  },
+  {
+   "fold": 5,
+   "n_truth": 11398,
+   "n_dots": 39551,
+   "frozen_hh_hd_ste_dti": 0.3179962667732945,
+   "stage1_q10": {
+    "held_trace_rows": 96,
+    "budget_trace_rows": 1030,
+    "threshold": -0.5317324185248714,
+    "approved_area_share": 0.9007849830078068
+   },
+   "outputs": {
+    "fresh_hd_hh_blend_ungated": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "tp": 5590.243924873217,
+     "fp": 36715.70502901507,
+     "emitted_inside_allowed": 39551
+    },
+    "fresh_hd_hh_blend_stage1_q10": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "tp": 5590.243924873217,
+     "fp": 36715.70502901507,
+     "emitted_inside_allowed": 39551
+    },
+    "h53a_blend_ungated": {
+     "dti": 0.30375227856266945,
+     "dots": 39551,
+     "tp": 5332.589441317112,
+     "fp": 36854.002155599985,
+     "emitted_inside_allowed": 39551
+    },
+    "h53a_blend_stage1_q10": {
+     "dti": 0.30375227856266945,
+     "dots": 39551,
+     "tp": 5332.589441317112,
+     "fp": 36854.002155599985,
+     "emitted_inside_allowed": 39551
+    }
+   },
+   "h53f_sweep": {
+    "r3.47_f2.00": {
+     "dti": 0.3179962667732945,
+     "dots": 39551,
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "dti": 0.3173938106232775,
+     "dots": 39551,
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "dti": 0.31721934699898635,
+     "dots": 33738,
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "dti": 0.3166852269406282,
+     "dots": 33738,
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "uniform_controls": {
+    "U_q10": {
+     "dti": 0.21740427728528222,
+     "dots": 39551
+    },
+    "U_block": {
+     "dti": 0.21740427728528222,
+     "dots": 39551
+    }
+   },
+   "candidate_stage1": {
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1101428408152463
+   }
+  }
+ ],
+ "slot_used": false,
+ "limitations": [
+  "The known-fault catalogue is not the hidden expert truth; this is only a local ranking proxy.",
+  "The holdout does not establish organizer score, artifact acceptance, or value for geothermal vents.",
+  "The six folds have been reused across many hypotheses; no independent lockbox exists.",
+  "The strain residual is computed in rank space; source units/component remain provisional (IR-51-12).",
+  "H53-F's mass ratio rests on the planning |G| = 12,700 estimate, which is inferred from owner-reported sibling scores, not an organizer count.",
+  "A failed H53-A never produces a TIFF and never consumes a competition slot."
+ ]
+}

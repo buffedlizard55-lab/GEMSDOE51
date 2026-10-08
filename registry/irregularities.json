@@ -196,5 +196,29 @@
   "summary": "The H52 V4 raster was described using a six-fold DTI that belongs to a different STE geometry; no direct holdout receipt exists for the written V4 candidate.",
   "evidence": "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json has holdout=null and its uniform_control.candidate_arm is V7_ste_q10. The cited mean 0.2808209979823443 in evidence/h52_emission_pass2_20261007T212644Z.json is for V7 STE q10, not the built V4 NMS r=2.4 raster. The builder selection fell back to V4 because the STE geometry-change bar was not met; the amended pass-2 rerun was killed by sandbox recycle and wrote no new receipt. The available arithmetic harness recheck only validates the respecified comparison against existing receipts; it does not score V4.",
   "status": "OPEN; candidate downgraded to RESEARCH_ONLY_NOT_PROMOTED in data/submission_manifest.json. README and site now state no upload-eligible artifact and explicitly say NOT FOR SUBMISSION. The site card links the checks, pass-2 ledger, arithmetic harness recheck and current-inventory uniqueness audit. Resolve by restoring data/prepared, rerunning the amended six-fold pass-2 instrument so the actual V4 arm is directly scored, then require a fresh preregistered promotion decision before any slot is considered."
+ },
+ {
+  "id": "IR-H53-01",
+  "summary": "The preregistered top candidate H53-A (fine-scale geodetic strain-residual ridge features added to the H-H arm) was validated on the frozen six-fold spatially blocked holdout and NOT promoted: q10-gated mean 0.284001 vs the frozen best 0.285341, paired delta -0.000923 vs the fresh q10-gated baseline, 3/6 folds. No H53-feature TIFF was built; the hypothesis is falsified on this instrument.",
+  "evidence": "evidence/h53_holdout_20261008.json (status COMPLETE_NOT_PROMOTED, gates, rows); registry/preregistration_h53.json (frozen rule); knowledge/candidate-hypotheses-h53-2026-10-08.md. The submission artifact is instead the q10-confined regeneration of the promoted H-H/H-D procedure.",
+  "status": "CLOSED; hypothesis falsified on the frozen instrument; H53-B..E remain untested proposals in the slate"
+ },
+ {
+  "id": "IR-H53-02",
+  "summary": "A transcription error was caught by line-by-line verification before the H53 holdout run: the Stage-1 trace-holdout uniform-DTI constant in scripts/run_h53_holdout.py had two digits transposed (0.04856426822063665 instead of the correct 0.04856426582063665 from evidence/stage1_q10_trace_holdout_20261007.json).",
+  "evidence": "evidence/stage1_q10_trace_holdout_20261007.json summary.uniform_dti = 0.04856426582063665; scripts/evaluate_hk1_holdout.py line 282 carries the correct value; the H53 receipt now carries the verified constant.",
+  "status": "CLOSED; fixed before the run; caught by the multi-pass review requirement"
+ },
+ {
+  "id": "IR-H53-03",
+  "summary": "scripts/build_submission_h53.py crashed three times during manifest/registry assembly (NameError on folds_won, then FROZEN_BEST, then a renamed paired_holdout key) after the TIFF had already been staged and promoted to docs/downloads. Each crash left an orphaned artifact pair; all orphans were removed and the build was rerun as a single clean cycle.",
+  "evidence": "registry/submission_build_h53.json and docs/downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json are from the final clean cycle; the TIFF bytes are identical across all cycles (same SHA-256 5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e), confirming determinism; docs/downloads contains exactly one H53 artifact set.",
+  "status": "CLOSED; final build is a single clean cycle; determinism verified by identical SHA-256 across cycles"
+ },
+ {
+  "id": "IR-H53-04",
+  "summary": "The frozen local best (H-H/H-D blend, proxy mean 0.285341) remains non-uploadable (86.71% of dots inside q10; NaN-outside encoding) and is demoted to an audit-only primary. The portal range error is addressed by encoding in the new recommended candidate (all 12,279,160 cells finite in [0,1], zeros outside, no NoData tag), but no GEMSDOE51 artifact has been portal-validated and the file that triggered the original 'Predicted values must be in range [0, 1]' error remains unidentified.",
+  "evidence": "data/submission_manifest.json (primary role ARCHIVED_LOCAL_BENCHMARK_NOT_UPLOADABLE; recommended_upload_candidate with format checks nan_cells=0, values_outside_0_1=0, outside_footprint_zeros=true, nodata=null); docs/downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json; independent full-grid scan recorded in knowledge/h53-session-results-2026-10-08.md section 7.",
+  "status": "OPEN; portal validation pending the entrant's upload decision; no organizer score claimed"
  }
 ]

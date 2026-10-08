@@ -24,18 +24,85 @@
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
 
+<section class="download">
+<h2>⬇ Recommended upload candidate — NOT YET PORTAL-VALIDATED</h2>
+<p class="warn"><b>RECOMMENDED UPLOAD CANDIDATE.</b> This is the only artifact in this repository that
+satisfies every constraint in the method brief at once: official grid/CRS/transform/dtype, all pixel
+values finite and inside [0, 1], every emitted point at least
+200 m from the mapped catalogue, every
+emitted point inside the Stage-1 strain-deficit approved tiles, Stage-1 non-dominance, and a support
+that no locally held prior submission matches. It has <b>not</b> been uploaded, so portal acceptance is
+unproven, and it is <b>not</b> an organizer score.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif">Download the submission GeoTIFF</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.zip">ZIP containing the same single GeoTIFF</a></p>
+<dl class="kv">
+<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-H53-TWOSTAGE-20261008T040951Z</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>Two-stage GEMSDOE51 H53 submission: coarse rank-space strain-budget deficit (q10 approved tiles, 90.1% of footprint) gating a STE L9 emission of the 0.5 H-D + 0.5 H-H (regeneration of the promoted procedure) belief field; 44,069 unit dots, none within 200 m of the published catalogue, 100% inside approved tiles; all cells finite in [0,1] with zeros outside the footprint; local format/uniqueness/Stage-1 gates passed; H53-A promoted=False; no organizer score claimed.</code></dd>
+<dt>Format receipt (local, not portal validation)</dt><dd>one-band float32 EPSG:32611
+ shape [3730, 3292], finite everywhere (nan_cells=0),
+ values in [0.0, 1.0], format_valid=True,
+ portal_legal=True</dd>
+<dt>Mass geometry</dt><dd>44069 unit dots; nearest-neighbour spacing median
+ 7.810249675906654 px; distance to mapped catalogue median
+ 4.47 px (p10 2.24,
+ p90 14.4)</dd>
+<dt>Stage 1 (kept coarse)</dt><dd>approved area 90.09% of footprint;
+ every emitted point inside approved tiles; lift 1.110 (limit 1.5);
+ formula Kreemer et al. (2000), Eq. 3: eps_ij = 1/2 sum_k [L_k u_dot_k/(A sin(delta_k))] m_ij^k</dd>
+<dt>Uniqueness (local priors)</dt><dd>PASS —
+ max support Jaccard 0.2140 (limit 0.50),
+ max containment 0.3526 (limit 0.60);
+ 42 local priors compared, 21 of them family references</dd>
+<dt>Paired six-fold proxy (artifact)</dt><dd>artifact 0.284924 vs
+ fresh q10-gated baseline 0.284924
+ (Δ +0.000000;
+ 0/6 folds won).
+ The baseline reproduces the archived receipt exactly (max deviation
+ 0.0), so the comparison is paired and
+ reproducible. H53-A hypothesis result, reported separately: 0.284001
+ (Δ -0.000923;
+ 3/6 folds; promoted=False).
+ <b>This is a compliance cost, not a score improvement:</b> the brief's
+ all-points-inside-approved requirement costs 0.000416
+ mean proxy DTI vs the frozen UNGATED local best (which is itself not uploadable).</dd>
+<dt>SHA-256</dt><dd><code>5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e</code></dd>
+</dl>
+<p class="ev">Receipts: <a href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json">local checks</a>,
+ <a href="holdout.html">Stage 1 / Stage 2 holdouts reported separately</a>,
+ <a href="irregularities.html">IR-51-21</a>. No upload, portal acceptance or organizer score is claimed anywhere on this site.</p>
+</section>
 <section class="download missing">
 <h2>⬇ NO UPLOAD-ELIGIBLE ARTIFACT — existing local benchmark NOT CLEARED FOR UPLOAD</h2>
-<p><b>No file has passed the current holdout promotion rule; no weekly competition slot is authorized. This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<p><b>This archived local benchmark is NOT CLEARED FOR UPLOAD and is not an upload candidate — do not spend a competition slot on it.</b> It predates the current constraints: it was not newly generated, only 86.71% of its points lie inside the current full-map q10 approved tiles, and it encodes NaN outside the footprint (the unresolved portal range hazard). It is linked for audit only. The RECOMMENDED UPLOAD CANDIDATE above is the file the method brief's constraints select.</p>
 <p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
 <p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
 <dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload. SUPERSEDED by the H53 two-stage artifact as the upload candidate; remains research-only/audit — do not upload (fails the q10 all-points-inside requirement; NaN-outside encoding is the unresolved portal range hazard).</code></dd>
 <dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
 <dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
 </dl>
 <p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
+</section><section class="download">
+<p class="eyebrow">LATEST EXPERIMENT · H53 · 8 OCTOBER 2026</p>
+<h2>H53 two-stage submission artifact — unique new TIFF</h2>
+<p class="warn"><strong>DOWNLOAD: YES. SUBMIT: THIS IS THE COMPETITION SUBMISSION CANDIDATE.</strong><br>
+A newly trained, uniquely seeded prediction map — not a renamed or re-encoded prior submission.
+Every local gate passed: official grid/CRS/transform/dtype, all cells finite in [0, 1] with zeros
+outside the footprint and no NoData tag, 100% of points inside the Stage-1 q10 approved tiles,
+Stage-1 non-dominance, and a support that matches no locally held prior. <b>Not yet uploaded:</b>
+portal acceptance and any organizer score are unproven.</p>
+<p><a class="btn" download href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif">Download the submission GeoTIFF</a></p>
+<p><a download href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.zip">Download ZIP containing one TIFF</a> · <a href="holdout.html">Stage 1 / Stage 2 holdouts reported separately</a> · <a href="how-to-submit.html">Submission instructions</a></p>
+<dl class="kv"><dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-H53-TWOSTAGE-20261008T040951Z</code></dd>
+<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>Two-stage GEMSDOE51 H53 submission: coarse rank-space strain-budget deficit (q10 approved tiles, 90.1% of footprint) gating a STE L9 emission of the 0.5 H-D + 0.5 H-H (regeneration of the promoted procedure) belief field; 44,069 unit dots, none within 200 m of the published catalogue, 100% inside approved tiles; all cells finite in [0,1] with zeros outside the footprint; local format/uniqueness/Stage-1 gates passed; H53-A promoted=False; no organizer score claimed.</code></dd>
+<dt>H53-A top-candidate verdict</dt><dd>NOT PROMOTED — no H53-A TIFF; the artifact is the q10-confined regeneration of the promoted H-H/H-D procedure</dd>
+<dt>H53-A q10-gated proxy DTI</dt><dd>0.284001 vs fresh q10-gated H-H/H-D baseline 0.284924 (Δ -0.000923; 3/6 folds). Frozen ungated best 0.285341 (not uploadable). Not an organizer score.</dd>
+<dt>H53-F operating point</dt><dd>adopted arm r3.47_f2.00 (mean 0.284924); rule: adopt a non-default point only if it beats the (3.47, 2.0) gated mean by &gt;= +0.0020 with &gt;= 4/6 folds</dd>
+<dt>Stage-1 confinement</dt><dd>100% of points inside approved tiles; approved area 90.13%; lift 1.109 (limit 1.5)</dd>
+<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag</dd>
+<dt>SHA-256</dt><dd><code>5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e</code></dd></dl>
+<p><a href="downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json">Final-byte checks and scoped uniqueness gate</a> · <a href="downloads/h53_holdout_20261008.json">H53 six-fold holdout receipt</a> · <a href="downloads/candidate_hypotheses_prereg_20261008.json">preregistered H53 slate</a>. Format/range safety is not portal acceptance.</p>
 </section><section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
 <h2>New, independently generated TIFF</h2>
@@ -146,7 +213,7 @@ They are not upload-eligible. See the <a href="downloads/uniqueness_gate_H_M_sof
 <a href="downloads/uniqueness_gate_STE_HD_20261007.json">STE audit</a>, and
 <a href="downloads/holdout_archive_review.json">archive reconciliation</a>.</p>
 <h2>What is offered</h2>
-<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>EXISTING_LOCAL_BEST_NOT_UPLOADABLE</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
+<table class=''><thead><tr><th>role</th><th>file</th><th>gate</th><th>what it is</th><th>holdout cost vs ungated</th><th>max Jaccard vs prior submissions</th><th>uniqueness</th></tr></thead><tbody><tr><td>ARCHIVED_LOCAL_BENCHMARK_NOT_UPLOADABLE</td><td><a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif</a><br><span class='ev'>zip: <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip</a></span></td><td>H-H/H-D 50/50 + STE</td><td>Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.</td><td>n/a</td><td>0.248</td><td>PASS</td></tr></tbody></table>
 <p class="warn"><b>Target and provenance limitation.</b> The official problem describes the supplied
 training labels as existing USGS/INGENIOUS faults, while the initial hidden test set contains
 expert-identified faults absent from the existing database. The local <code>labels.tif</code> and

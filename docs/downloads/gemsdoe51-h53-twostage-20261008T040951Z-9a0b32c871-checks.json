@@ -1,0 +1,940 @@
+{
+ "name": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871",
+ "promoted_h53a": false,
+ "h53f_decision": {
+  "default_arm": "r3.47_f2.00",
+  "default_mean": 0.2849241048617298,
+  "sweep_means": {
+   "r3.47_f2.00": 0.2849241048617298,
+   "r3.47_f2.24": 0.28465547257575263,
+   "r2.96_f2": 0.2831753710382806,
+   "r2.96_f2.24": 0.28294181218756553
+  },
+  "adopted_arm": "r3.47_f2.00",
+  "adopted_mean": 0.2849241048617298,
+  "rule": "adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds",
+  "note": "no non-default point met the adoption bar; the build keeps ratio 3.47, flank 2.0 px"
+ },
+ "ratio": 3.47,
+ "flank_px": 2.0,
+ "n_dots": 44069,
+ "n_emitted": 44069,
+ "stage1_q": 10.0,
+ "tile_px": 100,
+ "stage1_area_share": 0.900925673451481,
+ "stage1_emitted_share": 1.0,
+ "stage1_lift": 1.1099694785796939,
+ "on_catalogue_px": 0,
+ "stage2_top_decile_share": 0.9973223808119086,
+ "geometry_audit": {
+  "dots": 44069,
+  "d_cat_p10": 2.23606797749979,
+  "d_cat_median": 4.47213595499958,
+  "d_cat_p90": 14.422205101855956,
+  "frac_within_3px": 0.3365858086183031,
+  "frac_within_5px": 0.566634141913817,
+  "frac_within_10px": 0.8442896367060746,
+  "spacing": {
+   "n": 44069,
+   "nn_median": 7.810249675906654,
+   "nn_p10": 3.1622776601683795,
+   "nn_p90": 19.115413128318366
+  }
+ },
+ "holdout": {
+  "schema_version": 1,
+  "status": "COMPLETE_NOT_PROMOTED",
+  "candidate": "H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm",
+  "preregistration": "registry/preregistration_h53.json",
+  "slate": "evidence/candidate_hypotheses_prereg_20261008.json",
+  "instrument": "six-fold 3x3 spatial holdout; visible known-fault catalogue proxy truth",
+  "protocol": {
+   "buffer_px": 12,
+   "negative_samples": 250000,
+   "negative_seed": "1000 + fold.index",
+   "model_seed": "fold.index",
+   "max_iter": 250,
+   "mass_ratio": 3.47,
+   "blend_baseline": "0.5 * fresh H-D + 0.5 * fresh H-H",
+   "blend_candidate": "0.5 * fresh H-D + 0.5 * (fresh H-H + 6 H53-A features)",
+   "emission": "STE ridge scales 1/2/3.5 px, line length 9, continuity exponent 0.35, greedy spacing 2.4 px, catalogue flank 2.0 px",
+   "candidate_features": [
+    "h53a_geod_2ndinv_s15_crest",
+    "h53a_geod_2ndinv_s40_crest",
+    "h53a_geod_shearrate_s15_crest",
+    "h53a_geod_shearrate_s40_crest",
+    "h53a_geod_dilaterate_s15_crest",
+    "h53a_geod_dilaterate_s40_crest"
+   ],
+   "candidate_feature_source": "rank-space residual q(observed 2.5 km tile mean) - q(fault tensor II 2.5 km tile) per geodetic band, smoothed sigma=4 px, crest response at sigma 1.5/4.0 px (src/gems51/strain_residual.py)",
+   "stage1_gate": {
+    "field": "q10 geodetic second-invariant deficit over 10 km tiles",
+    "fold_specific_known_catalogue": "yes; held-out trace rows removed",
+    "all_stage2_points_confined_to_approved_tiles": true
+   },
+   "spatial_truth": "held-out block only; known-trace exclusion radius 2 px"
+  },
+  "baseline": {
+   "frozen_mean_dti": 0.285340602656319,
+   "frozen_per_fold": [
+    0.28358474213082796,
+    0.27178387428750844,
+    0.29027025890966246,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "fresh_ungated_mean_dti": 0.285340602656319,
+   "fresh_ungated_per_fold": [
+    0.28358474213082796,
+    0.27178387428750844,
+    0.29027025890966246,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ],
+   "fresh_minus_frozen_mean": 0.0,
+   "fresh_max_abs_dev_vs_frozen": 0.0,
+   "reproduction_tolerance": 1e-05,
+   "reproduced": true,
+   "stage1_q10_gated_mean_dti": 0.2849241048617298,
+   "stage1_q10_gated_per_fold": [
+    0.28358474213082796,
+    0.2704360700961979,
+    0.28911907633343786,
+    0.24335930706370568,
+    0.30504916677291494,
+    0.3179962667732945
+   ]
+  },
+  "stage1_holdout": {
+   "separately_evaluated": true,
+   "trace_split_evidence": "evidence/stage1_q10_trace_holdout_20261007.json",
+   "trace_holdout_deficit_q10_dti": 0.05062738717100875,
+   "trace_holdout_uniform_dti": 0.04856426582063665,
+   "trace_holdout_deficit_q10_lift": 1.0591471679793076,
+   "spatial_fold_mean_approved_area_share": 0.9013465513972637,
+   "spatial_fold_mean_lift_if_all_points_approved": 1.1094511855066225,
+   "stage1_score_weight": 0.0
+  },
+  "candidate_result": {
+   "ungated_mean_dti": 0.2843985129520102,
+   "ungated_per_fold": [
+    0.2883653416002059,
+    0.27082359319209715,
+    0.291052368880227,
+    0.24881278995696843,
+    0.30358470551989303,
+    0.30375227856266945
+   ],
+   "stage1_q10_gated_mean_dti": 0.2840010514573334,
+   "stage1_q10_gated_per_fold": [
+    0.2883653416002059,
+    0.2700145139321978,
+    0.2894766791720659,
+    0.24881278995696843,
+    0.30358470551989303,
+    0.30375227856266945
+   ],
+   "paired_deltas_vs_stage1_gated_hd_hh": [
+    0.004780599469377922,
+    -0.0004215561640001364,
+    0.0003576028386280128,
+    0.005453482893262751,
+    -0.0014644612530219092,
+    -0.014243988210625058
+   ],
+   "paired_mean_delta_vs_stage1_gated_hd_hh": -0.000923053404396403,
+   "positive_folds_vs_stage1_gated_hd_hh": 3
+  },
+  "h53f_operating_point": {
+   "config": "sweep on the fresh H-H/H-D blend, q10-gated, STE emission",
+   "arms": {
+    "r3.47_f2.00": {
+     "mean_dti": 0.2849241048617298,
+     "per_fold": [
+      0.28358474213082796,
+      0.2704360700961979,
+      0.28911907633343786,
+      0.24335930706370568,
+      0.30504916677291494,
+      0.3179962667732945
+     ],
+     "ratio": 3.47,
+     "flank_px": 2.0
+    },
+    "r3.47_f2.24": {
+     "mean_dti": 0.28465547257575263,
+     "per_fold": [
+      0.2833508384822992,
+      0.270451446407391,
+      0.28911907633343786,
+      0.24282286547703025,
+      0.30479479813108007,
+      0.3173938106232775
+     ],
+     "ratio": 3.47,
+     "flank_px": 2.24
+    },
+    "r2.96_f2": {
+     "mean_dti": 0.2831753710382806,
+     "per_fold": [
+      0.27730414440712936,
+      0.2773640179778179,
+      0.2947098421893408,
+      0.2307451627250078,
+      0.30170971193140145,
+      0.31721934699898635
+     ],
+     "ratio": 2.96,
+     "flank_px": 2.0
+    },
+    "r2.96_f2.24": {
+     "mean_dti": 0.28294181218756553,
+     "per_fold": [
+      0.2770359016862809,
+      0.27749735360337857,
+      0.2947098421893408,
+      0.23026304698824623,
+      0.30145950171751856,
+      0.3166852269406282
+     ],
+     "ratio": 2.96,
+     "flank_px": 2.24
+    }
+   },
+   "decision": {
+    "default_arm": "r3.47_f2.00",
+    "default_mean": 0.2849241048617298,
+    "sweep_means": {
+     "r3.47_f2.00": 0.2849241048617298,
+     "r3.47_f2.24": 0.28465547257575263,
+     "r2.96_f2": 0.2831753710382806,
+     "r2.96_f2.24": 0.28294181218756553
+    },
+    "adopted_arm": "r3.47_f2.00",
+    "adopted_mean": 0.2849241048617298,
+    "rule": "adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds",
+    "note": "no non-default point met the adoption bar; the build keeps ratio 3.47, flank 2.0 px"
+   }
+  },
+  "stage1_non_dominance": {
+   "gate": "fold-specific q10 broad-tile deficit mask; score weight 0.0",
+   "approved_area_share_mean": 0.9013465513972637,
+   "expected_emitted_share_inside_approved": 1.0,
+   "lift_over_area_share": 1.1094511855066225,
+   "maximum_allowed_lift": 1.5,
+   "passed": true,
+   "uniform_control": {
+    "candidate_mean": 0.2849241048617298,
+    "uniform_mean": 0.18695605434530682,
+    "uniform_block_mean": 0.1861495253548243,
+    "margin": 0.002,
+    "passed": true,
+    "note": "the fine model must beat a uniform random fill of the same approved tiles at the same mass; this is the dominance control for the 'not dominated by stage one' requirement"
+   }
+  },
+  "promotion_rule": "fresh ungated baseline reproduces frozen mean within 1e-5; candidate q10-gated mean > frozen best 0.285340602656319; paired q10-gated delta > 0 with >= 4/6 folds; 100% of points inside approved tiles; approved area >= 2/3 and Stage-1 lift <= 1.5",
+  "gates": {
+   "six_folds": true,
+   "baseline_reproduced_within_1e5": true,
+   "beats_frozen_best": false,
+   "paired_delta_positive": false,
+   "positive_folds_ge_4_of_6": false,
+   "all_points_inside_q10": true,
+   "stage1_broad_and_non_dominant": true
+  },
+  "promoted": false,
+  "rows": [
+   {
+    "fold": 0,
+    "n_truth": 12803,
+    "n_dots": 44426,
+    "frozen_hh_hd_ste_dti": 0.28358474213082796,
+    "stage1_q10": {
+     "held_trace_rows": 100,
+     "budget_trace_rows": 1026,
+     "threshold": -0.5180102915951973,
+     "approved_area_share": 0.9006108132701084
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.28358474213082796,
+      "dots": 44426,
+      "tp": 5567.875112919252,
+      "fp": 41389.63624870735,
+      "emitted_inside_allowed": 44426
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.28358474213082796,
+      "dots": 44426,
+      "tp": 5567.875112919252,
+      "fp": 41389.63624870735,
+      "emitted_inside_allowed": 44426
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.2883653416002059,
+      "dots": 44426,
+      "tp": 5664.767400405965,
+      "fp": 41345.2895390803,
+      "emitted_inside_allowed": 44426
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.2883653416002059,
+      "dots": 44426,
+      "tp": 5664.767400405965,
+      "fp": 41345.2895390803,
+      "emitted_inside_allowed": 44426
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.28358474213082796,
+      "dots": 44426,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.2833508384822992,
+      "dots": 44426,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.27730414440712936,
+      "dots": 37897,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.2770359016862809,
+      "dots": 37897,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.19293028878246082,
+      "dots": 44426
+     },
+     "U_block": {
+      "dti": 0.19293028878246082,
+      "dots": 44426
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1103575320942578
+    }
+   },
+   {
+    "fold": 1,
+    "n_truth": 10426,
+    "n_dots": 36178,
+    "frozen_hh_hd_ste_dti": 0.27178387428750844,
+    "stage1_q10": {
+     "held_trace_rows": 60,
+     "budget_trace_rows": 1066,
+     "threshold": -0.42710120068610635,
+     "approved_area_share": 0.9036063392365908
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.27178387428750844,
+      "dots": 36178,
+      "tp": 4337.245785853802,
+      "fp": 33750.938302036855,
+      "emitted_inside_allowed": 36178
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.2704360700961979,
+      "dots": 36178,
+      "tp": 4315.222093183762,
+      "fp": 33763.443208245444,
+      "emitted_inside_allowed": 36178
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.27082359319209715,
+      "dots": 36178,
+      "tp": 4321.307769283283,
+      "fp": 33755.5510242515,
+      "emitted_inside_allowed": 36178
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.2700145139321978,
+      "dots": 36178,
+      "tp": 4308.156549277167,
+      "fp": 33764.23188514175,
+      "emitted_inside_allowed": 36178
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.2704360700961979,
+      "dots": 36178,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.270451446407391,
+      "dots": 36178,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.2773640179778179,
+      "dots": 30861,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.27749735360337857,
+      "dots": 30861,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.15002087103492898,
+      "dots": 36178
+     },
+     "U_block": {
+      "dti": 0.15066884234938846,
+      "dots": 36178
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1066766096891785
+    }
+   },
+   {
+    "fold": 2,
+    "n_truth": 7096,
+    "n_dots": 24623,
+    "frozen_hh_hd_ste_dti": 0.29027025890966246,
+    "stage1_q10": {
+     "held_trace_rows": 42,
+     "budget_trace_rows": 1084,
+     "threshold": -0.37907375643224694,
+     "approved_area_share": 0.9016813765911615
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.29027025890966246,
+      "dots": 24623,
+      "tp": 3159.244821283902,
+      "fp": 22875.778904242135,
+      "emitted_inside_allowed": 24623
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.28911907633343786,
+      "dots": 24623,
+      "tp": 3146.4058537071924,
+      "fp": 22883.261580649098,
+      "emitted_inside_allowed": 24623
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.291052368880227,
+      "dots": 24623,
+      "tp": 3168.031203784237,
+      "fp": 22871.700442391353,
+      "emitted_inside_allowed": 24623
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.2894766791720659,
+      "dots": 24623,
+      "tp": 3150.4727603888555,
+      "fp": 22882.22100229252,
+      "emitted_inside_allowed": 24623
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.28911907633343786,
+      "dots": 24623,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.28911907633343786,
+      "dots": 24623,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.2947098421893408,
+      "dots": 21004,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.2947098421893408,
+      "dots": 21004,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.14624519542865488,
+      "dots": 24623
+     },
+     "U_block": {
+      "dti": 0.1407580501713002,
+      "dots": 24623
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1090392082628295
+    }
+   },
+   {
+    "fold": 3,
+    "n_truth": 5630,
+    "n_dots": 19536,
+    "frozen_hh_hd_ste_dti": 0.24335930706370568,
+    "stage1_q10": {
+     "held_trace_rows": 38,
+     "budget_trace_rows": 1088,
+     "threshold": -0.490566037735849,
+     "approved_area_share": 0.9007849830078068
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.24335930706370568,
+      "dots": 19536,
+      "tp": 2094.6587357974254,
+      "fp": 18421.68043427371,
+      "emitted_inside_allowed": 19536
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.24335930706370568,
+      "dots": 19536,
+      "tp": 2094.6587357974254,
+      "fp": 18421.68043427371,
+      "emitted_inside_allowed": 19536
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.24881278995696843,
+      "dots": 19536,
+      "tp": 2141.777499520674,
+      "fp": 18378.16228595195,
+      "emitted_inside_allowed": 19536
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.24881278995696843,
+      "dots": 19536,
+      "tp": 2141.777499520674,
+      "fp": 18378.16228595195,
+      "emitted_inside_allowed": 19536
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.24335930706370568,
+      "dots": 19536,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.24282286547703025,
+      "dots": 19536,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.2307451627250078,
+      "dots": 16665,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.23026304698824623,
+      "dots": 16665,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.19584376127477565,
+      "dots": 19536
+     },
+     "U_block": {
+      "dti": 0.19584376127477565,
+      "dots": 19536
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1101428408152463
+    }
+   },
+   {
+    "fold": 4,
+    "n_truth": 13348,
+    "n_dots": 46318,
+    "frozen_hh_hd_ste_dti": 0.30504916677291494,
+    "stage1_q10": {
+     "held_trace_rows": 108,
+     "budget_trace_rows": 1018,
+     "threshold": -0.5385934819897085,
+     "approved_area_share": 0.9006108132701084
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.30504916677291494,
+      "dots": 46318,
+      "tp": 6256.850743298708,
+      "fp": 42905.94082504608,
+      "emitted_inside_allowed": 46318
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.30504916677291494,
+      "dots": 46318,
+      "tp": 6256.850743298708,
+      "fp": 42905.94082504608,
+      "emitted_inside_allowed": 46318
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.30358470551989303,
+      "dots": 46318,
+      "tp": 6225.242930645574,
+      "fp": 42911.68585686959,
+      "emitted_inside_allowed": 46318
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.30358470551989303,
+      "dots": 46318,
+      "tp": 6225.242930645574,
+      "fp": 42911.68585686959,
+      "emitted_inside_allowed": 46318
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.30504916677291494,
+      "dots": 46318,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.30479479813108007,
+      "dots": 46318,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.30170971193140145,
+      "dots": 39510,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.30145950171751856,
+      "dots": 39510,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.21929193226573848,
+      "dots": 46318
+     },
+     "U_block": {
+      "dti": 0.21929193226573848,
+      "dots": 46318
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1103575320942578
+    }
+   },
+   {
+    "fold": 5,
+    "n_truth": 11398,
+    "n_dots": 39551,
+    "frozen_hh_hd_ste_dti": 0.3179962667732945,
+    "stage1_q10": {
+     "held_trace_rows": 96,
+     "budget_trace_rows": 1030,
+     "threshold": -0.5317324185248714,
+     "approved_area_share": 0.9007849830078068
+    },
+    "outputs": {
+     "fresh_hd_hh_blend_ungated": {
+      "dti": 0.3179962667732945,
+      "dots": 39551,
+      "tp": 5590.243924873217,
+      "fp": 36715.70502901507,
+      "emitted_inside_allowed": 39551
+     },
+     "fresh_hd_hh_blend_stage1_q10": {
+      "dti": 0.3179962667732945,
+      "dots": 39551,
+      "tp": 5590.243924873217,
+      "fp": 36715.70502901507,
+      "emitted_inside_allowed": 39551
+     },
+     "h53a_blend_ungated": {
+      "dti": 0.30375227856266945,
+      "dots": 39551,
+      "tp": 5332.589441317112,
+      "fp": 36854.002155599985,
+      "emitted_inside_allowed": 39551
+     },
+     "h53a_blend_stage1_q10": {
+      "dti": 0.30375227856266945,
+      "dots": 39551,
+      "tp": 5332.589441317112,
+      "fp": 36854.002155599985,
+      "emitted_inside_allowed": 39551
+     }
+    },
+    "h53f_sweep": {
+     "r3.47_f2.00": {
+      "dti": 0.3179962667732945,
+      "dots": 39551,
+      "ratio": 3.47,
+      "flank_px": 2.0
+     },
+     "r3.47_f2.24": {
+      "dti": 0.3173938106232775,
+      "dots": 39551,
+      "ratio": 3.47,
+      "flank_px": 2.24
+     },
+     "r2.96_f2": {
+      "dti": 0.31721934699898635,
+      "dots": 33738,
+      "ratio": 2.96,
+      "flank_px": 2.0
+     },
+     "r2.96_f2.24": {
+      "dti": 0.3166852269406282,
+      "dots": 33738,
+      "ratio": 2.96,
+      "flank_px": 2.24
+     }
+    },
+    "uniform_controls": {
+     "U_q10": {
+      "dti": 0.21740427728528222,
+      "dots": 39551
+     },
+     "U_block": {
+      "dti": 0.21740427728528222,
+      "dots": 39551
+     }
+    },
+    "candidate_stage1": {
+     "emitted_share_inside_approved": 1.0,
+     "lift_over_area_share": 1.1101428408152463
+    }
+   }
+  ],
+  "slot_used": false,
+  "limitations": [
+   "The known-fault catalogue is not the hidden expert truth; this is only a local ranking proxy.",
+   "The holdout does not establish organizer score, artifact acceptance, or value for geothermal vents.",
+   "The six folds have been reused across many hypotheses; no independent lockbox exists.",
+   "The strain residual is computed in rank space; source units/component remain provisional (IR-51-12).",
+   "H53-F's mass ratio rests on the planning |G| = 12,700 estimate, which is inferred from owner-reported sibling scores, not an organizer count.",
+   "A failed H53-A never produces a TIFF and never consumes a competition slot."
+  ]
+ },
+ "field_extras_hh": [
+  "lidrel_facecoh09",
+  "lidrel_facecoh21",
+  "detelev_facecoh09",
+  "detelev_facecoh21",
+  "hh_endpoint",
+  "hh_bridge",
+  "hh_bridge_cond",
+  "hh_bridge_surface",
+  "hh_endpoint_concordance"
+ ],
+ "field_extras_hd": [
+  "lidrel_facecoh09",
+  "lidrel_facecoh21",
+  "detelev_facecoh09",
+  "detelev_facecoh21"
+ ],
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "epsg": 32611
+ },
+ "format": {
+  "file": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif",
+  "bytes": 227820,
+  "sha256": "5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e",
+  "crs": "EPSG:32611",
+  "crs_epsg": 32611,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "shape": [
+   3730,
+   3292
+  ],
+  "count": 1,
+  "dtype": "float32",
+  "nodata": null,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "transform_matches_template": true,
+   "shape_matches_template": true,
+   "inside_footprint_finite": true,
+   "outside_footprint_nan": false,
+   "outside_footprint_zeros": true,
+   "nan_cells": 0,
+   "global_invalid_cells": 0,
+   "all_cells_finite_in_range": true,
+   "nodata_tag_safe": true,
+   "values_outside_0_1": 0,
+   "min_value": 0.0,
+   "max_value": 1.0,
+   "nodata_tag_is_nan": false,
+   "predicted_px": 44069,
+   "total_mass": 44069.0,
+   "portal_legal": true,
+   "format_valid": true
+  }
+ },
+ "uniqueness": {
+  "candidate": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif",
+  "sha256": "5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e",
+  "byte_duplicate_of": [],
+  "support_jaccard": {
+   "data/prior/g25_dotted_prior.tif": 0.015493,
+   "data/prior/g32_anchor_prior.tif": 0.015493,
+   "data/prior/g32_h33b2_prior.tif": 0.016733,
+   "data/refs/13gems-r13-lattice-nan.tif": 0.007398,
+   "data/refs/8gemsdoe-hedge-v2.tif": 0.015431,
+   "data/refs/gems10-h25-ctx-ridge.tif": 0.030903,
+   "data/refs/gems10-h28-dotted-ridge.tif": 0.021788,
+   "data/refs/gems16-h16-1-baseline-nan.tif": 0.02331,
+   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.024038,
+   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.024617,
+   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.017977,
+   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.015493,
+   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.015493,
+   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.011561,
+   "data/refs/gems32-probe-S1-anchor.tif": 0.015493,
+   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.019383,
+   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.015493,
+   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.015579,
+   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.015465,
+   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.015728,
+   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.015819,
+   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.016733,
+   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.016548,
+   "data/refs/gemsdoe9-2314b599.tif": 0.004246,
+   "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.120003,
+   "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.159344,
+   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.147033,
+   "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.139912,
+   "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.214005,
+   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.000681,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.145095,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.145095,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.151108,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.151108,
+   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.028452,
+   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.147033,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.139632,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.139632,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.146108,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.146108,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.14198,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.14198
+  },
+  "support_containment": {
+   "data/prior/g25_dotted_prior.tif": 0.03052,
+   "data/prior/g32_anchor_prior.tif": 0.03052,
+   "data/prior/g32_h33b2_prior.tif": 0.03052,
+   "data/refs/13gems-r13-lattice-nan.tif": 0.041821,
+   "data/refs/8gemsdoe-hedge-v2.tif": 0.093649,
+   "data/refs/gems10-h25-ctx-ridge.tif": 0.148494,
+   "data/refs/gems10-h28-dotted-ridge.tif": 0.054846,
+   "data/refs/gems16-h16-1-baseline-nan.tif": 0.086841,
+   "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.089405,
+   "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.090063,
+   "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.04173,
+   "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.03052,
+   "data/refs/gems25-dotted-d2-8-zeros.tif": 0.03052,
+   "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.0231,
+   "data/refs/gems32-probe-S1-anchor.tif": 0.03052,
+   "data/refs/gemsdoe-ens12-7f00890a.tif": 0.093649,
+   "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.03052,
+   "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.031383,
+   "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.031088,
+   "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.03161,
+   "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.031859,
+   "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.03052,
+   "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.03052,
+   "data/refs/gemsdoe9-2314b599.tif": 0.037214,
+   "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.199778,
+   "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.274887,
+   "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.256371,
+   "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.245479,
+   "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.352561,
+   "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.004198,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.253421,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.253421,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.262543,
+   "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.262543,
+   "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.087885,
+   "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.256371,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.245048,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.245048,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.254964,
+   "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.254964,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.248656,
+   "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.248656
+  },
+  "stage1_dominance": {
+   "approved_area_share_of_footprint": 0.900925673451481,
+   "emitted_pixels_inside_approved": 44069,
+   "emitted_pixels_total": 44069,
+   "emitted_share_inside_approved": 1.0,
+   "lift_over_area_share": 1.1099694785796939,
+   "hard_confined": true,
+   "uniform_control": {
+    "candidate_mean": 0.2849241048617298,
+    "uniform_mean": 0.18695605434530682,
+    "uniform_block_mean": 0.1861495253548243,
+    "margin": 0.002,
+    "passed": true,
+    "note": "the fine model must beat a uniform random fill of the same approved tiles at the same mass; this is the dominance control for the 'not dominated by stage one' requirement",
+    "excess": 0.09796805051642299
+   }
+  },
+  "verdict": "PASS",
+  "notes": []
+ }
+}

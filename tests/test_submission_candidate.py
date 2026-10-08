@@ -115,9 +115,13 @@ def test_manifest_readiness_state_is_known_and_not_overclaiming(manifest: dict) 
     assert readiness["status"] in {
         "PORTAL_ACCEPTED",
         "NOT_YET_PORTAL_VALIDATED",
+        "LOCAL_GATES_PASSED_NOT_PORTAL_TESTED",
         "BLOCKED_NOT_FOR_UPLOAD",
     }
-    if manifest.get("recommended_upload_candidate") and readiness["status"] == "NOT_YET_PORTAL_VALIDATED":
+    if manifest.get("recommended_upload_candidate") and readiness["status"] in {
+        "NOT_YET_PORTAL_VALIDATED",
+        "LOCAL_GATES_PASSED_NOT_PORTAL_TESTED",
+    }:
         # An unvalidated candidate must never be described as accepted anywhere in the index.
         index = (ROOT / "docs" / "index.html").read_text(encoding="utf-8").lower()
         assert "portal-validated submission file" not in index

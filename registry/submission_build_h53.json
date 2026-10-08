@@ -1,0 +1,29 @@
+{
+ "created_utc": "20261008T040951Z",
+ "name": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871",
+ "promoted_h53a": false,
+ "config": {
+  "dry_run": false,
+  "seed_hd": 53,
+  "seed_hh": 54,
+  "seed_h53a": 55,
+  "tag": "h53-twostage"
+ },
+ "tif": {
+  "file": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif",
+  "bytes": 227820,
+  "sha256": "5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e"
+ },
+ "zip": {
+  "file": "gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.zip",
+  "bytes": 189004,
+  "sha256": "162f0354fc8d01090fb95fe7cc39e2c6f3fbf314f9a0702c335046b2e3e93267"
+ },
+ "emitted_px": 44069,
+ "on_catalogue_px": 0,
+ "stage1_area_share": 0.900925673451481,
+ "stage1_lift": 1.1099694785796939,
+ "uniqueness_verdict": "PASS",
+ "holdout_receipt": "evidence/h53_holdout_20261008.json",
+ "notes": "Two-stage H53 submission: coarse rank-space strain-budget prior (Stage 1, tiles only, q10 approved domain) + blended belief-field STE emission (Stage 2, every point inside the approved tiles). Local format and uniqueness checks only \u2014 no organizer score is claimed."
+}
