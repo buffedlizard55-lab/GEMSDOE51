@@ -196,5 +196,23 @@
   "summary": "The H52 V4 raster was described using a six-fold DTI that belongs to a different STE geometry; no direct holdout receipt exists for the written V4 candidate.",
   "evidence": "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json has holdout=null and its uniform_control.candidate_arm is V7_ste_q10. The cited mean 0.2808209979823443 in evidence/h52_emission_pass2_20261007T212644Z.json is for V7 STE q10, not the built V4 NMS r=2.4 raster. The builder selection fell back to V4 because the STE geometry-change bar was not met; the amended pass-2 rerun was killed by sandbox recycle and wrote no new receipt. The available arithmetic harness recheck only validates the respecified comparison against existing receipts; it does not score V4.",
   "status": "OPEN; candidate downgraded to RESEARCH_ONLY_NOT_PROMOTED in data/submission_manifest.json. README and site now state no upload-eligible artifact and explicitly say NOT FOR SUBMISSION. The site card links the checks, pass-2 ledger, arithmetic harness recheck and current-inventory uniqueness audit. Resolve by restoring data/prepared, rerunning the amended six-fold pass-2 instrument so the actual V4 arm is directly scored, then require a fresh preregistered promotion decision before any slot is considered."
+ },
+ {
+  "id": "IR-R1-01",
+  "summary": "The archived frozen-best six-fold values (0.2853406) cannot be reproduced because the fold field files that produced them were kept in data/prepared/ (gitignored) and never committed.",
+  "evidence": "2026-10-08 R1 run: refit base reproduces evidence/p1_holdout_20261007.json baseline_ungated with max deviation 0.0 on all six folds (scripts/recheck_r1_instrument.py), but deviates from evidence/hh_blend_holdout.json fold 0 by 1.53e-4; the P1 session itself recorded baseline_reproduced:false and baseline_drift -2.5447786610344192e-05. The two-stage 2026-10-07 refit's fold-0 H-D value matches today's refit to the last digit, so the pipeline is stable; the archived fold-0 blend field is stale.",
+  "status": "OPEN; mitigated by preregistration Amendment A1 (knowledge/preregistration-2026-10-08.md section 6): the instrument anchor is the P1 receipt, same procedure and pipeline state. Future sessions must commit field digests (or the fields themselves, size permitting) alongside any frozen number."
+ },
+ {
+  "id": "IR-R1-02",
+  "summary": "Nearest-cell relocation confinement is credit-destructive at tile granularity: disapproved regions are whole 10 km tiles, so moved dots travel beyond the 3 px DTI kernel.",
+  "evidence": "evidence/r1_holdout_20261008.json fold 1: 285 relocated dots, mean move 28.49 px, relocate DTI 0.2638512 vs base 0.2717839 (\u0394 -0.00793); restrict DTI 0.2644986. Folds 0,3,4,5 moved zero dots. Uniform-tiles dominance control still passes decisively (+0.0959 over margin 0.002), so the fine model, not the tiles, carries the signal.",
+  "status": "OPEN; informs the R2 operator design (continue the greedy STE search on the approved domain for disapproved dots only), to be preregistered before use."
+ },
+ {
+  "id": "IR-R1-03",
+  "summary": "Top-n layer screens are mass-inflated by tie expansion: tmi_s15_lin has 209,521 pixels exactly equal to 1.0 in the current stack, so a 'top-12,691' emission actually selects 209,521 pixels.",
+  "evidence": "Direct recount on 2026-10-08: np.partition threshold for n=12691 equals 1.0 and (v>=thr).sum()=209521. The 2026-10-07 layer screen recorded px=12691 for tmi_s15_lin with S=0.0648; rerunning the identical protocol today reproduces S=0.06475673576176265 at px=209521, i.e. the historical number was a ~16.5x-mass measurement. Strict-mass (tie-free rank) screening gives S=0.0141 for the same layer.",
+  "status": "OPEN; X5 rejection unaffected (fusion far below random control under either reading). Future screens must report emitted_px and cap mass explicitly; consider tie-broken top-n."
  }
 ]

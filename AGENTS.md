@@ -1,11 +1,20 @@
 # Session entrypoint
 
-Before any work, read README.md (current decision, standing user task brief and appendices),
-knowledge/next-candidates-20261007.md, and the latest evidence receipts. Never reuse an
-old TIFF as a new submission. Score hypotheses before using a competition slot; a
-research download must be visibly NOT FOR SUBMISSION. Do not claim portal acceptance
-from local checks. Preserve failed experiments and do not tune until a holdout passes.
+Before any work, read `README.md` (current decision, standing user task brief and appendices),
+`knowledge/hypothesis-slate-20261008.md`, `registry/preregistration_h53.json`, and the latest
+receipts in `evidence/`. The 2026-10-08 H53-A baseline-reproduction gate failed; H53-A Stage 2 is
+fail-closed and no H53-A candidate score or TIFF exists. A distinct earlier H53-K2x six-fold screen
+was completed and NOT PROMOTED; its new TIFF is research-only, not an H53-A substitute, and not for
+submission. Do not spend a slot on it. Do not weaken the frozen gate, shop for a passing result, or
+substitute the H52 seed-2000 cache. First recover auditable baseline lineage or preregister a new
+baseline before candidate scoring.
 
-Work on the Arena-provided session branch only. Data/raw, data/prepared and work are
-regenerable and ignored. Keep bulk official archives out of Git. Read source definitions
-before converting physical quantities; distinguish evidence from assumptions.
+Never reuse an old TIFF as a new submission. Score hypotheses before using a competition slot;
+a research download must be visibly NOT FOR SUBMISSION. Do not claim portal acceptance from local
+checks or attribute user/community scores to a file without verified evidence. Preserve failed
+experiments and do not tune until a valid holdout passes.
+
+Work on the Arena-provided session branch only. Data/raw, data/prepared and work are regenerable
+and ignored. Keep bulk official archives out of Git. Read source definitions before converting
+physical quantities; distinguish evidence from assumptions. Historical slates and session notes
+remain available for context but must not override the current H53 receipt or preregistration.

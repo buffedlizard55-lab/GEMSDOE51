@@ -40,9 +40,18 @@ from gems51.extras import (                   # noqa: E402
 from gems51.grid import GRID                 # noqa: E402
 
 P = ROOT / "data" / "prepared"
+
+
+def build_hh_group(get, footprint):
+    """Exact H-D face-coherence features plus H-H endpoint/relay features."""
+    group = facecoh_group(get, footprint)
+    group.update(_build_endpoint_bridge(get, footprint))
+    return group
+
+
 GROUPS = {
     "hd": facecoh_group,
-    "hh": _build_endpoint_bridge,
+    "hh": build_hh_group,
     "h53_k2x": conductive_ribbon_group,
 }
 
