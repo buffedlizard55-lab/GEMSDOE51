@@ -1,6 +1,34 @@
 # Session entrypoint
 
-Before work, read `README.md` (current decision and standing task brief), `knowledge/k2-08-results-2026-10-08.md`, `knowledge/k2-08-candidate-hypotheses-2026-10-08.md`, `registry/preregistration_k2_stage1_20261008.json`, the current K2 receipts in `evidence/`, both H53-A slates, `knowledge/candidate-hypotheses-2026-10-08.md` (earlier H53-K2x slate), `knowledge/pr20-h53-r1-review-three-passes-2026-10-08.md`, `knowledge/review-three-passes-20261008.md`, and `knowledge/executive-submission-guide-2026-10-08.md`. Treat versioned receipts and `data/submission_manifest.json` as authoritative; older pages and owner reports do not override them.
+Before any work, read `README.md` (current decision and standing user task brief),
+`knowledge/k2-08-results-2026-10-08.md`, `knowledge/k2-08-candidate-hypotheses-2026-10-08.md`,
+`registry/preregistration_k2_stage1_20261008.json`, the current K2 receipts in `evidence/`,
+all three H53 slates (`registry/preregistration_h53sr_20261008.json` this session's
+strain-residual; `registry/preregistration_h53.json` finite-lag; and
+`evidence/candidate_hypotheses_budget_q10_prereg_20261008.json` budget-q10),
+`knowledge/candidate-hypotheses-2026-10-08.md` (earlier H53-K2x slate),
+`knowledge/pr20-h53-r1-review-three-passes-2026-10-08.md`,
+`knowledge/review-three-passes-20261008.md`, and
+`knowledge/executive-submission-guide-2026-10-08.md`. Treat versioned receipts and
+`data/submission_manifest.json` as authoritative; older pages and owner reports do not
+override them.
+
+**Merged-session state (2026-10-08, three parallel sessions):** the H53-SR two-stage artifact
+(`docs/downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871.tif`) is the RECOMMENDED
+UPLOAD CANDIDATE — every local gate passed (all-finite [0,1] encoding, 100% of points inside
+q10 approved tiles, Stage-1 non-dominance, uniqueness), but it has NOT been uploaded; portal
+acceptance and any organizer score are unproven, and the entrant decides on the weekly slot.
+See `registry/preregistration_h53sr_20261008.json`, `evidence/h53sr_holdout_20261008.json`,
+and `knowledge/h53sr-session-results-2026-10-08.md`. Three parallel sessions each
+preregistered an `H53-A` for a DIFFERENT hypothesis; they are disambiguated under IR-H53-05
+and IR-H53-06 — do not conflate this session's H53-A (strain-residual ridge, validated, NOT
+PROMOTED) with the finite-lag H53-A (Stage 2 blocked) or the budget-q10 H53-A variant
+(NOT PROMOTED, research-only TIFF).
+
+K2-08 is the parallel sessions' latest overall completed candidate. It failed the frozen paired
+spatial promotion rule and the strict family uniqueness gate; its GeoTIFF is research-only and
+must not be submitted. Do not tune or rescore K2-08 on the same holdout. Preserve the failed
+result as evidence.
 
 ## Current scientific state
 

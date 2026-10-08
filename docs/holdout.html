@@ -22,7 +22,7 @@
 </nav>
 </div></header>
 <main class="wrap">
-<p class="ev">Current as of 2026-10-08: the K2-08 candidate failed spatial promotion and family uniqueness; no artifact is cleared for a competition slot. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
+<p class="ev">Current as of 2026-10-08 (merged sessions): the H53-SR two-stage artifact is the RECOMMENDED UPLOAD CANDIDATE below (local gates passed; not yet portal-validated). The parallel session's K2-08 candidate failed spatial promotion and family uniqueness and remains research-only. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
 
 <h2>K2-08 spatial holdout — proxy evidence, NOT PROMOTED</h2>
 <p>The candidate was compared with a fresh 50:50 H-D/H-H blend (not only H-D) using fixed six-fold 3×3 spatial blocks, 12-pixel buffer, 250,000 negatives, fixed HGB/emitter settings, 3.47 mass ratio, 200 m catalogue exclusion, and fold-specific physical q10 masks. Labels are the visible known-fault catalogue, not hidden expert faults.</p>
@@ -136,6 +136,40 @@ all scored K1 points were in approved tiles, and lift was
 </p>
 <table class=''><thead><tr><th>fold</th><th>fresh H-D/H-H (ungated)</th><th>K1 blend (ungated)</th><th>fresh H-D/H-H (q10)</th><th>K1 blend (q10)</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283529</td><td>0.283432</td><td>0.283529</td><td>+0.000097</td></tr><tr><td>1</td><td>0.271784</td><td>0.275603</td><td>0.270436</td><td>0.274444</td><td>+0.004008</td></tr><tr><td>2</td><td>0.290270</td><td>0.292220</td><td>0.289119</td><td>0.290417</td><td>+0.001298</td></tr><tr><td>3</td><td>0.243359</td><td>0.242234</td><td>0.243359</td><td>0.242234</td><td>-0.001126</td></tr><tr><td>4</td><td>0.305049</td><td>0.304764</td><td>0.305049</td><td>0.304764</td><td>-0.000286</td></tr><tr><td>5</td><td>0.317996</td><td>0.315072</td><td>0.317996</td><td>0.315072</td><td>-0.002924</td></tr></tbody></table>
 <p class="ev">Full receipts: <a href="downloads/hk1_spatial_holdout_20261007.json">K1 six-fold outcome</a> and
+<a href="downloads/stage1_q10_trace_holdout_20261007.json">separate Stage-1 q10 trace holdout</a>.</p>
+
+<h3>H53-SR Stage-2 spatial holdout — top preregistered candidate, validated before any build (2026-10-08)</h3>
+<p>H53-A (six fine-scale geodetic strain-residual ridge features added to the H-H arm, blended 50/50
+with freshly fitted H-D) was validated on the frozen six-fold splits under the rule frozen in
+<a href="downloads/preregistration_h53sr_20261008.json">registry/preregistration_h53sr_20261008.json</a> before any
+submission artifact was built. The fresh ungated baseline reproduced the frozen receipt exactly
+(max per-fold deviation 0.0),
+so the comparison is paired and reproducible. H53-A q10-gated mean was
+<b>0.284001</b> versus
+the fresh q10-gated baseline
+<b>0.284924</b> (paired Δ
+-0.000923;
+3/6 folds) and below
+the frozen 0.2853406 best. Status: <b>NOT PROMOTED; no H53-feature TIFF written.</b> The submission
+artifact is the q10-confined regeneration of the promoted H-H/H-D procedure, whose Stage-2 holdout is
+the fresh q10-gated baseline column below (measured compliance cost vs the frozen UNGATED best:
+-0.000416).</p>
+<table class=''><thead><tr><th>fold</th><th>fresh H-D/H-H (ungated)</th><th>H53-A blend (ungated)</th><th>fresh H-D/H-H (q10)</th><th>H53-A blend (q10)</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283585</td><td>0.288365</td><td>0.283585</td><td>0.288365</td><td>+0.004781</td></tr><tr><td>1</td><td>0.271784</td><td>0.270824</td><td>0.270436</td><td>0.270015</td><td>-0.000422</td></tr><tr><td>2</td><td>0.290270</td><td>0.291052</td><td>0.289119</td><td>0.289477</td><td>+0.000358</td></tr><tr><td>3</td><td>0.243359</td><td>0.248813</td><td>0.243359</td><td>0.248813</td><td>+0.005453</td></tr><tr><td>4</td><td>0.305049</td><td>0.303585</td><td>0.305049</td><td>0.303585</td><td>-0.001464</td></tr><tr><td>5</td><td>0.317996</td><td>0.303752</td><td>0.317996</td><td>0.303752</td><td>-0.014244</td></tr></tbody></table>
+<p>H53-F operating-point sweep (cached fields): adopted arm
+<b>r3.47_f2.00</b>
+(mean 0.284924);
+no non-default point met the +0.0020 / ≥4-of-6 adoption bar, so the build keeps ratio 3.47 and flank
+2.0 px. Stage-2 dominance control: the built geometry beats a uniform random fill of the same approved
+tiles at the same mass by
++0.097968
+mean proxy DTI — the fine-scale model, not the Stage-1 tiles, places the dots. Stage-1 q10 approved area
+share was 0.901,
+100% of scored candidate points were inside approved tiles, and lift was
+1.109 (limit 1.5).
+Stage 1's own holdout is the trace-held-out section above — reported separately, never conflated with
+the Stage-2 score.</p>
+<p class="ev">Full receipts: <a href="downloads/h53sr_holdout_20261008.json">H53-SR six-fold outcome</a>,
+<a href="downloads/candidate_hypotheses_prereg_h53sr_20261008.json">preregistered H53-SR slate</a>, and
 <a href="downloads/stage1_q10_trace_holdout_20261007.json">separate Stage-1 q10 trace holdout</a>.</p>
 
 <h3>Interpretation limit</h3>

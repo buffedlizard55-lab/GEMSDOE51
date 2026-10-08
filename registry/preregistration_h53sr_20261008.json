@@ -1,0 +1,40 @@
+{
+ "id": "GEMSDOE51-H53-PREREG-1",
+ "created_utc": "2026-10-08T00:00:00Z",
+ "status": "frozen_before_running",
+ "author_note": "Written before scripts/run_h53_holdout.py was executed for the first time. It covers (a) the top geological candidate H53-A from the 2026-10-08 slate, (b) the H53-F emission operating-point sweep on cached fold fields, and (c) the regeneration build of the promoted H-H/H-D procedure under the brief's constraints (new seeds, q10 confinement, all-finite [0,1] encoding with zeros outside the footprint).",
+ "instrument": {
+  "folds": "six contiguous 3x3 spatial blocks of the visible catalogue; 12 px training buffer; block = fold truth; rest of catalogue = known/masked",
+  "negatives": "250,000 per fold, seed 1000 + fold.index",
+  "model": "HistGradientBoostingClassifier, max_iter=250, seed=fold.index",
+  "emission": "STE ridge scales 1/2/3.5 px, line length 9, continuity exponent 0.35, greedy spacing 2.4 px",
+  "stage1": "fold-specific rank-space strain-budget deficit over 10 km tiles (Kreemer et al. 2000 Eq. 3), held-out trace rows removed; approved = tiles at/above q10; 100% Stage-2 confinement; lift <= 1.5; approved area >= 2/3",
+  "frozen_best": 0.285340602656319,
+  "frozen_best_receipt": "evidence/hh_blend_holdout.json",
+  "frozen_best_uploadable": false
+ },
+ "h53_a": {
+  "candidate_field": "0.5 x H-D + 0.5 x (H-H + H53-A features)",
+  "features": "6 crest/ridge responses of the rank-space geodetic residuals (q(observed 2.5 km tile mean) - q(fault tensor II 2.5 km tile)) for geod_2ndinv, geod_shearrate, geod_dilaterate at sigma 1.5 and 4.0 px",
+  "promotion_requires_all_of": [
+   "fresh ungated baseline reproduces frozen mean within 1e-5",
+   "candidate q10-gated mean > 0.285340602656319",
+   "paired q10-gated delta > 0 with >= 4/6 folds positive",
+   "100% candidate points inside q10 approved tiles",
+   "approved area >= 2/3 every fold; lift <= 1.5"
+  ],
+  "on_failure": "NOT PROMOTED; no H53-A TIFF; no slot consumed"
+ },
+ "h53_f": {
+  "arms": "ratio in {2.96, 3.47} x flank in {2.0, 2.24} px on cached fresh fold blend fields; STE L9 w=0.35 s=2.4; q10-gated",
+  "adoption_rule": "adopt a non-default point only if it beats the (3.47, 2.0) gated mean by >= +0.0020 with >= 4/6 folds positive; otherwise build at ratio 3.47, flank 2.0 px, 44,069 dots"
+ },
+ "regeneration_build": {
+  "procedure": "H-H/H-D fixed 50/50 probability blend fitted on the full published catalogue, STE L9 w=0.35 spacing 2.4 emission, flank 2.0 px, all points inside the full-data q10 approved tiles, mass from the H53-F decision (default 44,069 dots = 3.47 x 12,700 planning |G|)",
+  "uniqueness": "new seeds -> new belief fields -> new dot support; pre-write support gate against every locally held prior (21 pinned family references + local priors + previous downloads + archive); limits Jaccard 0.50 / containment 0.60",
+  "encoding": "float32, EPSG:32611, exact template transform and shape, all cells finite in [0,1], zeros outside the footprint, no NoData tag (direct fix for the portal 'Predicted values must be in range [0, 1]' hazard, IR-51-21)",
+  "validation_requirement": "a fresh paired six-fold receipt for the exact built geometry (q10-gated blend) is required before the manifest may mark the file as the upload candidate; the receipt reports the measured compliance cost vs the frozen ungated best honestly"
+ },
+ "claims_policy": "No organizer score, portal acceptance, or leaderboard improvement is claimed from any local number. A local proxy promotion licenses packaging and labelling, never a score claim.",
+ "disambiguation_note": "Two parallel sessions both preregistered an 'H53-A' on 2026-10-08 for DIFFERENT hypotheses. This preregistration (id GEMSDOE51-H53-PREREG-1) documents THIS session's H53-A = fine-scale geodetic strain-residual ridge. The parallel session's H53-A = finite-lag cross-physics edge pairing lives in registry/preregistration_h53.json and was blocked before Stage-2 scoring. The two IDs and receipts must not be conflated (IR-H53-05)."
+}

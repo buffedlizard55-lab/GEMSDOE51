@@ -77,11 +77,22 @@ def main() -> int:
                         f"allowed={sorted(allowed_downloads)}")
     index = (DOCS / "index.html").read_text(encoding="utf-8")
     latest_overall = manifest.get("latest_experiment", {}) or {}
-    if latest_overall.get("id") != "K2_08_CONDUCTIVE_RIBBON_20261008":
-        failures.append("manifest must retain K2-08 as the latest overall experiment")
+    cand_rec = manifest.get("recommended_upload_candidate") or {}
+    cand_id = cand_rec.get("id")
+    # Merged state: the latest experiment is the recommended upload candidate
+    # (H53-SR artifact); K2-08 remains recorded as the parallel sessions' latest
+    # overall COMPLETED candidate (research-only).
+    if latest_overall.get("id") not in {"K2_08_CONDUCTIVE_RIBBON_20261008", cand_id}:
+        failures.append("manifest latest_experiment must be the recommended candidate "
+                        "or the retained K2-08 record")
+    research_ids = {r.get("id") for r in manifest.get("research_only_artifacts", [])}
+    if "K2_08_CONDUCTIVE_RIBBON_20261008" not in research_ids:
+        failures.append("manifest must retain K2-08 as a research-only record")
     latest_page_for_identity = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
-    if "K2-08" not in latest_page_for_identity or "LATEST EXPERIMENT" not in latest_page_for_identity.upper():
-        failures.append("latest report must retain K2-08 as the latest overall experiment")
+    if "K2-08" not in latest_page_for_identity:
+        failures.append("latest report must retain the K2-08 research record")
+    if cand_id and "H53-SR" not in latest_page_for_identity:
+        failures.append("latest report must render the H53-SR recommended candidate")
     readiness = manifest.get("submission_readiness", {}).get("status", "")
     if manifest.get("primary"):
         for name in allowed_current:
@@ -132,8 +143,15 @@ def main() -> int:
             failures.append("latest H53 record must explicitly report no H53-A candidate TIFF/ZIP")
         if latest_h53.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
             failures.append("latest H53 record does not preserve the fail-closed Stage-2 blocker")
-        if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
-            failures.append("H53 baseline blocker cannot be upload-eligible")
+        # The blocked H53-A baseline-gate record must never be upload-eligible.  This
+        # is scoped to that record: a DIFFERENT artifact (this session's H53-SR
+        # two-stage candidate, IR-H53-05) may legitimately hold upload_ok=true.
+        cand_rec = manifest.get("recommended_upload_candidate") or {}
+        if (cand_rec.get("id") == latest_h53.get("research_identifier")
+                or cand_rec.get("submission_name") == latest_h53.get("research_identifier")
+                or (latest_h53.get("file") and cand_rec.get("file") == latest_h53.get("file"))):
+            failures.append("the blocked H53-A baseline-gate record must not be the "
+                            "recommended upload candidate")
         latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
         latest_upper = latest_page.upper()
         for required in ("FINITE-LAG H53-A", "NO FINITE-LAG H53-A CANDIDATE TIFF",
@@ -154,6 +172,10 @@ def main() -> int:
                 for key in ("file", "zip"):
                     if record.get(key):
                         allowed_h53_research.add(Path(record[key]).name)
+        cand_h53 = manifest.get("recommended_upload_candidate") or {}
+        for key in ("file", "zip"):
+            if cand_h53.get(key):
+                allowed_h53_research.add(Path(cand_h53[key]).name)
         h53_rasters = {p.name for p in download_dir.iterdir()
                        if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}
                        and "h53" in p.name.lower()}

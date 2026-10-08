@@ -214,5 +214,41 @@
   "summary": "Top-n layer screens are mass-inflated by tie expansion: tmi_s15_lin has 209,521 pixels exactly equal to 1.0 in the current stack, so a 'top-12,691' emission actually selects 209,521 pixels.",
   "evidence": "Direct recount on 2026-10-08: np.partition threshold for n=12691 equals 1.0 and (v>=thr).sum()=209521. The 2026-10-07 layer screen recorded px=12691 for tmi_s15_lin with S=0.0648; rerunning the identical protocol today reproduces S=0.06475673576176265 at px=209521, i.e. the historical number was a ~16.5x-mass measurement. Strict-mass (tie-free rank) screening gives S=0.0141 for the same layer.",
   "status": "OPEN; X5 rejection unaffected (fusion far below random control under either reading). Future screens must report emitted_px and cap mass explicitly; consider tie-broken top-n."
+ },
+ {
+  "id": "IR-H53-01",
+  "summary": "The preregistered top candidate of THIS session's slate, H53-A strain-residual (fine-scale geodetic strain-residual ridge features added to the H-H arm; distinct from the parallel session's H53-A finite-lag hypothesis, see IR-H53-05) was validated on the frozen six-fold spatially blocked holdout and NOT promoted: q10-gated mean 0.284001 vs the frozen best 0.285341, paired delta -0.000923 vs the fresh q10-gated baseline, 3/6 folds. No H53-feature TIFF was built; the hypothesis is falsified on this instrument.",
+  "evidence": "evidence/h53sr_holdout_20261008.json (status COMPLETE_NOT_PROMOTED, gates, rows); registry/preregistration_h53sr_20261008.json (frozen rule); knowledge/candidate-hypotheses-h53sr-2026-10-08.md. The submission artifact is instead the q10-confined regeneration of the promoted H-H/H-D procedure.",
+  "status": "CLOSED; hypothesis falsified on the frozen instrument; H53-B..E remain untested proposals in the slate"
+ },
+ {
+  "id": "IR-H53-02",
+  "summary": "A transcription error was caught by line-by-line verification before the H53 holdout run: the Stage-1 trace-holdout uniform-DTI constant in scripts/run_h53_holdout.py had two digits transposed (0.04856426822063665 instead of the correct 0.04856426582063665 from evidence/stage1_q10_trace_holdout_20261007.json).",
+  "evidence": "evidence/stage1_q10_trace_holdout_20261007.json summary.uniform_dti = 0.04856426582063665; scripts/evaluate_hk1_holdout.py line 282 carries the correct value; the H53 receipt now carries the verified constant.",
+  "status": "CLOSED; fixed before the run; caught by the multi-pass review requirement"
+ },
+ {
+  "id": "IR-H53-03",
+  "summary": "scripts/build_submission_h53.py crashed three times during manifest/registry assembly (NameError on folds_won, then FROZEN_BEST, then a renamed paired_holdout key) after the TIFF had already been staged and promoted to docs/downloads. Each crash left an orphaned artifact pair; all orphans were removed and the build was rerun as a single clean cycle.",
+  "evidence": "registry/submission_build_h53sr.json and docs/downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json are from the final clean cycle; the TIFF bytes are identical across all cycles (same SHA-256 5823def4fab491ac6bd667cedb467c0540fd1bbce1351992289f4a609e7b775e), confirming determinism; docs/downloads contains exactly one H53 artifact set.",
+  "status": "CLOSED; final build is a single clean cycle; determinism verified by identical SHA-256 across cycles"
+ },
+ {
+  "id": "IR-H53-04",
+  "summary": "The frozen local best (H-H/H-D blend, proxy mean 0.285341) remains non-uploadable (86.71% of dots inside q10; NaN-outside encoding) and is demoted to an audit-only primary. The portal range error is addressed by encoding in the new recommended candidate (all 12,279,160 cells finite in [0,1], zeros outside, no NoData tag), but no GEMSDOE51 artifact has been portal-validated and the file that triggered the original 'Predicted values must be in range [0, 1]' error remains unidentified.",
+  "evidence": "data/submission_manifest.json (primary role ARCHIVED_LOCAL_BENCHMARK_NOT_UPLOADABLE; recommended_upload_candidate with format checks nan_cells=0, values_outside_0_1=0, outside_footprint_zeros=true, nodata=null); docs/downloads/gemsdoe51-h53-twostage-20261008T040951Z-9a0b32c871-checks.json; independent full-grid scan recorded in knowledge/h53sr-session-results-2026-10-08.md section 7.",
+  "status": "OPEN; portal validation pending the entrant's upload decision; no organizer score claimed"
+ },
+ {
+  "id": "IR-H53-05",
+  "summary": "Two parallel sessions both preregistered an 'H53-A' on 2026-10-08 for DIFFERENT hypotheses: this repo's session preregistered H53-A = fine-scale geodetic strain-residual ridge (validated, NOT PROMOTED; artifact = q10-confined regeneration of the promoted H-H/H-D procedure), while the parallel session (merged first as PR #18) preregistered H53-A = finite-lag cross-physics edge pairing (Stage-2 blocked at the baseline-reproduction gate). The colliding file names were disambiguated on merge: this session's preregistration, slate receipt, slate note and session results now carry the 'h53sr' suffix (registry/preregistration_h53sr_20261008.json, evidence/candidate_hypotheses_prereg_h53sr_20261008.json, knowledge/candidate-hypotheses-h53sr-2026-10-08.md, knowledge/h53sr-session-results-2026-10-08.md, evidence/h53sr_holdout_20261008.json, registry/submission_build_h53sr.json); the parallel session's files keep their original names.",
+  "evidence": "registry/preregistration_h53.json (parallel-session H53-A, finite-lag) vs registry/preregistration_h53sr_20261008.json (this session's H53-A, strain-residual ridge); evidence/h53sr_holdout_20261008.json candidate='H53-A fine-scale geodetic strain-residual ridge features added to the H-H arm' vs evidence/h53a_stage1_holdout_20261008.json / evidence/h53a_baseline_provenance_20261008.json (parallel session, Stage-2 BLOCKED). The two IDs must not be conflated in any receipt, site page, or claim.",
+  "status": "CLOSED by file-level disambiguation (h53sr suffix) at merge; hypothesis-ID collision documented here and in the manifest candidate_screen note"
+ },
+ {
+  "id": "IR-H53-06",
+  "summary": "A THIRD parallel session (merged as PR #20, branch arena/922033c2-gemsdoe51) also preregistered an 'H53-A' on 2026-10-08 \u2014 a componentwise budget-q10 Stage-1 residual operationalization with confinement-only Stage 2 \u2014 producing a three-way H53-A identifier collision across parallel sessions (this session's H53-SR strain-residual ridge, PR #18's finite-lag edge pairing, PR #20's budget-q10 variant). All three are distinct hypotheses with distinct receipts; this session's records carry the 'h53sr' file-name disambiguator, the others keep their original names.",
+  "evidence": "registry/preregistration_h53sr_20261008.json (this session, strain-residual ridge, validated NOT PROMOTED, evidence/h53sr_holdout_20261008.json); registry/preregistration_h53.json (PR #18, finite-lag, Stage 2 BLOCKED, evidence/h53a_baseline_provenance_20261008.json); evidence/candidate_hypotheses_budget_q10_prereg_20261008.json (PR #20, budget-q10, NOT PROMOTED, research-only TIFF gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif, evidence/h53_stage1_holdout_20261008.json + evidence/h53_stage2_holdout_20261008.json). The manifest candidate_screen note and README/AGENTS.md disambiguate all three; no numbers are cross-attributed.",
+  "status": "CLOSED by file-level disambiguation (h53sr suffix for this session) and documentation in the manifest, README, AGENTS.md and site; the three H53-A records remain distinct in every receipt and page"
  }
 ]
