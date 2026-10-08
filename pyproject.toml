@@ -7,7 +7,7 @@ name = "gems51"
 version = "0.1.0"
 description = "Two-stage strain-budget-constrained fault discovery for the DOE GEMS Prize (DrivenData #306)"
 requires-python = ">=3.10"
-dependencies = ["numpy", "scipy", "rasterio", "scikit-learn", "pandas"]
+dependencies = ["numpy", "scipy", "rasterio", "scikit-learn", "scikit-image", "pandas"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
