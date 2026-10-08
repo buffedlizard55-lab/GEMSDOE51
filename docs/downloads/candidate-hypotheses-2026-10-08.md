@@ -1,6 +1,6 @@
 # Candidate slate and frozen test plan — 2026-10-08
 
-**This slate was preregistered before implementing or scoring H53-A.** Target: improve discovery of fault geometry absent from the supplied known-fault catalogue. It is not a geothermal-vent classifier. Expected directions below are qualitative research judgments, not predicted scores. Novelty claims are limited to this repository, its archived hypothesis ledger, and the bounded 54-repository public-artifact/document inventory; they are not global literature claims. H53-A has since been tested and rejected for promotion; see the dated outcome section at the end.
+**This four-candidate slate was preregistered before implementing or scoring the componentwise budget-q10 H53-A operationalization.** Target: improve discovery of fault geometry absent from the supplied known-fault catalogue. It is not a geothermal-vent classifier. Expected directions below are qualitative research judgments, not predicted scores. Novelty claims are limited to this repository, its archived hypothesis ledger, and the bounded 54-repository public-artifact/document inventory; they are not global literature claims. The budget-q10 H53-A variant has since been tested and not promoted; it is distinct from the separate finite-lag H53-A experiment, whose Stage 2 was blocked before candidate scoring. See the dated outcome section at the end and the finite-lag receipts in `README.md`.
 
 ## Ranked candidates
 
@@ -39,9 +39,9 @@
 - [USGS 3DEP](https://www.usgs.gov/3d-elevation-program) — official elevation source; this slate uses only already-restored competition/DEM-derived rasters for H53-C.
 - [USGS GeoDAWN release](https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and) — official potential-field/radiometric context for H53-B/D.
 
-## Outcome — 2026-10-08, after preregistered evaluation
+## Outcome — separate componentwise budget-q10 variant, after preregistered evaluation
 
-**H53-A was not promoted. No competition slot is authorized.** The slate above was saved before the H53-A residual-mask build and holdout; the outcomes below reference separate, preserved receipts.
+**The componentwise budget-q10 H53-A variant in this slate was not promoted. No competition slot is authorized.** The slate above was saved before its residual-mask build and holdout; the outcomes below reference separate, preserved receipts. This is not the finite-lag H53-A experiment; that candidate's Stage 2 was blocked on baseline reproduction and has no candidate score or TIFF.
 
 ### Stage 1 — coarse holdout
 
@@ -61,4 +61,4 @@ A new 44,069-point full-map diagnostic was emitted only after holdout. It is a f
 
 The local artifact uniqueness gate passed, but the broader pinned 54-repository family gate **failed**: all 365 unique TIFF Git blobs were fetched and SHA-verified, maximum support Jaccard was 0.184778, and maximum containment was **1.0**, above the registered 0.6 ceiling. Zero byte duplicates do not negate support containment. Explicit status: **RESEARCH ONLY — DO NOT SUBMIT; not cleared as genuinely unique for the public family**. Receipts: [`evidence/h53_artifact_20261008T030347Z.json`](../evidence/h53_artifact_20261008T030347Z.json), [`evidence/h53_public_uniqueness_20261008.json`](../evidence/h53_public_uniqueness_20261008.json), and the final-byte checks beside the TIFF.
 
-**Final preregistration status:** completed; H53-A **NOT PROMOTED** on Stage 2 and broad support uniqueness **FAIL**. Do not relax the frozen tolerance or uniqueness threshold. No portal attempt, portal acceptance, competition upload, organizer score, hidden-set result, or global uniqueness claim is made. Future work begins with a new ranked/preregistered hypothesis slate and must read the current decision and brief in `README.md` first.
+**Final status for this alternative slate:** the budget-q10 H53-A variant was **NOT PROMOTED** on Stage 2 and broad support uniqueness **FAIL**. Do not relax the frozen tolerance or uniqueness threshold. This TIFF is a research diagnostic only; it is not cleared for download as a submission or for a slot. No portal attempt, portal acceptance, competition upload, organizer score, hidden-set result, or global uniqueness claim is made. The current finite-lag H53-A operationalization is separate and remains blocked before candidate scoring. Future work begins with a new ranked/preregistered hypothesis slate and must read the current decision and brief in `README.md` first.

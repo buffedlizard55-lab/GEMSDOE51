@@ -1,19 +1,37 @@
 # Session entrypoint
 
-Before any work, read the current-decision and full standing-brief sections in `README.md`,
-`knowledge/executive-submission-guide-2026-10-08.md`, the latest preregistered slate/result in
-`knowledge/candidate-hypotheses-2026-10-08.md`, and the prior review/remaining work in
-`knowledge/review-three-passes-20261008.md`. Then inspect the current evidence receipts linked
-there; do not assume older site pages or manifest statuses are current.
+Before any work, read `README.md` (current decision, standing user brief and appendices),
+`knowledge/hypothesis-slate-20261008.md`, `knowledge/candidate-hypotheses-2026-10-08.md`,
+`registry/preregistration_h53.json`, `knowledge/preregistration-2026-10-08.md`, and the latest
+receipts in `evidence/`. The workspace contains two distinct H53-A operationalizations; do not
+conflate their results:
 
-H53-A is **RESEARCH ONLY / DO NOT SUBMIT**: it failed the frozen Stage-2 promotion rule and the
-pinned public-family support-uniqueness gate. Do not relax either threshold or claim global
-uniqueness. No current candidate authorizes a competition slot. Never reuse an old TIFF as a new
-prediction. Do not claim portal acceptance from local checks or an organizer score from proxy DTI.
-Preserve failed experiments; do not tune an identical hypothesis to shop for a passing holdout.
+- **Current finite-lag H53-A:** Stage 1 was audited, but Stage 2 is fail-closed because the fresh
+  canonical H-D/H-H baseline missed its frozen mean by `−0.000025448`, outside `1e-5`. No
+  candidate score or TIFF exists for this operationalization. Do not weaken its frozen gate, rerun
+  to shop for a passing result, or substitute the H52 seed-2000 cache. Recover auditable baseline
+  lineage or preregister a new baseline before any future candidate scoring.
+- **Separate componentwise budget-q10 H53-A variant:** this was scored independently and produced
+  a fresh TIFF, but it is **RESEARCH ONLY / DO NOT SUBMIT**. Stage 1 showed no meaningful
+  residual enrichment; Stage 2 failed promotion; the pinned public-family support-containment
+  gate failed. Its file and evidence are recorded separately in `data/submission_manifest.json`
+  and the H53 receipts. A local format or scoped-uniqueness pass is not submission clearance.
+- **R1:** the current primary manifest entry is also research-only; its paired confinement rule
+  was not promoted. No artifact is cleared for a competition slot.
+
+Never reuse an old TIFF as a new submission. A candidate must beat the current local holdout best
+under a valid, reproducible, preregistered comparison before any competition slot is considered.
+A research download must be unmistakably marked NOT FOR SUBMISSION. Do not claim portal acceptance
+from local checks or attribute user/community scores to a file without verified evidence. Preserve
+failed experiments and do not tune until a valid holdout passes.
+
+Keep Stage 1 coarse and separate from Stage 2. Validate on spatial holdouts, verify official
+sources and attributes, test artifact uniqueness and format, and report limitations and
+irregularities. Do not claim hidden-label performance, organizer scores, or portal acceptance
+without direct evidence. Retain the repository's link-only/no-automatic-leaderboard-monitoring
+policy unless permission is explicitly established.
 
 Work on the Arena-provided session branch only. Data/raw, data/prepared and work are regenerable
 and ignored. Keep bulk official archives out of Git. Read source definitions before converting
-physical quantities; distinguish source-verified values from assumptions. Report Stage 1 and
-Stage 2 separately, and report support/area dominance rather than inferring independence from a
-broad mask.
+physical quantities; distinguish evidence from assumptions. Historical slates and session notes
+remain available for context but must not override the relevant current preregistration or receipt.

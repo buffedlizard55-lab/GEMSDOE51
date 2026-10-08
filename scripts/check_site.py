@@ -118,6 +118,51 @@ def main() -> int:
         if ("No eligible submission file" not in index
                 and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
+
+    latest = manifest.get("latest_experiment", {}) or {}
+    if latest.get("hypothesis_id") == "H53-A":
+        if latest.get("prediction_tiff_generated") is not False or latest.get("file") or latest.get("zip"):
+            failures.append("H53 manifest must explicitly report no candidate TIFF/ZIP")
+        if latest.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
+            failures.append("H53 manifest does not preserve the fail-closed Stage-2 blocker")
+        if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
+            failures.append("H53 baseline blocker cannot be upload-eligible")
+        latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
+        for required in ("FEATURE-LAG H53-A DOWNLOAD FOR RESEARCH: NO", "SUBMIT TO THE COMPETITION: NO",
+                         "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING", "No finite-lag H53-A TIFF",
+                         "Separate componentwise strain-budget q10 variant",
+                         "not the current finite-lag H53-A candidate above",
+                         "Stage 1 — coarse componentwise residual",
+                         "Stage 2 — fine placement, separate six-fold holdout"):
+            if required.lower() not in latest_page.lower():
+                failures.append(f"latest experiment page omits H53 operationalization/status wording: {required}")
+        for name in ("h53a_stage1_holdout_20261008.json", "h53a_baseline_provenance_20261008.json",
+                     "hypothesis-slate-20261008.md", "preregistration_h53.json"):
+            if not (download_dir / name).is_file():
+                failures.append(f"H53 evidence download missing: {name}")
+            if f'href="downloads/{name}"' not in latest_page and name not in {"hypothesis-slate-20261008.md", "preregistration_h53.json"}:
+                failures.append(f"latest experiment page does not link H53 evidence: {name}")
+        budget_variant = next((r for r in manifest.get("research_only_artifacts", [])
+                               if r.get("id") == "H53A_BUDGET_Q10_RESEARCH_20261008"), None)
+        allowed_h53_files = set()
+        if budget_variant:
+            for key in ("file", "zip"):
+                value = budget_variant.get(key)
+                if value:
+                    allowed_h53_files.add(Path(value).name)
+        h53_rasters = [p.name for p in download_dir.iterdir()
+                       if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}
+                       and p.name.lower().startswith("h53") and p.name not in allowed_h53_files]
+        if h53_rasters:
+            failures.append(f"unregistered H53 raster/ZIP exists despite the finite-lag candidate being blocked: {h53_rasters}")
+        if "NO TIFF FOR THAT CANDIDATE EXISTS" not in index.upper():
+            failures.append("executive summary must distinguish the missing finite-lag H53-A TIFF")
+        if budget_variant:
+            if budget_variant.get("safe_to_submit") is not False:
+                failures.append("H53-A budget-q10 variant must remain safe_to_submit=false")
+            if not str(budget_variant.get("uniqueness", {}).get("verdict", "")).startswith("FAIL"):
+                failures.append("H53-A budget-q10 public-family failure is missing from the manifest")
+
     if allowed_research:
         if "NOT FOR SUBMISSION" not in index and "DO NOT SUBMIT" not in index:
             failures.append("research-only download is not prominently marked NOT FOR SUBMISSION / DO NOT SUBMIT")
@@ -125,12 +170,12 @@ def main() -> int:
             if f'href="downloads/{name}"' not in index:
                 failures.append(f"research-only artifact is not linked from index: {name}")
         h53 = next((r for r in manifest.get("research_only_artifacts", [])
-                    if r.get("id") == "H53A_BUDGET_Q10_20261008"), None)
+                    if r.get("id") == "H53A_BUDGET_Q10_RESEARCH_20261008"), None)
         if h53:
             if h53.get("safe_to_submit") is not False:
-                failures.append("H53-A must remain explicitly marked safe_to_submit=false")
+                failures.append("H53-A budget-q10 variant must remain explicitly marked safe_to_submit=false")
             if not str(h53.get("uniqueness", {}).get("verdict", "")).startswith("FAIL"):
-                failures.append("H53-A public-family uniqueness failure is missing from the manifest")
+                failures.append("H53-A budget-q10 public-family uniqueness failure is missing from the manifest")
             latest = (DOCS / "latest.html").read_text(encoding="utf-8")
             if "H53-A" not in latest or "DO NOT SUBMIT" not in latest:
                 failures.append("latest report does not prominently show H53-A DO NOT SUBMIT")

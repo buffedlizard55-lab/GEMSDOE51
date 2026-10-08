@@ -26,39 +26,29 @@
 
 <h2>Submission guide — current status first</h2>
 <section class="download missing">
-<p class="eyebrow">LATEST EXPERIMENT · H53-A · 8 OCTOBER 2026</p>
-<h2>Fresh H53-A GeoTIFF — RESEARCH ONLY / DO NOT SUBMIT</h2>
-<p class="warn"><strong>Download for research and audit only. Do not submit, do not spend a competition slot.</strong><br>
-The full-map raster is a fresh model build, not a copied/re-encoded earlier prediction. It failed the frozen Stage-2 promotion rule and the pinned-family support-uniqueness gate. Its local format check passing does not make it eligible.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif">Download H53-A research TIFF</a></p>
-<p class="zip">or <a href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip">download the ZIP containing one GeoTIFF</a> ·
-<a href="latest.html">Full results and checks</a> · <a href="how-to-submit.html">Submission guide — blocked</a></p>
+<p class="eyebrow">LATEST REGISTERED FEATURE-LAG EXPERIMENT · H53-A · 8 OCTOBER 2026</p>
+<h2>Finite-lag H53-A: Stage 1 measured; Stage 2 blocked before candidate scoring</h2>
+<p class="warn"><strong>FEATURE-LAG H53-A DOWNLOAD FOR RESEARCH: NO — NO TIFF WAS GENERATED FOR THAT CANDIDATE.</strong><br>
+<strong>SUBMIT TO THE COMPETITION: NO.</strong> Its candidate score, raster, uniqueness result, and format result do not exist because Stage 2 was blocked before candidate fitting. A distinct componentwise budget-q10 variant is documented separately below; it is also research-only and not cleared to submit. No competition slot was used.</p>
+<p>Identifier: <code>GEMSDOE51-H53-A-20261008</code> (preregistration/research identifier only; not a portal submission name). No submission comment or filename has been issued.</p>
 <dl class="kv">
-<dt>Research label (do not paste into portal)</dt><dd><code>GEMSDOE51-H53A-BUDGET-Q10-R44069-20261008T030347Z</code></dd>
-<dt>Research-only note</dt><dd><code>H53-A budget-q10 + fresh H-D/H-H; failed promotion and broad uniqueness gates; DO NOT SUBMIT.</code></dd>
-<dt>Local format</dt><dd>PASS — one-band float32, EPSG:32611, 3730 × 3292; finite values in [0,1], 44,069 points, zeros outside; one-file ZIP. This is not portal acceptance.</dd>
-<dt>Stage 1 / Stage 2</dt><dd>Stage-1 lift 1.000; Stage-2 q10 0.266510 vs frozen best 0.285341; 0/6 paired folds positive.</dd>
-<dt>Broad public-family gate</dt><dd><strong>FAIL</strong> — max containment 1.000 &gt; 0.6; local gate PASS. Not cleared as broadly unique.</dd>
-<dt>SHA-256</dt><dd><code>2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a</code></dd>
+<dt>Separate Stage-1 nominal result</dt><dd>5 whole-record splits; q10 approved area 90.19%; visible-catalogue trace-pixel recall 92.91%; recall/area lift 1.0301.</dd>
+<dt>Stage-1 matched-mass controls</dt><dd>Uniform-dot proxy DTI 0.048390 inside approved tiles vs 0.049025 over the full footprint. One seeded random draw per split; descriptive only.</dd>
+<dt>Stage-2 status</dt><dd>NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING. The baseline provenance/reproduction gate failed; see the table and receipts below.</dd>
+<dt>Submission readiness</dt><dd><strong>BLOCKED_NOT_FOR_UPLOAD</strong>. Do not use an earlier research TIFF as a substitute for an H53 result.</dd>
 </dl>
-<p><a href="downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT-checks.json">Artifact receipt / final-byte checks / gate status</a>. The GeoTIFF is explicitly research-only; <b>NOT SAFE TO SUBMIT.</b></p>
+<p><a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a> ·
+<a href="downloads/h53a_baseline_provenance_20261008.json">baseline provenance/reproduction receipt</a> ·
+<a href="downloads/hypothesis-slate-20261008.md">ranked H53 slate</a> ·
+<a href="downloads/preregistration_h53.json">frozen H53 preregistration</a> ·
+<a href="how-to-submit.html">submission instructions</a>.</p>
 </section>
 
-
-<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
-<p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
-<dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
-</dl>
-<p>The new H53-A TIFF is a research diagnostic only: Stage-2 q10 mean 0.2665098 is below the frozen 0.2853406 local best with 0/6 positive folds, and the broad family uniqueness gate fails at containment 1.0 &gt; 0.6. Its local format pass does not authorize upload. <a href="downloads/h53_stage1_holdout_20261008.json">Stage 1</a> · <a href="downloads/h53_stage2_holdout_20261008.json">Stage 2</a> · <a href="downloads/h53_public_uniqueness_20261008.json">public gate</a>.</p>
+<p class="warn"><b>There is no current upload-eligible artifact.</b> Do not upload an archived
+or research-only file. This block is generated from the submission manifest.</p>
 
 <h3>What to upload, and what not to upload</h3>
-<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> H51-N2 and H52 V4 remain research-only; H53-A also has a fresh research TIFF, but it failed the q10 Stage-2 promotion rule and broad public-family support-uniqueness gate. No current file may be uploaded. Wait for a new candidate to beat the current spatially blocked best under a frozen rule and clear the full uniqueness gate, then recheck its final bytes and portal format before spending a slot.</p>
+<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable research TIFFs are marked RESEARCH ONLY; local format/uniqueness checks do not override a failed or missing preregistered holdout. The current finite-lag H53-A candidate has no TIFF because its Stage-2 path was blocked before scoring; the separate budget-q10 H53-A variant exists but failed its own Stage-2 promotion and broad support-uniqueness gates. Do not upload any current file. Wait for a future candidate to beat the holdout incumbent under a valid frozen comparison, then recheck the exact final bytes and portal format before considering a slot.</p>
 <p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
@@ -68,7 +58,7 @@ The full-map raster is a fresh model build, not a copied/re-encoded earlier pred
 <li>Include the required narrative with an accurate generative-AI disclosure. Read the current official rules and verify data provenance, claims, and license position before submitting.</li>
 </ol>
 <h3>Existing local benchmark interpretation</h3>
-<p>The retained H-H/H-D blend is the historical local benchmark (six-fold visible-catalogue proxy mean DTI 0.2853406), not a new TIFF and not upload-eligible. It contains NaN outside the footprint and only 86.71% of its points lie inside the current full-map q10 approved domain. H53-A is the latest fresh research TIFF, but its Stage-2 holdout and broad support-uniqueness gates failed; it is explicitly DO NOT SUBMIT. H51-K1 is an earlier failed screen. No organizer score, upload, or portal acceptance is claimed.</p>
+<p>The retained H-H/H-D blend is an earlier local benchmark (frozen six-fold visible-catalogue proxy mean DTI 0.2853406), not a new TIFF and not upload-eligible. The fresh canonical baseline differs by -0.000025448, beyond the 1e-5 tolerance; exact legacy field provenance is unavailable. It contains NaN outside the footprint and only 86.71% of its points lie inside the current full-map q10 approved domain. Historical H51-K1 and P1 failed their promotion screens; finite-lag H53-A Stage 2 was not scored. The separate budget-q10 H53-A variant was scored, failed promotion, and failed the broader containment gate. No organizer score, upload, or portal acceptance is claimed.</p>
 
 <h3>Generative-AI narrative disclosure</h3>
 <p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">GEMS Prize Rules</a>
@@ -80,9 +70,10 @@ process and verify every statement:</p>
 all actual AI use across the eventual submission materials.</p>
 
 <h3>Leaderboard and Terms of Use</h3>
-<p>This repository does not scrape, monitor, copy, or mirror leaderboard standings. DrivenData's
-<a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> prohibit automated monitoring/copying
-and manual monitoring/copying without prior written consent. No such consent is on record.</p>
+<p>This repository retains a link-only policy: no automatic leaderboard monitoring or stored
+standings. DrivenData's <a href="https://www.drivendata.org/termsofuse/">Terms of Use</a> page
+shows a 2014 last-modified date and the reviewed section limits use of site materials. Do not add
+a monitoring or standings-copy workflow unless permission is established.</p>
 
 </main>
 <footer><div class="wrap">

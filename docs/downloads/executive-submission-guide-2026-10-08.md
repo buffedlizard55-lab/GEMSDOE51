@@ -2,9 +2,9 @@
 
 ## Decision: no upload-eligible file
 
-**Do not spend a competition slot or upload any current raster.** No organizer score has been received for a GEMSDOE51 artifact, and no portal acceptance is known. The new H53-A map is available for research/audit only and is explicitly named `RESEARCH-ONLY-DO-NOT-SUBMIT`.
+**Do not spend a competition slot or upload any current raster.** No organizer score has been received for a GEMSDOE51 artifact, and no portal acceptance is known. The separate componentwise budget-q10 H53-A variant has a research-only map explicitly named `RESEARCH-ONLY-DO-NOT-SUBMIT`; it is not the current finite-lag H53-A experiment. Finite-lag H53-A Stage 2 was blocked before candidate scoring and has no TIFF. R1 also failed promotion and remains research-only.
 
-### H53-A diagnostic artifact
+### Separate componentwise budget-q10 H53-A diagnostic artifact — NOT the finite-lag candidate
 
 - GeoTIFF: [`docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif`](../docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif)
 - One-file ZIP: [`docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip`](../docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip)
@@ -37,6 +37,6 @@ The official competition target is **fault geometry**, not geothermal-vent label
 
 ## Score attribution and leaderboard policy
 
-The GEMSDOE32 owner page marks H33-2-B2 **UNSCORED** and describes 0.2747 as a modeled projection; the user-reported 0.2778 file-score mapping is unverified. The official leaderboard page was manually checked on 2026-10-08: 0.3195 was not the page high, but leaderboard standings cannot authenticate the H33 file attribution. The project does not persist a leaderboard snapshot or automatically monitor standings. See the [official leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) and [Terms of Use](https://www.drivendata.org/termsofuse/).
+The GEMSDOE32 owner page marks H33-2-B2 **UNSCORED** and describes 0.2747 as a modeled projection; the user-reported 0.2778 file-score mapping is unverified. A one-time official leaderboard read recorded in the prior session contradicted the user claim that 0.3195 was the page high; treat it as stale, not current. The project does not persist a leaderboard snapshot or automatically monitor standings. See the [official leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) and [Terms of Use](https://www.drivendata.org/termsofuse/).
 
-**Session handoff:** read the current top section of [`README.md`](../README.md) and the [H53-A preregistered slate](candidate-hypotheses-2026-10-08.md) before the next change. Keep work on `arena/922033c2-gemsdoe51`; no competition slot is authorized by the current evidence.
+**Session handoff:** read the current top section of [`README.md`](../README.md), the [finite-lag H53-A slate](hypothesis-slate-20261008.md), and the [separate budget-q10 alternative slate](candidate-hypotheses-2026-10-08.md) before the next change. Keep work on `arena/922033c2-gemsdoe51`; no competition slot is authorized by the current evidence.

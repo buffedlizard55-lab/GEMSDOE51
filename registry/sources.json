@@ -9,19 +9,19 @@
   "id": "rules_pdf",
   "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
   "what": "Official GEMS Prize Rules, September 2026",
-  "status": "Fetched 2026-10-07; \u00a73.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
+  "status": "Fetched 2026-10-07; §3.2 requires a narrative disclosure of whether/how generative AI was used, including submission elements."
  },
  {
   "id": "terms_of_use",
   "url": "https://www.drivendata.org/termsofuse/",
   "what": "DrivenData Terms of Use",
-  "status": "Fetched 2026-10-07; terms prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No leaderboard snapshot or monitoring feed is maintained here."
+  "status": "Reviewed official Terms of Use; the page displays Last Modified: August 7, 2014 and the checked section limits use of site materials. This project retains a link-only policy, no automatic leaderboard monitoring, and no standings snapshots unless permission is established."
  },
  {
   "id": "official_leaderboard",
   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
   "what": "Official leaderboard source link only",
-  "status": "Not mirrored or monitored; consult the official page subject to DrivenData Terms of Use. No standings are stored in this repository."
+  "status": "Official link only. A one-time page read recorded in the prior session contradicted the user-supplied claim that 0.3195 was the current high; no rows/values were stored. No automatic monitoring or standings snapshot is maintained."
  },
  {
   "id": "data_page",
@@ -63,13 +63,13 @@
   "id": "gdr_1391",
   "url": "https://gdr.openei.org/submissions/1391",
   "what": "INGENIOUS Great Basin Regional Dataset Compilation, DOI 10.15121/1881483",
-  "status": "Official repository record; local tables are owner-mirrored and not authenticated against the organizer download. GDR lists a Quaternary Faults v2 archive with field definitions, but that companion text was not locally audited for the unit of the copied slip-rate field."
+  "status": "Official GDR record reviewed. The preserved official Quaternary Faults v2 field definitions and DBF audit verify slip-rate units of mm/year for the local mirror; the rate component (vertical vs total fault-plane motion), per-trace dip/rake, and local mirror authentication remain unresolved. See evidence/official_attribute_audit_20261008.json."
  },
  {
   "id": "siler_2022",
   "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
   "what": "USGS Siler slip-/dilation-tendency release, DOI 10.5066/P9YL58W6",
-  "status": "Archive record reviewed; downloadable shapefile and field units were not validated locally. H51-X4 remains blocked pending acquisition and inspection."
+  "status": "Official ScienceBase metadata reviewed; it lists full-study and INGENIOUS-area shapefile/KMZ downloads. The archive was not downloaded or field-audited, so H51-X4 remains blocked pending inspection."
  },
  {
   "id": "kreemer_2000",

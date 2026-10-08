@@ -5,9 +5,10 @@ Why this exists
 ---------------
 ``scripts/build_extras.py`` builds *every* hypothesis group in one process and
 holds the result in a dict; measured in this sandbox (2 cores, ~3 GB RAM) that
-process is OOM-killed while computing later groups. This script can build H-D
-scarp-facing coherence or the H-H endpoint/relay bridge arm independently,
-then writes each layer to a float32 memmap.
+process is OOM-killed while computing the later groups, so the H-D feature group
+cannot be produced by it here.  The group builders themselves are unchanged:
+this script imports ``gems51.extras.facecoh_group`` — the same function
+``build_static`` now calls for H-D — and writes each layer as it is produced.
 
 Output: ``data/prepared/arm_<group>.dat`` (float32 memmap, one layer per row) and
 ``data/prepared/arm_<group>_names.json``.
@@ -29,18 +30,21 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems51.detector import Stack                       # noqa: E402
-from gems51.extras import _build_endpoint_bridge, facecoh_group  # noqa: E402
-from gems51.grid import GRID                              # noqa: E402
+from gems51.detector import Stack            # noqa: E402
+from gems51.extras import facecoh_group, _build_endpoint_bridge  # noqa: E402
+from gems51.grid import GRID                 # noqa: E402
 
 P = ROOT / "data" / "prepared"
 
-def h_h_group(get, footprint):
-    return {**facecoh_group(get, footprint),
-            **_build_endpoint_bridge(get, footprint)}
+
+def build_hh_group(get, footprint):
+    """Exact H-D face-coherence features plus H-H endpoint/relay features."""
+    group = facecoh_group(get, footprint)
+    group.update(_build_endpoint_bridge(get, footprint))
+    return group
 
 
-GROUPS = {"hd": facecoh_group, "hh": h_h_group}
+GROUPS = {"hd": facecoh_group, "hh": build_hh_group}
 
 
 def main() -> int:

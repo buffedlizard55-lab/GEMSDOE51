@@ -62,5 +62,53 @@
   "measured_auc": null,
   "measured_dti_r3_47": null,
   "delta_vs_base": null
+ },
+ {
+  "id": "H53-X5",
+  "name": "Radiometric K/Th alteration concordance on magnetic lineaments, off-catalogue",
+  "layers": "geodawn_rad_u8 mirror (rad_K, rad_Th) + stack tmi_s15_lin + distance-to-catalogue gate (>200 m).",
+  "signature": "Quantile-ranked log(K/Th) enrichment multiplied by quantile-ranked magnetic lineament response (tmi_s15_lin), evaluated only away from catalogued faults.",
+  "why_new_faults": "Hydrothermal fluid pathways alter surface radioelement concentrations along structures; a K excess colocal with a magnetic lineament where the catalogue has no nearby fault is more likely an unmapped pathway than a mapped contact.",
+  "differs_from": "P3's conditional-negative-control idea was never implemented; sibling r11f/r12 fused scarp and radiometric coincidence, not K/Th x magnetic-crest x off-catalogue conditioning. No in-repo feature combines radiochemistry with magnetic lineaments.",
+  "expected_dti": "Rank 2 qualitative (2026-10-08 slate); moderate upside uncertain. No numerical forecast.",
+  "cost": "medium; mirrored radiometric layers already hash-verified",
+  "external_data_needed": "none (mirrored inputs)",
+  "measured_auc": null,
+  "measured_dti_r3_47": null,
+  "measured_transform_layers": null,
+  "delta_vs_base": null,
+  "outcome": "preregistered 2026-10-08; off-catalogue S/L screen pending (scripts/screen_x5.py)"
+ },
+ {
+  "id": "H53-X6",
+  "name": "Along-strike displacement taper at unmapped segment tips",
+  "layers": "Detrended elevation (comp_det_elev) + DEM-derived scarp step/relief layers.",
+  "signature": "Second along-strike derivative of local step amplitude; keep finite tapers bracketed by coherent shoulders, reject drainage-like monotone decay.",
+  "why_new_faults": "A dying displacement profile exposes an unmapped fault segment end; the catalogue tends to stop where the scarp becomes ambiguous, exactly where taper geometry is informative.",
+  "differs_from": "H_C uses catalogue-tip distance; H-H counts potential-field endpoints; neither measures topographic displacement taper independent of catalogue geometry.",
+  "expected_dti": "Rank 4 qualitative (2026-10-08 slate); low-to-moderate upside uncertain. No numerical forecast.",
+  "cost": "high; requires robust along-strike parameterisation",
+  "external_data_needed": "none (mirrored inputs)",
+  "measured_auc": null,
+  "measured_dti_r3_47": null,
+  "measured_transform_layers": null,
+  "delta_vs_base": null,
+  "outcome": "preregistered 2026-10-08; not implemented"
+ },
+ {
+  "id": "H53-X4",
+  "name": "Stress-compatible structural corridors (blocked on external data)",
+  "layers": "USGS Siler slip-/dilation-tendency polygons (DOI 10.5066/P9YL58W6) x independently detected lineament orientations.",
+  "signature": "Coarse corridor prior where detected lineament orientations are favorably stressed for slip/dilation.",
+  "why_new_faults": "Critically stressed orientations are more permeable; a corridor aligned with a geophysical edge could mark a hidden continuation or splay.",
+  "differs_from": "Stage 1 is a geodetic-vs-mapped-fault budget, not a stress/tendency layer.",
+  "expected_dti": "Rank 5 qualitative (2026-10-08 slate); potentially moderate, very uncertain.",
+  "cost": "high and currently blocked",
+  "external_data_needed": "USGS ScienceBase DOI 10.5066/P9YL58W6; NOT obtainable from this sandbox egress allowlist and not mirrored. Mirror via owner GitHub bridge with sha256 pin before any further work.",
+  "measured_auc": null,
+  "measured_dti_r3_47": null,
+  "measured_transform_layers": null,
+  "delta_vs_base": null,
+  "outcome": "preregistered 2026-10-08; NOT VIABLE here until data mirrored"
  }
 ]

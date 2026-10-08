@@ -1,53 +1,49 @@
-# Three-pass review and handoff — 2026-10-08
+# Three-pass review — H53-A status update
 
-**Current decision: H53-A is RESEARCH ONLY / DO NOT SUBMIT. No weekly slot is authorized.** This document records the three requested passes, including failures and remaining blockers; it is not a scientific certification.
+Date: 2026-10-08 UTC
 
-## Pass 1 — implement and verify
+Branch: `arena/922033c2-gemsdoe51` (Arena session branch; integration work for PR #20)
 
-- Ranked four distinct geological candidates in `knowledge/candidate-hypotheses-2026-10-08.md` and `evidence/candidate_hypotheses_prereg_20261008.json` before implementing/scoring H53-A. H53-A was selected; H53-B–D remain blocked or untested for their stated reasons.
-- Audited official INGENIOUS/QFault shapefile attributes against the preserved DBF and actual clipped trace segment export. `SLIPRT2023`/`SLIPRTNUM` in mm/year and row identity are verified; component convention, dip/rake, and observed undocumented `RL`/`LL` codes are explicit unresolved items. Formula is Kreemer et al. (2000), Eq. 3, with source link and assumptions recorded.
-- Evaluated Stage 1 alone over six spatially blocked folds and separately evaluated Stage 2 under the frozen q10 protocol. Full fold-level receipts are linked in the executive guide and latest site report.
-- After holdout rejection, generated one fresh full-map 44,069-point diagnostic TIFF, not by copying/re-encoding an earlier prediction. Rechecked the final bytes, ZIP contents, CRS, grid, dtype, and `[0,1]` range. The local format and local-inventory gates pass; broad-family support uniqueness fails.
+Scope: finite-lag H53-A preregistration and baseline gate; separate componentwise budget-q10 H53-A diagnostic; R1 integration; manifest/README/site reconciliation; tests and repository checks.
 
-## Pass 2 — review for defects, omissions, assumptions, and edge cases
+## Pass 1 — Implement and verify
 
-### Scientific/validation findings
+- Preserved the three-candidate, ranked pre-score slate in [`hypothesis-slate-20261008.md`](hypothesis-slate-20261008.md): H53-A finite-lag surface/gravity edge pairing; H53-B multi-kilometre chord persistence; H53-C LiDAR face-polarity contrast. Each names inputs, physical signature, missing-catalogue rationale, specific difference from existing operators, expected benefit, cost, and whether new data are required. H53-A was top-ranked; it uses existing pinned inputs, so no new external dataset was needed.
+- Kept the frozen experiment protocol in [`../registry/preregistration_h53.json`](../registry/preregistration_h53.json). Built six label-blind H53 feature layers to ignored `data/prepared/arm_h53a.dat`.
+- Separately evaluated Stage 1 on five whole-record splits. Nominal means: q10 area `0.9019044`, held-out visible-catalogue trace-pixel recall `0.9290894`, recall/area lift `1.0301461`. One matched-mass uniform draw per split gave proxy DTI `0.0483903` inside the mask and `0.0490248` across the footprint. This is weak/noisy local proxy evidence, not an organizer result.
+- Ran the baseline-only audit. Fresh canonical H-D/H-H mean `0.2853151549` vs frozen cached-field mean `0.2853406027`; delta `−0.0000254478`, beyond the locked `1e-5` tolerance. Fold 0 differs by `−0.0001526867`; folds 1–5 match. Legacy cached field bytes and exact generation metadata are missing; no cause is assigned.
+- The **finite-lag H53-A** Stage-2 script was invoked only to verify its guard. It exited before candidate fitting with the expected fail-closed message; no candidate score, Stage-2 receipt, TIFF, ZIP, uniqueness result, or format result exists for that operationalization.
+- A distinct **componentwise budget-q10 H53-A variant** was evaluated separately and generated its own unique-by-bytes research-only TIFF. That variant has Stage-1/Stage-2 receipts and a separate broad-family audit; it failed promotion and support containment and is not the finite-lag candidate.
+- This review was extended during PR #20 integration to include main's R1 artifact and reconcile the manifest, README, renderer, generated site, and holdout/method/hypothesis docs. No existing research artifact is a submission recommendation.
 
-- Stage-1 primary lift is `0.999618`; the geodetic-only control is `0.996075`. This fails to demonstrate residual enrichment over the area baseline. It is not evidence that the residual locates an unmapped fault.
-- The Stage-2 candidate is below the frozen local best; the fresh baseline itself misses the registered reproduction tolerance. Those failures were preserved, not tuned away.
-- Mean Stage-1 non-dominance meets the preregistered mean rule, and full-map support/area lift is `1.10973`; however, one held block approves only `54.98%` of its area (implied confinement lift `1.819`). That instability is disclosed rather than hidden by the mean.
-- Broad support uniqueness fails at containment `1.0 > 0.6`, despite zero byte duplicates and a passing local-artifact gate. No global uniqueness claim is justified.
-- Format pass does not resolve the unknown historical portal-triggering file or prove portal acceptance.
+## Pass 2 — Bugs, assumptions, and edge cases
 
-### Repository/site defects corrected
+- **Fixed a fail-open provenance edge case in the Stage-2 code path.** Before this review, the runner trusted a successful status flag without verifying that the exact H-D/H-H field files it would consume still matched the baseline receipt. The runner now verifies the frozen baseline receipt hash, audited input-manifest/feature-arm hashes, all six cached H-D/H-H field hashes, field shape/dtype, and the pass/tolerance fields before candidate scoring. The audit writer now records receipt and arm-cache digests for any future qualifying audit. Added tests for exact-cache acceptance, changed bytes, incomplete folds, and wrong geometry.
+- This instrumentation hardening does **not** change the preregistered scientific threshold or this result. The failed 2026-10-08 receipt predates these extra input-hash fields; it remains failed and cannot be promoted. The current runner rejects it on its failed status before opening a candidate arm. A future passing path needs a newly authorized, fully auditable baseline under a frozen protocol; do not patch the old receipt or use an unreceipted cache.
+- **Preregistration wording ambiguity recorded, not edited:** the frozen JSON's `sensitivity_not_used_for_selection` list redundantly names “fault-plane rate convention,” although fault-plane is already the nominal convention. The executed receipt is explicit: nominal `1e-8/year` fault-plane, sensitivity `1e-9/year` fault-plane, and sensitivity `1e-8/year` vertical-rate. No fourth case is claimed; the preregistration was not changed after results.
+- The Stage-1 result is not described as enrichment or fault confirmation: area is about 90%, lift about 1.03, and the matched-mass in-mask uniform DTI is lower than the full-footprint draw on average. The one-draw-per-split control is noisy. Coarse Stage 1 remains an allowed-domain prior only.
+- The split catalogue is reused and is not an untouched hidden-label lockbox. No external data were downloaded or required. The source slip-rate units were previously checked against the official DBF; fault-plane component, dip, geodetic unit conversion, omitted unknown sense, off-fault/aseismic deformation and interpolation remain assumptions or limitations.
+- The user-reported `[0,1]` portal error has no verified triggering filename. Local format checks are not portal validation. GEMSDOE32 `0.2778` file attribution is unverified; the user-supplied `0.3195` is stale, not the current leaderboard high. No score is attributed to a verified file or treated as organizer evidence; no leaderboard snapshot or automatic monitoring is maintained.
+- Inspected the incoming-main `data/restore_receipt.json` update: only per-entry `cached` → `fetched` statuses changed; the pinned byte counts and SHA-256 values are unchanged. Retain this verified restoration receipt as part of the merge; it is data-provenance bookkeeping, not a new scientific result.
 
-- Updated README’s current status, current branch (`arena/922033c2-gemsdoe51`, verified by `git branch --show-current`), H53 evidence links, leaderboard-attribution note, ranked current slate, and future-session entrypoint. Retained earlier experiments as historical material.
-- Updated `AGENTS.md` to point to the current brief, guide, slate, and receipts instead of stale 2026-10-07 notes.
-- Updated `data/submission_manifest.json` before the site build so the manifest-pruning builder retains H53-A, its one-file ZIP, and final-byte checks. H53-A is explicitly `safe_to_submit=false`; `recommended_upload_candidate` remains null and the previous local best remains intact.
-- Fixed `current_hypothesis_table()` to load the H53 schema and overlay H53’s measured result; split the prior H-G/H-J table into an explicitly historical renderer so the same slate/fields are not mislabeled or repeated as current.
-- Replaced the P1-only `scripts/latest_report.py` with a receipt-driven H53-A report, added H53-specific current site/holdout/method content, and changed the submission guide to a no-go state. Added H53 no-go assertions to `scripts/check_site.py`.
-- Added an executive submission guide and updated current source metadata. The official leaderboard is link-only; a single dated comparison is described without storing standings rows.
-- Marked the old P1 section in README as historical so it cannot be confused with the current H53-A artifact or current no-go status.
+## Pass 3 — Full request and acceptance-criteria review
 
-**Verification (2026-10-08):** the default system `python` lacks NumPy, so the first site-build attempt failed before writing pages; using the repository `.venv` succeeded. `./.venv/bin/python scripts/build_site.py` passed; `./.venv/bin/python scripts/check_site.py` passed (13 pages, local links and download state match manifest); `./.venv/bin/pytest -q` passed (100 passed, 6 skipped); and `git diff --check` passed. The final H53-A TIFF was rechecked with `scripts/check_submission.py`: one float32 band, EPSG:32611, 3730×3292 template grid/transform, finite values in `[0,1]`, zero outside footprint, 44,069 emitted points, local format pass. SHA-256: `2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a`. The one-TIFF ZIP passed `unzip -t` and its archived bytes match the TIFF. None of these local checks means portal acceptance.
-
-## Pass 3 — recheck against the full standing brief
-
-| Acceptance criterion | Current disposition |
+| Requirement | Result |
 |---|---|
-| 3–5 ranked hypotheses before implementation | **Done:** four H53 candidates preregistered. |
-| Official sources, equation, source attributes, limitations | **Documented:** Eq. 3 source linked; mm/year verified; rate component/dip/rake and codebook irregularities remain explicit. |
-| Stage 1 coarse holdout, Stage 2 separate holdout | **Done; H53-A rejected:** visible-catalogue proxy only; Stage 1 uninformative, Stage 2 below frozen best. |
-| Candidate beats local blocked best before slot | **No:** H53-A fails. **No slot used or authorized.** |
-| Full-map GeoTIFF normalized and checked | **Local checks pass:** 44,069 points, required grid, float32, finite `[0,1]`; portal not tested. |
-| Local and broad uniqueness gate | **Local pass; broad gate fails:** max containment 1.0. Artifact is not cleared as unique for the audited family. |
-| Stage-1 support dominance | **Reported both ways:** full-map lift 1.10973; one spatial holdout fold is more restrictive (1.819). |
-| H33 / leaderboard comparison | **Qualified:** owner marks H33-2-B2 UNSCORED; `0.2778` attribution unverified; one manual official-page check on 2026-10-08 contradicts `0.3195` as page high. No standings snapshot or automatic monitor. |
-| README/site/guide and review passes | **Implemented and checked:** generated site has 13 pages; local-link/download checker and full test suite pass; three passes are documented here. |
-| PR and merge | **Not yet attempted.** Must remain on `arena/922033c2-gemsdoe51`; report any branch protection or permission blocker. |
+| 3–5 untried, ranked hypotheses before implementation | **Met:** three operator-level hypotheses were frozen before H53 scoring; top candidate and data/cost distinctions are documented. |
+| Geodetic budget as coarse Stage 1 only; source units and summation | **Implemented and separately audited:** official DBF unit check and sourced tensor formula; all component/unit/dip choices are explicit. Stage 1 never places points. |
+| Separate Stage-1 and fine-scale Stage-2 holdouts | **Stage 1 complete; Stage 2 blocked before candidate fit/score.** Reported separately; no fake Stage-2 number. |
+| No competition slot until a candidate beats holdout best | **Met:** no candidate reached promotion and no slot was used. |
+| Finite-lag H53-A GeoTIFF and checks | **No candidate TIFF, correctly:** the reproduction gate blocked Stage 2 before candidate fitting. No score or artifact checks exist for that operationalization. |
+| Separate budget-q10 H53-A diagnostic | **Generated after its separate holdout:** Stage 2 was not promoted (0/6 paired folds positive; −0.0188308 vs frozen best) and the broad support-containment gate failed (1.000 > 0.6). Its local format/scoped checks do not authorize a slot. |
+| Stage-1 non-dominance, approved-tile confinement | **Reported by operationalization:** finite-lag H53-A has only a coarse Stage-1 result because Stage 2 was blocked; the budget-q10 variant's mean gate passed, but one block had 0.5498 approved area / 1.8188 confinement lift. Its full-map points were all inside the mask, which does not cure failed promotion/uniqueness. |
+| Portal `[0,1]` error and official submission instructions | **Status made explicit:** user-reported error remains unresolved; local range checks are not portal acceptance. How-to-submit page prohibits using any present file. |
+| Identifier and short submission note | **No submission name/note issued for H53** because no eligible H53 TIFF exists. The research identifier is clearly marked not a portal name. Earlier research artifact labels are marked not to paste. |
+| Owner-reported scores and organizer-score attribution | **Kept separate:** no unverified file attribution or organizer-score claim. |
+| README, executive summary, clean generated site | **Updated:** first-screen H53 status, receipts, slate/preregistration, and research-only historical downloads; site checker confirms links and manifest/download consistency. |
+| Tests, repository and site checks | **PASS:** both pre-merge snapshots were re-run from their exact Git commits (`2900420`: `100 passed, 6 skipped`; incoming `e5b751d`: `112 passed, 6 skipped`); the integrated working tree passes `117 passed, 6 skipped`. Repo-health imports/API/test collection passed; the 13-page site/link/download check passed; compile and `git diff --check` passed. The finite-lag Stage-2 guard produced the expected refusal and no receipt. |
+| PR and merge | **PR #20 remains open.** Main's R1 files and holdout are preserved, and the conflict-resolved tree passes local checks; the merge commit, push, and fresh GitHub checks are pending. No mergeability or completion claim is made. |
 
-### Remaining work / next session
+## Decision
 
-1. **Completed before PR:** rebuilt the site after this review-note edit; `scripts/check_site.py`, `git diff --check`, and the full test suite passed. The final generated pages/downloads and H53-A warning were inspected.
-2. **Pending:** create a PR from the fixed Arena branch and attempt the requested merge; never switch branches. Record the PR link and any merge blocker in this review after PR creation.
-3. Do not spend a competition slot on H53-A or any other current TIFF. A future candidate requires a new slate, frozen holdout, broad uniqueness clearance, byte checks, and explicit review of the one-fold Stage-1 restriction issue.
+`GEMSDOE51-H53-A-20261008` identifies the finite-lag H53-A preregistration only. Its Stage 1 is separate, and its baseline provenance/reproduction gate failed, so **finite-lag Stage 2 is blocked before candidate scoring; no finite-lag candidate score or TIFF exists; download for finite-lag research: NO; submit: NO.** The separate componentwise budget-q10 H53-A variant did generate a TIFF, but it remains **RESEARCH ONLY / DO NOT SUBMIT** after failed Stage-2 promotion and broad support containment. R1 also remains research-only after its paired confinement rule failed. No file is cleared for a competition slot; no portal acceptance or organizer score is claimed. Preserve all failures. Recover auditable lineage or preregister a new baseline before scoring another finite-lag candidate; do not weaken the frozen rule.
