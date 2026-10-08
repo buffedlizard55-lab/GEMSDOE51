@@ -317,6 +317,16 @@ def build():
         "h52-session-results-2026-10-07.md",
         "uniqueness_recheck_h51n2_20261007.json",
         "uniqueness_recheck_h52_20261007.json",
+        "h53_k2x_holdout_20261008.json",
+        "h53_k2x_input_audit_20261008.json",
+        "h53_k2x_feature_build_20261008.json",
+        "h53_k2x_pretest_lock_20261008.json",
+        "h53_k2x_artifact_20261008.json",
+        "h53_k2x_current_uniqueness_20261008.json",
+        "h53_k2x_family_uniqueness_20261008.json",
+        "candidate_hypotheses_prereg_20261008.json",
+        "candidate-hypotheses-2026-10-08.md",
+        "review-three-passes-20261008.md",
     )
     expected_downloads.update(supporting_files)
     for item in downloads.iterdir():
@@ -498,7 +508,24 @@ uniqueness, Stage-1 allowed-domain/non-dominance, and the preregistered blocked-
     research_cards = []
     for record in research:
         if record.get("id") == "P1_ODD_EVEN_Q10":
-            continue  # Rendered from its own measured schema in latest_report.
+            name = Path(record.get("file", "")).name
+            zip_name = Path(record.get("zip", "")).name
+            holdout = record.get("holdout", {})
+            stage1 = record.get("stage1", {})
+            checks_name = Path(record.get("checks_file", "")).name
+            research_cards.append(f"""
+<section class="download missing">
+<h2>Earlier P1 odd/even-profile TIFF — research only</h2>
+<p class="warn"><b>NOT FOR SUBMISSION; do not spend a slot.</b> P1's q10-gated mean proxy DTI was {holdout.get('candidate_gated', float('nan')):.6f} vs same-fold baseline {holdout.get('baseline_gated', float('nan')):.6f} (Δ {holdout.get('paired_delta', float('nan')):+.6f}; {holdout.get('positive_folds', 0)}/6 folds). The frozen-best reproduction gate also failed.</p>
+<p><a class="btn" href="downloads/{html.escape(name)}">Download P1 research TIFF</a> · <a href="downloads/{html.escape(zip_name)}">one-TIFF ZIP</a></p>
+<dl class="kv"><dt>Research label</dt><dd><code>{html.escape(str(record.get('submission_name', '')))}</code></dd>
+<dt>Local Stage-1 gate</dt><dd>{stage1.get('emitted_pixels_inside_approved', 0):,}/{stage1.get('emitted_pixels_total', 0):,} points inside; approved area {stage1.get('approved_area_share_of_footprint', float('nan')):.2%}. This is not promotion.</dd>
+<dt>Final-byte receipt</dt><dd><a href="downloads/{html.escape(checks_name)}">local format checks</a></dd>
+<dt>Full receipts</dt><dd><a href="downloads/p1_holdout_20261007.json">holdout</a> · <a href="downloads/p1_family_audit_20261007.json">broader family uniqueness (NOT CLEARED)</a></dd></dl>
+</section>""")
+            continue
+        if record.get("id") == "H53_K2X_Q10_RESEARCH_20261008":
+            continue  # Current/latest H53 result is rendered from its measured evidence in latest_report.
         name = Path(record.get("file", "")).name
         zip_name = Path(record.get("zip", "")).name if record.get("zip") else ""
         if not name or name != record.get("file") or not (downloads / name).is_file():
@@ -629,7 +656,8 @@ Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact r
     from scripts.latest_report import render
     latest_card, latest_detail = render()
     (DOCS / "latest.html").write_text(page("Latest experiment", latest_detail or "<p>P1 experiment in progress. No new submission authorized.</p>", "latest.html"))
-    body = cand_card + card + latest_card + research_card + f"""
+    # Put the newest research-only artifact first so its download/decision is immediately visible.
+    body = latest_card + cand_card + card + research_card + f"""
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
 proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
@@ -661,18 +689,18 @@ of genuinely new faults or predict an organizer score. Local source rasters are 
 mirrors, not organizer-authenticated.</p>
 <p class="warn"><b>Phase 1 entries are not free.</b> Official materials say submissions are later reviewed
 by experts for the expanded label set. Any future emission must be geologically justifiable as well
-as holdout-tested. The earlier H-H/H-D blend is linked above for audit only. The new H51-K1
-candidate failed the preregistered final gated promotion rule, so no replacement TIFF was written.
+as holdout-tested. The latest H53-K2x candidate failed its preregistered promotion rule; its fresh
+TIFF is research-only and linked at the top. Earlier H51-K1 also failed and produced no TIFF.
 A user-reported portal range error is unresolved; no artifact is described as portal-ready.</p>
 <h2>What this is</h2>
 <p>GEMSDOE51 studies fault indications in the GeoDAWN region. Stage 1 is a coarse 10&nbsp;km
 geodetic strain-budget diagnostic; Stage 2 is a fine-scale detector. The separately evaluated q10
-Stage-1 deficit mask approved about 90% of the footprint, with weak trace-holdout enrichment, and
-was used as a fold-specific allowed-domain constraint for the K1 comparison. Its soft score weight
-was zero; every scored K1 point was inside the fold-specific approved mask. The historical H-H/H-D
-benchmark predates this q10 condition and only 86.71% of its points fall inside the current full-map
-q10 mask, so it does not satisfy the all-points-inside constraint. H51-K1 was not promoted, and
-all local holdout values remain visible-catalogue proxies, not organizer scores.</p>
+Stage-1 deficit mask approved about 90% of the footprint, with weak trace-holdout enrichment. It
+was used as a fold-specific allowed domain, with zero Stage-1 score weight, for the earlier K1 test
+and the latest H53-K2x test; every tested Stage-2 point was inside its approved mask. The historical
+H-H/H-D benchmark predates this q10 condition and only 86.71% of its points fall inside the current
+full-map q10 mask, so it does not satisfy the all-points-inside constraint. H51-K1 and H53-K2x were
+not promoted, and all local holdout values remain visible-catalogue proxies, not organizer scores.</p>
 
 <h2>The three facts that decide everything</h2>
 <ol>
@@ -763,7 +791,7 @@ file rather than from a NaN or out-of-range pixel.</p>
 <dt>Local format receipt (not portal validation)</dt><dd>{html.escape(primary_format)}</dd>
 <dt>SHA-256</dt><dd><code>{html.escape(str(sub.get('sha256', '')))}</code></dd>
 </dl>
-<p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
+<p><b>Latest candidate: H53-K2x is NOT PROMOTED.</b> Its q10-gated mean was 0.2850361 versus the frozen best 0.2853406; the fresh baseline also missed the unchanged 1e-5 reproduction tolerance. A new TIFF exists for research download only—<b>download yes; submit no; no slot</b>. See the <a href="latest.html">full report</a> and <a href="downloads/h53_k2x_holdout_20261008.json">six-fold receipt</a>. Earlier H51-K1 also failed and produced no TIFF; see its <a href="downloads/hk1_spatial_holdout_20261007.json">historical receipt</a>.</p>
 """
     else:
         status_block = """
@@ -775,7 +803,7 @@ or research-only file. This block is generated from the submission manifest.</p>
 {latest_card}
 {status_block}
 <h3>What to upload, and what not to upload</h3>
-{(f'<p>Upload <b>only</b> the candidate explicitly marked RECOMMENDED UPLOAD CANDIDATE above; do not upload the archived benchmark or any research-only TIFF. First identify the exact TIFF that produced the reported portal error and reconcile the portal range rule with the official outside-footprint requirements. Local format checks are not portal acceptance.</p>' if cand else '<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable H51-N2 and H52 V4 TIFFs below are research-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload either file. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>')}
+{(f'<p>Upload <b>only</b> the candidate explicitly marked RECOMMENDED UPLOAD CANDIDATE above; do not upload the archived benchmark or any research-only TIFF. First identify the exact TIFF that produced the reported portal error and reconcile the portal range rule with the official outside-footprint requirements. Local format checks are not portal acceptance.</p>' if cand else '<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> H53-K2x, H51-N2, H52 V4, and earlier research TIFFs are research-only; local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload any of them. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>')}
 <p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
@@ -785,7 +813,7 @@ or research-only file. This block is generated from the submission manifest.</p>
 <li>Include the required narrative with an accurate generative-AI disclosure. Read the current official rules and verify data provenance, claims, and license position before submitting.</li>
 </ol>
 <h3>Existing local benchmark interpretation</h3>
-<p>The retained H-H/H-D blend is an earlier local benchmark (six-fold visible-catalogue proxy mean DTI 0.2853406), not a new TIFF and not upload-eligible. It contains NaN outside the footprint and only 86.71% of its points lie inside the current full-map q10 approved domain. H51-K1 did not pass the frozen gated holdout rule; no K1 TIFF was written. No organizer score, upload, or portal acceptance is claimed.</p>
+<p>The retained H-H/H-D blend is an earlier local benchmark (six-fold visible-catalogue proxy mean DTI 0.2853406), not a new TIFF and not upload-eligible. It contains NaN outside the footprint and only 86.71% of its points lie inside the current full-map q10 approved domain. The latest H53-K2x q10-gated result was 0.2850361, below the frozen best, and its fresh baseline failed the reproduction tolerance; its separate new TIFF is research-only. H51-K1 also failed and produced no TIFF. No organizer score, upload, or portal acceptance is claimed.</p>
 
 <h3>Generative-AI narrative disclosure</h3>
 <p>Section 3.2 of the <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">GEMS Prize Rules</a>
@@ -861,14 +889,18 @@ or STE at approximately 2.4 pixels. The official metric gives a marginal-pixel c
 near <code>0.2*DTI</code>; this motivates sparse dots, but does not prove any individual
 prediction is a real fault.</p>
 <p>The earlier local H-H/H-D blend uses fixed 50/50 probabilities and STE line length 9, continuity weight 0.35, spacing 2.4, and 44,069 predicted pixels. Its historical six-fold proxy DTI is 0.2853406 versus 0.2816627 for H-D (paired Δ +0.0036779; 4/6 folds higher). It is a local benchmark only: it predates q10 confinement and only 86.71% of its points fall inside the full-map q10 approved domain. It is not upload-eligible.</p>
-<p>H51-K1's ungated mean was 0.2855703, but after the preregistered fold-specific q10 mask its mean was 0.2850766, below the frozen best; paired gated Δ versus gated H-D/H-H was +0.000178 with 3/6 folds better. The fresh ungated baseline also missed the 1e-5 reproduction tolerance. Thus K1 is not promoted, no new TIFF was written, and no slot is authorized. Full per-fold evidence is <a href="downloads/hk1_spatial_holdout_20261007.json">here</a>.</p>
+<p>H53-K2x adds a preregistered rank-space anisotropy interaction between conductivity gradients and an independent basement/potential-field edge axis. In the six spatial folds, the q10-gated mean was 0.2850361 versus 0.2848987 for the same-fold gated H-D/H-H baseline (Δ +0.0001375; 4/6 folds), but 0.0003045 below the frozen best. The fresh ungated baseline drifted −0.00002545, beyond the unchanged 1e-5 tolerance. It was not promoted; its freshly generated TIFF is research-only and no slot is authorized. Stage 1 was measured separately and remained a broad hard domain with zero score weight. See <a href="latest.html">full results</a>, the <a href="downloads/h53_k2x_holdout_20261008.json">holdout receipt</a>, and the <a href="downloads/candidate-hypotheses-2026-10-08.md">four-hypothesis slate</a>.</p>
+<p>Earlier H51-K1's ungated mean was 0.2855703, but after the preregistered fold-specific q10 mask its mean was 0.2850766, below the frozen best; paired gated Δ versus gated H-D/H-H was +0.000178 with 3/6 folds better. Its fresh ungated baseline also missed the 1e-5 reproduction tolerance. Thus K1 was not promoted, no TIFF was written, and no slot was authorized. Full per-fold evidence is <a href="downloads/hk1_spatial_holdout_20261007.json">here</a>.</p>
 """
     (DOCS / "method.html").write_text(page("Method", body, "method.html"))
 
     # ------------------------------------------------------------ hypotheses
     hy = load("hypotheses.json", [])
+    current_h53 = next((h for h in hy if h.get("id") == "H53-K2x"), None)
     rows = []
     for h in hy:
+        if h.get("id") == "H53-K2x":
+            continue  # Presented separately with the 2026-10-08 ranked slate and measured outcome.
         layers = esc(h.get("layers", ""))
         measured = h.get("measured_transform_layers")
         if measured:
@@ -880,8 +912,22 @@ prediction is a real fault.</p>
                      esc(h.get("cost", "")), esc(h.get("external_data_needed", "")),
                      esc(h.get("outcome", "not run")), esc(h.get("measured_auc", "")),
                      esc(h.get("measured_dti_r3_47", "")), esc(h.get("delta_vs_base", ""))])
+    h53_table = "<p class='missing'>H53-K2x record not available.</p>"
+    if current_h53:
+        h53_table = tbl(
+            ["id", "hypothesis", "layers", "signature / operator", "why it may find missing faults",
+             "difference from prior work", "expected benefit", "cost", "external-data needs", "measured outcome"],
+            [[esc(current_h53.get("id", "")), esc(current_h53.get("name", "")),
+              esc(current_h53.get("layers", "")), esc(current_h53.get("signature", "")),
+              esc(current_h53.get("why_new_faults", "")), esc(current_h53.get("differs_from", "")),
+              esc(current_h53.get("expected_dti", "")), esc(current_h53.get("cost", "")),
+              esc(current_h53.get("external_data_needed", "")), esc(current_h53.get("outcome", "not run"))]])
     body = f"""
-<h2>Preregistered H51-K1–K4 candidate slate — 2026-10-07</h2>
+<h2>Latest ranked slate and outcome — 2026-10-08</h2>
+<p>Before implementation, four distinct untested mechanisms were ranked: H53-K2x conductive-ribbon anisotropy, H53-LID paired scarp-face polarity, H53-RAD radiometric composition breaks conditioned on independent structure, and H53-GEO sparse warm-water/geochemistry alignment. H53-K2x was selected as the top candidate and tested once under the frozen six-fold rule. The complete hypotheses, source/context checks, operator definitions, prior-art distinctions, costs, and result are in the <a href="downloads/candidate-hypotheses-2026-10-08.md">ranked preregistration and outcome</a> and <a href="downloads/candidate_hypotheses_prereg_20261008.json">machine-readable lock</a>.</p>
+{h53_table}
+<p><b>H53-K2x outcome:</b> q10-gated Stage-2 proxy DTI 0.2850361; same-fold gated H-D/H-H baseline 0.2848987 (paired Δ +0.0001375; 4/6 folds), but 0.0003045 below the frozen best 0.2853406. Fresh baseline drift −0.00002545 exceeded the unchanged 1e-5 tolerance. <b>NOT PROMOTED; fresh research TIFF only; no slot.</b> See the <a href="downloads/h53_k2x_holdout_20261008.json">six-fold receipt</a>, <a href="downloads/h53_k2x_artifact_20261008.json">artifact receipt</a>, and <a href="latest.html">user-facing result/download page</a>.</p>
+<h2>Earlier preregistered H51-K1–K4 slate — 2026-10-07</h2>
 <p>These four operator-level fault hypotheses were ranked before the K1 holdout run. The complete source checks, exact operators, prior-art differences, cost rationale, Stage-1 reconciliation, and outcome are in <a href="downloads/candidate-hypotheses-2026-10-07.md">the preregistration note</a> and <a href="downloads/candidate_hypotheses_prereg_20261007.json">machine-readable receipt</a>. K1 uses the supplied horizontal/vertical gradient bands but is explicitly only a tilt-like partial-gradient proxy because gravity-HG semantics are unresolved. No broad family is claimed globally novel.</p>
 {candidate_slate_table()}
 <p><b>K1 outcome:</b> ungated mean proxy DTI 0.2855703; final fold-specific q10-gated mean 0.2850766, below the frozen 0.2853406 best. Against the same-fold q10-gated H-D/H-H comparator, Δ=+0.0001780 but only 3/6 folds improved. The fresh baseline differed from the frozen receipt by −0.00002545, beyond the 1e-5 tolerance. The candidate was not promoted; no TIFF was written and no slot was used. See the <a href="downloads/hk1_spatial_holdout_20261007.json">full holdout receipt</a>.</p>
@@ -932,6 +978,26 @@ prediction is a real fault.</p>
                          f"{base_g:.6f}", f"{cand_g:.6f}", f"{cand_g-base_g:+.6f}"])
     stage1_q10 = load_evidence("stage1_q10_trace_holdout_20261007.json", {})
     s1q10 = stage1_q10.get("summary", {})
+    h53_hold = load_evidence("h53_k2x_holdout_20261008.json", {})
+    h53_result = h53_hold.get("candidate_result", {})
+    h53_base = h53_hold.get("baseline", {})
+    h53_s1 = h53_hold.get("stage1_holdout", {})
+    h53_domain = h53_s1.get("spatial_fold_q10_domain", {})
+    h53_rows = []
+    for row in h53_hold.get("rows", []):
+        out = row.get("outputs", {})
+        bu = out.get("fresh_hd_hh_blend_ungated", {}).get("dti", float("nan"))
+        cu = out.get("h53_k2x_blend_ungated", {}).get("dti", float("nan"))
+        bg = out.get("fresh_hd_hh_blend_stage1_q10", {}).get("dti", float("nan"))
+        cg = out.get("h53_k2x_blend_stage1_q10", {}).get("dti", float("nan"))
+        h53_rows.append([str(row.get("fold", "")), f"{bu:.6f}", f"{cu:.6f}",
+                         f"{bg:.6f}", f"{cg:.6f}", f"{cg-bg:+.6f}"])
+    h53_domain_rows = [
+        [str(i), f"{area:.3%}", f"{lift:.4f}"]
+        for i, (area, lift) in enumerate(zip(
+            h53_domain.get("approved_area_share_by_fold", []),
+            h53_domain.get("implied_lift_by_fold", [])))
+    ]
     body = f"""
 <h2>Spatial holdout — proxy evidence, not a competition score</h2>
 <p>The detector holdout uses a 3×3 spatial blocking design, removes a 1.2 km boundary band from
@@ -1005,7 +1071,15 @@ support was too similar to the existing soft-w=0.10 artifact (Jaccard 0.86130; t
 containment 0.92548; threshold 0.60). The builder stopped before writing a GeoTIFF. No slot was used.
 See <a href="downloads/preregistration-2026-10-07.md">frozen preregistration and appended outcome</a>.</p>
 
-<h3>H51-K1 Stage-2 spatial holdout (after fold-specific Stage-1 q10 mask)</h3>
+<h3>H53-K2x Stage 2 — preregistered six-fold spatial holdout (2026-10-08)</h3>
+<p>The six-fold score is a visible-known-catalogue proxy, not hidden organizer truth. The fresh ungated H-D/H-H baseline was {h53_base.get('fresh_ungated_mean_dti', float('nan')):.7f} versus frozen best {h53_base.get('frozen_mean_dti', float('nan')):.7f}; drift {h53_base.get('fresh_minus_frozen_mean', float('nan')):+.8f} exceeded the fixed 1e-5 tolerance. H53-K2x q10-gated mean was {h53_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f}, below frozen best by {h53_base.get('frozen_mean_dti', float('nan')) - h53_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f}. It beat the same-fold q10-gated baseline ({h53_base.get('stage1_q10_gated_mean_dti', float('nan')):.7f}) by {h53_result.get('paired_mean_delta_vs_stage1_gated_hd_hh', float('nan')):+.7f} and won {h53_result.get('positive_folds_vs_stage1_gated_hd_hh', 0)}/6 folds, but cannot override the reproduction/frozen-best failures. Ungated candidate mean {h53_result.get('ungated_mean_dti', float('nan')):.7f} is not the preregistered primary metric. <b>NOT PROMOTED; research TIFF only; no slot.</b> Full receipt: <a href="downloads/h53_k2x_holdout_20261008.json">H53-K2x holdout</a>.</p>
+{tbl(['fold','fresh baseline (ungated)','K2x (ungated)','fresh baseline (q10)','K2x (q10)','paired q10 Δ'], h53_rows)}
+<h4>Stage 1 — separately evaluated coarse prior and q10 allowed domain</h4>
+<p>Five whole-trace splits, reported separately from Stage 2, approved mean area {h53_s1.get('trace_split_mean_area', float('nan')):.2%}, retained {h53_s1.get('heldout_trace_recall', float('nan')):.2%} of held-out trace pixels (mean lift {h53_s1.get('heldout_trace_lift', float('nan')):.4f}). These are weak broad-enrichment statistics, not fine-scale DTI. For the six spatial folds, the q10 masks were recomputed with held-out trace rows excluded; mean approved area was {h53_domain.get('mean_approved_area_share', float('nan')):.2%}, with mean implied lift {h53_domain.get('mean_implied_lift_if_all_stage2_points_are_confined', float('nan')):.4f}. Every scored Stage-2 point was inside the fold-specific mask; Stage-1 score weight was zero.</p>
+{tbl(['fold','q10 approved area','implied lift if all points confined'], h53_domain_rows)}
+<p>The Stage-1 domain/non-dominance checks passed but do not rescue Stage-2 promotion. See the <a href="downloads/candidate-hypotheses-2026-10-08.md">ranked four-hypothesis slate</a>, <a href="downloads/h53_k2x_input_audit_20261008.json">input semantics/source audit</a>, and <a href="latest.html">full report and research download</a>.</p>
+
+<h3>Earlier H51-K1 Stage-2 spatial holdout (after fold-specific Stage-1 q10 mask)</h3>
 <p>The ungated H-D/H-H benchmark was freshly reconstructed at mean
 {hk1_hold.get('baseline', {}).get('fresh_ungated_mean_dti', float('nan')):.6f} versus frozen
 {hk1_hold.get('baseline', {}).get('frozen_mean_dti', float('nan')):.6f}; the difference

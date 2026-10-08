@@ -1,17 +1,31 @@
 # GEMSDOE51 — DOE GEMS fault-discovery research
 
-**Current decision (2026-10-07): NO new TIFF is cleared for a competition slot. No slot has been used; no organizer score or portal acceptance is claimed.**
+**Current decision (2026-10-08): NO artifact is cleared for a competition slot. No slot has been used; no organizer score or portal acceptance is claimed.**
 
-The six-fold, spatially blocked promotion rule takes precedence over local format and uniqueness checks. The existing H-H/H-D blend remains the best *measured local proxy* (mean DTI 0.2853406), but it predates the all-points-inside-Stage-1-q10 requirement (86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it.
+The frozen local best remains the six-fold H-H/H-D blend (known-fault proxy DTI 0.285340602656319), but it predates the all-points-inside-Stage-1-q10 requirement (only 86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it. H53-K2x was the latest preregistered test; it failed its fixed promotion rule.
 
-Two additional unique, all-finite, `[0,1]` GeoTIFFs are downloadable **for research/audit only — DO NOT SUBMIT**:
+## Latest H53-K2x research TIFF — download YES; submit NO
 
-- **H51-N2 physical / credit-thin:** [`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json). It passes local format, uniqueness, and Stage-1 q10 confinement checks, but **failed its preregistered six-fold paired holdout**: 0.280116 vs 0.281663 for the H-D comparator (Δ −0.001547; 0/6 folds won). No submission slot.
-- **H52 V4 strain-confined:** [`gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif`](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip) · [checks](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json). It passes local format and the current-inventory uniqueness audit (worst Jaccard 0.2049, containment 0.3401 over 16 comparisons, including the H51-N2 and P1 TIFFs) and places all points inside q10-approved tiles. **Its actual V4 NMS raster has no direct six-fold holdout receipt.** The available 0.280821 figure belongs to V7 STE q10, a different geometry, and must not be attributed to this file. The parent +0.0020 rule was not met. No submission slot.
+- **[Download the new H53-K2x TIFF](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif)** · [single-TIFF ZIP](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip) · [final-byte/artifact receipt](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json)
+- Executive summary: [latest results](docs/latest.html) · submission guide: [How to submit — currently blocked](docs/how-to-submit.html)
+- Unique research label (do **not** paste into the portal): `GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA`
+- Comment: `RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.`
+- **Six-fold Stage-2 result:** q10-gated candidate mean 0.2850361 vs same-fold gated H-D/H-H 0.2848987 (paired Δ +0.0001375; 4/6 folds); it is **0.0003045 below** the frozen best. Fresh ungated baseline drifted −0.00002545, outside the unchanged 1e-5 reproduction tolerance. **NOT PROMOTED. No slot.** Full receipt: [`evidence/h53_k2x_holdout_20261008.json`](evidence/h53_k2x_holdout_20261008.json).
+- **Stage 1 reported separately:** five whole-trace splits approved 90.15% mean area, retained 96.01% of held-out trace pixels, lift 1.065. In the six spatial folds, q10 masks approved 90.06–90.36% of the footprint (mean 90.13%); all candidate points were confined and implied lift was about 1.109. Stage 1 is a broad hard domain with zero Stage-2 score weight, not a fine-scale win.
+- **Local format checks:** one float32 band, EPSG:32611, 3730×3292, exact template transform, 44,069 binary points, zeros outside, no NoData tag, all cells finite in [0,1]. This is not organizer portal acceptance. The official task page describes null/NaN outside bounds; our all-finite zero convention is not reconciled with portal behavior. Do not claim the portal will accept it.
+- **Uniqueness:** current local inventory PASS (8 comparisons, max support Jaccard 0.2168 / containment 0.3564). Broader 54-repository family gate **NOT CLEARED**: 365/365 payloads fetched; one different-grid format-test file was incomparable; 364 same-grid comparisons found no exact duplicate, max Jaccard 0.1496, max containment 1.0. No global novelty claim. See [`evidence/h53_k2x_current_uniqueness_20261008.json`](evidence/h53_k2x_current_uniqueness_20261008.json) and [`evidence/h53_k2x_family_uniqueness_20261008.json`](evidence/h53_k2x_family_uniqueness_20261008.json).
+- SHA-256: `15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144`.
 
-**Action: download only to inspect or reproduce these research artifacts. Do not paste either name into the competition portal.** The site’s executive summary and submission guide are generated from `data/submission_manifest.json` and intentionally show “no upload-eligible artifact.”
+**Download only to inspect/reproduce this research artifact. Do not submit it or spend a competition slot.** The full source/semantics audit is [`evidence/h53_k2x_input_audit_20261008.json`](evidence/h53_k2x_input_audit_20261008.json); the preregistration and four-candidate slate are [`knowledge/candidate-hypotheses-2026-10-08.md`](knowledge/candidate-hypotheses-2026-10-08.md); the three-pass implementation/review/recheck is [`knowledge/review-three-passes-20261008.md`](knowledge/review-three-passes-20261008.md).
 
-## Parallel-session research TIFF (P1): download yes; submit NO
+## Earlier research TIFFs — audit only; do not submit
+
+- **H51-N2 physical / credit-thin:** [`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json). It passes local format and q10 confinement but failed its paired six-fold holdout: 0.280116 vs 0.281663 for H-D (Δ −0.001547; 0/6 wins).
+- **H52 V4 strain-confined:** [`gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif`](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip) · [checks](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json). The actual V4/NMS raster has no direct six-fold holdout receipt; 0.280821 belongs to a different V7 STE q10 geometry.
+
+All research TIFFs remain explicitly **NOT FOR SUBMISSION**. Local format and scoped uniqueness checks never override a failed/missing holdout, incomplete full-family gate, or unresolved portal format behavior.
+
+## Earlier P1 research TIFF: download yes; submit NO
 
 [Live site](https://buffedlizard55-lab.github.io/GEMSDOE51/) · [Pull request12](https://github.com/buffedlizard55-lab/GEMSDOE51/pull/12) · [Three-pass review and handoff](knowledge/review-three-passes-20261007.md)
 
@@ -64,20 +78,21 @@ This full working brief is retained so a future session can continue without ask
 >
 > Review and update the site, preserve auditable research and source links, include this full prompt in README, and autonomously attempt a pull request and merge to `main`. State blockers and irregularities. No manual user input is expected.
 
-This checkout is fixed to branch `arena/4df01627-gemsdoe51`. Work remains on that session branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
+This checkout is fixed to branch `arena/c2b2ea5e-gemsdoe51`. Work remains on that session branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
 
 ## Current status and local benchmark
 
 | Item | Status / result |
 |---|---|
-| **Upload eligibility** | **None. No slot authorized.** H51-N2 loses its paired holdout; H52 V4 has no direct holdout for the written geometry and fails its parent promotion rule. |
+| **Upload eligibility** | **None. No slot authorized.** H53-K2x fails its frozen-best / baseline-reproduction rule; H51-N2 loses its paired holdout; H52 V4 has no direct holdout for the written geometry. |
 | Compliance cost of the brief's constraints | `-0.0015469` mean proxy DTI (0/6 folds) versus the archived H-D configuration; the harness reproduces the archived receipt with max deviation `0.0` |
 | Off-catalogue A/B physical-arm AUC (4 folds) | `0.6936` all / `0.6486` catalogue-independent (≥5 px from any A pixel) |
 | Far-field ring-weight experiment | `+0.017314` on the off-catalogue A/B instrument, `-0.113310` on the blocked instrument → **instrument disagreement; no ring weight used** |
 | Existing local H-H/H-D blend + STE L9 | Historical local best only; not portal-validated, not uploaded, no organizer score |
 | Six-fold H-H/H-D proxy DTI | `0.2853406027`, visible known-fault catalogue; `4/6` folds beat H-D |
 | Existing H-D proxy comparator | `0.2816626603` |
-| P1 odd/even profile screen | 0.2839869; NOT PROMOTED; new research TIFF generated, no slot |
+| H53-K2x conductive anisotropy, q10-gated | 0.2850361 vs frozen best 0.2853406; baseline drift outside tolerance; NOT PROMOTED; fresh research TIFF only, no slot |
+| P1 odd/even profile screen | 0.2839869; NOT PROMOTED; research TIFF generated, no slot |
 | H51-K1 new-operator screen | **NOT PROMOTED**; no new TIFF; no slot |
 | Portal `[0,1]` validation error | **OPEN BLOCKER**; triggering file identity unknown |
 | Organizer score / acceptance | None verified for GEMSDOE51 |
@@ -94,7 +109,7 @@ The existing local benchmark artifacts are linked for audit only:
 
 This old raster is locally verified as one-band `float32`, EPSG:32611, shape `3730 × 3292`, correct template transform, finite in-footprint values in `[0,1]`, and NaN outside with a NaN NoData tag. **The portal's reported range error remains unresolved**: local validity is not evidence that the portal accepts NaN outside. The exact file used in the reported portal attempt was not recorded. Do not infer that the old H-H/H-D TIFF either caused or fixes the error.
 
-## Preregistered candidate slate and result
+## Earlier 2026-10-07 preregistered candidate slate and result
 
 The full four-item slate, exact operators, source checks, prior-art boundaries, costs, and outcome are in [`knowledge/candidate-hypotheses-2026-10-07.md`](knowledge/candidate-hypotheses-2026-10-07.md) and [`evidence/candidate_hypotheses_prereg_20261007.json`](evidence/candidate_hypotheses_prereg_20261007.json). They are also linked from the [hypotheses page](docs/hypotheses.html).
 

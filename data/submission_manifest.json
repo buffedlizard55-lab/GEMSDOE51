@@ -1462,11 +1462,215 @@
     "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof"
    },
    "not_for_submission_reason": "The candidate was built before the amended pass-2 rerun wrote a receipt. Its checks receipt has holdout=null, and the available score copied into its uniform-control metadata belongs to V7 STE q10 rather than the V4 NMS raster. The original pass-2 receipt also records harness_ok=false under the earlier clause. Arithmetic recheck supports the respecified harness but does not supply a new V4 holdout. Do not spend a slot."
+  },
+  {
+   "schema_version": 1,
+   "id": "H53_K2X_Q10_RESEARCH_20261008",
+   "role": "RESEARCH_ONLY",
+   "status": "RESEARCH_ONLY_NOT_FOR_SUBMISSION",
+   "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+   "zip": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip",
+   "checks_file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json",
+   "submission_name": "GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA",
+   "note": "RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.",
+   "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+   "bytes": 230888,
+   "support_sha256": "b9c0adee61ea30c00dde53d87b209e09a01759fbaa163119eac500bce7568340",
+   "format": {
+    "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+    "bytes": 230888,
+    "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+    "crs": "EPSG:32611",
+    "crs_epsg": 32611,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": [
+     3730,
+     3292
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "nodata": null,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "shape_matches_template": true,
+     "inside_footprint_finite": true,
+     "outside_footprint_nan": false,
+     "outside_footprint_zeros": true,
+     "nan_cells": 0,
+     "global_invalid_cells": 0,
+     "all_cells_finite_in_range": true,
+     "nodata_tag_safe": true,
+     "values_outside_0_1": 0,
+     "min_value": 0.0,
+     "max_value": 1.0,
+     "nodata_tag_is_nan": false,
+     "predicted_px": 44069,
+     "total_mass": 44069.0,
+     "portal_legal": true,
+     "format_valid": true
+    }
+   },
+   "holdout": {
+    "evidence": "evidence/h53_k2x_holdout_20261008.json",
+    "candidate_mean": 0.2850361457010805,
+    "baseline_mean": 0.28489865707511947,
+    "paired_delta": 0.00013748862596105657,
+    "folds_higher": 4,
+    "folds_total": 6,
+    "frozen_best": 0.285340602656319,
+    "candidate_minus_frozen_best": -0.0003044569552385079,
+    "fresh_baseline": 0.28531515486970865,
+    "frozen_baseline": 0.285340602656319,
+    "baseline_drift": -2.5447786610344192e-05,
+    "baseline_tolerance": 1e-05,
+    "baseline_reproduced": false,
+    "holdout_gate_passed": false
+   },
+   "stage1": {
+    "q": 10.0,
+    "tile_px": 100,
+    "approved_area_share": 0.900925673451481,
+    "implied_lift_if_all_points_inside": 1.1099694785796939,
+    "emitted_points": 44069,
+    "points_inside_approved": 44069,
+    "points_outside_approved": 0,
+    "emitted_share_inside_approved": 1.0,
+    "approved_pixel_occupancy": 0.00946617264740295,
+    "ungated_support_jaccard": 0.7220843672456576,
+    "fraction_gated_points_also_ungated": 0.8386167146974063,
+    "formula": "source-corrected official QFault vector budget; 10-km tile, q10 of ranked observed geodetic second-invariant minus ranked budget second invariant; broad hard domain, Stage-2 score weight zero",
+    "all_points_confined": true,
+    "receipt": "evidence/official_vector_budget_20261007.json"
+   },
+   "stage1_trace_holdout": {
+    "evidence": "evidence/official_vector_budget_20261007.json",
+    "instrument": "Five whole-official-trace splits; recall/lift only, not DTI; distinct from legacy P1 Stage1",
+    "mean_approved_area": 0.901527139612333,
+    "heldout_trace_recall": 0.9601245840459715,
+    "heldout_trace_lift": 1.0650105093454951,
+    "score_type": "separate Stage-1 trace-recall/lift; not Stage-2 DTI"
+   },
+   "model": {
+    "training": "all visible known-fault catalogue pixels; 250,000 sampled non-catalogue pixels",
+    "feature_arms": {
+     "H_D": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21"
+     ],
+     "H_H": [
+      "hh_endpoint",
+      "hh_bridge",
+      "hh_bridge_cond",
+      "hh_bridge_surface",
+      "hh_endpoint_concordance"
+     ],
+     "H53_K2x": [
+      "h53_k2x_min_s2s5"
+     ]
+    },
+    "negative_sample_seeds": [
+     20261008,
+     20261009
+    ],
+    "model_seeds": [
+     20261008,
+     20261009
+    ],
+    "hgb_max_iter": 250,
+    "blend": "0.5 H-D + 0.5 H-H+H53-K2x probabilities",
+    "emission": "STE scales 1/2/3.5 px, L9, continuity exponent 0.35, spacing 2.4 px",
+    "point_budget": 44069,
+    "point_budget_is_organizer_truth_count": false
+   },
+   "source": "Fresh fitted model predictions; no prior TIFF was used as input.",
+   "decision": "No competition slot authorized: candidate failed the frozen holdout and full-family uniqueness is NOT_CLEARED.",
+   "portal_acceptance": "NOT TESTED. Local grid/range checks do not establish organizer portal acceptance; official outside-footprint language and local all-finite zero encoding are not treated as reconciled.",
+   "elapsed_seconds": 192.7411024570465,
+   "limitations": [
+    "Visible known-fault labels are proxy training/holdout truth, not the hidden expert labels.",
+    "The fresh full-catalogue point map is not itself a holdout score; six-fold results belong to the separate receipt.",
+    "The supplied cond_surf unit, depth sensitivity, inversion and layer-specific source are undocumented in the local mirror; the feature operates on empirical ranks only.",
+    "Electrical conductivity is non-unique and the cited fault-conductor studies are site-specific.",
+    "The full-map Stage-1 q10 gate is a coarse hard domain; its physical assumptions and ambiguities remain in the separate receipt.",
+    "Local format validity is not portal acceptance; no upload, score or submission-slot use occurred."
+   ],
+   "zip_sha256": "ea475b62364f490b11e320ab969f52ebfdcd0c0f38110ba0c03be83bd24b5e02",
+   "zip_bytes": 189849,
+   "current_inventory_uniqueness": {
+    "receipt": "evidence/h53_k2x_current_uniqueness_20261008.json",
+    "verdict": "PASS",
+    "comparisons": 8,
+    "byte_duplicate_of": [],
+    "max_support_jaccard": 0.216804,
+    "max_support_containment": 0.35635,
+    "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof"
+   },
+   "family_inventory_uniqueness": {
+    "receipt": "evidence/h53_k2x_family_uniqueness_20261008.json",
+    "verdict": "NOT_CLEARED",
+    "expected_unique_blobs": 365,
+    "downloaded": 365,
+    "coverage_complete": false,
+    "valid_same_shape_comparisons": 364,
+    "invalid_comparisons": [
+     {
+      "source": {
+       "repo": "GEMSDOE36",
+       "branch": "main",
+       "path": "docs/downloads/GEMS36_FORMAT_TEST_NOT_SUBMISSION.tif",
+       "size": 1129,
+       "git_blob_sha": "a97c7b2a513225c9f9f2b35736afe5abf4d2a491"
+      },
+      "error": "different grid shape"
+     }
+    ],
+    "exact_duplicate": false,
+    "max_support_jaccard": 0.14956111176324816,
+    "max_support_containment": 1.0,
+    "thresholds": {
+     "jaccard": 0.5,
+     "containment": 0.6
+    },
+    "scope": "Committed 54-repository inventory: docs/downloads and submissions; unique Git blobs"
+   },
+   "uniqueness": {
+    "verdict": "NOT_CLEARED",
+    "pixel_comparisons": 364,
+    "references_sha_verified": 365,
+    "max_support_jaccard": 0.14956111176324816,
+    "max_support_containment": 1.0,
+    "exact_duplicate": false,
+    "current_inventory_verdict": "PASS",
+    "family_inventory_verdict": "NOT_CLEARED",
+    "note": "Local inventory gate passed, but full committed-family gate is NOT_CLEARED: one different-grid toy map cannot be compared and several dense same-grid references fully contain this sparse support (max containment 1.0); exact duplicate is false."
+   },
+   "evidence": {
+    "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json",
+    "input_audit": "evidence/h53_k2x_input_audit_20261008.json",
+    "feature_build": "evidence/h53_k2x_feature_build_20261008.json",
+    "pretest_lock": "evidence/h53_k2x_pretest_lock_20261008.json",
+    "holdout": "evidence/h53_k2x_holdout_20261008.json",
+    "current_uniqueness": "evidence/h53_k2x_current_uniqueness_20261008.json",
+    "family_uniqueness": "evidence/h53_k2x_family_uniqueness_20261008.json"
+   }
   }
  ],
  "promotion": {
-  "decision": "NO NEW CANDIDATE PROMOTED; NO COMPETITION SLOT AUTHORIZED",
-  "rule": "must beat current spatially-blocked holdout best under the frozen preregistered rule",
+  "decision": "H53-K2x NOT PROMOTED; NO COMPETITION SLOT AUTHORIZED",
+  "rule": "must beat frozen current spatially-blocked holdout best with baseline reproduction, paired improvement, Stage-1 confinement/non-dominance, current-inventory uniqueness, provenance, and final-format checks",
+  "h53_k2x": "NOT_PROMOTED: gated mean 0.2850361457 vs frozen best 0.2853406027; baseline drift -0.0000254478 exceeds 1e-5 tolerance; paired gated delta +0.0001375 vs same-fold baseline, 4/6 folds; broad Stage-1 domain passed; broader family uniqueness NOT_CLEARED",
   "h51_n2": "NOT_PROMOTED: paired delta -0.0015468841, 0/6 folds",
   "h52_v4": "NOT_PROMOTED: built V4 raster has no direct six-fold holdout; available 0.280821 is V7 STE q10, not V4; parent rule not met",
   "portal_status": "NOT TESTED; no organizer upload or score claimed"
@@ -1609,7 +1813,10 @@
   "The Stage-1 rate field is provisionally interpreted as mm/yr; source component and dip are unresolved.",
   "The H51-N2 zero-outside artifact passes local format/uniqueness checks but fails its paired six-fold holdout and is research-only.",
   "The H52 V4 zero-outside artifact passes local format/uniqueness checks but has no direct holdout receipt for its actual NMS geometry; the nearby V7 STE q10 metric is not transferable.",
-  "No new candidate is authorized for a competition slot; existing local benchmark remains not portal-validated and violates the all-points-inside-q10 constraint."
+  "No new candidate is authorized for a competition slot; existing local benchmark remains not portal-validated and violates the all-points-inside-q10 constraint.",
+  "H53-K2x cond_surf input semantics (unit, depth sensitivity, calibration, layer-specific source) are not established by the local owner mirror; its feature is rank-space only.",
+  "H53-K2x source-corrected q10 Stage-1 mask is broad and held-out trace recall/lift are separate from Stage-2 DTI; neither implies hidden-label performance.",
+  "H53-K2x TIFF is research-only; full family uniqueness is NOT_CLEARED and local format validity is not organizer portal acceptance."
  ],
  "research_comparisons": {
   "H_M_cross_scale_crest": {
@@ -1644,29 +1851,44 @@
  "submission_readiness": {
   "status": "BLOCKED_NOT_FOR_UPLOAD",
   "upload_ok": false,
-  "reason": "No new candidate has beaten the current spatially-blocked holdout best under its preregistered promotion rule. H51-N2 lost to its paired H-D comparator by 0.001547 (0/6 folds); H52 V4 has no direct six-fold receipt for the built geometry and the A4 promotion bar was not met. Existing H-H/H-D blend remains a local proxy best but fails the all-points-inside-q10 requirement and has unresolved portal range validation. Do not spend a weekly competition slot on any current file.",
+  "reason": "H53-K2x failed its preregistered six-fold promotion rule: the fresh baseline missed the 1e-5 tolerance and the q10-gated candidate remained below the frozen local best. The fresh H53 TIFF is research-only. Current-inventory uniqueness passes, but the broader family gate is NOT_CLEARED (one different-grid toy reference, max support containment 1.0). The local zero-outside encoding has not been portal-validated and the official null/NaN outside wording remains unresolved. No competition slot is authorized.",
   "no_organizer_upload_or_score_claimed": true
  },
  "candidate_screen": {
-  "candidate": "H51-K1 cross-scale potential-field tilt-like partial-gradient edge persistence",
-  "status": "NOT_PROMOTED_NO_TIFF",
-  "evidence": "evidence/hk1_spatial_holdout_20261007.json",
-  "reason": "Candidate gated mean 0.2850766 did not exceed frozen ungated best 0.2853406; paired improvement over same-fold gated H-D/H-H was positive in only 3/6 folds; fresh ungated baseline missed preregistered reproduction tolerance."
+  "candidate": "H53-K2x structure-conditioned conductive-ribbon anisotropy",
+  "status": "NOT_PROMOTED_RESEARCH_TIFF_AVAILABLE",
+  "evidence": "evidence/h53_k2x_holdout_20261008.json",
+  "reason": "Fresh ungated baseline missed its unchanged 1e-5 reproduction tolerance by -0.0000254478; the q10-gated candidate mean 0.2850361457 was 0.0003044570 below frozen best 0.2853406027. It improved on the same-fold gated baseline by +0.0001374886 in 4/6 folds, but the preregistered gate failed. A TIFF was created for research only; no slot.",
+  "holdout_q10_domain": {
+   "all_points_inside_approved": true,
+   "stage1_non_dominance_pass": true,
+   "mean_approved_area_share": 0.9013465513972637,
+   "implied_lift": 1.1094527606285027,
+   "stage1_score_weight": 0.0
+  },
+  "uniqueness": {
+   "current_inventory": "PASS, 8 comparisons",
+   "committed_family_inventory": "NOT_CLEARED: 365/365 retrieved, 364 same-grid comparisons, one different-grid toy file, max containment 1.0",
+   "exact_duplicate": false
+  }
  },
  "latest_experiment": {
-  "id": "P1_ODD_EVEN_Q10",
+  "schema_version": 1,
+  "id": "H53_K2X_Q10_RESEARCH_20261008",
   "role": "RESEARCH_ONLY",
-  "status": "NOT_FOR_SUBMISSION",
-  "file": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
-  "zip": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip",
-  "submission_name": "GEMSDOE51-P1-Q10-2a687636c85e",
-  "note": "RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.",
-  "sha256": "73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4",
-  "bytes": 228384,
+  "status": "RESEARCH_ONLY_NOT_FOR_SUBMISSION",
+  "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+  "zip": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip",
+  "checks_file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json",
+  "submission_name": "GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA",
+  "note": "RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.",
+  "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+  "bytes": 230888,
+  "support_sha256": "b9c0adee61ea30c00dde53d87b209e09a01759fbaa163119eac500bce7568340",
   "format": {
-   "file": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
-   "bytes": 228384,
-   "sha256": "73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4",
+   "file": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+   "bytes": 230888,
+   "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
    "crs": "EPSG:32611",
    "crs_epsg": 32611,
    "transform": [
@@ -1708,151 +1930,150 @@
    }
   },
   "holdout": {
-   "baseline_ungated": 0.28531515486970865,
-   "baseline_gated": 0.28489865707511947,
-   "candidate_gated": 0.2839869255837515,
-   "paired_delta": -0.0009117314913680055,
-   "positive_folds": 2,
+   "evidence": "evidence/h53_k2x_holdout_20261008.json",
+   "candidate_mean": 0.2850361457010805,
+   "baseline_mean": 0.28489865707511947,
+   "paired_delta": 0.00013748862596105657,
+   "folds_higher": 4,
+   "folds_total": 6,
    "frozen_best": 0.285340602656319,
-   "baseline_drift": -2.5447786610344192e-05
+   "candidate_minus_frozen_best": -0.0003044569552385079,
+   "fresh_baseline": 0.28531515486970865,
+   "frozen_baseline": 0.285340602656319,
+   "baseline_drift": -2.5447786610344192e-05,
+   "baseline_tolerance": 1e-05,
+   "baseline_reproduced": false,
+   "holdout_gate_passed": false
   },
-  "holdout_promoted": false,
-  "uniqueness": {
-   "candidate": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
-   "sha256": "73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4",
-   "byte_duplicate_of": [],
-   "support_jaccard": {
-    "data/prior/g25_dotted_prior.tif": 0.015142,
-    "data/prior/g32_anchor_prior.tif": 0.015142,
-    "data/prior/g32_h33b2_prior.tif": 0.016354,
-    "data/refs/13gems-r13-lattice-nan.tif": 0.00724,
-    "data/refs/8gemsdoe-hedge-v2.tif": 0.015579,
-    "data/refs/gems10-h25-ctx-ridge.tif": 0.031215,
-    "data/refs/gems10-h28-dotted-ridge.tif": 0.021843,
-    "data/refs/gems16-h16-1-baseline-nan.tif": 0.023883,
-    "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.024375,
-    "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.024763,
-    "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.017847,
-    "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.015142,
-    "data/refs/gems25-dotted-d2-8-zeros.tif": 0.015142,
-    "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.011217,
-    "data/refs/gems32-probe-S1-anchor.tif": 0.015142,
-    "data/refs/gemsdoe-ens12-7f00890a.tif": 0.01957,
-    "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.015142,
-    "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.015224,
-    "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.015155,
-    "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.015453,
-    "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.01551,
-    "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.016354,
-    "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.016198,
-    "data/refs/gemsdoe9-2314b599.tif": 0.004048,
-    "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.148019,
-    "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.183076,
-    "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.00063,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.145348,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.145348,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.152086,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.152086,
-    "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.028233,
-    "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.148019,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.140045,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.140045,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.147033,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.147033,
-    "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.142261,
-    "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.142261
-   },
-   "support_containment": {
-    "data/prior/g25_dotted_prior.tif": 0.02984,
-    "data/prior/g32_anchor_prior.tif": 0.02984,
-    "data/prior/g32_h33b2_prior.tif": 0.02984,
-    "data/refs/13gems-r13-lattice-nan.tif": 0.040936,
-    "data/refs/8gemsdoe-hedge-v2.tif": 0.094534,
-    "data/refs/gems10-h25-ctx-ridge.tif": 0.149947,
-    "data/refs/gems10-h28-dotted-ridge.tif": 0.054982,
-    "data/refs/gems16-h16-1-baseline-nan.tif": 0.088929,
-    "data/refs/gems19-h19-4-thermalpop-allfinite.tif": 0.090631,
-    "data/refs/gems19-h19-5-powerlaw-allfinite.tif": 0.090585,
-    "data/refs/gems24-dotted-d1-5-allfinite.tif": 0.041435,
-    "data/refs/gems24-dotted-d2-8-allfinite.tif": 0.02984,
-    "data/refs/gems25-dotted-d2-8-zeros.tif": 0.02984,
-    "data/refs/gems32-bayesopt-dilation-zeros.tif": 0.022419,
-    "data/refs/gems32-probe-S1-anchor.tif": 0.02984,
-    "data/refs/gemsdoe-ens12-7f00890a.tif": 0.094534,
-    "data/refs/gemsdoe32-d28-ref02600-repro-zeros.tif": 0.02984,
-    "data/refs/gemsdoe32-h32a-dipstep-zeros.tif": 0.030679,
-    "data/refs/gemsdoe32-h32b-swarm-zeros.tif": 0.030475,
-    "data/refs/gemsdoe32-h32c-claycap-zeros.tif": 0.031065,
-    "data/refs/gemsdoe32-h32d-submodular-zeros.tif": 0.031246,
-    "data/refs/gemsdoe32-h33-2-b2-zeros.tif": 0.02984,
-    "data/refs/gemsdoe32-h33-2b2-plus-h33-1-zeros.tif": 0.029885,
-    "data/refs/gemsdoe9-2314b599.tif": 0.03549,
-    "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.257868,
-    "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.309492,
-    "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.00388,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.253807,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.253807,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.264018,
-    "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.264018,
-    "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.087227,
-    "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.257868,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.245683,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.245683,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.256371,
-    "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.256371,
-    "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.249087,
-    "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.249087
-   },
-   "stage1_dominance": {
-    "approved_area_share_of_footprint": 0.900925673451481,
-    "emitted_pixels_inside_approved": 44069,
-    "emitted_pixels_total": 44069,
-    "emitted_share_inside_approved": 1.0,
-    "lift_over_area_share": 1.1099694785796939,
-    "emitted_outside_approved": 0,
-    "approved_pixel_occupancy": 0.00946617264740295,
-    "interpretation": "Pass means broad gate, not proof of causal independence; zero soft Stage1 weight."
-   },
-   "verdict": "PASS",
-   "notes": []
-  },
-  "reference_count": 21,
   "stage1": {
-   "approved_area_share_of_footprint": 0.900925673451481,
-   "emitted_pixels_inside_approved": 44069,
-   "emitted_pixels_total": 44069,
+   "q": 10.0,
+   "tile_px": 100,
+   "approved_area_share": 0.900925673451481,
+   "implied_lift_if_all_points_inside": 1.1099694785796939,
+   "emitted_points": 44069,
+   "points_inside_approved": 44069,
+   "points_outside_approved": 0,
    "emitted_share_inside_approved": 1.0,
-   "lift_over_area_share": 1.1099694785796939,
-   "emitted_outside_approved": 0,
    "approved_pixel_occupancy": 0.00946617264740295,
-   "interpretation": "Pass means broad gate, not proof of causal independence; zero soft Stage1 weight."
+   "ungated_support_jaccard": 0.7220843672456576,
+   "fraction_gated_points_also_ungated": 0.8386167146974063,
+   "formula": "source-corrected official QFault vector budget; 10-km tile, q10 of ranked observed geodetic second-invariant minus ranked budget second invariant; broad hard domain, Stage-2 score weight zero",
+   "all_points_confined": true,
+   "receipt": "evidence/official_vector_budget_20261007.json"
   },
-  "stage1_ablation": {
-   "gated_vs_ungated_support_jaccard": 0.7337031354498603,
-   "fraction_gated_points_also_ungated": 0.8463999636932992
+  "stage1_trace_holdout": {
+   "evidence": "evidence/official_vector_budget_20261007.json",
+   "instrument": "Five whole-official-trace splits; recall/lift only, not DTI; distinct from legacy P1 Stage1",
+   "mean_approved_area": 0.901527139612333,
+   "heldout_trace_recall": 0.9601245840459715,
+   "heldout_trace_lift": 1.0650105093454951,
+   "score_type": "separate Stage-1 trace-recall/lift; not Stage-2 DTI"
   },
   "model": {
-   "seeds": [
-    17,
-    19
+   "training": "all visible known-fault catalogue pixels; 250,000 sampled non-catalogue pixels",
+   "feature_arms": {
+    "H_D": [
+     "lidrel_facecoh09",
+     "lidrel_facecoh21",
+     "detelev_facecoh09",
+     "detelev_facecoh21"
+    ],
+    "H_H": [
+     "hh_endpoint",
+     "hh_bridge",
+     "hh_bridge_cond",
+     "hh_bridge_surface",
+     "hh_endpoint_concordance"
+    ],
+    "H53_K2x": [
+     "h53_k2x_min_s2s5"
+    ]
+   },
+   "negative_sample_seeds": [
+    20261008,
+    20261009
    ],
-   "negatives": 250000,
-   "max_iter": 250,
-   "blend": [
-    0.5,
-    0.5
+   "model_seeds": [
+    20261008,
+    20261009
    ],
-   "planning_truth_count": 12700,
-   "planning_truth_count_is_not_observed": true
+   "hgb_max_iter": 250,
+   "blend": "0.5 H-D + 0.5 H-H+H53-K2x probabilities",
+   "emission": "STE scales 1/2/3.5 px, L9, continuity exponent 0.35, spacing 2.4 px",
+   "point_budget": 44069,
+   "point_budget_is_organizer_truth_count": false
   },
-  "source": "new fitted feature-based predictions; no prior TIFF used as model input",
-  "decision": "Research download only; no slot authorized. P1 promotion and scientific/provenance checks must all pass before any future recommendation.",
+  "source": "Fresh fitted model predictions; no prior TIFF was used as input.",
+  "decision": "No competition slot authorized: candidate failed the frozen holdout and full-family uniqueness is NOT_CLEARED.",
+  "portal_acceptance": "NOT TESTED. Local grid/range checks do not establish organizer portal acceptance; official outside-footprint language and local all-finite zero encoding are not treated as reconciled.",
+  "elapsed_seconds": 192.7411024570465,
   "limitations": [
-   "Local format validity is not portal acceptance.",
-   "Uniqueness scoped to available reference rasters, not all possible submissions.",
-   "Source geometry audit is separate; this artifact uses preregistered legacy q10 mask for exact experiment consistency."
+   "Visible known-fault labels are proxy training/holdout truth, not the hidden expert labels.",
+   "The fresh full-catalogue point map is not itself a holdout score; six-fold results belong to the separate receipt.",
+   "The supplied cond_surf unit, depth sensitivity, inversion and layer-specific source are undocumented in the local mirror; the feature operates on empirical ranks only.",
+   "Electrical conductivity is non-unique and the cited fault-conductor studies are site-specific.",
+   "The full-map Stage-1 q10 gate is a coarse hard domain; its physical assumptions and ambiguities remain in the separate receipt.",
+   "Local format validity is not portal acceptance; no upload, score or submission-slot use occurred."
   ],
-  "checks_file": "gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json"
+  "zip_sha256": "ea475b62364f490b11e320ab969f52ebfdcd0c0f38110ba0c03be83bd24b5e02",
+  "zip_bytes": 189849,
+  "current_inventory_uniqueness": {
+   "receipt": "evidence/h53_k2x_current_uniqueness_20261008.json",
+   "verdict": "PASS",
+   "comparisons": 8,
+   "byte_duplicate_of": [],
+   "max_support_jaccard": 0.216804,
+   "max_support_containment": 0.35635,
+   "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof"
+  },
+  "family_inventory_uniqueness": {
+   "receipt": "evidence/h53_k2x_family_uniqueness_20261008.json",
+   "verdict": "NOT_CLEARED",
+   "expected_unique_blobs": 365,
+   "downloaded": 365,
+   "coverage_complete": false,
+   "valid_same_shape_comparisons": 364,
+   "invalid_comparisons": [
+    {
+     "source": {
+      "repo": "GEMSDOE36",
+      "branch": "main",
+      "path": "docs/downloads/GEMS36_FORMAT_TEST_NOT_SUBMISSION.tif",
+      "size": 1129,
+      "git_blob_sha": "a97c7b2a513225c9f9f2b35736afe5abf4d2a491"
+     },
+     "error": "different grid shape"
+    }
+   ],
+   "exact_duplicate": false,
+   "max_support_jaccard": 0.14956111176324816,
+   "max_support_containment": 1.0,
+   "thresholds": {
+    "jaccard": 0.5,
+    "containment": 0.6
+   },
+   "scope": "Committed 54-repository inventory: docs/downloads and submissions; unique Git blobs"
+  },
+  "uniqueness": {
+   "verdict": "NOT_CLEARED",
+   "pixel_comparisons": 364,
+   "references_sha_verified": 365,
+   "max_support_jaccard": 0.14956111176324816,
+   "max_support_containment": 1.0,
+   "exact_duplicate": false,
+   "current_inventory_verdict": "PASS",
+   "family_inventory_verdict": "NOT_CLEARED",
+   "note": "Local inventory gate passed, but full committed-family gate is NOT_CLEARED: one different-grid toy map cannot be compared and several dense same-grid references fully contain this sparse support (max containment 1.0); exact duplicate is false."
+  },
+  "evidence": {
+   "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json",
+   "input_audit": "evidence/h53_k2x_input_audit_20261008.json",
+   "feature_build": "evidence/h53_k2x_feature_build_20261008.json",
+   "pretest_lock": "evidence/h53_k2x_pretest_lock_20261008.json",
+   "holdout": "evidence/h53_k2x_holdout_20261008.json",
+   "current_uniqueness": "evidence/h53_k2x_current_uniqueness_20261008.json",
+   "family_uniqueness": "evidence/h53_k2x_family_uniqueness_20261008.json"
+  }
  },
  "recommended_upload_candidate": null
 }

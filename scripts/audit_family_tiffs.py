@@ -19,6 +19,11 @@ from scripts.run_public_uniqueness_audit import fetch_one, eligible, git_blob_sh
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--candidate")
+    ap.add_argument(
+        "--out",
+        default=str(ROOT / "evidence" / "p1_family_audit_20261007.json"),
+        help="write receipt here (default preserves the historical P1 path)",
+    )
     a = ap.parse_args()
     inv = json.loads((ROOT / "registry/sibling_tiff_inventory.json").read_text())
     cache = ROOT / "data/raw/family_refs"
@@ -130,9 +135,11 @@ def main():
             ),
             thresholds=dict(jaccard=0.5, containment=0.6),
         )
-    (ROOT / "evidence/p1_family_audit_20261007.json").write_text(
-        json.dumps(report, indent=2) + "\n"
-    )
+    out_path = Path(a.out)
+    if not out_path.is_absolute():
+        out_path = ROOT / out_path
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({k: v for k, v in report.items() if k != "comparisons"}, indent=2))
 
 

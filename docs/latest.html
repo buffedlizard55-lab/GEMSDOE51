@@ -23,45 +23,44 @@
 </div></header>
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
-<h2>Latest experiment: evidence and decision</h2><section class="download missing">
-<p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
-<h2>New, independently generated TIFF</h2>
+<h2>Latest experiment: H53-K2x structure-conditioned conductive-ribbon anisotropy</h2>
+<section class="download missing">
+<p class="eyebrow">LATEST EXPERIMENT · H53-K2x · 8 OCTOBER 2026</p>
+<h2>New, independently generated research TIFF</h2>
 <p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
-This is a newly trained prediction map, not a renamed or re-encoded prior submission. It has not cleared every promotion gate. No competition slot was used.</p>
-<p><a class="btn" download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download new research TIFF</a></p>
-<p><a download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">Download ZIP containing one TIFF</a> · <a href="latest.html">Results, checks &amp; decision</a> · <a href="how-to-submit.html">Submission instructions</a></p>
-<dl class="kv"><dt>Unique identifier</dt><dd><code>GEMSDOE51-P1-Q10-2a687636c85e</code></dd>
-<dt>Short comment (research only)</dt><dd><code>RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.</code></dd>
-<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag.</dd>
-<dt>Stage2 proxy DTI</dt><dd>0.283987 vs paired gated baseline 0.284899; 2/6 folds improved. Not an organizer score.</dd>
-<dt>Stage1 confinement</dt><dd>44,069/44,069 points inside approved tiles; approved area 90.09%; lift 1.110.</dd>
-<dt>Uniqueness scope</dt><dd>Broader family gate: NOT_CLEARED; exact duplicate: False. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
-<dt>SHA-256</dt><dd><code>73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4</code></dd></dl>
-<p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
+The preregistered candidate failed its frozen promotion rule. The artifact is a fresh model output, not a renamed prior raster. No competition slot was used; no organizer score or portal acceptance is claimed.</p>
+<p><a class="btn" download href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif">Download H53-K2x research TIFF</a></p>
+<p><a download href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip">Download one-TIFF ZIP</a> · <a href="latest.html">Results and checks</a> · <a href="how-to-submit.html">How to submit (currently blocked)</a></p>
+<dl class="kv"><dt>Unique label (research only)</dt><dd><code>GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA</code></dd>
+<dt>Short comment</dt><dd><code>RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.</code></dd>
+<dt>Local final-byte checks</dt><dd>one float32 band · EPSG:32611 · 3292 × 3730 · min 0, max 1 · 0 nonfinite/out-of-range cells · zeros outside · no NoData tag. These local checks do not establish portal acceptance.</dd>
+<dt>Stage-2 q10 proxy</dt><dd>0.285036 vs same-fold gated H-D/H-H baseline 0.284899; Δ +0.000137, 4/6 folds. Frozen best 0.285341; candidate is 0.000304 below it. Fresh baseline drift -0.00002545 exceeded 1e-5; <b>NOT PROMOTED</b>.</dd>
+<dt>Stage-1 domain</dt><dd>q10 approves 90.09% of the footprint; 44,069/44,069 points lie inside. This is a broad hard domain, not Stage-2 score credit.</dd>
+<dt>Uniqueness</dt><dd>Current local inventory PASS (8 comparisons); committed-family gate NOT_CLEARED, not a global proof. Exact family duplicate=False; full receipt linked below.</dd>
+<dt>SHA-256</dt><dd><code>15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144</code></dd></dl>
+<p><a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json">Checks and artifact receipt</a>. <strong>NOT FOR SUBMISSION.</strong></p>
 </section>
-<h3>Stage2: spatially blocked fine-scale detector</h3>
-<p>P1 decomposes detrended-elevation normal profiles into antisymmetric step and symmetric ridge/valley signals at ±200m and ±500m. Three features extend H-H, blended50/50 with freshly fitted H-D. No earlier submission is an input. Fixed six-fold splits, 1.2km buffer,250,000 negative samples and250 HGB iterations; STE L9/w0.35/spacing2.4, ratio3.47. Predictions confined to the frozen fold-specific q10 strain prior.</p>
-<table><thead><tr><th>Fold</th><th>Baseline ungated</th><th>Baseline q10</th><th>P1 q10</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283432</td><td>0.280968</td></tr><tr><td>1</td><td>0.271784</td><td>0.270436</td><td>0.274441</td></tr><tr><td>2</td><td>0.290270</td><td>0.289119</td><td>0.288570</td></tr><tr><td>3</td><td>0.243359</td><td>0.243359</td><td>0.236952</td></tr><tr><td>4</td><td>0.305049</td><td>0.305049</td><td>0.305500</td></tr><tr><td>5</td><td>0.317996</td><td>0.317996</td><td>0.317490</td></tr></tbody></table>
-<p>Mean P1=0.2839869; paired Δ=-0.0009117. Frozen best=0.2853406; reproduced baseline drift=-0.00002545. Promotion rules were not relaxed after results.</p><ul><li>six_folds: <strong>PASS</strong></li><li>baseline_reproduced: <strong>FAIL</strong></li><li>beats_frozen: <strong>FAIL</strong></li><li>beats_paired: <strong>FAIL</strong></li><li>positive_folds: <strong>FAIL</strong></li><li>stage1_broad: <strong>PASS</strong></li><li>confinement: <strong>PASS</strong></li></ul>
-<h3>Stage1: separate holdouts, not the fine-scale score</h3>
-<p>The frozen legacy q10 trace holdout: DTI0.050627 vs uniform0.048564; approved area90.06%, recall95.39%. This is weak coarse enrichment, not a detector.</p>
-<p>The new <strong>official-vector</strong> five-split trace audit has mean approved area 90.15%, trace recall 96.01%, and lift 1.0650. It uses actual clipped segment lengths rather than centroid rate assignment. This separate source-corrected audit is <em>not</em> silently substituted into P1's frozen legacy gate. It requires its own paired Stage2 test before production use.</p>
-<p>Actual artifact gate ablation: 84.64% of gated points also occur in the same detector's ungated output; support Jaccard 0.7337. Within approved tiles, only 0.95% of cells receive a point. Broadness/lift is an operational check, not proof of causal independence.</p>
-<h3>Source corrections and limitations</h3>
-<p>Official DBF confirms mm/year and matches all1,126 mirrored records. Source shear is min(|e1|,|e2|) for opposite-signed principal strains, else0. Actual-vector tensor summation and scalar residuals are now implemented with explicit dip/component/unit scenarios. Off-fault and aseismic strain or erroneous catalogue rates can cause a deficit. The task predicts faults, not vents.</p>
-<p>All-finite zero-outside encoding removes NaNs and out-of-range sentinels from this file. The published null/NaN-outside language and portal behavior remain unverified together; the historical error-triggering file is unknown. Do not treat a local check as a successful portal submission.</p>
-<p>Neither the user-reported0.2778 attribution nor the stated0.3195 leaderboard high establishes an achievable score here. GEMSDOE32's own primary page still says UNSCORED. Reused catalogue folds cannot certify hidden-fault or leaderboard performance.</p>
-<h3>Audit files and next experiment</h3>
-<ul>
-<li><a href="downloads/p1_final_verification_20261007.json">Independent final-byte, ZIP and tile-confinement verification</a></li>
-<li><a href="downloads/p1_holdout_20261007.json">Complete P1 holdout</a></li>
-<li><a href="downloads/official_vector_budget_20261007.json">Vector-budget equation, residuals and five-split Stage1 holdout</a></li>
-<li><a href="downloads/official_attribute_audit_20261007.json">Official DBF match receipt</a></li>
-<li><a href="downloads/official-source-review-20261007.md">Source ledger, exact equations and scientific corrections</a></li>
-<li><a href="downloads/next-candidates-20261007.md">Four ranked hypotheses and preregistered rules</a></li>
-<li><a href="../registry/official/receipt.json">Official archive hashes and field inventory</a></li>
-</ul>
-<p>Next: resolve frozen-baseline drift, verify outside-footprint semantics with the organizer, introduce an untouched spatial/trace-family lockbox, and test the official-vector mask with a new fine-scale candidate. Preserve this negative experiment. Do not tune P1 until it passes the same reused folds.</p><h3>Broader family audit</h3><p>365/365 inventory payloads restored; verdict NOT_CLEARED; exact duplicate=False; maximum support Jaccard=0.1521, containment=1.0000. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>
+<h3>Stage 2 — preregistered six-fold spatial holdout</h3>
+<p>The target remains fault pixels absent from the supplied catalogue, not geothermal-vent probability. H53-K2x adds one fixed, label-free feature from the rank-prepared conductivity surface, basement depth, gravity anomaly, and total magnetic intensity. At σ=2 and 5 px it estimates an unoriented independent structural edge axis, projects conductivity-gradient energy into edge-normal and edge-parallel components, weights the positive cross-edge contrast by structural-edge coherence, normalizes the two scales, and takes their pixelwise minimum. No feature threshold or scale was tuned after seeing results. The exact definition is frozen in the <a href="downloads/candidate_hypotheses_prereg_20261008.json">preregistration</a>.</p>
+<p>Protocol: six contiguous 3×3 spatial folds; 12 px training buffer; 250,000 negatives; fixed fold seeds; HGB 250 iterations; 3.47 matched point-mass ratio; 50/50 fresh H-D plus H-H+K2x; STE scales 1/2/3.5 px, L9, continuity 0.35, spacing 2.4 px. The metric is a visible-known-catalogue proxy, not hidden organizer truth.</p>
+<table><thead><tr><th>Fold</th><th>Baseline ungated</th><th>K2x ungated</th><th>Baseline q10</th><th>K2x q10</th><th>Paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.279943</td><td>0.283432</td><td>0.279943</td><td>-0.003489</td></tr><tr><td>1</td><td>0.271784</td><td>0.274238</td><td>0.270436</td><td>0.273102</td><td>+0.002666</td></tr><tr><td>2</td><td>0.290270</td><td>0.291255</td><td>0.289119</td><td>0.289316</td><td>+0.000197</td></tr><tr><td>3</td><td>0.243359</td><td>0.247934</td><td>0.243359</td><td>0.247934</td><td>+0.004574</td></tr><tr><td>4</td><td>0.305049</td><td>0.305948</td><td>0.305049</td><td>0.305948</td><td>+0.000899</td></tr><tr><td>5</td><td>0.317996</td><td>0.313974</td><td>0.317996</td><td>0.313974</td><td>-0.004023</td></tr></tbody></table>
+<p>Fresh ungated baseline mean 0.2853152 vs frozen 0.2853406; drift -0.00002545 exceeds the preregistered ±0.00001 tolerance. K2x q10 mean 0.2850361, same-fold q10 baseline 0.2848987, paired Δ +0.0001375, 4/6 folds higher. K2x is 0.0003045 below the frozen local best, so it fails promotion independently of baseline reproducibility. <b>No tuning, slot, or organizer score.</b></p>
+<h3>Stage 1 — separate trace holdout and broad-domain audit</h3>
+<p>The source-corrected official-vector five-whole-trace holdout approved mean area 90.15%, with held-out trace recall 96.01% and lift 1.0650. This is weak broad enrichment only; it is not a fine-scale DTI and is not combined with Stage 2. Its budget retains the recorded slip-unit ambiguity, assumed dips/components, and residual alternatives.</p>
+<p>For Stage 2 the q10 mask was recomputed in each spatial fold with held-out trace rows removed. Every fold-specific mask approved more than two-thirds of the footprint; every baseline and candidate point was inside the approved mask. Stage-1 score weight was zero.</p>
+<table><thead><tr><th>Fold</th><th>q10 approved area</th><th>Implied lift if all points are confined</th></tr></thead><tbody><tr><td>0</td><td>90.0611%</td><td>1.1104</td></tr><tr><td>1</td><td>90.3606%</td><td>1.1067</td></tr><tr><td>2</td><td>90.1681%</td><td>1.1090</td></tr><tr><td>3</td><td>90.0785%</td><td>1.1101</td></tr><tr><td>4</td><td>90.0611%</td><td>1.1104</td></tr><tr><td>5</td><td>90.0785%</td><td>1.1101</td></tr></tbody></table>
+<p>Mean fold-wise area 90.13%; implied mean lift 1.1095. The separate full-map research TIFF has 44,069/44,069 points confined and reports its own gate/ungated support overlap in the artifact receipt.</p>
+<h3>Input semantics and science limitations</h3>
+<p>The local band 17 descriptor says “Conductivity surface — electrical conductivity of subsurface,” but supplies no verified units, depth sensitivity, inversion/source or calibration. Its owner-pinned mirror is hash-verified, not organizer-authenticated. The feature is therefore rank-space only and makes no S/m, depth, fluid, alteration, or geothermal-temperature claim. See the <a href="downloads/h53_k2x_input_audit_20261008.json">input/source audit</a>. Electrical conductivity is non-unique; the cited fault-zone conductor studies are site-specific, and some active faults lack an observed conductor.</p>
+<h3>Artifact, local checks, and uniqueness</h3>
+<p>The fresh research TIFF contains 44,069 binary points; float32; one band; EPSG:32611; exact template transform and shape; all cells finite in [0,1]; zeros outside footprint; no NoData tag. This is a local check only. The official problem page describes null/NaN outside the data bounds; the all-finite zero convention was chosen for local range safety and has <b>not</b> been validated by the portal. <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json">Final-byte receipt</a> · <a href="downloads/h53_k2x_current_uniqueness_20261008.json">current local inventory</a> · <a href="downloads/h53_k2x_family_uniqueness_20261008.json">54-repository family inventory</a>.</p>
+<p>Current local uniqueness passes 8 comparisons (max Jaccard 0.2168, containment 0.3564). The broader family audit restored 365/365 payloads but is <b>NOT CLEARED</b>: one toy TIFF has a different grid, and several same-grid dense maps fully contain this sparse support (max containment 1.0). No exact duplicate was found; no universal novelty claim is made.</p>
+<h3>Source links checked</h3>
+<ul><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Official task, feature inventory, metric, and format description</a></li>
+<li><a href="https://gdr.openei.org/submissions/1391">GDR 1391 INGENIOUS compilation record</a></li>
+<li><a href="https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b">USGS Great Basin depth-integrated MT conductance release</a> — distinct from the undocumented source of cond_surf</li>
+<li><a href="https://pubs.usgs.gov/publication/70204785">USGS Great Basin MT + structural/geochemical case studies</a> — context, not validation of this operator</li></ul>
+<p>Receipts: <a href="downloads/h53_k2x_holdout_20261008.json">six-fold Stage-2 / separate Stage-1 holdout</a>, <a href="downloads/h53_k2x_feature_build_20261008.json">feature build</a>, <a href="downloads/h53_k2x_pretest_lock_20261008.json">pretest freeze</a>, <a href="downloads/candidate-hypotheses-2026-10-08.md">ranked hypothesis slate and outcome</a>, and <a href="downloads/review-three-passes-20261008.md">three-pass review/recheck</a>. No upload, slot use, portal acceptance, hidden score, or vent-prediction claim is made.</p>
 </main>
 <footer><div class="wrap">
 <p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
