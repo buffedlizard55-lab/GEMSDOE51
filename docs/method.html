@@ -22,16 +22,16 @@
 </nav>
 </div></header>
 <main class="wrap">
-<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
+<p class="ev">Current as of 2026-10-08: the K2-08 candidate failed spatial promotion and family uniqueness; no artifact is cleared for a competition slot. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
 
-<h2>Method, with Stage 1 and Stage 2 kept separate</h2>
-<h3>Current finite-lag H53-A: source-segment Stage 1 (coarse prior only; Stage 2 blocked)</h3>
-<p>The nominal tensor sums 84,331 clipped source segments from 1,126 whole fault records into 10 km tiles. For segment k, <code>E_dot_ij = 1/2 Σ[L_k u_dot_k /(A_tile sin δ_k) · (n_i m_j + n_j m_i)]</code>, following Kreemer et al. (2000), Eq. 3. Original vertices are projected to EPSG:32611 and segment length is clipped tile-by-tile. The official DBF audit confirms rate units are mm/year; nominal values assume the field is total fault-plane rate, 60° normal dip, 90° strike-slip dip, and omit unknown sense. A literal `10E-9/year` (1e-8/year) conversion is frozen; 1e-9/year and vertical-rate conventions are sensitivities, not post-hoc choices. Exact nominal residuals are `r_dil = observed_dilatation - predicted_dilatation/(1e-8/year)` and `r_shear = observed_shear - predicted_shear/(1e-8/year)`. The mean of their empirical ranks sets q10 as the broad approved-domain mask; it is not a dimensional inversion or fine-scale locator.</p>
-<p>Five deterministic whole-record splits (NumPy seed 5308) remove all clipped segments for held-out record IDs before the budget is computed. Nominal Stage-1 means: approved area 0.901904, held-out visible-catalogue trace-pixel recall 0.929089, lift 1.030146. Matched-mass uniform dots yielded proxy DTI 0.048390 inside the mask and 0.049025 across the full footprint. Sensitivities: 1e-9/year area 0.901769 / recall 0.928055 / lift 1.029144; vertical-rate area 0.901376 / recall 0.930280 / lift 1.032068. These weak/noisy visible-catalogue measurements motivate a coarse prior only; they are not Stage-2 scores or hidden-label validation.</p>
-<p>The finite-lag H53-A fine-scale feature is a bounded (1–8 pixel, 100–800 m) surface-to-gravity edge lag at σ=2 and 5 px, with zero-lag controls. Six label-blind layers were built locally, but no finite-lag H53 candidate fit, holdout score, TIFF, uniqueness check, or format check was run: the freshly reconstructed H-D/H-H baseline missed its frozen mean by 0.000025448 against a 1e-5 tolerance. The fail-closed Stage-2 runner blocked candidate scoring. See <a href="latest.html">baseline provenance receipt</a> and <a href="downloads/preregistration_h53.json">frozen protocol</a>.</p>
-<h3>Separate componentwise budget-q10 H53-A variant — diagnostic only</h3>
-<p>This alternative operationalization is not the finite-lag candidate above and is not a promoted method. Its six-fold Stage-1 q10 domain approved mean area 0.9163855, recalled 0.9164906 of visible-catalogue truth (lift 0.9996183; tile Spearman 0.0608031); the geodetic-only control lift was 0.9960746. One spatial block approved only 0.5498067 of its area. These measurements show no meaningful residual enrichment on this proxy. In its separately run Stage 2, the q10 H-D/H-H mean was 0.2665098 vs frozen best 0.2853406 (Δ −0.0188308; 0/6 paired folds positive); fresh-baseline reproduction also missed the 1e-5 tolerance. It beat same-domain uniform dots, but that does not rescue promotion. The diagnostic TIFF is research-only; its broad public-family support-containment test failed at 1.000 against a 0.6 ceiling. See the separate <a href="downloads/h53_stage1_holdout_20261008.json">Stage-1</a>, <a href="downloads/h53_stage2_holdout_20261008.json">Stage-2</a>, <a href="downloads/h53_public_uniqueness_20261008.json">public-family</a>, and <a href="downloads/h53_artifact_20261008T030347Z.json">artifact</a> receipts.</p>
-<h3>Earlier Stage 1 — geodetic strain-budget residuals</h3>
+<h2>Current method — K2-08, Stage 1 and Stage 2 kept separate</h2>
+<h3>Stage 1 — physical dilation/shear subtraction; coarse tile prior only</h3>
+<p>The source-matched INGENIOUS/QFault v2 trace segments are tensor-summed in 20 km tiles using Kreemer et al. (2000), Eq. 3. The checked GDR field definitions verify SLIPRT2023 in mm/year and SLIPRTNUM as its numeric portion; the 1,126 mirrored records match the source names, rates, and senses. For each declared scale/component scenario the method subtracts fault-tensor dilation from the supplied geodetic dilation and fault-tensor source-defined scalar shear from the supplied shear, ranks the signed residuals, averages ranks, and applies a q10 tile gate. This is physical scalar subtraction before ranking, not the legacy rank-space second-invariant residual. The `10E-9/yr` text and rate component remain ambiguous; 1e-9/1e-8 and vertical/fault-plane scenarios are retained.</p>
+<p>Five scattered whole-trace splits: area approved 90.33%; held-trace recall 91.00%; lift 1.0075; Spearman 0.1423; uniform DTI approved 0.063356 vs support 0.063645 (paired Δ -0.000289). This is a weak broad prior; the trace splits are not a geographic lockbox.</p>
+<h3>Stage 2 — K2 directional conductivity contrast at a basement edge</h3>
+<p>K2 conditions along-edge conductivity contrast and persistence on an independently estimated basement-depth edge at 200 m and 500 m scales, accepting both contrast signs. Candidate is 0.5 H-D + 0.5 H-H+K2; baseline is a fresh 0.5 H-D + 0.5 H-H blend. Frozen best 0.285341; fresh gated blend 0.275543; K2 q10 0.274888; paired Δ -0.000655, 2/6 folds. K2 is NOT PROMOTED. Receipts: <a href="downloads/physical_stage1_holdout_20261008.json">Stage 1</a>, <a href="downloads/k2_spatial_holdout_20261008.json">Stage 2</a>, <a href="downloads/k2-08-results-2026-10-08.md">full report</a>.</p>
+<h2>Historical methods and earlier experiments</h2>
+<h3>Legacy geodetic strain-budget residuals</h3>
 <p>Kreemer et al. (2000), Eq. 3, write the fault-slip-derived strain tensor as:</p>
 <pre>eps_dot_ij = (1/2) sum_k [ L_k * u_dot_k / (A * sin(delta_k)) ] * m_ij^k
 m_ij^k = n_i^k * s_j^k + n_j^k * s_i^k</pre>
@@ -41,9 +41,9 @@ normal/slip direction. A total fault-plane rate for pure normal slip yields
 <code>L*u_plane*cos(delta)/A</code>; if the source is vertical displacement rate, the coefficient
 is <code>L*u_vertical*cot(delta)/A</code>. Vertical strike slip yields
 <code>L*u_dot/(2*A)</code>, with RL and LL signs opposite. The source convention and dip are
-still unresolved: the implementation exposes vertical versus total-plane rates, defaults
-provisionally to vertical, assumes a 60-degree normal dip, and converts source values
-provisionally as mm/yr. Absolute strain values remain source-sensitive.</p>
+still unresolved: the current physical test exposes vertical versus total-plane rates and assumes
+a 60-degree normal dip. GDR v2 field definitions verify the rate unit as mm/year, but absolute
+strain values remain component- and scenario-sensitive.</p>
 <p>The implementation is approximate rather than a full inversion: it rasterizes local trace
 directions, assigns slip rates from trace associations, simplifies slip-sense/dip categories,
 and uses partial-footprint support area. The Stage-1 runner now performs a valid five-split
@@ -52,7 +52,7 @@ field is computed (<code>n_splits=5</code>,
 rate convention <code>vertical</code>,
 planning constant <code>g_hidden=12700</code>; this is not
 an organizer truth count).</p>
-<p><b>Residual convention:</b> the supplied dilatation and shear scalar layers are not
+<p><b>Historical rank-space residual convention (not K2 Stage 1):</b> the supplied dilatation and shear scalar layers are not
 source-verified to share units, signs, or tensor definitions with the fault second invariant.
 The reported controls therefore use rank-space residuals
 <code>rank(observed scalar) - rank(fault tensor II)</code>, not absolute-number subtraction.

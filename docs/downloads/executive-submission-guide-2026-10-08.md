@@ -1,5 +1,9 @@
 # Executive submission guide — 2026-10-08
 
+## Latest candidate — K2-08 (RESEARCH ONLY / DO NOT SUBMIT)
+
+K2-08 is the newest completed experiment in the repository. Its newly fitted TIFF is [available for research inspection](../docs/downloads/gemsdoe51-k2-08-research-only-20261008.tif), SHA-256 `3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e`. Stage 1 was a weak, broad 20 km physical q10 prior (90.33% mean area approved; held-trace lift 1.007). Separately, Stage 2's K2 mean was `0.2748879` against a fresh gated H-H/H-D mean of `0.2755433` (Δ `−0.0006554`, 2/6 folds positive); it also missed the frozen best. The strict family uniqueness gate is `NOT_CLEARED` (maximum containment 1.0); local format checks are not portal validation. No slot is authorized. See the [full K2 results](k2-08-results-2026-10-08.md) and [K2 three-pass review](k2-08-review-three-passes-2026-10-08.md).
+
 ## Decision: no upload-eligible file
 
 **Do not spend a competition slot or upload any current raster.** No organizer score has been received for a GEMSDOE51 artifact, and no portal acceptance is known. The separate componentwise budget-q10 H53-A variant has a research-only map explicitly named `RESEARCH-ONLY-DO-NOT-SUBMIT`; it is not the current finite-lag H53-A experiment. Finite-lag H53-A Stage 2 was blocked before candidate scoring and has no TIFF. R1 also failed promotion and remains research-only.
@@ -39,4 +43,4 @@ The official competition target is **fault geometry**, not geothermal-vent label
 
 The GEMSDOE32 owner page marks H33-2-B2 **UNSCORED** and describes 0.2747 as a modeled projection; the user-reported 0.2778 file-score mapping is unverified. A one-time official leaderboard read recorded in the prior session contradicted the user claim that 0.3195 was the page high; treat it as stale, not current. The project does not persist a leaderboard snapshot or automatically monitor standings. See the [official leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/) and [Terms of Use](https://www.drivendata.org/termsofuse/).
 
-**Session handoff:** read the current top section of [`README.md`](../README.md), the [finite-lag H53-A slate](hypothesis-slate-20261008.md), and the [separate budget-q10 alternative slate](candidate-hypotheses-2026-10-08.md) before the next change. Keep work on `arena/922033c2-gemsdoe51`; no competition slot is authorized by the current evidence.
+**Session handoff:** K2-08 is the latest completed candidate; read its [ranked slate](k2-08-candidate-hypotheses-2026-10-08.md), [results](k2-08-results-2026-10-08.md), and [three-pass review](k2-08-review-three-passes-2026-10-08.md) first. Then read the [finite-lag H53-A slate](hypothesis-slate-20261008.md) and the [separate budget-q10 alternative slate](candidate-hypotheses-2026-10-08.md); they are distinct operationalizations. Keep work on `arena/922033c2-gemsdoe51`; no competition slot is authorized by current evidence.

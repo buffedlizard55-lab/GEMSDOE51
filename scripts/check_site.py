@@ -120,6 +120,11 @@ def main() -> int:
             failures.append("index page does not state that no eligible file exists")
 
     latest = manifest.get("latest_experiment", {}) or {}
+    if latest.get("id") != "K2_08_CONDUCTIVE_RIBBON_20261008":
+        failures.append("manifest must retain K2-08 as the latest overall experiment")
+    latest_page_for_identity = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
+    if "LATEST EXPERIMENT" not in latest_page_for_identity.upper() or "K2-08" not in latest_page_for_identity:
+        failures.append("latest report page must keep K2-08 as the latest overall experiment")
     if latest.get("hypothesis_id") == "H53-A":
         if latest.get("prediction_tiff_generated") is not False or latest.get("file") or latest.get("zip"):
             failures.append("H53 manifest must explicitly report no candidate TIFF/ZIP")
@@ -177,8 +182,13 @@ def main() -> int:
             if not str(h53.get("uniqueness", {}).get("verdict", "")).startswith("FAIL"):
                 failures.append("H53-A budget-q10 public-family uniqueness failure is missing from the manifest")
             latest = (DOCS / "latest.html").read_text(encoding="utf-8")
-            if "H53-A" not in latest or "DO NOT SUBMIT" not in latest:
-                failures.append("latest report does not prominently show H53-A DO NOT SUBMIT")
+            latest_upper = latest.upper()
+            for required in (
+                    "FINITE-LAG H53-A BASELINE ONLY", "NO TIFF",
+                    "SEPARATE H53-A BUDGET-Q10 ALTERNATIVE",
+                    "NOT THE FINITE-LAG BASELINE RESULT", "DO NOT SUBMIT"):
+                if required not in latest_upper:
+                    failures.append(f"latest report conflates or omits H53 variant status: {required}")
             if "Stage 1" not in latest or "Stage 2" not in latest:
                 failures.append("latest report does not report Stage 1 and Stage 2 separately")
     elif not manifest.get("primary") and 'href="downloads/' in index:
