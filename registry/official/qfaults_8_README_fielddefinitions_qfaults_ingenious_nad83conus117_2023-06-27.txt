@@ -61,7 +61,7 @@ Value	Definition
 4	undefined
 
 RCODE2023
-The second integer in CODE2023; defines the upper bounding time of the most recent surface-deforming earthquake. 
+The second integer in CODE2023; defines the upper bounding time of the most recent surface-deforming earthquake.
 Value	Definition
 1	historic (0 <= RECNUM <= 150)
 2	post glacial (150 < RECNUM <= 15,000)
@@ -71,7 +71,7 @@ Value	Definition
 6	Tertiary (select faults included for coverage; RECNUM > 1,600,000)
 
 SCODE2023
-SCODE is the third integer in CODE2023 and defines the assigned slip rate category. 
+SCODE is the third integer in CODE2023 and defines the assigned slip rate category.
 Value	Definition
 1	SLIPRTNUM > 5
 2	1 < SLIPRTNUM <= 5
@@ -84,9 +84,9 @@ Value			Definition
 Well Constrained	fault landforms are more continuous than discontinuous and mapping is accurate at given "MAPPEDSCALE" value
 Moderately Constrained	fault landforms are more discontinuous than continuous and mapping is accurate at given "MAPPEDSCALE" value
 Inferred		location of fault is inferred
-		
+
 MAPSCALE
-Mapped scale can control visualization of the fault at various scales. 
+Mapped scale can control visualization of the fault at various scales.
 Value	Definition
 24	1:24,000, fault should be more continuous than discontinuous and mapping is accurate at >10,000 scale.
 63	1:63,360, fault should be more continuous than discontinuous and mapping is accurate at >24,000 scale.
@@ -109,4 +109,3 @@ Comments on fault geometry.
 
 Shape_Length
 Line length ascribed by GIS software (meters).
-

@@ -1,0 +1,36 @@
+{
+  "id": "GEMSDOE51-H52-PREREG-1-A4",
+  "parent": "GEMSDOE51-H52-PREREG-1",
+  "created_utc": "2026-10-07T21:10:00Z",
+  "status": "frozen_before_running",
+  "author_note": "Written after pass 1 reached fold 2 and before scripts/run_h52_emission_pass2.py produced any number (the script has not been executed). It resolves a conflict between the parent preregistration's promotion bar and the standing user brief, and it is deliberately explicit about being a relaxation.",
+  "the_conflict": {
+    "parent_rule": "the confined candidate (V4 or V5) must beat V0 on the six-fold mean by >= +0.0020 with >= 4/6 folds positive",
+    "what_pass_1_shows": "the confined NMS candidate V4 sits 0.0006-0.0015 BELOW its own unconfined twin V2 on folds 0-3: hard Stage-1 confinement has a small but consistently negative local cost. That is expected once the quantile direction is read correctly: q10 approves the tiles at or above the 10th percentile of the deficit, i.e. ~90 % of the footprint, so the confinement removes only the lowest-deficit tenth of the map.",
+    "what_the_brief_requires": "the fine-scale model must place points ONLY inside approved tiles, and both stages must be reported separately -- confinement is a user requirement, not a candidate hypothesis to be accepted or rejected on +-0.001",
+    "consequence_of_the_letter": "no confined candidate can ever pass a rule that asks the confined variant to beat the unconfined incumbent by +0.0020 when confinement alone costs ~0.0012 and the best emitter change is worth ~+0.0022; the letter of the rule would forbid shipping anything, which contradicts the highest-urgency part of the brief"
+  },
+  "resolution": {
+    "principle": "the preregistration governs the CLAIMS (what may be called validated/better), not the user's mandated artifact structure. The artifact is therefore built to the brief, and the numbers that fail to meet the parent bar are published as a labelled deviation in registry/irregularities.json and on the site.",
+    "geometry_decision_tree": [
+      "measure, on the identical cached fold fields, V6 (validated STE, unconfined) against V0 (incumbent NMS r=2.4, unconfined) with matched mass",
+      "if mean(V6) - mean(V0) >= +0.0020 AND >= 4/6 folds strictly positive -> the shipped geometry is STE (V7 = V6 inside the approved tiles)",
+      "otherwise -> the shipped geometry is the incumbent NMS r=2.4 geometry (V4 = V0 inside the approved tiles), because STE is then NOT supported by measurement on these fields, and 'the incumbent geometry, brief-compliantly confined' is the only defensible file"
+    ],
+    "confinement": "always applied (user requirement). Its measured cost is reported (mean(V6) - mean(V7) if STE ships, mean(V0) - mean(V4) if NMS ships), with the parent limit of 0.0050 retained as the maximum acceptable cost",
+    "hard_failure_branch": "if the shipped file's own six-fold mean is more than 0.0050 BELOW V0, no TIFF is written and the session reports a blocked submission instead",
+    "disclosure": "the site card and README must state, in plain words, that the parent +0.0020 net bar was not met and why the file was still built (mandated structure, measured cost, labelled deviation)"
+  },
+  "still_frozen": {
+    "mass": "3.47 x n_truth on the instrument; 42,424 dots on the full footprint",
+    "clearance": "2 px (200 m) from the published catalogue, enforced in code, refusing to write otherwise",
+    "range": "every cell finite and inside [0,1]",
+    "uniqueness": "no byte identity, Jaccard <= 0.50, containment <= 0.60 against local priors, shipped downloads and the fetched sibling submissions",
+    "stage1": "q10 approved tiles from the fold-specific / full-catalogue strain-budget deficit, tile size 100 px (10 km)"
+  },
+  "confinement_domain_question": {
+    "statement": "with q10 the approved domain is ~90 % of the footprint, which satisfies the letter of the brief ('coarse prior over broad tiles') but leaves Stage 1 with almost no effect on the emitted support; a stricter quantile (top 10-30 % of the deficit) gives Stage 1 real content at a measured cost",
+    "decision_rule": "measure the approved-area share and the existing artifact's overlap for q in {10, 30, 50, 60, 70, 80, 90} on the current-formula map; ship the STRICTEST quantile whose measured confinement cost on the six-fold instrument stays within the parent's 0.0050 limit, because a stricter domain is what makes this a new artifact rather than a relabelling of the existing one (the uniqueness gate compares supports, limit 0.60 containment)",
+    "logged_utc": "2026-10-07T21:13:30Z"
+  }
+}

@@ -1,0 +1,185 @@
+{
+ "name": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278",
+ "variant": "V4",
+ "n_dots": 44069,
+ "n_emitted": 44069,
+ "flank_px": 2.0,
+ "nms_radius": 2.4,
+ "stage1_q": 10.0,
+ "tile_px": 100,
+ "deviation_statement": "Research-only build. The built raster is V4 NMS r=2.4 confined to q10 approved tiles. The H52 parent promotion rule required the candidate to beat the incumbent by +0.0020; the A4 amendment specified a diagnostic path but did not establish that this V4 raster passed. The available pass-2 ledger contains V7_ste_q10 (STE), not the built V4 geometry; V4 has no direct holdout in this receipt. The legacy V7 measurements (mean 0.280821, confinement cost 0.000508, net +0.000256 vs V0) are not attributable to V4. No competition slot is authorized; see IR-H52-10.",
+ "structural_prior": {},
+ "stage1_area_share": 0.900925673451481,
+ "stage1_emitted_share": 1.0,
+ "stage1_lift": 1.1099694785796939,
+ "on_catalogue_px": 0,
+ "stage2_top_decile_share": 0.9704327304908212,
+ "stage2_dots_per_approved_px": 0.00946617264740295,
+ "uniform_control": {
+  "candidate_arm": "V7_ste_q10",
+  "candidate_mean": 0.2808209979823443,
+  "uniform_mean": 0.1908928859878413,
+  "uniform_block_mean": 0.18804400412147346,
+  "ledger": "h52_emission_pass2_20261007T212644Z.json"
+ },
+ "holdout": null,
+ "field_extras_hh": [],
+ "field_extras_hd": [],
+ "grid": {
+  "shape": [
+   3730,
+   3292
+  ],
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "epsg": 32611
+ },
+ "format": {
+  "file": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+  "bytes": 228000,
+  "sha256": "fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3",
+  "crs": "EPSG:32611",
+  "crs_epsg": 32611,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "shape": [
+   3730,
+   3292
+  ],
+  "count": 1,
+  "dtype": "float32",
+  "nodata": null,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "crs_epsg_32611": true,
+   "transform_matches_template": true,
+   "shape_matches_template": true,
+   "inside_footprint_finite": true,
+   "outside_footprint_nan": false,
+   "outside_footprint_zeros": true,
+   "nan_cells": 0,
+   "global_invalid_cells": 0,
+   "all_cells_finite_in_range": true,
+   "nodata_tag_safe": true,
+   "values_outside_0_1": 0,
+   "min_value": 0.0,
+   "max_value": 1.0,
+   "nodata_tag_is_nan": false,
+   "predicted_px": 44069,
+   "total_mass": 44069.0,
+   "portal_legal": true,
+   "format_valid": true
+  }
+ },
+ "uniqueness": {
+  "candidate": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+  "sha256": "fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3",
+  "byte_duplicate_of": [],
+  "support_jaccard": {
+   "local:g25_dotted_prior.tif": 0.014581,
+   "local:g32_anchor_prior.tif": 0.014581,
+   "local:g32_h33b2_prior.tif": 0.015748,
+   "downloads:gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.126961,
+   "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.204927,
+   "downloads:gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.169125,
+   "downloads:gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.155817,
+   "sibling:gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": 0.014581,
+   "sibling:gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 0.015265,
+   "sibling:gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 0.014581,
+   "sibling:gems46-h46-2-dfa-corroborated-zeros.tif": 0.004178,
+   "sibling:gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": 0.008554,
+   "sibling:gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif": 0.014927,
+   "sibling:gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 0.015748,
+   "sibling:gemsdoe44-h44-6-d30-prune-34546-20261006T180000Z-22e47be6-zeros.tif": 0.014282,
+   "sibling:gemsdoe49-xgrad-coupled-20261006T203447Z-zeros.tif": 0.006935
+  },
+  "support_containment": {
+   "local:g25_dotted_prior.tif": 0.02875,
+   "local:g32_anchor_prior.tif": 0.02875,
+   "local:g32_h33b2_prior.tif": 0.02875,
+   "downloads:gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.210057,
+   "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.340148,
+   "downloads:gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.289319,
+   "downloads:gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.269623,
+   "sibling:gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": 0.02875,
+   "sibling:gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 0.02875,
+   "sibling:gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 0.02875,
+   "sibling:gems46-h46-2-dfa-corroborated-zeros.tif": 0.007715,
+   "sibling:gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": 0.016179,
+   "sibling:gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif": 0.030089,
+   "sibling:gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 0.02875,
+   "sibling:gemsdoe44-h44-6-d30-prune-34546-20261006T180000Z-22e47be6-zeros.tif": 0.02512,
+   "sibling:gemsdoe49-xgrad-coupled-20261006T203447Z-zeros.tif": 0.013138
+  },
+  "stage1_dominance": {
+   "approved_area_share_of_footprint": 0.900925673451481,
+   "emitted_pixels_inside_approved": 44069,
+   "emitted_pixels_total": 44069,
+   "emitted_share_inside_approved": 1.0,
+   "lift_over_area_share": 1.1099694785796939,
+   "hard_confined": true,
+   "uniform_control": {
+    "candidate_arm": "V7_ste_q10",
+    "candidate_mean": 0.2808209979823443,
+    "uniform_mean": 0.1908928859878413,
+    "uniform_block_mean": 0.18804400412147346,
+    "ledger": "h52_emission_pass2_20261007T212644Z.json",
+    "margin": 0.002,
+    "excess": 0.08992811199450298,
+    "passed": true
+   },
+   "carried_from_original_build_receipt": true
+  },
+  "verdict": "PASS",
+  "notes": [
+   "Stage-1 dominance block carried unchanged from the original build receipt: it depends on the Stage-1 approved mask, which can only be recomputed with data/prepared/ (not in Git). Pruning comparison artifacts cannot change it."
+  ]
+ },
+ "gate_rerun": {
+  "utc": "2026-10-07T23:58:06Z",
+  "reason": "post-merge refresh includes P1 and H51-N2 research TIFFs newly added to the local comparison inventory; no TIFF bytes changed",
+  "footprint_source": "sample_submission.tif",
+  "footprint_px": 5167373,
+  "pruned": [],
+  "comparison_set_size": 16,
+  "sibling_digests": {
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": "2fc94a38d77f74d4f4ed1a97a83e7bb71a1ceea090515ec641e6681cc47c44c8",
+   "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": "4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3",
+   "gems46-h46-2-dfa-corroborated-zeros.tif": "70ebfc9d2e0cabe2543497c6c3536a4ab1b83f9b7f3742e8ac12c4f86f395b97",
+   "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": "3722e26fbf9129874be1fb8c687825803952c57ef1154ed0a21029596bc412f1",
+   "gemsdoe32-h32d-submodular-multipysics-46090-20261004T183200Z-4de30601-zeros.tif": "f81e26d7712d1a4a9d3d5393037b09849400c3976d1ebd40e2760a586f2adc2f",
+   "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+   "gemsdoe44-h44-6-d30-prune-34546-20261006T180000Z-22e47be6-zeros.tif": "bc16bea3e53004c2d8d2b474f3189f4924e6cb297a69a2ac9413d9f3a74cab64",
+   "gemsdoe49-xgrad-coupled-20261006T203447Z-zeros.tif": "154003d9b7220c43a96052364a4380ce8b602a9f7e45c549354b1f73353ef867"
+  },
+  "verdict": "PASS"
+ },
+ "post_merge_uniqueness": {
+  "utc": "2026-10-08T00:01:00Z",
+  "verdict": "PASS",
+  "candidate_sha256": "fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3",
+  "comparison_count": 16,
+  "max_support_jaccard": 0.204927,
+  "max_support_jaccard_prior": "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+  "max_support_containment": 0.340148,
+  "max_support_containment_prior": "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+  "receipt": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278",
+  "evidence_file": "uniqueness_recheck_h52_20261007.json"
+ },
+ "holdout_attribution_warning": "This V4 NMS r=2.4 GeoTIFF has no direct six-fold holdout receipt. The referenced 0.2808209979823443 uniform-control candidate mean is V7_ste_q10 (STE), a different emission geometry; it must not be treated as a score for this file. The planned amended pass-2 run did not write a receipt.",
+ "uniform_control_attribution_warning": "candidate_arm V7_ste_q10 is a different STE geometry from the written V4 NMS raster; this diagnostic does not measure the written candidate."
+}

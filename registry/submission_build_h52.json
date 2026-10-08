@@ -1,0 +1,41 @@
+{
+ "created_utc": "20261007T213946Z",
+ "name": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278",
+ "variant": "V4",
+ "config": {
+  "variant": "V4",
+  "n_dots": 44069,
+  "flank": 2.0,
+  "tip_kappa": 0.0,
+  "tip_corridor": 40,
+  "tip_half_width": 2.0,
+  "tip_tau": 12.0,
+  "tip_bridge_gap": 40.0,
+  "nms_radius": 2.4,
+  "stage1_q": 10.0,
+  "tile_px": 100,
+  "negatives": 250000,
+  "tag": "",
+  "seed": 51,
+  "force_fields": false,
+  "holdout_ledger": ""
+ },
+ "tif": {
+  "file": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+  "bytes": 228000,
+  "sha256": "fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3"
+ },
+ "zip": {
+  "file": "gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip",
+  "bytes": 189366,
+  "sha256": "081e46cf759da5aed94599b07125d64078f5464a3b0fa2c43b4c2cd154df955f"
+ },
+ "emitted_px": 44069,
+ "on_catalogue_px": 0,
+ "stage1_area_share": 0.900925673451481,
+ "stage1_lift": 1.1099694785796939,
+ "uniqueness_verdict": "PASS (current 16-artifact audit; see evidence/uniqueness_recheck_h52_20261007.json)",
+ "notes": "H52 V4 NMS r=2.4 artifact retained for research only. It has final-byte format and scoped uniqueness passes, but no direct six-fold holdout receipt for this built geometry. The 0.280821 reference result belongs to V7 STE q10, not V4. The amended pass-2 run did not write a receipt; no weekly competition slot is authorized.",
+ "holdout_status": "NOT_MEASURED_FOR_BUILT_V4_GEOMETRY",
+ "slot_eligibility": "NOT_ELIGIBLE_RESEARCH_ONLY"
+}

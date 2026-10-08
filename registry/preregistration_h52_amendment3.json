@@ -1,0 +1,67 @@
+{
+  "id": "GEMSDOE51-H52-PREREG-1-A3",
+  "parent": "GEMSDOE51-H52-PREREG-1",
+  "created_utc": "2026-10-07T21:02:00Z",
+  "status": "frozen_before_running",
+  "author_note": "Written after pass 1 of the emission comparison and before scripts/run_h52_tip_holdout.py is executed. The geometry parameters of the prior are frozen here so that the only swept quantity is its strength.",
+  "hypothesis": {
+    "id": "H52-A",
+    "short": "structural inheritance: the hidden faults lie where the mapped traces continue",
+    "statement": "DrivenData staff state the hidden label set contains 'continuations, splays and parallel strands' of already-mapped systems (organizer post https://community.drivendata.org/t/where-do-you-draw-the-line/11536). A purely geometric prior that extrapolates mapped-trace tips along their strike, and bridges facing tips of different components (relay ramps; Cartwright et al. 1995 JSG 17(9) 1319-1326, doi:10.1016/0191-8141(95)00030-8), therefore marks a location class the attribute-field detectors of this repository cannot express.",
+    "why_not_a_catalogue_leak": "the prior is painted only from fold.train_pos, i.e. mapped pixels at least 12 px outside the held-out block; the held-out block itself is never read.",
+    "known_instrument_bias": "the local instrument hides the catalogue inside the block but leaves the block boundary unmasked, so a corridor entering the block from a tip just outside is favoured more than in the real task. The interior-eroded instrument is the guard against tuning on that artefact."
+  },
+  "arms": {
+    "B0": "score = field (the 50/50 H-H/H-D blend); reference, identical to the historical STE arm",
+    "B1..B4": "score = field * (1 + kappa * prior), kappa in the frozen grid {0.5, 1.0, 2.0, 4.0}",
+    "constant": "identical emitted mass (3.47 x n_truth), identical STE geometry, identical 2 px catalogue-flank exclusion, identical block confinement"
+  },
+  "prior_geometry": {
+    "corridor_px": 40,
+    "half_width_px": 2.0,
+    "tau_px": 12.0,
+    "start_px": 3.0,
+    "bridge_gap_px": 40.0,
+    "tau_bridge_px": 15.0,
+    "min_component_px": 12,
+    "walk_px": 14,
+    "max_curvature": 0.125,
+    "note": "frozen: no sweep over these values is admissible in this session"
+  },
+  "instruments": {
+    "primary": "full held-out block, six folds, reading B (gems51.live_metric.dti_binary_live)",
+    "guard": "held-out block eroded by 30 px (3 km), truth restricted to the eroded interior, reading B; removes the block-boundary advantage"
+  },
+  "control_arms": {
+    "U_block": "uniform random dots over the whole block at the same mass; the null model for 'no field at all'",
+    "U_approved": "uniform random dots over the approved tiles inside the block at the same mass; the null model for 'the Stage-1 mask alone is doing the work'",
+    "why": "the parent preregistration's non-dominance limit (emitted share inside approved / approved area share <= 1.5) is nearly degenerate under *hard* Stage-1 confinement, because the emitted share is 1.0 by construction, so the limit reduces to 'approved area >= 66.7 % of the footprint'. With q10 that holds (the approved tiles are ~90 % of the footprint, lift ~1.11), so the parent limit is met, but the number carries almost no information about whether the fine model or the tiles are placing the dots. Amendment A3 therefore keeps the parent limit as a reportable statistic AND adds a computable equivalent: the confined candidate must beat a uniform random fill of the same approved tiles at the same mass by a wide margin, while the U_approved - U_block margin bounds what the tiles alone could buy."
+  },
+  "selection_rule": {
+    "step1": "kappa_minus = B0 six-fold mean under the primary instrument; for each kappa: delta = mean(kappa) - mean(B0), folds_positive = count(delta_fold > 0)",
+    "step2": "eligible = kappa with delta >= +0.0020 and folds_positive >= 4 AND interior mean(kappa) >= interior mean(B0) - 0.0005 (no material harm on the guard instrument)",
+    "step3": "chosen = eligible kappa with the highest primary mean; if none is eligible, chosen = 0 and the negative result is published",
+    "step4": "the chosen strength is then written into the submission builder as a frozen constant, and the builder is run once on the full footprint"
+  },
+  "uniqueness_requirements": [
+    "the emitted dot set must differ from every prior artifact in data/prior and from the shipped research artifact gemsdoe51-hh-hd-blend-ste-r347 (no byte identity, Jaccard <= 0.50, containment <= 0.60)",
+    "the emitted dot set must differ in the same sense from the sibling TIFFs recorded in registry/sibling_tiff_inventory.json",
+    "all cells of the written GeoTIFF must be finite and inside [0, 1]"
+  ],
+  "failure": "if the structural prior fails the selection rule, the submission is built with kappa = 0 from amendment A2's winning geometry, and this negative result is published on the site under the H52 knowledge page.",
+  "amendment_log": [
+    {
+      "logged_utc": "2026-10-07T21:05:30Z",
+      "before_running": "scripts/run_h52_tip_holdout.py has not been executed yet when this entry was written.",
+      "change_1": "the kappa grid is trimmed from {0.5, 1.0, 2.0, 4.0} to {1.0, 3.0} for the compute budget of this session (2 vCPU box, pass 1 and pass 2 already consumed ~75 min of single-core running time). The two retained values bracket the multiplicative boost range reported by the exploratory arms.",
+      "change_2": "confined arms are added. The submission emits inside the Stage-1 approved tiles, so the dominance control must compare like with like: B_conf0 = confined STE at kappa = 0 (exactly the submission geometry) is the candidate whose mean is tested against the U_approved control instead of the unconfined B0_field mean. B0_field is retained as the unconfined reference and for the kappa comparison.",
+      "why_this_is_not_result_fishing": "neither change discards or reinterprets a measured value: no pass-2, tip-holdout or builder number exists at the time of writing, and the selection rule (step 2/3) is unchanged apart from the smaller grid."
+    },
+    {
+      "logged_utc": "2026-10-07T21:13:00Z",
+      "before_running": "scripts/run_h52_tip_holdout.py still has not been executed.",
+      "change": "correction of the rationale in control_arms.why (see above): the earlier wording asserted that the parent lift limit is unachievable under hard confinement. That is wrong for q10, where the approved tiles cover ~90 % of the footprint (registry/irregularities.json IR-51-21 records the same 90.09 % figure from the retained artifact's domain check). No arm, threshold or selection rule changes.",
+      "why": "the correction is recorded rather than silently edited so the amendment's history stays auditable."
+    }
+  ]
+}

@@ -102,6 +102,18 @@ def main() -> int:
             if ("NO UPLOAD-ELIGIBLE ARTIFACT" not in index_upper
                     or "NOT CLEARED FOR UPLOAD" not in index_upper):
                 failures.append("blocked local benchmark is not prominently marked NOT FOR UPLOAD in index")
+            if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
+                failures.append("manifest says no candidate, but upload_ok is not explicitly false")
+            howto = (DOCS / "how-to-submit.html").read_text(encoding="utf-8")
+            if "No file is cleared to upload" not in howto or "no weekly competition slot is authorized" not in howto.lower():
+                failures.append("submission guide does not explicitly block upload/slot while no candidate is cleared")
+            for rec in manifest.get("research_only_artifacts", []):
+                if rec.get("id") in {"H51_N2_PHYSICAL_CREDITTHIN", "H52_V4_STRAINCONF_20261007"}:
+                    name = Path(rec.get("file", "")).name
+                    if f'href="downloads/{name}"' not in index:
+                        failures.append(f"research-only candidate is not linked from index: {name}")
+                    if "NOT FOR SUBMISSION" not in index:
+                        failures.append("research-only candidate is not marked NOT FOR SUBMISSION")
     else:
         if ("No eligible submission file" not in index
                 and "No upload-eligible submission file" not in index):

@@ -1,7 +1,7 @@
 {
  "id": "H51_N2_PHYSICAL_CREDITTHIN",
- "role": "PRIMARY",
- "status": "LOCAL_GATES_PASSED_UNSCORED",
+ "role": "RESEARCH_ONLY_NOT_PROMOTED",
+ "status": "NOT_PROMOTED_NEGATIVE_PAIRED_HOLDOUT",
  "file": "gemsdoe51-h51n2-creditthin-20261007T210820Z.tif",
  "zip": "gemsdoe51-h51n2-creditthin-20261007T210820Z.zip",
  "submission_name": "GEMSDOE51-h51n2-creditthin-20261007T210820Z",
@@ -450,5 +450,17 @@
   "Local gates only: no DrivenData score, upload or acceptance is claimed.",
   "The hidden-truth mass 12700 is an estimate inferred from reported sibling scores; the mass sensitivity table lists the alternatives that were considered.",
   "Stage 1 is a coarse allowed domain; it is weak on the proxy instrument and never weights an individual emitted point."
- ]
+ ],
+ "promoted_for_submission": false,
+ "holdout_assessment": {
+  "verdict": "NOT_PROMOTED",
+  "mean": 0.28011577624481615,
+  "comparator": "archived H-D",
+  "comparator_mean": 0.2816626603034904,
+  "paired_delta": -0.0015468840586742583,
+  "folds_won": 0,
+  "folds_evaluated": 6,
+  "evidence": "evidence/h51_n2_paired_holdout.json",
+  "note": "The TIFF is retained for research/audit only; do not use a competition slot."
+ }
 }

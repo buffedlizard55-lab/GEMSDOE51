@@ -24,45 +24,18 @@
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
 
-<section class="download">
-<h2>⬇ Recommended upload candidate — NOT YET PORTAL-VALIDATED</h2>
-<p class="warn"><b>RECOMMENDED UPLOAD CANDIDATE.</b> This is the only artifact in this repository that
-satisfies every constraint in the method brief at once: official grid/CRS/transform/dtype, all pixel
-values finite and inside [0, 1], every emitted point at least 224 m from the mapped catalogue, every
-emitted point inside the Stage-1 strain-deficit approved tiles, Stage-1 non-dominance, and a support
-that no locally held prior submission matches. It has <b>not</b> been uploaded, so portal acceptance is
-unproven, and it is <b>not</b> an organizer score.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif">Download the submission GeoTIFF</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip">ZIP containing the same single GeoTIFF</a></p>
+<section class="download missing">
+<h2>⬇ NO UPLOAD-ELIGIBLE ARTIFACT — existing local benchmark NOT CLEARED FOR UPLOAD</h2>
+<p><b>No file has passed the current holdout promotion rule; no weekly competition slot is authorized. This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
+<p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
 <dl class="kv">
-<dt>Unique submission name to paste</dt><dd><code>GEMSDOE51-N2-physical-creditthin-r3.0-q10</code></dd>
-<dt>Note for the <em>Note (optional)</em> field</dt><dd><code>H-D physical detector (58 physical stack layers + 4 scarp-facing-coherence layers) fitted on the visible USGS/INGENIOUS known-fault catalogue; unit-valued dots at &gt;=2.4 px (240 m) greedy non-maximum-suppression spacing; every point &gt;=2.24 px (224 m) from the mapped catalogue and inside the Stage-1 strain-deficit q10 approved tiles; mass = 3.0x the estimated hidden-truth pixel count.</code></dd>
-<dt>Format receipt (local, not portal validation)</dt><dd>one-band float32 EPSG:32611
- shape [3730, 3292], finite everywhere (nan_cells=0),
- values in [0.0, 1.0], format_valid=True,
- portal_legal=True</dd>
-<dt>Mass geometry</dt><dd>38100 unit dots; nearest-neighbour spacing median
- 3.0 px; distance to mapped catalogue median
- 5.66 px (p10 2.83,
- p90 19.0)</dd>
-<dt>Stage 1 (kept coarse)</dt><dd>approved area 90.09% of footprint;
- every emitted point inside approved tiles; lift 1.110 (limit 1.5);
- formula Kreemer et al. (2000), Eq. 3: eps_ij = 1/2 sum_k [L_k u_dot_k/(A sin(delta_k))] m_ij^k</dd>
-<dt>Uniqueness (local priors)</dt><dd>PASS —
- max support Jaccard 0.1546 (limit 0.50),
- max containment 0.2887 (limit 0.60);
- 39 local priors compared, 21 of them family references</dd>
-<dt>Paired six-fold proxy vs the archived H-D arm</dt><dd>candidate
- 0.280116 vs baseline 0.281663
- (Δ -0.001547; 0/6 folds won).
- The baseline reproduces the archived receipt exactly (max deviation 0.0),
- so the comparison is paired and reproducible. <b>This is a compliance cost, not a score improvement:</b>
- the brief's all-points-inside-approved requirement costs about 0.0015 mean proxy DTI.</dd>
-<dt>SHA-256</dt><dd><code>b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22</code></dd>
+<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
+<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
 </dl>
-<p class="ev">Receipts: <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json">local checks</a>,
- <a href="holdout.html">Stage 1 / Stage 2 holdouts reported separately</a>,
- <a href="irregularities.html">IR-51-21</a>. No upload, portal acceptance or organizer score is claimed anywhere on this site.</p>
+<p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
 </section><section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
 <h2>New, independently generated TIFF</h2>
@@ -80,19 +53,6 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 <p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
 </section>
 <section class="download missing">
-<h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
-<p><b>This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">ZIP containing the same single GeoTIFF</a></p>
-<dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>sha256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
-</dl>
-<p class="ev">No organizer upload, acceptance, or score is claimed. See <a href="irregularities.html">IR-51-21</a> and the Stage-1/Stage-2 receipts.</p>
-</section>
-<section class="download missing">
 <h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
 <p class="warn"><b>Do not upload or spend a slot on this file.</b> The matched six-block
 visible-catalogue proxy DTI is 0.281056 versus
@@ -107,7 +67,7 @@ visible-catalogue proxy DTI is 0.281056 versus
 <dt>Measured format</dt><dd>PASS — one-band float32,
 EPSG:32611, shape [3730, 3292],
 inside values [0.0, 1.0],
-NaN outside with NaN NoData tag.</dd>
+NaN outside with NaN NoData tag</dd>
 <dt>SHA-256</dt><dd><code>4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f</code></dd>
 <dt>Scoped uniqueness</dt><dd>PASS —
 365 SHA-verified payloads,
@@ -121,8 +81,49 @@ max Jaccard 0.3216, cosine
 </dl>
 <p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
 Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
-<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>;
-<a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
+<a href="downloads/uniqueness_gate_H_G_HD_experimental_20261007.json">scoped uniqueness audit</a>; <a href="downloads/format_check_H_G_HD_nan.json">independent format receipt</a>.</p>
+</section>
+
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a competition slot on this file.</b> NOT PROMOTED under the paired six-fold rule: mean 0.280116 vs 0.281663 for H-D (Δ -0.001547; 0/6 folds won).</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif">Download research TIFF for inspection</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (do not paste into the portal)</dt><dd><code>GEMSDOE51-N2-physical-creditthin-r3.0-q10</code></dd>
+<dt>Note (research description only)</dt><dd><code>H-D physical detector (58 physical stack layers + 4 scarp-facing-coherence layers) fitted on the visible USGS/INGENIOUS known-fault catalogue; unit-valued dots at &gt;=2.4 px (240 m) greedy non-maximum-suppression spacing; every point &gt;=2.24 px (224 m) from the mapped catalogue and inside the Stage-1 strain-deficit q10 approved tiles; mass = 3.0x the estimated hidden-truth pixel count.</code></dd>
+<dt>Final-byte format</dt><dd>PASS — one-band float32,
+EPSG:32611, shape [3730, 3292], all cells finite and in [0, 1], zeros outside footprint; no NoData tag.</dd>
+<dt>Stage-1 diagnostic</dt><dd>qnan: approved area nan%, nan% of points inside, lift nan. This is a coarse-domain diagnostic, not a substitute for Stage-2 holdout promotion.</dd>
+<dt>Scoped uniqueness</dt><dd>PASS —
+16 local/reference comparisons;
+max support Jaccard 0.1955,
+max containment 0.3527.
+This is a scoped local gate, not a global proof of novelty.</dd>
+<dt>SHA-256</dt><dd><code>b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22</code></dd>
+</dl>
+<p class="ev">Evidence: <a href="downloads/h51_n2_paired_holdout.json">paired six-fold holdout</a>; <a href="downloads/uniqueness_recheck_h51n2_20261007.json">current-inventory uniqueness audit</a>; <a href="downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json">final-byte checks</a>. A format or uniqueness pass does not override the failed/missing preregistered holdout.</p>
+</section>
+
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a competition slot on this file.</b> NOT PROMOTED. The built V4 raster uses NMS r=2.4, and its checks receipt has no direct six-fold score. The available 0.280821 value is for V7 STE q10, a different emission geometry; it cannot be attributed to this file. The A4 parent promotion bar was not met, and the planned amended pass-2 run did not write a receipt.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif">Download research TIFF for inspection</a></p>
+<p class="zip">or <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip">download the one-TIFF ZIP</a></p>
+<dl class="kv">
+<dt>Research label (do not paste into the portal)</dt><dd><code>GEMSDOE51-H52-V4-STRAINCONF-20261007</code></dd>
+<dt>Note (research description only)</dt><dd><code>RESEARCH ONLY / DO NOT SUBMIT: H52 V4 NMS r=2.4, 44,069 dots, hard-confined to the Stage-1 q10 approved tiles; local GeoTIFF format and scoped uniqueness checks pass. The built V4 geometry does not have its own six-fold holdout receipt; the available 0.280821 score is for V7 STE q10, a different geometry. The A4 parent promotion rule was not met, and the audited pass-2 re-run did not finish. No competition slot.</code></dd>
+<dt>Final-byte format</dt><dd>PASS — one-band float32,
+EPSG:32611, shape [3730, 3292], all cells finite and in [0, 1], zeros outside footprint; no NoData tag.</dd>
+<dt>Stage-1 diagnostic</dt><dd>q10: approved area 90.09%, 100.0% of points inside, lift 1.110. This is a coarse-domain diagnostic, not a substitute for Stage-2 holdout promotion.</dd>
+<dt>Scoped uniqueness</dt><dd>PASS —
+16 local/reference comparisons;
+max support Jaccard 0.2049,
+max containment 0.3401.
+This is a scoped local gate, not a global proof of novelty.</dd>
+<dt>SHA-256</dt><dd><code>fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3</code></dd>
+</dl>
+<p class="ev">Evidence: <a href="downloads/h52_emission_pass2_20261007T212644Z.json">pass-2 instrument ledger</a>; <a href="downloads/h52_harness_recheck_20261007T235024Z.json">harness arithmetic recheck</a>; <a href="downloads/uniqueness_recheck_h52_20261007.json">current-inventory uniqueness audit</a>; <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json">final-byte checks</a>. A format or uniqueness pass does not override the failed/missing preregistered holdout.</p>
 </section>
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>STE L9</code> recorded

@@ -1,24 +1,15 @@
 # GEMSDOE51 — DOE GEMS fault-discovery research
 
-**Current decision (2026-10-07): ONE NEW, UNIQUE, CONSTRAINT-COMPLIANT CANDIDATE EXISTS. NO COMPETITION SLOT USED. NO ORGANIZER SCORE CLAIMED.**
+**Current decision (2026-10-07): NO new TIFF is cleared for a competition slot. No slot has been used; no organizer score or portal acceptance is claimed.**
 
-> ### ⬇ Download — recommended upload candidate (not yet portal-validated)
->
-> **[`docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif)** · [one-file ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [local checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json) · sha256 `b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22`
->
-> **Submission name to paste:** `GEMSDOE51-N2-physical-creditthin-r3.0-q10`
-> **Note (optional) field:** `H-D physical detector (58 physical layers + 4 scarp-facing-coherence layers) on the visible USGS/INGENIOUS catalogue; unit dots at >=2.4 px (240 m) NMS spacing; every point >=2.24 px (224 m) from the mapped catalogue and inside the Stage-1 strain-deficit q10 approved tiles; mass 3.0x estimated hidden-truth pixel count.`
->
-> **Status: READY TO UPLOAD AT YOUR DISCRETION — NOT YET PORTAL-VALIDATED, NOT ORGANIZER-SCORED.** It is the only artifact here that satisfies every constraint at once: official grid/CRS/transform/dtype, **every pixel finite and inside `[0, 1]`** (zeros outside the footprint, `nan_cells = 0`), 38,100 unit dots with ≥2.4 px nearest-neighbour spacing, every dot ≥224 m from the mapped catalogue, every dot inside the approved Stage-1 tiles, Stage-1 lift `1.110 < 1.5`, and a support that matches no locally held prior (max Jaccard `0.1546`, max containment `0.2887` against 39 priors / 21 pinned family references). **Honest caveat, measured:** the brief's "all points inside approved tiles" requirement costs `−0.0015469` mean six-fold proxy DTI versus the archived H-D configuration (0/6 folds won) — this is a compliance-cost artifact, not a score improvement. Nothing here has been uploaded; portal acceptance is unproven.
->
-> **Do not upload** the archived H-H/H-D blend (fails the q10 confinement requirement) or the research-only H-G+H-D TIFF (loses its matched holdout). Both remain linked for audit only.
+The six-fold, spatially blocked promotion rule takes precedence over local format and uniqueness checks. The existing H-H/H-D blend remains the best *measured local proxy* (mean DTI 0.2853406), but it predates the all-points-inside-Stage-1-q10 requirement (86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it.
 
-> **Also available (research only):** [`gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif`](docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif) — a separate session's P1 diagnostic. It is **NOT FOR SUBMISSION** (holdout not cleared); linked for audit only.
+Two additional unique, all-finite, `[0,1]` GeoTIFFs are downloadable **for research/audit only — DO NOT SUBMIT**:
 
+- **H51-N2 physical / credit-thin:** [`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json). It passes local format, uniqueness, and Stage-1 q10 confinement checks, but **failed its preregistered six-fold paired holdout**: 0.280116 vs 0.281663 for the H-D comparator (Δ −0.001547; 0/6 folds won). No submission slot.
+- **H52 V4 strain-confined:** [`gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif`](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip) · [checks](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json). It passes local format and the current-inventory uniqueness audit (worst Jaccard 0.2049, containment 0.3401 over 16 comparisons, including the H51-N2 and P1 TIFFs) and places all points inside q10-approved tiles. **Its actual V4 NMS raster has no direct six-fold holdout receipt.** The available 0.280821 figure belongs to V7 STE q10, a different geometry, and must not be attributed to this file. The parent +0.0020 rule was not met. No submission slot.
 
-The existing local H-H/H-D blend is retained as the best reproducible local proxy benchmark (six-fold visible-catalogue proxy mean DTI `0.2853406`), but it is an earlier artifact that fails the brief's all-points-inside-approved-tiles requirement (86.71% inside) and it writes NaN outside the footprint — the leading hypothesis for the user-reported portal error “Predicted values must be in range [0, 1]”, whose exact triggering file is still unidentified (IR-51-21). It has not been uploaded or accepted by DrivenData.
-
-The preregistered H51-K1 candidate was implemented and evaluated on the six spatial folds with a fold-specific, leakage-controlled broad Stage-1 q10 mask. It **did not pass** the preregistered promotion gates, so no K1 TIFF exists. The H51-N1 inventory-context arm was also preregistered and failed on every regime (fold 0: 0.0543 vs 0.1296 for the physical arm). The candidate shipped above is not a new geological hypothesis: it is the already-validated H-D physical arm re-emitted under the constraints, with its measured compliance cost stated.
+**Action: download only to inspect or reproduce these research artifacts. Do not paste either name into the competition portal.** The site’s executive summary and submission guide are generated from `data/submission_manifest.json` and intentionally show “no upload-eligible artifact.”
 
 ## Parallel-session research TIFF (P1): download yes; submit NO
 
@@ -73,13 +64,13 @@ This full working brief is retained so a future session can continue without ask
 >
 > Review and update the site, preserve auditable research and source links, include this full prompt in README, and autonomously attempt a pull request and merge to `main`. State blockers and irregularities. No manual user input is expected.
 
-This checkout is fixed to branch `arena/4e361438-gemsdoe51`; other sessions have used `arena/44e5e11e-gemsdoe51`, `arena/ec87b811-gemsdoe51` and `arena/63e96db6-gemsdoe51`; all work stays on the session's own branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
+This checkout is fixed to branch `arena/4df01627-gemsdoe51`. Work remains on that session branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
 
 ## Current status and local benchmark
 
 | Item | Status / result |
 |---|---|
-| **Recommended upload candidate (2026-10-07)** | **`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif` — unique, all-finite `[0,1]`, every point inside the Stage-1 approved tiles, all local gates PASS; NOT yet portal-validated and NOT organizer-scored** |
+| **Upload eligibility** | **None. No slot authorized.** H51-N2 loses its paired holdout; H52 V4 has no direct holdout for the written geometry and fails its parent promotion rule. |
 | Compliance cost of the brief's constraints | `-0.0015469` mean proxy DTI (0/6 folds) versus the archived H-D configuration; the harness reproduces the archived receipt with max deviation `0.0` |
 | Off-catalogue A/B physical-arm AUC (4 folds) | `0.6936` all / `0.6486` catalogue-independent (≥5 px from any A pixel) |
 | Far-field ring-weight experiment | `+0.017314` on the off-catalogue A/B instrument, `-0.113310` on the blocked instrument → **instrument disagreement; no ring weight used** |
@@ -185,8 +176,24 @@ All large rasters and owner-mirrored datasets are out of Git. Hash pins establis
 | Does the *visible inventory* carry placement signal beyond the physical layers? | `scripts/run_h51_n1.py` | `evidence/h51_n1_ab_fold0_timing.json`, `evidence/h51_n1_ab_static_fields.json` | **No** — the static physical arm beats the inventory-context arm in every regime on the A/B instrument; AUC_all `0.6936`, AUC_far `0.6486` |
 | Where in the distance-to-catalogue coordinate does the credit sit? | `scripts/run_ring_profile_ab.py` | `evidence/ring_profile_ab.json` | Far-field ring (`15 px`) beats unweighted (`0.205821` vs `0.188507`, `+0.017314`) on the A/B instrument; the near-field ring is the worst profile |
 | Do the brief's hard constraints cost score? | `scripts/run_h51_n2_holdout.py` | `evidence/h51_n2_paired_holdout.json` | `-0.0015469` mean, 0/6 folds; the baseline reproduces the archived receipt exactly (max deviation `0.0`); the ring weight is **rejected** here (`-0.113310`) |
-| Is the shipped artifact unique and inside the constraints? | `scripts/build_submission_n1.py` | `evidence/submission_h51n2.json` | All gates PASS: format, `[0,1]` finite everywhere, 100% of points inside approved tiles, lift `1.109969 < 1.5`, max Jaccard `0.154578`, max containment `0.288740` |
+| Does the H51-N2 research artifact pass local geometry/format checks? | `scripts/build_submission_n1.py` | `evidence/submission_h51n2.json`; `evidence/h51_n2_paired_holdout.json` | Format, `[0,1]` range, q10 confinement, lift and scoped uniqueness pass; **holdout fails** (Δ −0.0015469; 0/6 wins), so the artifact is research-only and no slot is authorized |
 | Why do the thin-dot artifacts score highest, and what would beat `0.3195`? | analysis | `knowledge/03_why_the_dotted_family_wins_2026-10-07.md` | Mass/thinness and catalogue-halo deletion dominate; the reported ladder implies `|G| <= 14,088` and credit/dot ≈ `0.13`; reaching `0.35` needs ~+35% placement quality at the same mass |
+
+### H52 reconciliation note (2026-10-07, after cross-session merge review)
+
+The H52 V4 GeoTIFF is retained as a research artifact, **not** as an upload recommendation.
+`docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json` has
+`holdout: null`. It was built as V4 (NMS r=2.4), but the only 0.280821 value in the available
+pass-2 ledger is `V7_ste_q10` (STE), so that number is not evidence for the V4 raster. The
+pass-2 ledger records `harness_ok: false` under the older clause; the arithmetic recheck
+`evidence/h52_harness_recheck_20261007T235024Z.json` supports the respecified tolerance but is
+not a fresh six-fold pass-2 run. See **IR-H52-09**. The candidate’s format and scoped
+uniqueness gates do not waive the required holdout promotion rule.
+
+The branch also includes the parallel H51-N2 session and its source-audit work. Its TIFF is
+retained as research-only: its own paired six-fold holdout is 0.2801158 versus 0.2816627 for
+H-D (Δ −0.0015469; 0/6 wins), with the receipt explicitly `NOT_PROMOTED`. Its current-inventory
+support audit also passes, but that is not a submission candidate despite format/uniqueness checks.
 
 ## Reproduce, test, and review
 

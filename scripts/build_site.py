@@ -306,6 +306,17 @@ def build():
         "hk1_spatial_holdout_20261007.json",
         "stage1_q10_trace_holdout_20261007.json",
         "candidate-hypotheses-2026-10-07.md",
+        "h51_n2_paired_holdout.json",
+        "h52_holdout_20261007T211736Z.json",
+        "h52_emission_pass2_20261007T212644Z.json",
+        "h52_harness_recheck_20261007T235024Z.json",
+        "h52_tip_diagnostics_20261007T212240Z.json",
+        "stage1_domain_scan_20261007T211331Z.json",
+        "candidate-hypotheses-h52-2026-10-07.md",
+        "score-attribution-h52-2026-10-07.md",
+        "h52-session-results-2026-10-07.md",
+        "uniqueness_recheck_h51n2_20261007.json",
+        "uniqueness_recheck_h52_20261007.json",
     )
     expected_downloads.update(supporting_files)
     for item in downloads.iterdir():
@@ -440,8 +451,8 @@ unproven, and it is <b>not</b> an organizer score.</p>
         if portal_blocked:
             card = f"""
 <section class="download missing">
-<h2>⬇ Existing local benchmark — NOT CLEARED FOR UPLOAD</h2>
-<p><b>This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
+<h2>⬇ NO UPLOAD-ELIGIBLE ARTIFACT — existing local benchmark NOT CLEARED FOR UPLOAD</h2>
+<p><b>No file has passed the current holdout promotion rule; no weekly competition slot is authorized. This archived file is not an upload candidate.</b> The user-reported portal range error remains unresolved and the triggering file is unknown. This earlier local best is linked for audit only; it was not newly generated in this session and does not satisfy the later q10 all-points-inside-approved-tile constraint.</p>
 <p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download existing benchmark for audit</a></p>
 {zip_note}
 <dl class="kv">
@@ -479,9 +490,10 @@ layer family was not fully tested. The H-D soft w=0.20 proposal passed the numer
 failed source-aware uniqueness (Jaccard
 {soft.get('uniqueness', {}).get('max_jaccard', float('nan')):.3f}; limit 0.50).
 A separate H-G+H-D TIFF is available below for research only; it loses the matched holdout and
-must not be uploaded.</p>
-<p>This card remains intentionally empty until a candidate passes format, scoped uniqueness,
-q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.</p></section>"""
+must not be uploaded. H51-N2 is also NOT PROMOTED (0/6 folds won); H52 V4 has no direct holdout
+receipt for its built NMS geometry. Both downloadable TIFFs are explicitly research-only below.</p>
+<p>This card remains intentionally empty until a candidate passes final-byte format, scoped
+uniqueness, Stage-1 allowed-domain/non-dominance, and the preregistered blocked-holdout promotion rule.</p></section>"""
 
     research_cards = []
     for record in research:
@@ -493,15 +505,78 @@ q70 Stage-1 non-dominance, and the preregistered blocked-holdout promotion rule.
             raise SystemExit("research-only manifest names a missing/unsafe TIFF")
         if zip_name and (zip_name != record.get("zip") or not (downloads / zip_name).is_file()):
             raise SystemExit("research-only manifest names a missing/unsafe ZIP")
-        fmt = record.get("format", {})
-        checks = fmt.get("checks", {})
-        holdout = record.get("holdout", {})
-        unique = record.get("uniqueness", {})
-        s1 = record.get("stage1_dominance_q70", {})
-        audit_name = Path(unique.get("evidence", "")).name
-        format_receipt = Path(record.get("format_receipt", "")).name
+        fmt = record.get("format", {}) or {}
+        checks = fmt.get("checks", {}) or {}
+        holdout = record.get("holdout", {}) or {}
+        unique = record.get("uniqueness", {}) or {}
+        stage1 = record.get("stage1", record.get("stage1_dominance_q70", {})) or {}
         zip_link = (f'<p class="zip">or <a href="downloads/{html.escape(zip_name)}">download the one-TIFF ZIP</a></p>'
                     if zip_name else "")
+
+        if record.get("id") in {"H51_N2_PHYSICAL_CREDITTHIN", "H52_V4_STRAINCONF_20261007"}:
+            # These artifacts are quarantined: local format and scoped-uniqueness checks do not
+            # override a failed or missing preregistered holdout. H52's built V4/NMS geometry has
+            # no direct six-fold receipt; the V7 STE metric must not be attributed to it.
+            if record.get("id") == "H51_N2_PHYSICAL_CREDITTHIN":
+                holdout_evidence = Path(str(holdout.get("evidence", ""))).name
+                evidence = (f'<a href="downloads/{html.escape(holdout_evidence)}">paired six-fold holdout</a>; '
+                            f'<a href="downloads/uniqueness_recheck_h51n2_20261007.json">current-inventory uniqueness audit</a>; '
+                            f'<a href="downloads/{html.escape(str(record.get("checks_file", "")))}">final-byte checks</a>')
+                score_text = (f"NOT PROMOTED under the paired six-fold rule: mean {holdout.get('mean', float('nan')):.6f} "
+                              f"vs {holdout.get('incumbent_H_D_mean', float('nan')):.6f} for H-D "
+                              f"(Δ {holdout.get('paired_delta', float('nan')):+.6f}; "
+                              f"{holdout.get('folds_higher', 0)}/{holdout.get('folds_total', 0)} folds won).")
+            else:
+                holdout_evidence = Path(str(holdout.get("evidence", ""))).name
+                evidence = (f'<a href="downloads/{html.escape(holdout_evidence)}">pass-2 instrument ledger</a>; '
+                            f'<a href="downloads/h52_harness_recheck_20261007T235024Z.json">harness arithmetic recheck</a>; '
+                            f'<a href="downloads/uniqueness_recheck_h52_20261007.json">current-inventory uniqueness audit</a>; '
+                            f'<a href="downloads/{html.escape(str(record.get("checks_file", "")))}">final-byte checks</a>')
+                score_text = ("NOT PROMOTED. The built V4 raster uses NMS r=2.4, and its checks receipt has no direct six-fold score. "
+                              "The available 0.280821 value is for V7 STE q10, a different emission geometry; it cannot be attributed to this file. "
+                              "The A4 parent promotion bar was not met, and the planned amended pass-2 run did not write a receipt.")
+            finite_text = ("all cells finite and in [0, 1]" if checks.get("nan_cells") == 0 and checks.get("values_outside_0_1") == 0
+                           else f"local format_valid={checks.get('format_valid', False)}")
+            outside_text = "zeros outside footprint; no NoData tag" if checks.get("outside_footprint_zeros") else "outside encoding not verified"
+            s1_text = (f"q{stage1.get('q', float('nan')):g}: approved area "
+                       f"{stage1.get('approved_area_share', float('nan'))*100:.2f}%, "
+                       f"{stage1.get('emitted_share_inside_approved', float('nan'))*100:.1f}% of points inside, "
+                       f"lift {stage1.get('lift_over_area_share', float('nan')):.3f}.")
+            research_cards.append(f"""
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Do not upload or spend a competition slot on this file.</b> {html.escape(score_text)}</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download research TIFF for inspection</a></p>
+{zip_link}
+<dl class="kv">
+<dt>Research label (do not paste into the portal)</dt><dd><code>{html.escape(str(record.get('submission_name', '')))}</code></dd>
+<dt>Note (research description only)</dt><dd><code>{html.escape(str(record.get('note', '')))}</code></dd>
+<dt>Final-byte format</dt><dd>{'PASS' if checks.get('format_valid') else 'FAIL'} — one-band {html.escape(str(fmt.get('dtype', '')))},
+EPSG:{html.escape(str(fmt.get('crs_epsg', '')))}, shape {html.escape(str(fmt.get('shape', '')))}, {html.escape(finite_text)}, {html.escape(outside_text)}.</dd>
+<dt>Stage-1 diagnostic</dt><dd>{html.escape(s1_text)} This is a coarse-domain diagnostic, not a substitute for Stage-2 holdout promotion.</dd>
+<dt>Scoped uniqueness</dt><dd>{html.escape(str(unique.get('verdict', 'INCOMPLETE')))} —
+{unique.get('pixel_comparisons', unique.get('references_sha_verified', 0))} local/reference comparisons;
+max support Jaccard {unique.get('max_support_jaccard', float('nan')):.4f},
+max containment {unique.get('max_support_containment', float('nan')):.4f}.
+This is a scoped local gate, not a global proof of novelty.</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(str(record.get('sha256', '')))}</code></dd>
+</dl>
+<p class="ev">Evidence: {evidence}. A format or uniqueness pass does not override the failed/missing preregistered holdout.</p>
+</section>""")
+            continue
+
+        # Historical H-G/H-D research card (legacy schema).
+        s1q70 = record.get("stage1_dominance_q70", {}) or {}
+        unique_evidence = str(unique.get("evidence", "")).split(";")[0].strip()
+        audit_name = Path(unique_evidence).name
+        format_evidence = str(record.get("format_receipt", "")).split(";")[0].strip()
+        format_receipt = Path(format_evidence).name
+        audit_link = (f'<a href="downloads/{html.escape(audit_name)}">scoped uniqueness audit</a>'
+                      if audit_name and (downloads / audit_name).is_file()
+                      else html.escape(unique_evidence or "no scoped audit recorded"))
+        format_link = (f'<a href="downloads/{html.escape(format_receipt)}">independent format receipt</a>'
+                       if format_receipt and (downloads / format_receipt).is_file()
+                       else html.escape(format_evidence or "no separate format receipt"))
         research_cards.append(f"""
 <section class="download missing">
 <h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
@@ -518,7 +593,7 @@ visible-catalogue proxy DTI is {holdout.get('mean', float('nan')):.6f} versus
 <dt>Measured format</dt><dd>{'PASS' if checks.get('format_valid') else 'FAIL'} — one-band {html.escape(fmt.get('dtype', ''))},
 EPSG:{html.escape(str(fmt.get('crs_epsg', '')))}, shape {html.escape(str(fmt.get('shape', '')))},
 inside values [{checks.get('min_value', float('nan')):.1f}, {checks.get('max_value', float('nan')):.1f}],
-NaN outside with NaN NoData tag.</dd>
+{'NaN outside with NaN NoData tag' if checks.get('outside_footprint_nan') else 'finite zeros outside'}</dd>
 <dt>SHA-256</dt><dd><code>{html.escape(record.get('sha256', ''))}</code></dd>
 <dt>Scoped uniqueness</dt><dd>{html.escape(unique.get('verdict', 'INCOMPLETE'))} —
 {unique.get('references_sha_verified', 0)} SHA-verified payloads,
@@ -526,14 +601,13 @@ NaN outside with NaN NoData tag.</dd>
 max Jaccard {unique.get('max_support_jaccard', float('nan')):.4f}, cosine
 {unique.get('max_cosine', float('nan')):.4f}.</dd>
 <dt>Archived-field Stage-1 q70 diagnostic</dt><dd>Approved area
-{s1.get('approved_area_share', float('nan')) * 100:.3f}%; emissions inside
-{s1.get('emitted_share_inside_approved', float('nan')) * 100:.3f}%; lift
-{s1.get('lift_over_area_share', float('nan')):.3f} — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
+{s1q70.get('approved_area_share', float('nan')) * 100:.3f}%; emissions inside
+{s1q70.get('emitted_share_inside_approved', float('nan')) * 100:.3f}%; lift
+{s1q70.get('lift_over_area_share', float('nan')):.3f} — non-dominant on the historical prior field only. Current-formula map not rerun.</dd>
 </dl>
 <p class="ev">The NaN-outside format recoding leaves every in-footprint prediction unchanged.
 Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact receipt</a>;
-<a href="downloads/{html.escape(audit_name)}">scoped uniqueness audit</a>;
-<a href="downloads/{html.escape(format_receipt)}">independent format receipt</a>.</p>
+{audit_link}; {format_link}.</p>
 </section>""")
     research_card = "\n".join(research_cards)
 
@@ -555,7 +629,7 @@ Evidence: <a href="downloads/experimental_H_G_plus_H_D_artifact.json">artifact r
     from scripts.latest_report import render
     latest_card, latest_detail = render()
     (DOCS / "latest.html").write_text(page("Latest experiment", latest_detail or "<p>P1 experiment in progress. No new submission authorized.</p>", "latest.html"))
-    body = cand_card + latest_card + card + research_card + f"""
+    body = cand_card + card + latest_card + research_card + f"""
 <p class="warn"><b>Latest six-fold point estimates are research leads, not robust wins.</b>
 The archived STE rule <code>{html.escape(ste_result.get('rule', 'STE L9'))}</code> recorded
 proxy DTI {ste_result.get('mean_proxy_dti', float('nan')):.6f} versus
@@ -701,15 +775,8 @@ or research-only file. This block is generated from the submission manifest.</p>
 {latest_card}
 {status_block}
 <h3>What to upload, and what not to upload</h3>
-<p>Upload <b>only</b> the recommended candidate named in the big download button above; do not upload the
-archived benchmark, and do not upload the research-only files (marked NOT FOR SUBMISSION). First identify the
-exact TIFF that produced the reported portal error, then reconcile the portal's `[0,1]` validation with the
-official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values,
-the one-band float32 grid/CRS/transform, and the outside encoding (finite zeros and NaN are both accepted by the
-local contract). The recommended candidate is all-finite zero-outside with no NoData tag; the archived benchmark
-and the H-G+H-D research TIFF are NaN-outside; the P1 research TIFF is zero-outside. Neither encoding has been
-portal-validated here. A future regenerated artifact must put every prediction inside the verified range and must
-keep every Stage-2 point inside the validated approved-tile domain.</p>
+{(f'<p>Upload <b>only</b> the candidate explicitly marked RECOMMENDED UPLOAD CANDIDATE above; do not upload the archived benchmark or any research-only TIFF. First identify the exact TIFF that produced the reported portal error and reconcile the portal range rule with the official outside-footprint requirements. Local format checks are not portal acceptance.</p>' if cand else '<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable H51-N2 and H52 V4 TIFFs below are research-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload either file. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>')}
+<p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>

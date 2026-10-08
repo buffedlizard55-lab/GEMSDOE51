@@ -1,0 +1,38 @@
+{
+ "utc": "2026-10-07T23:50:24Z",
+ "ledger_pass1": "h52_holdout_20261007T211736Z.json",
+ "ledger_pass2": "h52_emission_pass2_20261007T212644Z.json",
+ "rule": "A2 harness clause as respecified: folds 1-5 bit-exact (tolerance 0.0), fold 0 within 2e-05 with the discrepancy recorded as IR-H52-06",
+ "per_fold_pass1": {
+  "0": 0.2789974375314839,
+  "1": 0.2665415597903744,
+  "2": 0.2877669841663094,
+  "3": 0.24310276038911616,
+  "4": 0.302525293497295,
+  "5": 0.3044432709252026
+ },
+ "per_fold_pass2": {
+  "0": 0.2790081775203549,
+  "1": 0.2665415597903744,
+  "2": 0.2877669841663094,
+  "3": 0.24310276038911616,
+  "4": 0.302525293497295,
+  "5": 0.3044432709252026
+ },
+ "per_fold_delta": {
+  "0": 1.0739988870966943e-05,
+  "1": 0.0,
+  "2": 0.0,
+  "3": 0.0,
+  "4": 0.0,
+  "5": 0.0
+ },
+ "max_abs_delta_folds_1_to_5": 0.0,
+ "fold0_abs_delta": 1.0739988870966943e-05,
+ "fold0_tolerance": 2e-05,
+ "folds_1_to_5_bit_exact": true,
+ "fold0_within_bound": true,
+ "effective_harness_ok": true,
+ "note": "This is arithmetic on the two existing receipts, not a new measurement.  It exists because the first audited pass-2 re-run (which would have written a receipt with harness_ok=true under the respecified clause) was killed by a sandbox recycle before it wrote anything, and because the 2026-10-07 folding fields are not recoverable from the snapshot (data/prepared is excluded).",
+ "interpretation": "fold 0's 1.074e-05 offset is a pass-1 bookkeeping artefact: the same offset appears on pass-1's V2 arm (0.278443147667559 recorded vs 0.278453892569 recomputed from the cached arrays), while folds 1-5 agree to 0.0.  It is 0.004 % relative and two orders of magnitude below the +0.0020 promotion bar, so it cannot change any promotion decision; it is nevertheless published rather than smoothed away."
+}

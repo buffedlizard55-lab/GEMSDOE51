@@ -1,0 +1,80 @@
+{
+ "created_utc": "20261007T211331Z",
+ "tile_px": 100,
+ "artifact": "gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+ "rows": [
+  {
+   "q": 10,
+   "approved_area_share": 0.900925673451481,
+   "catalogue_share_inside": 0.8554141798386568,
+   "artifact_dots_inside": 38211,
+   "artifact_dot_containment": 0.8670720914928861
+  },
+  {
+   "q": 30,
+   "approved_area_share": 0.7011645956272171,
+   "catalogue_share_inside": 0.5775726372401128,
+   "artifact_dots_inside": 26063,
+   "artifact_dot_containment": 0.5914134652476798
+  },
+  {
+   "q": 50,
+   "approved_area_share": 0.5015368544132579,
+   "catalogue_share_inside": 0.36146455040335806,
+   "artifact_dots_inside": 16345,
+   "artifact_dot_containment": 0.37089564092672855
+  },
+  {
+   "q": 60,
+   "approved_area_share": 0.4002087714589212,
+   "catalogue_share_inside": 0.2419984259198531,
+   "artifact_dots_inside": 11284,
+   "artifact_dot_containment": 0.256053007783249
+  },
+  {
+   "q": 70,
+   "approved_area_share": 0.3005457511969815,
+   "catalogue_share_inside": 0.1456024135895586,
+   "artifact_dots_inside": 7207,
+   "artifact_dot_containment": 0.1635389956658876
+  },
+  {
+   "q": 80,
+   "approved_area_share": 0.2014025308411063,
+   "catalogue_share_inside": 0.08942742834655998,
+   "artifact_dots_inside": 4486,
+   "artifact_dot_containment": 0.10179491252354263
+  },
+  {
+   "q": 90,
+   "approved_area_share": 0.10015979105824178,
+   "catalogue_share_inside": 0.033432806453728606,
+   "artifact_dots_inside": 1852,
+   "artifact_dot_containment": 0.042025006240214206
+  }
+ ],
+ "note": "approved = deficit rank >= q-th percentile, so q10 is the WIDEST domain (~90 % of the footprint) and q90 the narrowest. Containment of the old artifact inside the domain bounds how much of a newly confined file can coincide with it.",
+ "stage1_meta": {
+  "tile_px": 100,
+  "tile_shape": [
+   38,
+   33
+  ],
+  "h_seis_m": 15000.0,
+  "median_centroid_distance_px": 36.345563690772494,
+  "frac_catalogue_px_with_slip_rate": 0.7440971994490719,
+  "frac_catalogue_px_with_known_sense": 0.7436052994031612,
+  "rate_convention": "vertical",
+  "assume_unknown_normal": true,
+  "dip_assumptions": {
+   "normal_deg": 60.0,
+   "strike_slip_deg": 90.0
+  },
+  "regional_median_slip_rate_mm_yr": 0.1,
+  "total_mapped_trace_km": 6821.350197517395,
+  "area_mask_px": 5167373,
+  "slip_rate_unit_assumption": "mm/yr (provisional; verify source field definition)",
+  "tile_area_m2_min": 20000.0,
+  "tile_area_m2_max": 100000000.0
+ }
+}
