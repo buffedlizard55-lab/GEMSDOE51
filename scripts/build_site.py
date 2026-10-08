@@ -317,6 +317,9 @@ def build():
         "h52-session-results-2026-10-07.md",
         "uniqueness_recheck_h51n2_20261007.json",
         "uniqueness_recheck_h52_20261007.json",
+        "r1_holdout_20261008.json",
+        "preregistration-2026-10-08.md",
+        "x5_screen_20261008.json",
     )
     expected_downloads.update(supporting_files)
     for item in downloads.iterdir():
@@ -425,7 +428,90 @@ unproven, and it is <b>not</b> an organizer score.</p>
  <a href="irregularities.html">IR-51-21</a>. No upload, portal acceptance or organizer score is claimed anywhere on this site.</p>
 </section>"""
 
-    dl = sub
+    # ------------------------------------------------------------ R1 card
+    # The R1 regeneration manifest (schema 4) carries an explicit
+    # ok_to_download_and_submit boolean decided by the preregistered holdout
+    # rule.  Its card states the status in the first line, unambiguously.
+    r1_card = ""
+    is_r1 = isinstance(sub, dict) and str(sub.get("id", "")).startswith("R1_")
+    if is_r1:
+        r1_file = Path(str(sub.get("file", ""))).name
+        r1_zip = Path(str(sub.get("zip", ""))).name if sub.get("zip") else ""
+        if (not r1_file or not (DOCS / "downloads" / r1_file).is_file()):
+            raise SystemExit("R1 manifest names a missing/unsafe primary download")
+        if r1_zip and not (DOCS / "downloads" / r1_zip).is_file():
+            raise SystemExit("R1 manifest names a missing/unsafe ZIP download")
+        r1_ok = bool(sub.get("ok_to_download_and_submit", False))
+        r1_fmt = sub.get("format", {}) or {}
+        r1_checks = r1_fmt.get("checks", {}) or {}
+        r1_hold = sub.get("holdout", {}) or {}
+        r1_s1 = sub.get("stage1", {}) or {}
+        r1_uniq = sub.get("uniqueness", {}) or {}
+        r1_staged = r1_uniq.get("staged", {}) if isinstance(r1_uniq.get("staged"), dict) else {}
+        r1_pre = r1_uniq.get("prewrite", {}) if isinstance(r1_uniq.get("prewrite"), dict) else {}
+        r1_emit = sub.get("emission", {}) or {}
+        r1_zip_note = (f'<p class="zip">or the <a href="downloads/{html.escape(r1_zip)}">'
+                       "ZIP containing the same single GeoTIFF</a></p>" if r1_zip else "")
+        if r1_ok:
+            r1_headline = ("✅ OK TO DOWNLOAD AND SUBMIT — passed every preregistered "
+                           "local gate")
+            r1_lead = ("This artifact passed the preregistered six-fold paired holdout rule, "
+                       "places 100% of its points inside Stage-1 strain-budget approved tiles, "
+                       "is all-finite with every value in [0,1] (zeros outside the footprint, "
+                       "no NoData tag), and cleared the family uniqueness and Stage-1 "
+                       "non-dominance gates. <b>Honest limits:</b> the holdout truth is the "
+                       "visible known-fault catalogue (a proxy, not the organizer's hidden "
+                       "labels); no upload or organizer score is claimed; portal acceptance is "
+                       "not proven until you upload.")
+        else:
+            r1_headline = "🚫 RESEARCH ONLY — DO NOT SUBMIT THIS FILE"
+            r1_lead = ("The preregistered promotion rule was NOT met for this geometry. There "
+                       "is NO UPLOAD-ELIGIBLE ARTIFACT in this session and this file is NOT "
+                       "CLEARED FOR UPLOAD. It is published for inspection and reproducibility "
+                       "only. Do not paste its name into the competition portal and do not "
+                       "spend a weekly slot on it.")
+        r1_card = f"""
+<section class="download{' missing' if not r1_ok else ''}">
+<h2>⬇ {r1_headline}</h2>
+<p class="{'warn' if not r1_ok else ''}">{r1_lead}</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(r1_file)}">Download the GeoTIFF</a></p>
+{r1_zip_note}
+<dl class="kv">
+<dt>Submission name (paste only if marked OK above)</dt><dd><code>{html.escape(str(sub.get('submission_name','')))}</code></dd>
+<dt>Note for the portal's <em>Note (optional)</em> field</dt><dd><code>{html.escape(str(sub.get('portal_note','')))}</code></dd>
+<dt>Final-byte format (local receipt)</dt><dd>one-band {html.escape(str(r1_fmt.get('dtype','')))}
+ EPSG:{html.escape(str(r1_fmt.get('crs_epsg','')))} shape {html.escape(str(r1_fmt.get('shape','')))};
+ nan_cells={r1_checks.get('nan_cells','?')}; all_cells_finite_in_range={r1_checks.get('all_cells_finite_in_range','?')};
+ values [{r1_checks.get('min_value','?')}, {r1_checks.get('max_value','?')}];
+ format_valid={r1_checks.get('format_valid', False)}</dd>
+<dt>Stage 2 holdout (six-fold proxy, paired)</dt><dd>variant {html.escape(str(r1_hold.get('variant','')))}
+ mean {r1_hold.get('variant_mean', float('nan')):.6f} vs frozen best 0.285341 (Δ
+ {r1_hold.get('mean_delta_vs_base', float('nan')):+.6f}; {r1_hold.get('folds_won', 0)}/6 folds won);
+ instrument reproduction max deviation {r1_hold.get('instrument_max_dev', float('nan')):.2e} (tolerance 1e-5).
+ <a href="downloads/r1_holdout_20261008.json">Full receipt</a>.</dd>
+<dt>Stage 1 (coarse prior, reported separately)</dt><dd>q{r1_s1.get('q', float('nan')):g} tiles:
+ approved area {r1_s1.get('approved_area_share', float('nan'))*100:.2f}% of footprint;
+ 100% of points inside approved tiles; lift {r1_s1.get('lift_over_area_share', float('nan')):.3f};
+ uniform-fill dominance control mean {r1_hold.get('uniform_tiles_mean', float('nan')):.4f}.
+ Formula: {html.escape(str(r1_s1.get('formula','')))}</dd>
+<dt>Emission</dt><dd>{r1_emit.get('placed_dots','?')} dots; STE L{r1_emit.get('line_length','?')}
+ w{r1_emit.get('continuity_weight','?')} spacing {r1_emit.get('spacing_px','?')} px;
+ confinement operator {html.escape(str(r1_emit.get('confinement','')))}</dd>
+<dt>Uniqueness (local scope)</dt><dd>{html.escape(str(r1_staged.get('verdict', r1_pre.get('verdict',''))))} —
+ max support Jaccard {r1_pre.get('max_jaccard', float('nan')):.4f} (limit 0.50);
+ max containment {r1_pre.get('max_containment', float('nan')):.4f} (limit 0.60);
+ {r1_pre.get('n_prior','?')} priors compared ({r1_uniq.get('reference_count','?')} family references)</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(str(sub.get('sha256','')))}</code></dd>
+</dl>
+<p class="ev">Receipts: <a href="downloads/{html.escape(str(sub.get('checks_file','')))}">final-byte checks</a>,
+ <a href="downloads/r1_holdout_20261008.json">six-fold holdout</a>,
+ <a href="downloads/preregistration-2026-10-08.md">preregistration</a>,
+ <a href="holdout.html">Stage 1 / Stage 2 holdouts separately</a>.</p>
+</section>"""
+
+    dl = None if is_r1 else sub
+    if is_r1:
+        card = r1_card
     if dl:
         name = dl.get("file", "")
         if (not name or Path(name).name != name
@@ -477,7 +563,7 @@ unproven, and it is <b>not</b> an organizer score.</p>
 </dl>
 <p class="ev">{html.escape(dl.get('evidence',''))}</p>
 </section>"""
-    else:
+    elif not is_r1:
         d = subm.get("decision", {})
         x1 = d.get("h51_x1", {})
         soft = d.get("h_d_soft_w020", {})
@@ -512,6 +598,32 @@ uniqueness, Stage-1 allowed-domain/non-dominance, and the preregistered blocked-
         stage1 = record.get("stage1", record.get("stage1_dominance_q70", {})) or {}
         zip_link = (f'<p class="zip">or <a href="downloads/{html.escape(zip_name)}">download the one-TIFF ZIP</a></p>'
                     if zip_name else "")
+
+        if record.get("id", "").startswith("H_H_HD_BLEND"):
+            q10c = record.get("stage1_q10_domain_check", {}) or {}
+            hd = record.get("holdout", {}) or {}
+            research_cards.append(f"""
+<section class="download missing">
+<h2>⬇ Research-only GeoTIFF — NOT FOR SUBMISSION</h2>
+<p class="warn"><b>Superseded audit benchmark — do not upload or spend a slot.</b>
+{html.escape(str(record.get('demotion_note', '')))} Its six-fold visible-catalogue proxy mean
+DTI was {hd.get('mean_dti', float('nan')):.6f} (the value later recorded as 0.2853406 with
+per-fold STE fields that were never committed; the rebuilt-pipeline base is 0.2853152 — see
+<a href="irregularities.html">IR-R1-01</a>). It is retained for continuity and comparison only.</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(name)}">Download benchmark TIFF (audit only)</a></p>
+{zip_link}
+<dl class="kv">
+<dt>Research label (do not paste into the portal)</dt><dd><code>{html.escape(str(record.get('submission_name', '')))}</code></dd>
+<dt>Note (research description only)</dt><dd><code>{html.escape(str(record.get('note', '')))}</code></dd>
+<dt>q10 domain audit</dt><dd>{q10c.get('points_inside_approved', '?')}/{q10c.get('predicted_points', '?')} points
+inside the full-map q10 approved domain ({q10c.get('emitted_share_inside_approved', float('nan'))*100:.2f}%);
+outside encoding NaN. Not eligible under the all-points-inside requirement.</dd>
+<dt>SHA-256</dt><dd><code>{html.escape(str(record.get('sha256', '')))}</code></dd>
+</dl>
+<p class="ev">Evidence: <a href="downloads/{html.escape(str(record.get('checks_file','')))}">final-byte checks</a>,
+ <a href="downloads/r1_holdout_20261008.json">R1 holdout that superseded it</a>.</p>
+</section>""")
+            continue
 
         if record.get("id") in {"H51_N2_PHYSICAL_CREDITTHIN", "H52_V4_STRAINCONF_20261007"}:
             # These artifacts are quarantined: local format and scoped-uniqueness checks do not
@@ -706,7 +818,41 @@ to a live DTI. It is <b>not</b> a score.</p>
     (DOCS / "index.html").write_text(page("GEMSDOE51 — DOE GEMS Prize", body, "index.html"))
 
     # ------------------------------------------------------------ how to submit
-    if sub:
+    is_r1_submit = isinstance(sub, dict) and str(sub.get("id", "")).startswith("R1_")
+    if is_r1_submit:
+        r1_ok_h = bool(sub.get("ok_to_download_and_submit", False))
+        r1_file_h = Path(str(sub.get("file", ""))).name
+        r1_zip_h = Path(str(sub.get("zip", ""))).name if sub.get("zip") else ""
+        r1_zip_note_h = (f'<p class="zip">or the <a href="downloads/{html.escape(r1_zip_h)}">'
+                         "ZIP containing the same single GeoTIFF</a></p>" if r1_zip_h else "")
+        if r1_ok_h:
+            status_block = f"""
+<p class="download"><b>✅ OK TO DOWNLOAD AND SUBMIT.</b> The current artifact
+<code>{html.escape(r1_file_h)}</code> passed the preregistered six-fold paired holdout rule, places 100% of its
+points inside Stage-1 strain-budget approved tiles, is all-finite with every value in [0, 1]
+(zeros outside the footprint, no NoData tag), and cleared the family uniqueness and Stage-1
+non-dominance gates. Paste this name and note:</p>
+<dl class="kv">
+<dt>Submission name</dt><dd><code>{html.escape(str(sub.get('submission_name', '')))}</code></dd>
+<dt>Note (optional)</dt><dd><code>{html.escape(str(sub.get('portal_note', '')))}</code></dd>
+</dl>
+<p class="big"><a class="btn" href="downloads/{html.escape(r1_file_h)}">Download the submission GeoTIFF</a></p>
+{r1_zip_note_h}
+<p class="warn"><b>Honest limits.</b> The holdout truth is the visible known-fault catalogue — a proxy,
+not the organizer's hidden labels. No upload or organizer score is claimed by this repository.
+Portal acceptance is proven only when DrivenData accepts the file; the all-finite [0,1] encoding
+is designed to remove the previously reported "Predicted values must be in range [0, 1]" hazard.</p>
+"""
+        else:
+            status_block = f"""
+<p class="download missing"><b>🚫 RESEARCH ONLY — DO NOT SUBMIT.</b> The current artifact
+<code>{html.escape(r1_file_h)}</code> did NOT pass the preregistered promotion rule. It is downloadable for
+inspection and reproducibility only; do not paste its name into the portal and do not spend a
+weekly slot on it.</p>
+<p class="big"><a class="btn" href="downloads/{html.escape(r1_file_h)}">Download the research GeoTIFF</a></p>
+{r1_zip_note_h}
+"""
+    if sub and not is_r1_submit:
         primary_file = Path(sub.get("file", "")).name
         primary_zip = Path(sub.get("zip", "")).name if sub.get("zip") else ""
         primary_fmt = sub.get("format", {})
@@ -775,7 +921,7 @@ or research-only file. This block is generated from the submission manifest.</p>
 {latest_card}
 {status_block}
 <h3>What to upload, and what not to upload</h3>
-{(f'<p>Upload <b>only</b> the candidate explicitly marked RECOMMENDED UPLOAD CANDIDATE above; do not upload the archived benchmark or any research-only TIFF. First identify the exact TIFF that produced the reported portal error and reconcile the portal range rule with the official outside-footprint requirements. Local format checks are not portal acceptance.</p>' if cand else '<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable H51-N2 and H52 V4 TIFFs below are research-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload either file. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>')}
+{(f'<p>Upload <b>only</b> the candidate explicitly marked RECOMMENDED UPLOAD CANDIDATE above; do not upload the archived benchmark or any research-only TIFF. First identify the exact TIFF that produced the reported portal error and reconcile the portal range rule with the official outside-footprint requirements. Local format checks are not portal acceptance.</p>' if cand else (f'<p>Upload <b>only</b> the file marked ✅ OK TO DOWNLOAD AND SUBMIT above. Every other TIFF in this repository — including all archived benchmarks — is research-only and must not be uploaded. If the portal reports an error, record the exact text and file name before retrying.</p>' if (is_r1_submit and r1_ok_h) else '<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable research TIFFs are marked RESEARCH ONLY; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload them. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>'))}
 <p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">

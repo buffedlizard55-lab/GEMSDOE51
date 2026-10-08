@@ -42,21 +42,11 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
 <p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
 </section>
 
-
-<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
-<p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
-<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
-<dl class="kv">
-<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
-<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
-<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
-<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
-</dl>
-<p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
+<p class="warn"><b>There is no current upload-eligible artifact.</b> Do not upload an archived
+or research-only file. This block is generated from the submission manifest.</p>
 
 <h3>What to upload, and what not to upload</h3>
-<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable H51-N2 and H52 V4 TIFFs below are research-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload either file. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>
+<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable research TIFFs are marked RESEARCH ONLY; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload them. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>
 <p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
