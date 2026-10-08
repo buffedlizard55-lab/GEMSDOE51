@@ -270,7 +270,7 @@ def main() -> int:
         candidate="H53-A componentwise physical strain-budget residual prior",
         status="STAGE1_SPATIAL_HOLDOUT_COMPLETED; STAGE2_PENDING",
         instrument="Six truth-bearing contiguous blocks from the frozen 3x3 spatial split; visible known-fault catalogue proxy truth only.",
-        preregistration="evidence/candidate_hypotheses_prereg_20261008.json",
+        preregistration="evidence/candidate_hypotheses_budget_q10_prereg_20261008.json",
         protocol=dict(
             tile_px=TILE_PX,
             buffer_px=BUFFER_PX,

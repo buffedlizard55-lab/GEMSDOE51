@@ -199,6 +199,106 @@ def _build_hk1_tilt_features(stack, footprint: np.ndarray) -> dict[str, np.ndarr
     }
 
 
+def _sampled_q95(values: np.ndarray, valid: np.ndarray, max_samples: int = 200_000) -> float:
+    """Deterministic q95 from row-major valid values, matching H-X1's convention."""
+    selected = np.asarray(values, dtype=np.float32)[valid]
+    if selected.size == 0:
+        return 0.0
+    stride = max(1, int(np.ceil(selected.size / max_samples)))
+    return float(np.quantile(selected[::stride], 0.95))
+
+
+def _conductive_ribbon_at_scale(fields: dict[str, np.ndarray], common: np.ndarray,
+                                sigma: float) -> np.ndarray:
+    """One unitless H53-K2x score at a fixed Gaussian scale.
+
+    An axial tensor combines normalized gradients of basement depth, gravity,
+    and TMI. Conductivity gradient energy is rewarded only when it is stronger
+    across the independent structural edge than along it. Every normalization
+    is label-free and deterministic; all source layers share one finite mask.
+    """
+    structural_names = ("comp_depth_to_base_surf", "comp_iso_grav_anom", "comp_tmi")
+    gradients: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+    valid = np.asarray(common, dtype=bool).copy()
+    for name in (*structural_names, "comp_cond_surf"):
+        field = np.asarray(fields[name], dtype=np.float32)
+        gx = _ncd(field, common, sigma, [0, 1])
+        gy = _ncd(field, common, sigma, [1, 0])
+        gradients[name] = (gx, gy)
+        valid &= np.isfinite(gx) & np.isfinite(gy)
+
+    jxx = np.zeros(common.shape, dtype=np.float32)
+    jxy = np.zeros(common.shape, dtype=np.float32)
+    jyy = np.zeros(common.shape, dtype=np.float32)
+    strength_sum = np.zeros(common.shape, dtype=np.float32)
+    for name in structural_names:
+        gx, gy = gradients[name]
+        magnitude = np.hypot(gx, gy).astype(np.float32)
+        scale = _sampled_q95(magnitude, valid)
+        if scale <= 1e-12:
+            weight = np.zeros(common.shape, dtype=np.float32)
+        else:
+            weight = np.clip(magnitude / scale, 0.0, 1.0).astype(np.float32)
+        ux = np.zeros(common.shape, dtype=np.float32)
+        uy = np.zeros(common.shape, dtype=np.float32)
+        nonzero = valid & (magnitude > 1e-12)
+        np.divide(gx, magnitude, out=ux, where=nonzero)
+        np.divide(gy, magnitude, out=uy, where=nonzero)
+        jxx += weight * ux * ux
+        jxy += weight * ux * uy
+        jyy += weight * uy * uy
+        strength_sum += weight
+        del magnitude, weight, ux, uy
+
+    delta = jxx - jyy
+    twice_offdiag = 2.0 * jxy
+    trace = jxx + jyy
+    coherence = np.hypot(delta, twice_offdiag) / (trace + 1e-12)
+    edge_strength = (strength_sum / float(len(structural_names))) * coherence
+    normal_angle = 0.5 * np.arctan2(twice_offdiag, delta)
+    nx = np.cos(normal_angle).astype(np.float32)
+    ny = np.sin(normal_angle).astype(np.float32)
+
+    gx_cond, gy_cond = gradients["comp_cond_surf"]
+    cond_magnitude = np.hypot(gx_cond, gy_cond).astype(np.float32)
+    cond_scale = _sampled_q95(cond_magnitude, valid)
+    normal_gradient = gx_cond * nx + gy_cond * ny
+    tangent_gradient = -gx_cond * ny + gy_cond * nx
+    cond_energy = normal_gradient * normal_gradient + tangent_gradient * tangent_gradient
+    anisotropy = np.maximum(normal_gradient * normal_gradient
+                            - tangent_gradient * tangent_gradient, 0.0)
+    anisotropy /= cond_energy + 1e-12
+    if cond_scale <= 1e-12:
+        amplitude = np.zeros(common.shape, dtype=np.float32)
+    else:
+        amplitude = np.clip(cond_magnitude / cond_scale, 0.0, 1.0)
+    feature = (edge_strength * anisotropy * amplitude).astype(np.float32)
+    feature[~valid] = np.nan
+    return feature
+
+
+def conductive_ribbon_group(get, footprint: np.ndarray) -> dict[str, np.ndarray]:
+    """H53-K2x: independent structural edge-conditioned conductivity anisotropy.
+
+    The input feature layers are already globally empirical-rank transformed,
+    so the output is a relative, unitless pattern statistic rather than a
+    conductivity estimate. Band units, inversion depth and source are not
+    established by the local competition GeoTIFF metadata.
+    """
+    names = ("comp_cond_surf", "comp_depth_to_base_surf",
+             "comp_iso_grav_anom", "comp_tmi")
+    fields = {name: np.asarray(get(name), dtype=np.float32) for name in names}
+    common = np.asarray(footprint, dtype=bool).copy()
+    for field in fields.values():
+        common &= np.isfinite(field)
+    small = _conductive_ribbon_at_scale(fields, common, sigma=2.0)
+    broad = _conductive_ribbon_at_scale(fields, common, sigma=5.0)
+    valid = np.isfinite(small) & np.isfinite(broad)
+    combined = np.minimum(small, broad).astype(np.float32)
+    combined[~valid] = np.nan
+    return {"h53_k2x_min_s2s5": combined}
+
+
 def facecoh_group(get, footprint: np.ndarray) -> dict[str, np.ndarray]:
     """H-D — scarp-facing coherence (extracted so it can be built alone).
 

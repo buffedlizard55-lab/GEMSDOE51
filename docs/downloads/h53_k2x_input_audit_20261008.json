@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "audit_date_utc": "2026-10-08",
+  "status": "AUDITED_BEFORE_FEATURE_IMPLEMENTATION",
+  "candidate": "H53-K2x",
+  "question": "Are the supplied competition layer semantics and source documentation adequate for the preregistered structure-conditioned conductivity-gradient test?",
+  "local_mirror": {
+    "path": "data/raw/training_features.tif",
+    "restoration_receipt": "data/restore_receipt.json",
+    "restore_status": "SHA-256 and byte-count verified against the pinned owner-mirror manifest; not organizer-authenticated",
+    "bytes": 418912844,
+    "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "grid": {
+      "crs": "EPSG:32611",
+      "resolution_m": 100,
+      "width": 3292,
+      "height": 3730,
+      "dtype": "float32",
+      "nodata": -3.4028234663852886e+38
+    },
+    "band_17": {
+      "band_name": "cond_surf",
+      "raw_description": "cond_surf - Conductivity surface - electrical conductivity of subsurface",
+      "tags": {
+        "band_name": "cond_surf",
+        "data_category": "subsurface",
+        "data_type": "numeric",
+        "description": "Conductivity surface - electrical conductivity of subsurface"
+      },
+      "units": null,
+      "observed_raw_value_range": [0.1937037855386734, 4.969292640686035],
+      "observed_raw_median": 2.88597286,
+      "finite_footprint_pixels": 5164312,
+      "footprint_pixels": 5167373,
+      "interpretation": "Layer name and short description identify an electrical-conductivity-related numeric subsurface surface. Metadata do not establish the unit, exact physical definition, depth sensitivity, inversion/source, calibration, or provenance of this band. Do not label the values as S/m, resistivity, conductance, or a particular depth."
+    },
+    "supporting_independent_structure_inputs": [
+      {
+        "band_name": "depth_to_base_surf",
+        "index_1_based": 15,
+        "raw_description": "depth_to_base_surf - Depth to basement surface - thickness of sedimentary cover",
+        "units": null
+      },
+      {
+        "band_name": "iso_grav_anom",
+        "index_1_based": 13,
+        "raw_description": "iso_grav_anom - Isostatic gravity anomaly - gravity after compensating for topographic mass",
+        "units": null
+      },
+      {
+        "band_name": "tmi",
+        "index_1_based": 14,
+        "raw_description": "tmi - Total magnetic intensity - total strength of magnetic field",
+        "units": null
+      }
+    ],
+    "mask_note": "The common finite-support mask is to be recomputed from all four required inputs and the official footprint; sentinels are not valid observations. The rank-prepared layers are unitless empirical ranks and do not preserve physical units."
+  },
+  "official_and_trusted_source_checks": [
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "The target is geological faults, not geothermal vents.",
+        "The task description identifies surface conductivity and depth to conductive base surface among the supplied training_features.tif layers.",
+        "The organizer says challenge datasets come from USGS and INGENIOUS, but the page does not give a layer-by-layer provenance, units, or calibration for cond_surf."
+      ],
+      "not_verified": ["The login-walled organizer download itself; the local owner mirror's byte-level identity to that download"]
+    },
+    {
+      "url": "https://gdr.openei.org/submissions/1391",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "GDR 1391 is the publicly accessible CC-BY 4.0 INGENIOUS Great Basin regional compilation.",
+        "Its listed resources include MT/conductance products and other geophysical/geothermal data; its terms warn that datasets are provided as-is and users must judge fitness for use."
+      ],
+      "critical_distinction": "The GDR page's USGS-linked electrical conductance maps are not thereby established as the source of the competition cond_surf band."
+    },
+    {
+      "url": "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "The USGS Great Basin conductance release describes maps from a 3-D MT inversion with conductance integrated over five depth intervals from 2 to 200 km.",
+        "This product is depth-integrated conductance, not evidence for the unit or depth meaning of competition cond_surf."
+      ]
+    },
+    {
+      "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "GeoDAWN is an airborne magnetic and radiometric survey/data release; its descriptions discuss surface geology/soil composition and subsurface structure/geology.",
+        "The GeoDAWN page does not document the competition cond_surf conductivity band; it is not cited as that band's provenance."
+      ]
+    },
+    {
+      "url": "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2004JB003030",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "Hoffmann-Rothe et al. report a site-specific northern Chile MT conductor roughly 350 m wide and 1.5 km deep that correlated with fluid alteration and fault-related damage elements.",
+        "This supports physical plausibility at one site only; it is not a transferable rule for this 100-m Great Basin raster."
+      ]
+    },
+    {
+      "url": "https://www.usgs.gov/publications/electrical-conductivity-images-active-and-fossil-fault-zones",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "Ritter et al. compare four fault/shear systems and report materially different electrical structures, including no observed fault-zone conductor at the Dead Sea Transform and possible fluid-, meteoric-water-, or graphite-related conductors elsewhere.",
+        "The paper explicitly states fault-zone conductors do not uniquely identify particular fault architectural or hydrological units."
+      ]
+    },
+    {
+      "url": "https://pubs.usgs.gov/publication/70204785",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "Wannamaker et al. discuss Great Basin case studies combining MT, structural interpretation, soil gas, and fluid geochemistry for hidden geothermal systems.",
+        "The source is regional/site-specific precedent for multi-evidence interpretation, not validation of this pixelwise operator."
+      ]
+    },
+    {
+      "url": "https://pubs.usgs.gov/publication/70250909",
+      "retrieved": "2026-10-08",
+      "verified_claims": [
+        "Peacock and Bedrosian emphasize 3-D bottom-up controls and depth-integrated conductance maps in Great Basin geothermal characterization.",
+        "This cautions against interpreting one 2-D conductivity layer as a complete geothermal or fault model."
+      ]
+    }
+  ],
+  "go_no_go": {
+    "absolute_physical_units_required": false,
+    "allowed_test_interpretation": "Unitless relative pattern/gradient statistic on globally empirical-rank-transformed competition layers; no claim about conductivity magnitude, specific depth, salinity, alteration, or geothermal temperature.",
+    "blocker": "If rank-layer masks are incomplete or the saved band mapping does not match the descriptions, do not implement or score.",
+    "scientific_caveat": "Electrical conductivity is non-unique; clay, saline water, lithology, inversion geometry, and fluids may create similar patterns; some active fault zones lack a conductor. This screen can be falsified by the spatial holdout and cannot prove a fault."
+  }
+}

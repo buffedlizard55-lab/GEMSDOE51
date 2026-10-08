@@ -348,7 +348,7 @@
   "source_references": {
     "competition_metric": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
     "kreemer_equation": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
-    "preregistration": "evidence/candidate_hypotheses_prereg_20261008.json"
+    "preregistration": "evidence/candidate_hypotheses_budget_q10_prereg_20261008.json"
   },
   "limitations": [
     "The six-fold visible-catalogue proxy cannot establish hidden-label performance or organizer score.",

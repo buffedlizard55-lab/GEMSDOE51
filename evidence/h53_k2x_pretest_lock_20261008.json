@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-08",
+  "status": "FROZEN_BEFORE_H53_K2X_HOLDOUT_SCORING",
+  "branch": "arena/c2b2ea5e-gemsdoe51",
+  "base_commit": "3a188187bf3d5fda157a257946bc4a257a1ae472",
+  "registered_protocol": "evidence/candidate_hypotheses_prereg_20261008.json",
+  "frozen_best_local_stage2_proxy": 0.285340602656319,
+  "fresh_baseline_tolerance": 1e-05,
+  "stage2_folds": 6,
+  "stage1": "source-corrected official-vector q10 deficit mask, recomputed fold-wise excluding held-out trace rows; Stage-1 trace-recall/lift reported separately; q10 mask score weight zero",
+  "no_post_result_tuning": true,
+  "code_and_receipt_sha256": {
+    "evidence/candidate_hypotheses_prereg_20261008.json": "9f845da57bbb19e41f7eeff76806ca01563718e5187cf712ae4290c6ea5f2540",
+    "evidence/h53_k2x_input_audit_20261008.json": "214cd2fb43a1d18f2c01a693a352341e8c07d659d015527a5968fc06d8ac3387",
+    "evidence/h53_k2x_feature_build_20261008.json": "f1d703ad3f144b6c23bbfcd24d50bf8726c534c5a8df35847b79b8ec5e681f53",
+    "src/gems51/extras.py": "6151211181954ee7d7543489e8401ea3e94f5779640c3877192a2016679b8790",
+    "scripts/build_arm_extras.py": "9ee4cff2535a223947530eeb77cfea7722dd810f60cbec6e68bf226b4cf044fb",
+    "scripts/evaluate_h53_k2x_holdout.py": "724aeb43f35d198d12f2a58cf16f9d50585d8adfd9d5cf04c57041cf7cf0a8f9",
+    "tests/test_h53_k2x.py": "ddb0a92b0f341228b821b2099b3e3cab69a412a609c8cf1689b9ccd9d77e454d"
+  },
+  "pretest_checks": {
+    "pytest": "98 passed, 6 skipped",
+    "feature_build": "one bounded [0,1] unitless feature; no labels in H53 operator"
+  },
+  "scores_from_candidate_run": null
+}

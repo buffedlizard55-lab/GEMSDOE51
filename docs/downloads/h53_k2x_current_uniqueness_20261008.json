@@ -1,0 +1,87 @@
+{
+ "utc": "2026-10-08T03:01:09Z",
+ "candidate": "docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+ "candidate_sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+ "candidate_support_px": 44069,
+ "footprint_px": 5167373,
+ "comparison_count": 8,
+ "scope": "current local data/prior, docs/downloads and supplied .cache/siblings; not a global proof",
+ "comparison_inventory": [
+  {
+   "label": "downloads:gemsdoe51-h51n2-creditthin-20261007T210820Z.tif",
+   "file": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif",
+   "bytes": 209680,
+   "sha256": "b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22"
+  },
+  {
+   "label": "downloads:gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+   "file": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif",
+   "bytes": 228000,
+   "sha256": "fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3"
+  },
+  {
+   "label": "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+   "file": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif",
+   "bytes": 378630,
+   "sha256": "4aff087dee275bc4958c787308a6141965479856dc38915dba5a6cd81e24989f"
+  },
+  {
+   "label": "downloads:gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+   "file": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif",
+   "bytes": 383608,
+   "sha256": "9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777"
+  },
+  {
+   "label": "downloads:gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+   "file": "/home/user/GEMSDOE51/docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+   "bytes": 228384,
+   "sha256": "73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4"
+  },
+  {
+   "label": "local:g25_dotted_prior.tif",
+   "file": "/home/user/GEMSDOE51/data/prior/g25_dotted_prior.tif",
+   "bytes": 836982,
+   "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30"
+  },
+  {
+   "label": "local:g32_anchor_prior.tif",
+   "file": "/home/user/GEMSDOE51/data/prior/g32_anchor_prior.tif",
+   "bytes": 806758,
+   "sha256": "4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3"
+  },
+  {
+   "label": "local:g32_h33b2_prior.tif",
+   "file": "/home/user/GEMSDOE51/data/prior/g32_h33b2_prior.tif",
+   "bytes": 219065,
+   "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9"
+  }
+ ],
+ "gate": {
+  "candidate": "gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif",
+  "sha256": "15c12778486e5a15f6cced0e9d61c6cf32f2c916128fb37f5ff2f09edd7bb144",
+  "byte_duplicate_of": [],
+  "support_jaccard": {
+   "local:g25_dotted_prior.tif": 0.015177,
+   "local:g32_anchor_prior.tif": 0.015177,
+   "local:g32_h33b2_prior.tif": 0.016392,
+   "downloads:gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.124017,
+   "downloads:gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.158156,
+   "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.147287,
+   "downloads:gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.139676,
+   "downloads:gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.216804
+  },
+  "support_containment": {
+   "local:g25_dotted_prior.tif": 0.029908,
+   "local:g32_anchor_prior.tif": 0.029908,
+   "local:g32_h33b2_prior.tif": 0.029908,
+   "downloads:gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.205723,
+   "downloads:gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.273117,
+   "downloads:gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.256756,
+   "downloads:gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.245116,
+   "downloads:gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.35635
+  },
+  "stage1_dominance": {},
+  "verdict": "PASS",
+  "notes": []
+ }
+}

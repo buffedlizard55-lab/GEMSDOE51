@@ -110,5 +110,25 @@
   "measured_transform_layers": null,
   "delta_vs_base": null,
   "outcome": "preregistered 2026-10-08; NOT VIABLE here until data mirrored"
+ },
+ {
+  "id": "H53-K2x",
+  "name": "Structure-conditioned conductive-ribbon anisotropy",
+  "layers": "Rank-prepared competition cond_surf, depth_to_base_surf, iso_grav_anom, and tmi; two Gaussian derivative scales sigma 2 and 5 px.",
+  "signature": "One q95-normalized feature: independent basement/gravity/magnetic gradient-normal tensor coherence multiplied by conductivity-gradient amplitude and positive cross-edge-minus-along-edge energy; pixelwise minimum across scales.",
+  "why_new_faults": "An anisotropic conductive pattern aligned with independent subsurface/potential-field structure is physically compatible with a fault-related conductive corridor, but conductivity is non-unique and some faults lack conductors.",
+  "differs_from": "H-E tests local co-location and H-H uses a conductive relay between paired edge terminations. K2x projects conductivity-gradient energy into normal/tangent directions of an independent edge axis.",
+  "expected_dti": "Qualitative low-to-moderate and uncertain; no numerical forecast.",
+  "cost": "Medium; existing supplied bands and a six-fold paired run.",
+  "external_data_needed": "No new acquisition. The local cond_surf mirror has no verified units, depth sensitivity, calibration, or layer-level provenance; feature uses rank space only.",
+  "outcome": "Tested under the frozen 2026-10-08 six-fold Stage-1-q10 protocol. Candidate gated mean proxy DTI 0.2850361457010805 vs same-fold gated H-D/H-H baseline 0.28489865707511947 (paired delta +0.00013748862596105657, 4/6 folds), but it was 0.0003044569552385079 below the frozen best 0.285340602656319. Fresh ungated baseline drift was -0.000025447786610344192, outside the unchanged 1e-5 tolerance. NOT PROMOTED; no slot. Fresh research TIFF exists, but broad family uniqueness remains NOT_CLEARED and download does not imply submission suitability.",
+  "measured_auc": null,
+  "measured_dti_r3_47": 0.2850361457010805,
+  "delta_vs_base": 0.00013748862596105657,
+  "stage1_q10_gated": true,
+  "paired_baseline": "fresh H-D/H-H 50/50 blend, same six folds, q10-gated",
+  "evidence": "evidence/h53_k2x_holdout_20261008.json",
+  "feature_audit": "evidence/h53_k2x_input_audit_20261008.json",
+  "artifact": "docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif"
  }
 ]
