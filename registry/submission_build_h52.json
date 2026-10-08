@@ -34,6 +34,8 @@
  "on_catalogue_px": 0,
  "stage1_area_share": 0.900925673451481,
  "stage1_lift": 1.1099694785796939,
- "uniqueness_verdict": "FAIL: support Jaccard 0.999 > 0.5; containment 1.000 > 0.6",
- "notes": "Two-stage H52 submission: coarse rank-space strain-budget prior (Stage 1, tiles only) + H-H/H-D blended belief field emission (Stage 2, every point inside the approved tiles). Local format and uniqueness checks only \u2014 no organizer score is claimed."
+ "uniqueness_verdict": "PASS (current 16-artifact audit; see evidence/uniqueness_recheck_h52_20261007.json)",
+ "notes": "H52 V4 NMS r=2.4 artifact retained for research only. It has final-byte format and scoped uniqueness passes, but no direct six-fold holdout receipt for this built geometry. The 0.280821 reference result belongs to V7 STE q10, not V4. The amended pass-2 run did not write a receipt; no weekly competition slot is authorized.",
+ "holdout_status": "NOT_MEASURED_FOR_BUILT_V4_GEOMETRY",
+ "slot_eligibility": "NOT_ELIGIBLE_RESEARCH_ONLY"
 }

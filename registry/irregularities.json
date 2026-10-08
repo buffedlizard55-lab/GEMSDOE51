@@ -73,9 +73,9 @@
  },
  {
   "id": "IR-51-12",
-  "summary": "The working Stage-1 conversion treats the owner-mirrored QFaults slip_rate values as mm/yr, but the NBMG layer schema does not state the SLIPRTNUM units and the linked GDR field-definition text was not locally audited.",
-  "evidence": "src/gems51/strain_budget.py load_slip_rates; data/sources.json entries gdr_1391 and nbmg_qfaults_ingenious; https://web2.nbmg.unr.edu/arcgis/rest/services/Qfaults/Qfaults_INGENIOUS/MapServer/0?f=pjson",
-  "status": "OPEN - absolute nanostrain/yr values are not source-validated. The current rank-based Stage-1 comparison is invariant to a uniform rescaling, but not to mixed units, categorical encodings, or record-specific errors. Audit the official GDR v2 field-definition document before using absolute strain claims."
+  "summary": "The original H51 rank-space Stage-1 build treated the copied QFaults slip-rate values as mm/yr before auditing the official field definition; this source-unit uncertainty is partly resolved, but rate component and individual dip remain open.",
+  "evidence": "evidence/official_attribute_audit_20261007.json: 1,126/1,126 row names/rates/senses match the official GDR v2 DBF; registry/official/qfaults_8_README_fielddefinitions_qfaults_ingenious_nad83conus117_2023-06-27.txt lines 39-43 specify mm/year; evidence/official_vector_budget_20261007.json; knowledge/official-source-review-20261007.md",
+  "status": "PARTIALLY RESOLVED. Official field definitions verify SLIPRT2023 in mm/year and SLIPRTNUM as its numeric portion; all 1,126 mirrored rows match official name/rate/sense. The rate component (vertical versus total fault-plane), individual fault dips, simplified rakes, and geodetic scalar scale (both 1e-9 and 1e-8 scenarios retained) remain unresolved. The source-corrected vector budget is a separate diagnostic and does not retroactively change the historical rank-space H51-N2 Stage-1 field; any production replacement needs a new preregistered Stage-2 paired holdout."
  },
  {
   "id": "IR-51-13",
@@ -124,6 +124,18 @@
   "summary": "The local `iso_grav_anom_hg` raster contains signed values, and its metadata does not establish whether it is total 2-D horizontal-gradient magnitude or one directional component.",
   "evidence": "The owner-mirrored training raster describes the layer as an isostatic-gravity horizontal gradient; the finite local range is approximately -15.44 to +12.86. H51-K1 therefore used abs(HG) in a tilt-like phase proxy and explicitly did not claim conventional total-horizontal-derivative tilt semantics; see `knowledge/candidate-hypotheses-2026-10-07.md` and `evidence/hk1_spatial_holdout_20261007.json`.",
   "status": "OPEN SOURCE-SEMANTICS LIMITATION - the tested operator is reproducible but its conventional tilt-angle interpretation is not established without authoritative band semantics."
+ },
+ {
+  "id": "IR-51-23",
+  "summary": "The owner score list attaches 0.1563 to four different artifact names, but the two of those artifacts held locally (8gemsdoe-hedge-v2.tif and gemsdoe-ens12-7f00890a.tif) have different supports (227,507 vs 172,974 px, Jaccard 0.7603), whereas the 0.2600 label is attached to three names whose supports are byte-identical (44,090 px, Jaccard 1.0000). Identical supports explain the second repetition but not the first.",
+  "evidence": "data/refs/_inventory_stats.json; pairwise support matrix computed in this session over the 21 pinned data/refs TIFFs",
+  "status": "OPEN - either a transcription error in the owner list or one number was attached to different artifacts. No artifact-to-score mapping is taken from the 0.1563 group."
+ },
+ {
+  "id": "IR-51-24",
+  "summary": "gems32-bayesopt-dilation-zeros (45,000 px, catalogue-distance p10 = 2.24 px) and gemsdoe32-h33-2-b2-zeros (37,654 px, p10 = 4.00 px) are the only held family artifacts that exclude the immediate catalogue band, but only the second carries an owner-reported score; the first is an untested sibling of the same emission idea.",
+  "evidence": "data/refs/_inventory_stats.json; measured supports of the 21 pinned reference TIFFs",
+  "status": "OPEN - noted so that the untested sibling is not later mistaken for a scored result."
  },
  {
   "id": "IR-H52-01",
@@ -178,5 +190,11 @@
   "summary": "The audited pass-2 re-run under the respecified harness clause was killed by a sandbox recycle before it wrote a receipt; the clause is therefore attested by an arithmetic recheck, not by a fresh run.",
   "evidence": "The re-run was started at 21:54:17Z and the sandbox was recycled at ~23:47Z; .cache (run logs), .venv and data/prepared are snapshot-excluded, and the recycled pass-2 receipt was never written. evidence/h52_harness_recheck_20261007T235024Z.json re-derives the clause from the two receipts that do exist: folds 1-5 delta exactly 0.0, fold 0 delta 1.074e-05 <= 2e-05, effective_harness_ok true.",
   "status": "OPEN for a clean re-run when the competition data is restored: `.venv/bin/python scripts/run_h52_emission_pass2.py --folds 6` will write a receipt with harness_ok=true under the respecified clause, and scripts/build_submission_h52.py refuses to rebuild from a receipt whose harness_ok is false."
+ },
+ {
+  "id": "IR-H52-10",
+  "summary": "The H52 V4 raster was described using a six-fold DTI that belongs to a different STE geometry; no direct holdout receipt exists for the written V4 candidate.",
+  "evidence": "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json has holdout=null and its uniform_control.candidate_arm is V7_ste_q10. The cited mean 0.2808209979823443 in evidence/h52_emission_pass2_20261007T212644Z.json is for V7 STE q10, not the built V4 NMS r=2.4 raster. The builder selection fell back to V4 because the STE geometry-change bar was not met; the amended pass-2 rerun was killed by sandbox recycle and wrote no new receipt. The available arithmetic harness recheck only validates the respecified comparison against existing receipts; it does not score V4.",
+  "status": "OPEN; candidate downgraded to RESEARCH_ONLY_NOT_PROMOTED in data/submission_manifest.json. README and site now state no upload-eligible artifact and explicitly say NOT FOR SUBMISSION. The site card links the checks, pass-2 ledger, arithmetic harness recheck and current-inventory uniqueness audit. Resolve by restoring data/prepared, rerunning the amended six-fold pass-2 instrument so the actual V4 arm is directly scored, then require a fresh preregistered promotion decision before any slot is considered."
  }
 ]

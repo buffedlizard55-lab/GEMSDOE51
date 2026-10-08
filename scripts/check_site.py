@@ -65,7 +65,13 @@ def main() -> int:
             value = record.get(key)
             if value:
                 allowed_research.add(Path(value).name)
-    allowed_downloads = allowed_current | allowed_research
+    allowed_candidate = set()
+    candidate = manifest.get("recommended_upload_candidate") or {}
+    for key in ("file", "zip"):
+        value = candidate.get(key)
+        if value:
+            allowed_candidate.add(Path(value).name)
+    allowed_downloads = allowed_current | allowed_research | allowed_candidate
     if public_downloads != allowed_downloads:
         failures.append(f"public TIFF/ZIPs do not match manifest: found={sorted(public_downloads)}, "
                         f"allowed={sorted(allowed_downloads)}")
@@ -75,23 +81,39 @@ def main() -> int:
         for name in allowed_current:
             if f'href="downloads/{name}"' not in index:
                 failures.append(f"primary artifact is not linked from index: {name}")
-        upload_ok = bool(manifest.get("submission_readiness", {}).get("upload_ok"))
         if readiness == "PORTAL_ACCEPTED":
             if "Portal-validated submission file" not in index:
                 failures.append("portal-accepted primary is not prominently marked in index")
-        elif upload_ok:
-            # A primary file whose local gates passed and which the manifest marks as
-            # upload-eligible must say so at the top of the page; the site must never
-            # offer a download without an explicit, machine-checkable status marker.
-            if "SUBMIT THIS FILE" not in index:
-                failures.append("upload-eligible primary is not marked 'SUBMIT THIS FILE' in index")
-            if manifest["submission_readiness"].get("caveat") and "no organizer score" not in index.lower():
-                failures.append("upload-eligible primary is not accompanied by a no-organizer-score caveat")
+        elif candidate:
+            # Third state: a constraint-compliant candidate exists that has never been
+            # uploaded.  The page must say so in those words, must still mark the
+            # audit-only benchmark as not cleared, and must link the candidate bytes.
+            if "RECOMMENDED UPLOAD CANDIDATE" not in index:
+                failures.append("recommended candidate is not prominently marked in index")
+            if "NOT YET PORTAL-VALIDATED" not in index.upper():
+                failures.append("recommended candidate is not marked NOT YET PORTAL-VALIDATED")
+            if "NOT CLEARED FOR UPLOAD" not in index.upper():
+                failures.append("audit-only benchmark is not marked NOT CLEARED FOR UPLOAD")
+            for name in allowed_candidate:
+                if f'href="downloads/{name}"' not in index:
+                    failures.append(f"recommended candidate is not linked from index: {name}")
         else:
             index_upper = index.upper()
             if ("NO UPLOAD-ELIGIBLE ARTIFACT" not in index_upper
                     or "NOT CLEARED FOR UPLOAD" not in index_upper):
                 failures.append("blocked local benchmark is not prominently marked NOT FOR UPLOAD in index")
+            if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
+                failures.append("manifest says no candidate, but upload_ok is not explicitly false")
+            howto = (DOCS / "how-to-submit.html").read_text(encoding="utf-8")
+            if "No file is cleared to upload" not in howto or "no weekly competition slot is authorized" not in howto.lower():
+                failures.append("submission guide does not explicitly block upload/slot while no candidate is cleared")
+            for rec in manifest.get("research_only_artifacts", []):
+                if rec.get("id") in {"H51_N2_PHYSICAL_CREDITTHIN", "H52_V4_STRAINCONF_20261007"}:
+                    name = Path(rec.get("file", "")).name
+                    if f'href="downloads/{name}"' not in index:
+                        failures.append(f"research-only candidate is not linked from index: {name}")
+                    if "NOT FOR SUBMISSION" not in index:
+                        failures.append("research-only candidate is not marked NOT FOR SUBMISSION")
     else:
         if ("No eligible submission file" not in index
                 and "No upload-eligible submission file" not in index):

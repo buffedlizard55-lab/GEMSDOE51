@@ -5,10 +5,10 @@ Scoring design
 --------------
 Emission and scoring are both **restricted to the held-out block**, and the
 number of emitted dots is set as a fixed multiple of the block's own truth size.
-That is the only way the proxy number is comparable to a live DTI: the official
-metric is DTI = TP / (0.2*M + 0.8*|G|), i.e. it depends on submitted mass and
-truth size only through their ratio, so matching M/|G| is what makes a proxy
-number mean the same thing as a live number.
+This controls raw prediction budget across folds, but does not calibrate proxy
+scores to live scores. The exact metric is TP / (0.2*(TP+FP) + 0.8*|G|);
+TP+FP is not generally raw mass M. Matching M/|G| is an experimental control,
+not proof that a proxy number means the same thing as a leaderboard number.
 
 Known biases, stated up front:
   * truth density inside a block is several times the regional average, so the

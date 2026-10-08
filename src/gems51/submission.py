@@ -26,8 +26,7 @@ def encode_submission_array(values: np.ndarray, footprint: np.ndarray,
     """Validate probabilities and return float32 array with specified outside value.
 
     When outside=0.0 (or a finite float in [0, 1]), every pixel in the entire raster
-    is finite and in [0, 1], guaranteeing acceptance by DrivenData's web validator
-    which checks that all values are in range [0, 1].
+    is finite and in [0, 1]. This checks the numeric range only, NOT portal acceptance.
     When outside=np.nan (default), outside pixels are set to NaN.
     """
     v = np.asarray(values, dtype=np.float32)
@@ -39,6 +38,8 @@ def encode_submission_array(values: np.ndarray, footprint: np.ndarray,
         raise ValueError("predictions inside the footprint must all be finite")
     if np.any((inside < 0.0) | (inside > 1.0)):
         raise ValueError("predictions inside the footprint must be in [0, 1]")
+    if not np.isnan(outside) and (not np.isfinite(outside) or not 0 <= outside <= 1):
+        raise ValueError("outside must be NaN or a finite probability in [0, 1]")
     out = np.full(GRID.shape, outside, dtype=np.float32)
     out[fp] = inside
     return out
@@ -51,12 +52,14 @@ def write_tif(path: Path, values: np.ndarray, footprint: np.ndarray,
     """Write a single-band float32 GeoTIFF.
 
     Default outside=0.0 and nodata=None ensures all values are in [0, 1],
-    preventing the DrivenData validator error: 'Predicted values must be in range [0, 1]'.
+    avoiding non-finite/out-of-range values that can trigger: 'Predicted values must be in range [0, 1]'.
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     out = encode_submission_array(values, footprint, outside=outside)
     nodata_val = nodata if nodata is not None else (float("nan") if np.isnan(outside) else None)
+    if nodata_val is not None and not np.isnan(nodata_val) and not 0 <= nodata_val <= 1:
+        raise ValueError("NoData sentinel outside [0, 1] is not allowed")
     profile = dict(driver="GTiff", height=GRID.shape[0], width=GRID.shape[1],
                    count=1, dtype="float32", crs=f"EPSG:{GRID.epsg}",
                    transform=Affine(*GRID.transform), nodata=nodata_val,
@@ -88,19 +91,22 @@ def verify(path: Path, footprint: np.ndarray) -> dict:
             shape=(s.height, s.width), count=s.count, dtype=s.dtypes[0],
             nodata=nodata,
         )
+    if a.shape != fp.shape:
+        raise ValueError(f"raster shape {a.shape} != footprint {fp.shape}")
     inside = a[fp]
     outside = a[~fp]
     inside_finite = bool(np.isfinite(inside).all())
     outside_nan = bool(np.isnan(outside).all())
     outside_zeros = bool(np.isfinite(outside).all() and (outside == 0.0).all())
     outside_range = int(((inside < -EPS) | (inside > 1.0 + EPS)).sum())
-    total_out_of_range = int((np.isnan(a) | (a < -EPS) | (a > 1.0 + EPS)).sum()) if not outside_nan else outside_range
+    global_invalid = int((~np.isfinite(a) | (a < 0) | (a > 1)).sum())
+    nodata_safe = nodata is None or math.isnan(nodata) or 0 <= nodata <= 1
     nodata_is_nan = nodata is not None and math.isnan(nodata)
     portal_legal = bool(
         got["count"] == 1 and got["dtype"] == "float32"
         and got["crs_epsg"] == 32611 and got["transform"] == GRID.transform
         and got["shape"] == GRID.shape and inside_finite
-        and (outside_zeros or outside_nan) and outside_range == 0
+        and (outside_zeros or outside_nan) and outside_range == 0 and nodata_safe
     )
     checks = dict(
         single_band=got["count"] == 1,
@@ -112,6 +118,9 @@ def verify(path: Path, footprint: np.ndarray) -> dict:
         outside_footprint_nan=outside_nan,
         outside_footprint_zeros=outside_zeros,
         nan_cells=int(np.isnan(a).sum()),
+        global_invalid_cells=global_invalid,
+        all_cells_finite_in_range=global_invalid == 0,
+        nodata_tag_safe=nodata_safe,
         values_outside_0_1=outside_range,
         min_value=float(np.nanmin(inside)) if inside.size else float("nan"),
         max_value=float(np.nanmax(inside)) if inside.size else float("nan"),

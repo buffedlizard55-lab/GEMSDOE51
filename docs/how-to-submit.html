@@ -9,6 +9,7 @@
 <p class="sub">DOE GEMS Prize &middot; DrivenData #306 &middot; GeoDAWN, NW Great Basin</p>
 <nav>
   <a class="" href="index.html">Executive summary</a>
+  <a class="" href="latest.html">Latest experiment</a>
   <a class="active" href="how-to-submit.html">How to submit</a>
   <a class="" href="method.html">Method</a>
   <a class="" href="hypotheses.html">Hypotheses</a>
@@ -21,34 +22,42 @@
 </nav>
 </div></header>
 <main class="wrap">
+<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
 
 <h2>Submission guide — current status first</h2>
+<section class="download missing">
+<p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
+<h2>New, independently generated TIFF</h2>
+<p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
+This is a newly trained prediction map, not a renamed or re-encoded prior submission. It has not cleared every promotion gate. No competition slot was used.</p>
+<p><a class="btn" download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download new research TIFF</a></p>
+<p><a download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">Download ZIP containing one TIFF</a> · <a href="latest.html">Results, checks &amp; decision</a> · <a href="how-to-submit.html">Submission instructions</a></p>
+<dl class="kv"><dt>Unique identifier</dt><dd><code>GEMSDOE51-P1-Q10-2a687636c85e</code></dd>
+<dt>Short comment (research only)</dt><dd><code>RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.</code></dd>
+<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag.</dd>
+<dt>Stage2 proxy DTI</dt><dd>0.283987 vs paired gated baseline 0.284899; 2/6 folds improved. Not an organizer score.</dd>
+<dt>Stage1 confinement</dt><dd>44,069/44,069 points inside approved tiles; approved area 90.09%; lift 1.110.</dd>
+<dt>Uniqueness scope</dt><dd>Broader family gate: NOT_CLEARED; exact duplicate: False. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
+<dt>SHA-256</dt><dd><code>73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4</code></dd></dl>
+<p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
+</section>
 
-<p class="download ready"><b>UPLOAD-ELIGIBLE: the H52 file.</b> Local gates passed — format
-(every cell finite in [0, 1], no NaN, no NoData tag), uniqueness against every local prior and
-the fetched sibling submissions, all-points-inside-approved-tiles confinement, and the
-preregistered six-fold emission comparison. No organizer score is claimed.</p>
-<p class="big"><a class="btn" href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif">Download the submission GeoTIFF</a></p>
-<p class="zip">or the <a href="downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip">one-file ZIP</a></p>
-<h3>Exactly how to submit</h3>
-<ol class="steps">
-<li>Click the download link above (or the ZIP) and keep the file name unchanged —
-<code>gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278</code>.</li>
-<li>Open the official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">submission page</a> with your own account and choose the downloaded file.</li>
-<li>Paste the unique name <code>gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278</code> into the form's unique-name field.</li>
-<li>Paste this note into the optional <i>Note</i> field:
-<pre class="note">GEMSDOE51 H52 two-stage: strain-budget tiles (q10, 90.1% of footprint) approve the domain; V4 emission of an H-H/H-D blended field; 44069 dots, zero within 200 m of the published catalogue; local gates passed; no organizer score claimed.</pre></li>
-<li>Confirm the file's SHA-256 after reading it back:
-<code>fffa7524b3f6e5a3b58f90b33aa9bc37982e214915ee3a16ca981feb2aa6cae3</code></li>
-<li>Include the generative-AI narrative disclosure below, checked against what was actually done.</li>
-</ol>
-<p class="warn"><b>If the portal still refuses the file, record the exact error text and the file's
-SHA-256 before changing anything.</b> A refusal would mean the portal rejects an all-finite
-[0, 1] raster, which the earlier reported error does not describe; do not silently re-encode a
-different format without recording it (see the irregularity register).</p>
 
-<h3>Do not upload now</h3>
-<p>There is no currently eligible file. First identify the exact TIFF that produced the reported portal error. Then reconcile the portal's `[0,1]` validation with the official outside-footprint/no-data requirements. The current local verifier checks finite in-footprint values, the one-band float32 grid/CRS/transform, and NaN outside; it is not a live portal test. A future regenerated artifact must put every prediction within the verified range and must keep every Stage-2 point inside the validated approved-tile domain.</p>
+<p class="download missing"><b>The archived benchmark is NOT CLEARED FOR UPLOAD.</b> The existing file is a local benchmark only (LOCAL_PROXY_PROMOTED_UNSCORED_PORTAL_VALIDATION_UNRESOLVED). The user-reported portal error “Predicted values must be in range [0, 1]” is unresolved and the triggering file is unknown. The local checker accepts NaN outside-footprint pixels but does not emulate the portal.</p>
+<p class="warn"><b>Do not spend a competition slot or upload this file.</b> It predates the q10 allowed-domain constraint: 38211/44069 points lie inside the current full-map q10 mask (86.71%), so it fails the all-points-inside-approved requirement.</p>
+<p class="big"><a class="btn" href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif">Download existing benchmark for audit</a></p>
+<p class="zip">or download the <a href="downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.zip">single-file ZIP (audit only)</a></p>
+<dl class="kv">
+<dt>Historical identifier — do not paste</dt><dd><code>GEMSDOE51-HH-HD-BLEND-STE-R347-20261007</code></dd>
+<dt>Historical note — do not paste</dt><dd><code>H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.</code></dd>
+<dt>Local format receipt (not portal validation)</dt><dd>one-band float32, EPSG:32611, shape [3730, 3292], format_valid=True</dd>
+<dt>SHA-256</dt><dd><code>9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777</code></dd>
+</dl>
+<p>H51-K1 was tested but failed the preregistered promotion rule; no K1 TIFF was written. See <a href="downloads/hk1_spatial_holdout_20261007.json">the six-fold receipt</a>.</p>
+
+<h3>What to upload, and what not to upload</h3>
+<p class="warn"><b>No file is cleared to upload, and no weekly competition slot is authorized.</b> The downloadable H51-N2 and H52 V4 TIFFs below are research-only; their local format/uniqueness checks do not override a failed or missing preregistered holdout. Do not upload either file. Wait for a candidate to beat the current spatially blocked best under a frozen rule, then recheck the exact final bytes and portal format before spending a slot.</p>
+<p>Identify the exact TIFF that produced the reported portal error before changing file conventions. The local verifier checks the one-band float32 grid, CRS/transform, pixel range, and outside-footprint encoding, but does not emulate DrivenData's validator. Every future Stage-2 point must remain inside an explicitly validated approved-tile domain.</p>
 <h3>Steps only after a future artifact is explicitly cleared</h3>
 <ol class="steps">
 <li>Use only the new file marked upload-eligible on the <a href="index.html">executive summary</a>. Confirm the ZIP contains exactly that GeoTIFF and recheck its final-byte SHA-256.</li>

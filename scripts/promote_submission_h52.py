@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
-"""Promote the built H52 artifact to the site's primary download slot.
+"""Promote an H52 build only after the exact geometry clears a spatial holdout.
 
-Reads ``registry/submission_build_h52.json`` + ``docs/downloads/<name>-checks.json``,
-verifies the local gates (format + uniqueness), then rewrites the top of
-``data/submission_manifest.json``:
+Reads ``registry/submission_build_h52.json`` + ``docs/downloads/<name>-checks.json``.
+Format and uniqueness are necessary but not sufficient: the candidate's own geometry
+must have a direct, matched-mass spatial holdout receipt with an explicit promotion pass
+before it can occupy the manifest's upload-candidate slot.
 
-* ``primary``                  -> the H52 file (upload-eligible block on the site)
+On success, rewrites the top of ``data/submission_manifest.json``:
+
+* ``primary``                  -> the H52 file (subject to separate portal validation)
 * ``research_only_artifacts``  -> the previous primary, relabelled NOT FOR SUBMISSION,
                                  plus every record already there (so the download
                                  accounting in ``scripts/check_site.py`` stays exact)
 
 It refuses to promote anything whose checks receipt is missing, whose format check
-failed, whose uniqueness verdict is not ``PASS``, or which contains a pixel within
-300 m of the published catalogue.  Nothing here claims an organizer score.
+failed, whose uniqueness verdict is not ``PASS``, whose candidate-specific holdout is
+missing or identifies another geometry, whose holdout lacks an explicit preregistered
+pass, or which contains a pixel within 300 m of the published catalogue. Nothing here
+claims an organizer score or portal acceptance.
 """
 
 from __future__ import annotations
@@ -81,12 +86,20 @@ def main() -> int:
     checks = json.loads(checks_path.read_text())
     fmt = checks["format"]
     gate = checks["uniqueness"]
+    holdout = checks.get("holdout")
 
     failures = []
     if not fmt.get("checks", {}).get("format_valid"):
         failures.append("local format check failed")
     if not str(gate.get("verdict", "")).startswith("PASS"):
         failures.append(f"uniqueness verdict is {gate.get('verdict')!r}")
+    if not isinstance(holdout, dict):
+        failures.append("candidate-specific six-fold holdout is missing (format/uniqueness alone cannot promote)")
+    else:
+        if holdout.get("candidate_variant") != build.get("variant"):
+            failures.append("holdout geometry does not identify the exact built variant")
+        if holdout.get("preregistered_promotion_passed") is not True:
+            failures.append("candidate-specific holdout does not carry an explicit preregistered promotion pass")
     if checks.get("on_catalogue_px"):
         failures.append(f"{checks['on_catalogue_px']} emitted pixels lie on the published catalogue")
     if not (DOCS / build["tif"]["file"]).is_file() or not (DOCS / build["zip"]["file"]).is_file():

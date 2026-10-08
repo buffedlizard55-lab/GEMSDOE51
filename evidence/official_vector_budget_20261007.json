@@ -1,0 +1,137 @@
+{
+  "source": "https://gdr.openei.org/submissions/1391",
+  "formula_source": "https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+  "formula": "E_ij = 0.5 sum L_k*u_k/(A*sin(dip_k))*(n_i*m_j+n_j*m_i)",
+  "input_segments": 84331,
+  "input_trace_records": 1126,
+  "results": {
+    "fault_plane": {
+      "metadata": {
+        "used_length_m": 16916898.606733907,
+        "omitted_segments": 1394,
+        "convention": "fault_plane",
+        "tile_m": 10000.0,
+        "unknown_sense": "omitted"
+      },
+      "raw_residuals": {
+        "1e-09_dilatation": {
+          "median": 2.5198599127042716,
+          "positive_fraction": 0.6449399656946827
+        },
+        "1e-09_shear": {
+          "median": 6.400818664646149,
+          "positive_fraction": 0.758147512864494
+        },
+        "1e-09_second_invariant": {
+          "median": 9.842837050440883,
+          "positive_fraction": 0.7753001715265866
+        },
+        "1e-08_dilatation": {
+          "median": 5.2810116044336795,
+          "positive_fraction": 0.8662092624356775
+        },
+        "1e-08_shear": {
+          "median": 9.162991250271753,
+          "positive_fraction": 0.8387650085763293
+        },
+        "1e-08_second_invariant": {
+          "median": 19.15736970867513,
+          "positive_fraction": 0.9931389365351629
+        }
+      }
+    },
+    "vertical": {
+      "metadata": {
+        "used_length_m": 16916898.606733907,
+        "omitted_segments": 1394,
+        "convention": "vertical",
+        "tile_m": 10000.0,
+        "unknown_sense": "omitted"
+      },
+      "raw_residuals": {
+        "1e-09_dilatation": {
+          "median": 2.1188768854448874,
+          "positive_fraction": 0.6020583190394511
+        },
+        "1e-09_shear": {
+          "median": 6.400818664646149,
+          "positive_fraction": 0.758147512864494
+        },
+        "1e-09_second_invariant": {
+          "median": 9.059945906639099,
+          "positive_fraction": 0.7495711835334476
+        },
+        "1e-08_dilatation": {
+          "median": 5.125367150805976,
+          "positive_fraction": 0.8627787307032591
+        },
+        "1e-08_shear": {
+          "median": 9.162991250271753,
+          "positive_fraction": 0.8387650085763293
+        },
+        "1e-08_second_invariant": {
+          "median": 18.899468529783356,
+          "positive_fraction": 0.9931389365351629
+        }
+      }
+    }
+  },
+  "holdout": {
+    "instrument": "Five whole-official-trace splits; recall/lift only, not DTI; distinct from legacy P1 Stage1",
+    "splits": [
+      {
+        "split": 0,
+        "held_trace_rows": 226,
+        "truth_pixels": 11084,
+        "area": 0.9036715561272624,
+        "recall": 0.9595813785636954,
+        "lift": 1.0618696273633286
+      },
+      {
+        "split": 1,
+        "held_trace_rows": 225,
+        "truth_pixels": 15533,
+        "area": 0.9004023901506626,
+        "recall": 0.9699993562093607,
+        "lift": 1.0772954034995983
+      },
+      {
+        "split": 2,
+        "held_trace_rows": 225,
+        "truth_pixels": 9217,
+        "area": 0.9021228001152617,
+        "recall": 0.9493327546924162,
+        "lift": 1.0523320711671655
+      },
+      {
+        "split": 3,
+        "held_trace_rows": 225,
+        "truth_pixels": 13456,
+        "area": 0.9012159563476451,
+        "recall": 0.9382431629013079,
+        "lift": 1.041085831085063
+      },
+      {
+        "split": 4,
+        "held_trace_rows": 225,
+        "truth_pixels": 12036,
+        "area": 0.9002229953208333,
+        "recall": 0.9834662678630774,
+        "lift": 1.0924696136123215
+      }
+    ],
+    "mean_area": 0.901527139612333,
+    "mean_recall": 0.9601245840459715,
+    "mean_lift": 1.0650105093454951
+  },
+  "shear_definition": "min(abs(eigenvalue1),abs(eigenvalue2)) if opposite signs, else0",
+  "role": "Separate physical audit, NOT silently substituted into preregistered P1 screen",
+  "limitations": [
+    "Source unit notation 10E-9/yr is ambiguous: both 1e-9 and1e-8 scenarios retained.",
+    "Per-trace dip/rake/component missing; normal60deg, lateral90deg assumptions.",
+    "Scalar-summary subtraction is not subtraction of full observed tensors.",
+    "Tile size10km is bookkeeping, finer than geodetic resolving length; residual may be off-fault/aseismic/catalogue error.",
+    "Normal/LL/RL only; other senses omitted with segment count.",
+    "Bounds-qualified numeric rates are point assumptions, not precise measured values."
+  ]
+}
