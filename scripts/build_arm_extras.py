@@ -16,6 +16,7 @@ Output: ``data/prepared/arm_<group>.dat`` (float32 memmap, one layer per row) an
 Usage::
 
     python3 scripts/build_arm_extras.py --group hd
+    python3 scripts/build_arm_extras.py --group hh
 """
 from __future__ import annotations
 
@@ -30,11 +31,20 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from gems51.detector import Stack            # noqa: E402
-from gems51.extras import facecoh_group      # noqa: E402
+from gems51.extras import facecoh_group, _build_endpoint_bridge  # noqa: E402
 from gems51.grid import GRID                 # noqa: E402
 
 P = ROOT / "data" / "prepared"
-GROUPS = {"hd": facecoh_group}
+
+
+def build_hh_group(get, footprint):
+    """Exact H-D face-coherence features plus H-H endpoint/relay features."""
+    group = facecoh_group(get, footprint)
+    group.update(_build_endpoint_bridge(get, footprint))
+    return group
+
+
+GROUPS = {"hd": facecoh_group, "hh": build_hh_group}
 
 
 def main() -> int:

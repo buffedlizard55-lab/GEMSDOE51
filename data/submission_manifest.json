@@ -1591,7 +1591,7 @@
    "sha256": "9bd1e50d86114daa7c944d0c6d4f9f7cba6ba5070ae98ba5e45a965d78650777",
    "bytes": 383608,
    "submission_name": "GEMSDOE51-HH-HD-BLEND-STE-R347-20261007",
-   "note": "H-H potential-field edge-termination/conductive-relay features plus H-D, fixed 50/50 probability blend, STE L9 w0.35 spacing 2.4; holdout-promoted but no organizer score claimed. Existing local benchmark only; portal validation unresolved; do not upload.",
+   "note": "Historical H-H/H-D 50/50 + STE local visible-catalogue proxy benchmark (frozen mean DTI 0.2853406027). A fresh canonical reconstruction missed the frozen mean by -0.000025448, beyond the 1e-5 tolerance; no cause is assigned. It predates the all-points-inside-q10 rule, portal range validation is unresolved, and it is NOT uploadable. No organizer score claimed.",
    "holdout": {
     "candidate": "H-H/H-D fixed 50/50 probability blend + STE L9 w=0.35 spacing=2.4",
     "mean_dti": 0.285340602656319,
@@ -1668,11 +1668,12 @@
     "all_points_inside_approved": false,
     "note": "Diagnostic only; this historical file predates the q10 allowed-domain requirement and is not eligible under it."
    },
+   "description": "Unique H-H/H-D probability blend; Stage 1 retained as a diagnostic and stage1_weight=0.0 in the emitted artifact.",
+   "status": "HISTORICAL_PROXY_BENCHMARK_BASELINE_REPRODUCTION_UNRESOLVED_PORTAL_VALIDATION_UNRESOLVED",
    "role": "SUPERSEDED_AUDIT_BENCHMARK",
-   "status": "SUPERSEDED_AUDIT_BENCHMARK_NOT_FOR_SUBMISSION",
    "ok_to_download_and_submit": false,
    "superseded_by": "R1_RESTRICT_20261008T031052Z",
-   "demotion_note": "Superseded by the R1 regeneration. Never upload-eligible: NaN outside the footprint and only 86.71% of points inside the q10 approved domain. Downloadable for audit only."
+   "demotion_note": "Superseded by the R1 regeneration. Never upload-eligible: NaN outside the footprint and only 86.71% of points inside the q10 approved domain; baseline reproduction of its frozen mean is unresolved (IR-R1-01). Downloadable for audit only."
   }
  ],
  "research_comparisons": {
@@ -1879,7 +1880,7 @@
   "status": "BLOCKED_NOT_FOR_UPLOAD",
   "upload_ok": false,
   "ok_to_download_and_submit": false,
-  "reason": "The preregistered promotion rule was not met. RESEARCH ONLY.",
+  "reason": "R1 NOT_PROMOTED under the frozen preregistered rule (restrict mean delta -0.0014061, 0/6 folds won). H53-A Stage-2 blocked on baseline reproduction. No current artifact is cleared for submission and no competition slot is authorized.",
   "no_organizer_upload_or_score_claimed": true
  },
  "limitations": [
@@ -1888,5 +1889,57 @@
   "Local mirrors are hash-checked but not organizer-authenticated.",
   "Slip-rate component (vertical vs fault-plane) and per-trace dips remain assumptions.",
   "Portal acceptance of the zeros-outside encoding is inferred from the published format, not from an accepted upload."
- ]
+ ],
+ "latest_experiment": {
+  "id": "GEMSDOE51-H53-A-STAGE1-AND-BASELINE-AUDIT-20261008",
+  "hypothesis_id": "H53-A",
+  "role": "RESEARCH_AUDIT_NO_PREDICTION_ARTIFACT",
+  "status": "STAGE1_COMPLETE_STAGE2_BLOCKED_BASELINE_REPRODUCTION_FAILED",
+  "research_identifier": "GEMSDOE51-H53-A-20261008",
+  "research_identifier_is_submission_name": false,
+  "file": null,
+  "zip": null,
+  "submission_name": null,
+  "short_submission_note": null,
+  "prediction_tiff_generated": false,
+  "stage1": {
+   "status": "COMPLETE_STAGE1_ONLY",
+   "evidence": "evidence/h53a_stage1_holdout_20261008.json",
+   "split_count": 5,
+   "mean_approved_area_share": 0.901904429968574,
+   "mean_heldout_trace_pixel_recall": 0.9290894120384197,
+   "mean_recall_area_lift": 1.0301461034883945,
+   "mean_uniform_matched_mass_dti_in_approved_tiles": 0.04839029619807429,
+   "mean_uniform_matched_mass_dti_full_footprint": 0.04902479022212286,
+   "truth": "visible-catalogue proxy only; not hidden expert labels or organizer score"
+  },
+  "baseline_reproduction": {
+   "status": "BASELINE_REPRODUCTION_FAILED_STAGE2_BLOCKED",
+   "evidence": "evidence/h53a_baseline_provenance_20261008.json",
+   "fresh_canonical_mean_dti": 0.28531515486970865,
+   "frozen_cached_field_mean_dti": 0.285340602656319,
+   "fresh_minus_frozen": -2.5447786610344192e-05,
+   "absolute_tolerance": 1e-05,
+   "reproduced": false,
+   "legacy_field_files_present": false,
+   "mismatch_cause_established": false
+  },
+  "stage2": {
+   "status": "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING",
+   "candidate_score": null,
+   "candidate_tiff": null,
+   "reason": "Frozen baseline reproduction gate failed; fail-closed preregistered runner blocked candidate scoring."
+  },
+  "decision": "DOWNLOAD FOR RESEARCH: NO H53 TIFF. SUBMIT: NO. No competition slot used.",
+  "no_organizer_upload_or_score_claimed": true,
+  "preregistration": "registry/preregistration_h53.json",
+  "ranked_hypothesis_slate": "knowledge/hypothesis-slate-20261008.md"
+ },
+ "candidate_screen": {
+  "candidate": "H51-K1 cross-scale potential-field tilt-like partial-gradient edge persistence",
+  "status": "NOT_PROMOTED_NO_TIFF",
+  "evidence": "evidence/hk1_spatial_holdout_20261007.json",
+  "reason": "Candidate gated mean 0.2850766 did not exceed frozen ungated best 0.2853406; paired improvement over same-fold gated H-D/H-H was positive in only 3/6 folds; fresh ungated baseline missed preregistered reproduction tolerance."
+ },
+ "recommended_upload_candidate": null
 }
