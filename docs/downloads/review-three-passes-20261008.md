@@ -43,7 +43,7 @@
 | Executive summary and submission guidance | README and generated site distinguish K2-08 as the later overall research experiment, H53-A as the latest H53-family experiment, and H53-K2x as the earlier H53 screen. They link the K2x research TIFF, receipts, how-to-submit, and explicit no-slot/portal caveats. |
 | Three-pass review | This record retains the K2x implementation/review/recheck and H53-A blocker review as distinct evidence streams. |
 | Tests/build after merge reconciliation | **PASS.** `.venv/bin/python scripts/build_site.py` rebuilt the site with K2-08 and both H53 records; `scripts/check_site.py` passed (13 pages, local links, and manifest/download state); `.venv/bin/pytest -q` passed (124 passed, 6 skipped); `py_compile` passed for the edited Python modules. These validate the local merge result, not GitHub checks or portal acceptance. |
-| PR #18 merge | Local integration is validated; push and required GitHub checks remain pending. Do not merge until the PR reports all required checks passed; no merge is claimed here. |
+| PR #18 merge | The integration must be merged through GitHub only after required checks pass on the final pushed PR head. Local merge resolution, rebuild, site check, and tests are not substitutes for those GitHub checks. |
 
 ## Decision
 
