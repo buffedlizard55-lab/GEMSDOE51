@@ -1,0 +1,26 @@
+{
+  "feature_name": "h53_k2x_min_s2s5",
+  "shape": [
+    3730,
+    3292
+  ],
+  "footprint_pixels": 5167373,
+  "finite_footprint_pixels": 5164312,
+  "nan_outside_footprint_pixels": 7111787,
+  "nonzero_fraction_of_finite": 0.2741009838290173,
+  "min": 0.0,
+  "max": 0.999970018863678,
+  "quantiles": {
+    "0": 0.0,
+    "0.25": 0.0,
+    "0.5": 0.0,
+    "0.75": 1.3957595911051612e-05,
+    "0.9": 0.01919999159872532,
+    "0.95": 0.06490091979503632,
+    "0.99": 0.3371351659297943,
+    "1": 0.999970018863678
+  },
+  "sha256": "d91ab0e4807b8a8494545e28c05490916b648494821023891effb265cfbb77a4",
+  "build_command": ".venv/bin/python scripts/build_arm_extras.py --group h53_k2x",
+  "labels_read": false
+}

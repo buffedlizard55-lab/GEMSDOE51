@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "preregistered_utc_date": "2026-10-08",
+  "status": "PREREGISTERED_BEFORE_IMPLEMENTATION",
+  "target": "Fault pixels absent from the supplied catalogue; no direct vent-probability claim.",
+  "current_best_local_proxy": {
+    "candidate": "H-H/H-D fixed 50/50 blend + STE L9/w=0.35/spacing=2.4",
+    "mean_dti": 0.285340602656319,
+    "folds": 6,
+    "receipt": "evidence/hh_blend_holdout.json",
+    "truth": "visible known-fault catalogue only"
+  },
+  "baseline_reproduction_warning": {
+    "last_fresh_mean": 0.28531515486970865,
+    "frozen_mean": 0.285340602656319,
+    "absolute_difference": 2.544778661034192e-05,
+    "tolerance": 1e-05,
+    "source": "evidence/hk1_spatial_holdout_20261007.json",
+    "rule": "recompute; do not widen tolerance after seeing the new outcome"
+  },
+  "stage1_separate_audit": {
+    "method": "official QFault vector segments clipped to 10-km tiles; documented Kostrov tensor summation; whole trace records held out in five splits",
+    "receipt": "evidence/official_vector_budget_20261007.json",
+    "mean_approved_area": 0.901527139612333,
+    "mean_trace_recall": 0.9601245840459715,
+    "mean_lift": 1.0650105093454951,
+    "interpretation": "weak broad enrichment only; not Stage-2 DTI and not a predictor of the hidden organizer score",
+    "required_reporting": [
+      "approved area",
+      "held-out trace recall",
+      "lift",
+      "units/component/dip assumptions",
+      "off-fault/aseismic/catalogue-error alternatives"
+    ]
+  },
+  "ranked_untried_candidates": [
+    {
+      "id": "H53-K2x",
+      "rank": 1,
+      "name": "Structure-conditioned conductive-ribbon anisotropy",
+      "layers": [
+        "cond_surf",
+        "depth_to_base_surf",
+        "iso_grav_anom",
+        "tmi",
+        "supplied potential-field gradients"
+      ],
+      "operator": "At sigma 2 and 5 px, estimate an unoriented independent structural edge tangent from basement/potential-field gradients. Project the conductivity gradient into edge-normal and edge-parallel components. Feature = structural edge strength times positive cross-edge minus along-edge conductivity gradient energy, scale-normalized; combine the two scales with their pixelwise minimum.",
+      "physical_signature": "Narrow conductive damage/alteration ribbon parallel to an independent basement or potential-field boundary, with greater cross-edge than along-edge variation.",
+      "missing_fault_rationale": "A faulted and fluid-altered corridor under cover may form a narrow conductive ribbon even when the surface scarp is weak; independent structure-axis conditioning aims to reject broad conductive basin fill.",
+      "confounds": [
+        "clay-rich or saline basin fill",
+        "lithologic contacts",
+        "3-D MT effects",
+        "interpolation or edge-location error",
+        "conductivity is non-unique"
+      ],
+      "difference_from_implemented": "H-E tests local conductivity/basement/gravity co-location; H-H uses conductivity as a bridge between paired geophysical edge terminations. Neither projects conductivity-gradient energy into parallel/perpendicular components of an independent edge axis. Earlier K2/I descriptions were proposals only and have no measured outcome.",
+      "expected_benefit": "Qualitative low-to-moderate, uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Medium; existing layers, directional transform, one six-fold paired run.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+        "https://gdr.openei.org/submissions/1391",
+        "https://pubs.usgs.gov/publication/70204785",
+        "https://pubs.usgs.gov/publication/70250909",
+        "https://doi.org/10.1029/2004JB003030"
+      ],
+      "authorized_for_test": true
+    },
+    {
+      "id": "H53-LID",
+      "rank": 2,
+      "name": "Paired high-resolution scarp-face polarity balance",
+      "layers": [
+        "lid_upface_max",
+        "lid_downface_max",
+        "lid_step_max",
+        "lid_cross_max",
+        "lid_relief",
+        "lid_coh100"
+      ],
+      "operator": "Normalized paired-face asymmetry (up-down)/(up+down+epsilon), absolute asymmetry, and adjacent-scale persistence conditioned on a coherent narrow lineament.",
+      "physical_signature": "One-sided displacement scarp with paired up/down-facing slopes and persistent trace geometry.",
+      "missing_fault_rationale": "Weathered fault scarps may preserve one-sided step morphology after absolute relief weakens.",
+      "confounds": [
+        "drainage banks",
+        "terraces",
+        "dunes",
+        "landslides",
+        "DEM processing/interpolation"
+      ],
+      "difference_from_implemented": "H-D uses gradient-direction coherence, H-M cross-scale crest coincidence, and P1 odd/even detrended-elevation profiles at 200/500 m; this uses paired 1-m-DEM-derived face statistics. The related H51-X2 was proposed but not implemented or measured.",
+      "expected_benefit": "Qualitative low-to-moderate, uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Low-medium.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+        "https://gdr.openei.org/submissions/1391"
+      ],
+      "authorized_for_test": false
+    },
+    {
+      "id": "H53-RAD",
+      "rank": 3,
+      "name": "Radiometric-composition break conditional on independent structure",
+      "layers": [
+        "rad_K",
+        "rad_Th",
+        "rad_U",
+        "rad_TC",
+        "depth_to_base_surf",
+        "tmi_hg",
+        "iso_grav_anom_hg"
+      ],
+      "operator": "After explicit finite/positive mask audit, compute local log(K/Th) and log(U/Th) cross-edge changes relative to along-edge changes at independent structure axes; missing/zero values are unknown, not absence.",
+      "physical_signature": "A narrow surface radiometric-composition boundary co-located with an independent subsurface structural edge.",
+      "missing_fault_rationale": "Hydrothermal alteration can modify near-surface radioelement distributions around fluid pathways, but radiometric data chiefly respond to surface composition and are not fault-specific.",
+      "confounds": [
+        "lithology",
+        "soil/moisture",
+        "erosion/cover",
+        "survey corrections",
+        "unstable ratios near zero"
+      ],
+      "difference_from_implemented": "No model feature uses a radiometric-ratio cross-versus-along contrast conditioned on a separate structural axis; earlier K3 ratio-lineament wording is unimplemented and not globally novel.",
+      "expected_benefit": "Qualitative low and highly uncertain; no numeric DTI forecast.",
+      "implementation_cost": "Medium-high; units, masks, ratio controls, and spatially blocked ablation.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+        "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+        "https://doi.org/10.1016/j.gexplo.2006.07.002"
+      ],
+      "authorized_for_test": false
+    },
+    {
+      "id": "H53-GEO",
+      "rank": 4,
+      "name": "Sparse warm-water/geochemistry alignment with independent structure",
+      "layers": [
+        "GDR 1391 well/spring temperature and chemistry records",
+        "independent gravity/magnetic/basement edge axis"
+      ],
+      "operator": "Validate source identifiers and units; test whether multiple independently sampled warm/geochemically anomalous sites align along a narrow external edge more than matched controls. Do not rasterize a broad geothermal-habitat score.",
+      "physical_signature": "Sparse, source-verified geothermal-fluid manifestations aligned with an independent structural corridor.",
+      "missing_fault_rationale": "Faults may transmit geothermal fluids to springs or wells, but data collection and exploration are spatially selective.",
+      "confounds": [
+        "survey/exploration bias",
+        "known-fault rediscovery",
+        "mixing/seasonality/depth",
+        "duplicate and missing records"
+      ],
+      "difference_from_implemented": "Broad thermal/habitat layers and models exist; this is a point-conditioned alignment test. Earlier H51-X3 was proposed but not implemented or measured.",
+      "expected_benefit": "Qualitative low and uncertain; no numeric DTI forecast.",
+      "implementation_cost": "High; provenance, units, deduplication, selection-bias controls, spatially blocked joins.",
+      "new_external_data_required": false,
+      "sources": [
+        "https://gdr.openei.org/submissions/1391"
+      ],
+      "authorized_for_test": false
+    }
+  ],
+  "frozen_stage2_protocol": {
+    "authorized_candidate": "H53-K2x",
+    "folds": "same six contiguous 3x3 spatial blocks; truth-bearing blocks only",
+    "training_buffer_px": 12,
+    "negative_samples_per_fold": 250000,
+    "negative_seed": "1000 + fold.index",
+    "model_seed": "fold.index",
+    "hgb_max_iter": 250,
+    "ratio": 3.47,
+    "known_catalogue_exclusion_px": 2.0,
+    "blend": "0.5 fresh H-D + 0.5 fresh H-H+H53-K2x probability",
+    "emission": "STE scales 1,2,3.5 px; L9; continuity exponent .35; spacing 2.4 px",
+    "stage1_gate": "source-corrected official-vector q10 10-km tile deficit, recomputed per fold with held-out trace records excluded",
+    "score_truth": "visible known-fault catalogue only; not hidden organizer labels"
+  },
+  "promotion_rule": {
+    "fresh_ungated_baseline_reproduces_frozen_mean_within": 1e-05,
+    "candidate_gated_mean_must_exceed_frozen_best": 0.285340602656319,
+    "paired_mean_delta_vs_same_fold_gated_HH_HD_must_be_positive": true,
+    "minimum_positive_folds": 4,
+    "n_folds": 6,
+    "minimum_q10_approved_area_share": 0.6666666666666666,
+    "maximum_stage1_lift": 1.5,
+    "all_candidate_points_inside_fold_specific_approved_tiles": true,
+    "no_post_result_tuning": true,
+    "competition_slot_if_any_gate_fails": false,
+    "research_only_tiff_after_completed_failure": "allowed only if genuinely generated from candidate predictions; prominently NOT FOR SUBMISSION; no upload recommendation",
+    "minimum_q10_approved_area_share_aggregation": "Each fold-specific full-footprint mask must independently meet the area and lift limits; report the six values and the mean."
+  },
+  "stage1_reference_holdout": {
+    "separate_receipt": "evidence/official_vector_budget_20261007.json",
+    "method": "five complete-trace splits; recall/lift only; not Stage-2 DTI",
+    "mean_area": 0.901527139612333,
+    "mean_recall": 0.9601245840459715,
+    "mean_lift": 1.0650105093454951,
+    "limitations": [
+      "source slip rate component unresolved",
+      "per-record dip/rake assumptions",
+      "geodetic unit notation has two plausible readings",
+      "residual may be off-fault, aseismic, or catalogue-rate error"
+    ]
+  },
+  "external_data_availability": {
+    "need_for_top_candidate": "none",
+    "official_public_sources_checked": [
+      "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+      "https://gdr.openei.org/submissions/1391",
+      "https://www.usgs.gov/publications/electrical-conductivity-images-active-and-fossil-fault-zones"
+    ],
+    "status": "Top candidate uses already supplied/pinned inputs; no external acquisition blocker. Local data mirrors are hash-pinned but not organizer-authenticated."
+  },
+  "uniqueness_and_submission_policy": "No weekly submission slot until every promotion, current-inventory uniqueness, format, provenance, and Stage-1 confinement/non-dominance gate passes. No portal acceptance inferred from local byte checks.",
+  "input_audit": "evidence/h53_k2x_input_audit_20261008.json",
+  "locked_implementation_spec": {
+    "feature_name": "h53_k2x_min_s2s5",
+    "candidate_model_arm": "H-H plus exactly one H53-K2x feature; candidate prediction is 0.5 fresh H-D probability + 0.5 fresh H-H+K2x probability",
+    "input_layers": [
+      "comp_cond_surf",
+      "comp_depth_to_base_surf",
+      "comp_iso_grav_anom",
+      "comp_tmi"
+    ],
+    "input_semantics": "Use existing globally empirical-rank-transformed competition feature layers, not physical-unit values. The cond_surf unit/depth/source are undocumented in the local GeoTIFF and organizer data download is login-walled. Do not claim S/m, resistivity, depth, salinity, alteration, or temperature.",
+    "scales_sigma_pixels": [
+      2.0,
+      5.0
+    ],
+    "derivatives": "Use the repository normalised-convolution Gaussian derivative at each scale and the common finite mask of all four source layers and footprint.",
+    "edge_axis": "For each of depth-to-base, isostatic gravity anomaly, and TMI, calculate gradient magnitude. Normalize each by its own deterministic row-major sampled 95th-percentile magnitude (sample at most approximately 200000 common valid pixels) and clip to [0,1]. Form a 2x2 unoriented gradient-normal tensor J=sum_j w_j*u_j*u_j^T, where u_j is the unit gradient vector, zero for magnitude <=1e-12. The normal angle is 0.5*atan2(2*Jxy,Jxx-Jyy), with tangent perpendicular.",
+    "edge_strength": "Mean of the three clipped normalized magnitudes times axial tensor coherence sqrt((Jxx-Jyy)^2+4*Jxy^2)/(Jxx+Jyy+1e-12).",
+    "conductivity_contrast": "Project the conductivity gradient onto the normal and tangent. Let anis=max(normal_projection^2-tangent_projection^2,0)/(gradient_magnitude^2+1e-12); let amplitude=clip(gradient_magnitude/q95_cond,0,1), where q95_cond uses the same deterministic sample rule. Per-scale feature=edge_strength*anis*amplitude.",
+    "scale_combination": "Pixelwise minimum of the sigma=2 and sigma=5 per-scale features; NaN outside the intersection of their finite derivative masks. If a normalization q95 is <=1e-12, corresponding normalized strength is zero.",
+    "labels_used_by_feature": "none; fold-safe static feature, computed from inputs only.",
+    "parameters_frozen_before_holdout": "All scale, normalization, orientation, clipping, mask, and combination decisions above; no candidate-outcome tuning."
+  },
+  "input_audit_status": "Source/page review and local GeoTIFF semantic audit complete before feature code; see input audit receipt. Unit/depth/provenance unknown is handled by rank-only operator and explicit caveat, not inferred."
+}

@@ -61,6 +61,24 @@ def render():
     ) or "<li>none</li>"
     failed_gates = [name for name, passed in holdout.get("promotion_gates", {}).items() if not passed]
 
+    h53_stage1 = _load("evidence/h53a_stage1_holdout_20261008.json")
+    h53_baseline = _load("evidence/h53a_baseline_provenance_20261008.json")
+    h53_k2x = _load("evidence/h53_k2x_holdout_20261008.json")
+    h53_s1 = (h53_stage1 or {}).get("summary", {}).get("nominal", {})
+    h53_base = (h53_baseline or {}).get("summary", {})
+    k2x_base = (h53_k2x or {}).get("baseline", {})
+    k2x_result = (h53_k2x or {}).get("candidate_result", {})
+    k2x_s1 = (h53_k2x or {}).get("stage1_holdout", {})
+    h53_context = ""
+    if h53_stage1 and h53_baseline and h53_k2x:
+        h53_context = f"""<section class="download missing">
+<p class="eyebrow">H53 FAMILY — LATEST EXPERIMENT: H53-A · EARLIER SEPARATE SCREEN: H53-K2x</p>
+<h2>Do not conflate the two H53 experiments</h2>
+<p><b>H53-A is the latest experiment within the H53 family.</b> Stage 1 was measured separately (five whole-record splits; q10 area {h53_s1.get('mean_approved_area_share', float('nan')):.2%}, trace recall {h53_s1.get('mean_heldout_recall', float('nan')):.2%}, lift {h53_s1.get('mean_recall_area_lift', float('nan')):.4f}). Stage 2 status: <b>NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING</b>; candidate scoring was blocked because the fresh baseline {h53_base.get('fresh_mean_dti', float('nan')):.9f} vs frozen {h53_base.get('frozen_mean_dti', float('nan')):.9f}; drift {h53_base.get('fresh_minus_frozen_mean', float('nan')):+.9f} exceeded the 1e-5 tolerance. <b>No H53-A TIFF exists and no candidate score was produced. H53-A download for research: NO. SUBMIT TO THE COMPETITION: NO.</b> See <a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a> and <a href="downloads/h53a_baseline_provenance_20261008.json">baseline blocker</a>.</p>
+<p><b>Earlier H53-K2x:</b> a distinct, completed six-fold screen, NOT PROMOTED. q10 mean {k2x_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f} vs same-fold gated baseline {k2x_base.get('stage1_q10_gated_mean_dti', float('nan')):.7f}; paired Δ {k2x_result.get('paired_mean_delta_vs_stage1_gated_hd_hh', float('nan')):+.7f}, {k2x_result.get('positive_folds_vs_stage1_gated_hd_hh', 0)}/6; {k2x_base.get('frozen_mean_dti', float('nan')) - k2x_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f} below frozen best. Fresh-baseline drift {k2x_base.get('fresh_minus_frozen_mean', float('nan')):+.8f} exceeded tolerance. Its separate TIFF is <b>downloadable for research only; submit: NO</b>. <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif">K2x research TIFF</a> · <a href="index.html#h53-k2x-research">full download card</a> · <a href="downloads/h53_k2x_holdout_20261008.json">six-fold receipt</a>.</p>
+<p>These H53 results are separate from the later overall K2-08 experiment above. No artifact is cleared for a competition slot, and no portal acceptance or organizer score is claimed.</p>
+</section>"""
+
     banner = f"""<section class="download missing">
 <p class="eyebrow">LATEST EXPERIMENT · K2-08 · 8 OCTOBER 2026</p>
 <h2>New feature-model GeoTIFF — research only</h2>
@@ -78,6 +96,7 @@ The K2 map was newly fitted from feature data, not copied or re-encoded from an 
 </dl>
 <p><a href="downloads/k2_research_artifact_20261008.json">Artifact receipt</a> · <a href="downloads/k2_spatial_holdout_20261008.json">Stage-2 receipt</a> · <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 receipt</a> · <a href="downloads/k2_family_uniqueness_20261008.json">Family audit</a> · <a href="downloads/k2-08-candidate-hypotheses-2026-10-08.md">Ranked hypotheses</a>.</p>
 </section>"""
+    banner += h53_context
 
     detail = f"""<h2>Latest experiment: K2-08 — evidence and decision</h2>
 {banner}
@@ -102,6 +121,10 @@ The K2 map was newly fitted from feature data, not copied or re-encoded from an 
 <p>The final bytes have one float32 band, EPSG:32611, shape {fmt['shape']}, transform {esc(str(fmt['transform']))}; the grid matches the competition template. The {checks['nan_cells']:,} NaN cells are outside the footprint; every in-footprint serialized value is finite and in [0,1], with min {checks['min_value']:g} and max {checks['max_value']:g}. The writer checks finite/range in footprint, no positive point outside the q10 allowed domain, NaN outside, and stable point count after re-reading the GeoTIFF. The global all-finite flag is false by design because outside-footprint nulls are NaN. Local format checks do not emulate the portal; the error-triggering file is unknown.</p>
 <h3>Strict family uniqueness audit — not cleared</h3>
 <p>The pinned 54-repository inventory fetched and hash-verified {family['downloaded']}/{family['expected']} unique Git-blob payloads. Exact byte duplicate: {family['exact_duplicate']}; maximum positive-support Jaccard: {family['max_jaccard']:.5f}; maximum containment: {family['max_containment']:.4f}; coverage complete: {family['coverage_complete']}; fixed thresholds: Jaccard {family['thresholds']['jaccard']:.2f}, containment {family['thresholds']['containment']:.2f}. Verdict: <b>{esc(family['verdict'])}</b>. Invalid reference(s):<ul>{invalid_note}</ul>Some fully positive probability/diagnostic layers trivially contain a sparse support; that explains the strict containment failure but does not waive it. No global support uniqueness or upload eligibility is claimed.</p>
+<h3>Latest H53-family experiment — H53-A baseline-reproduction gate</h3>
+<p>H53-A Stage 1 is separate: five whole-record splits; q10 approved area {h53_s1.get('mean_approved_area_share', float('nan')):.4f}, held-out trace-pixel recall {h53_s1.get('mean_heldout_recall', float('nan')):.4f}, lift {h53_s1.get('mean_recall_area_lift', float('nan')):.4f}. Fresh canonical H-D/H-H mean {h53_base.get('fresh_mean_dti', float('nan')):.9f} vs frozen {h53_base.get('frozen_mean_dti', float('nan')):.9f}; delta {h53_base.get('fresh_minus_frozen_mean', float('nan')):+.9f} exceeded the locked 1e-5 tolerance. Stage 2 is <b>NOT RUN — BLOCKED before candidate scoring</b>, not a measured candidate failure. No H53-A score or TIFF exists; H53-A download for research: NO; submit: NO. See <a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a>, <a href="downloads/h53a_baseline_provenance_20261008.json">baseline receipt</a>, and <a href="downloads/preregistration_h53.json">frozen protocol</a>.</p>
+<h3>Earlier H53-K2x six-fold screen — distinct; NOT PROMOTED</h3>
+<p>Stage 2 q10-gated mean {k2x_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f} vs same-fold gated H-D/H-H {k2x_base.get('stage1_q10_gated_mean_dti', float('nan')):.7f}; paired Δ {k2x_result.get('paired_mean_delta_vs_stage1_gated_hd_hh', float('nan')):+.7f}, {k2x_result.get('positive_folds_vs_stage1_gated_hd_hh', 0)}/6 folds. It remains {k2x_base.get('frozen_mean_dti', float('nan')) - k2x_result.get('stage1_q10_gated_mean_dti', float('nan')):.7f} below frozen best; fresh-baseline drift {k2x_base.get('fresh_minus_frozen_mean', float('nan')):+.8f} exceeded tolerance. Stage 1, separately: five whole-trace splits, mean approved area {k2x_s1.get('trace_split_mean_area', float('nan')):.2%}, recall {k2x_s1.get('heldout_trace_recall', float('nan')):.2%}, lift {k2x_s1.get('heldout_trace_lift', float('nan')):.4f}. The fold-specific q10 domain excluded held-out trace rows; all Stage-2 points were confined and Stage-1 score weight was zero. The local final-byte/current-inventory checks passed, but broader family uniqueness is <b>NOT CLEARED</b> and portal behavior is untested. <b>Download for research: YES; submit: NO.</b> <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif">H53-K2x research TIFF</a> · <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip">one-TIFF ZIP</a> · <a href="downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json">local checks</a> · <a href="downloads/h53_k2x_holdout_20261008.json">holdout</a> · <a href="downloads/candidate-hypotheses-2026-10-08.md">ranked four-candidate slate</a>.</p>
 <h3>Task boundary, sibling-score claims and next decision</h3>
 <p>The official target is fault geometry; geothermal relevance is motivation, not a vent-prediction label. The GEMSDOE32 owner page calls H33-2-B2 UNSCORED and describes 0.2747 as a projection. The user-reported 0.2778 attribution and 0.3195 high are unverified here; none is used as a target or promised result. No portal acceptance, organizer score, or competition submission is claimed. Older TIFFs remain preserved as prior art.</p>
 <ul>

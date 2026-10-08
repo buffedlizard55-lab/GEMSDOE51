@@ -119,32 +119,43 @@ def main() -> int:
                 and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
 
-    latest = manifest.get("latest_experiment", {}) or {}
-    if latest.get("hypothesis_id") == "H53-A":
-        if latest.get("prediction_tiff_generated") is not False or latest.get("file") or latest.get("zip"):
-            failures.append("H53 manifest must explicitly report no candidate TIFF/ZIP")
-        if latest.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
-            failures.append("H53 manifest does not preserve the fail-closed Stage-2 blocker")
+    latest_h53 = manifest.get("latest_h53_experiment", {}) or {}
+    if latest_h53.get("hypothesis_id") == "H53-A":
+        if (latest_h53.get("prediction_tiff_generated") is not False
+                or latest_h53.get("file") or latest_h53.get("zip")):
+            failures.append("latest H53 record must explicitly report no H53-A candidate TIFF/ZIP")
+        if latest_h53.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
+            failures.append("latest H53 record does not preserve the fail-closed Stage-2 blocker")
         if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
             failures.append("H53 baseline blocker cannot be upload-eligible")
         latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
-        for required in ("H53 DOWNLOAD FOR RESEARCH: NO", "SUBMIT TO THE COMPETITION: NO",
-                         "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING", "No H53 TIFF"):
+        for required in ("H53-A DOWNLOAD FOR RESEARCH: NO", "SUBMIT TO THE COMPETITION: NO",
+                         "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING", "No H53-A TIFF"):
             if required.lower() not in latest_page.lower():
-                failures.append(f"latest experiment page omits H53 blocked-status wording: {required}")
+                failures.append(f"latest experiment page omits H53-A blocked-status wording: {required}")
         for name in ("h53a_stage1_holdout_20261008.json", "h53a_baseline_provenance_20261008.json",
                      "hypothesis-slate-20261008.md", "preregistration_h53.json"):
             if not (download_dir / name).is_file():
                 failures.append(f"H53 evidence download missing: {name}")
             if f'href="downloads/{name}"' not in latest_page and name not in {"hypothesis-slate-20261008.md", "preregistration_h53.json"}:
                 failures.append(f"latest experiment page does not link H53 evidence: {name}")
-        h53_rasters = [p.name for p in download_dir.iterdir()
+        allowed_h53_research = set()
+        for record in manifest.get("research_only_artifacts", []):
+            if record.get("id") == "H53_K2X_Q10_RESEARCH_20261008":
+                for key in ("file", "zip"):
+                    if record.get(key):
+                        allowed_h53_research.add(Path(record[key]).name)
+        h53_rasters = {p.name for p in download_dir.iterdir()
                        if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}
-                       and p.name.lower().startswith("h53")]
-        if h53_rasters:
-            failures.append(f"H53 raster/ZIP exists despite blocked candidate scoring: {h53_rasters}")
-        if "NO H53 TIFF EXISTS" not in index.upper():
-            failures.append("executive summary does not prominently state that no H53 TIFF exists")
+                       and p.name.lower().startswith("h53")}
+        unexpected_h53_rasters = h53_rasters - allowed_h53_research
+        if unexpected_h53_rasters:
+            failures.append("unmanifested H53 raster/ZIP exists without a scored candidate: "
+                            f"{sorted(unexpected_h53_rasters)}")
+        if "NO H53-A TIFF EXISTS" not in index.upper():
+            failures.append("executive summary does not prominently state that no H53-A TIFF exists")
+        if "H53-K2X" not in index.upper() or "SUBMIT: NO" not in index.upper():
+            failures.append("executive summary does not distinguish the H53-K2x research TIFF from H53-A")
 
     if allowed_research:
         if "NOT FOR SUBMISSION" not in index:

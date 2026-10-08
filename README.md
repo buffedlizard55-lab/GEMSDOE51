@@ -4,7 +4,9 @@
 
 The previous H-H/H-D blend remains the best *measured local visible-catalogue proxy* (frozen mean DTI 0.2853406), but it predates the all-points-inside-Stage-1-q10 requirement (86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it. The fresh reconstruction was 0.2853152, 0.00002545 below the frozen value and outside the 1e-5 reproduction tolerance; this discrepancy is retained as a harness irregularity.
 
-## Latest experiment — K2-08: download for research only; do not submit
+**Latest H53-family experiment: H53-A.** Its Stage-1 audit is complete; Stage 2 was blocked before candidate scoring by that baseline-reproduction gate. H53-K2x is a separate, earlier completed screen. Neither H53 record is the later overall K2-08 experiment below, and K2-08 must not be attributed to H53-A or H53-K2x.
+
+## Latest overall experiment — K2-08: download for research only; do not submit
 
 A new feature-based K2 experiment was trained from the prepared data, not copied or re-encoded from an older TIFF. Its unique byte hash and no exact byte match establish a distinct artifact, **not global/support uniqueness**. The pinned 54-repository family audit is `NOT_CLEARED` (containment 1.0; one invalid-grid reference), and the blocked holdout failed promotion. No competition slot was used.
 
@@ -20,17 +22,31 @@ A new feature-based K2 experiment was trained from the prepared data, not copied
 
 ## Historical experiments and source context
 
-## Historical audit — H53-A baseline gate (2026-10-08; pre-K2-08)
+## Latest H53-family experiment — H53-A baseline gate (2026-10-08; K2-08 is a later separate experiment)
 
-- **Identifier:** `GEMSDOE51-H53-A-20261008` (research/preregistration identifier only; not a portal submission name). **Submission filename and short portal note:** not issued because no H53 prediction artifact exists and promotion was not reached.
+- **Identifier:** `GEMSDOE51-H53-A-20261008` (research/preregistration identifier only; not a portal submission name). **Submission filename and short portal note:** not issued because no H53-A prediction artifact exists and promotion was not reached.
 - **Hypothesis:** a bounded 1–8 pixel non-zero lag between detrended-elevation and isostatic-gravity edges, with a zero-lag control, at σ=2 and 5 px. The ranked 3-candidate slate and frozen rules are in [`knowledge/hypothesis-slate-20261008.md`](knowledge/hypothesis-slate-20261008.md) and [`registry/preregistration_h53.json`](registry/preregistration_h53.json).
 - **Stage 1, separately measured:** five fixed whole-record splits; nominal q10 approved area `90.19%`, held-out visible-catalogue trace-pixel recall `92.91%`, recall/area lift `1.0301`. Matched-mass uniform-dot DTI was `0.048390` inside approved tiles vs `0.049025` over the full footprint; these are noisy local proxy draws, not an organizer metric or evidence that the residual is a fault.
 - **Baseline provenance gate:** frozen H-H/H-D receipt mean `0.285340603`; fresh canonical 1000+fold reconstruction `0.285315155`; delta `−0.000025448` vs allowed `±0.000010000`. Folds 1–5 reproduce their cached receipt metrics; fold 0 differs by `−0.000152687`. The legacy field arrays and their generating metadata are missing. `run_h52_holdout.py`'s 2000+fold cache family was not substituted. No cause is assigned to the fold-0 mismatch.
-- **Stage 2:** `NOT RUN — BLOCKED`; the preregistered fail-closed baseline gate did not pass. There is no H53 candidate score, no H53 TIFF, and no H53 uniqueness/format result.
-- **Decision:** `DOWNLOAD FOR RESEARCH: NO H53 TIFF`; `SUBMIT: NO`. No competition slot was used. Do not attribute a H53 score to GEMSDOE32's owner-reported `0.2778` or the user-supplied `0.3195` leaderboard claim.
+- **Stage 2:** H53-A `NOT RUN — BLOCKED`; the preregistered fail-closed baseline gate did not pass. There is no H53-A candidate score, TIFF, uniqueness result, or format result.
+- **Decision:** H53-A download for research: **NO**; the separate earlier H53-K2x TIFF: **YES for research only**; submit either: **NO**. No competition slot was used. Do not attribute a H53 score to GEMSDOE32's owner-reported `0.2778` or the user-supplied `0.3195` leaderboard claim.
 - Receipts: [`evidence/h53a_stage1_holdout_20261008.json`](evidence/h53a_stage1_holdout_20261008.json), [`evidence/h53a_baseline_provenance_20261008.json`](evidence/h53a_baseline_provenance_20261008.json). Next: preserve the failed reproduction gate; recover a documented baseline field lineage or preregister a new baseline before scoring a future candidate. Do not weaken the frozen rule post hoc.
 
-Two earlier unique, all-finite, `[0,1]` GeoTIFFs remain downloadable **for research/audit only — DO NOT SUBMIT**:
+### Earlier H53-K2x completed screen — research download YES; submit NO
+
+H53-K2x is a separate, earlier four-hypothesis slate and six-fold screen, not H53-A or the later overall K2-08 experiment. It was tested once and was **NOT PROMOTED**; its freshly generated TIFF is a research-only diagnostic, not a submission candidate.
+
+- **[Download the H53-K2x research TIFF](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.tif)** · [one-TIFF ZIP](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros.zip) · [final-byte checks](docs/downloads/gemsdoe51-h53-k2x-q10-b9c0adee61ea-zeros-checks.json)
+- Research label, not a portal name: `GEMSDOE51-H53-K2X-Q10-20261008-B9C0ADEE61EA`. Comment: `RESEARCH ONLY / NOT FOR SUBMISSION: H53-K2x rank-space conductive anisotropy + H-D/H-H blend; q10 official-vector tile gate; STE L9, 44,069 points. Holdout failed; do not upload.`
+- Stage 2: q10-gated mean `0.2850361457` vs same-fold gated H-D/H-H `0.2848986571` (paired Δ `+0.0001374886`, 4/6 folds), but `0.0003044570` below frozen best `0.2853406027`. Fresh baseline drifted `−0.0000254478`, outside the unchanged `1e-5` tolerance. **NOT PROMOTED; no slot.** Receipt: [`evidence/h53_k2x_holdout_20261008.json`](evidence/h53_k2x_holdout_20261008.json).
+- Stage 1, separate from Stage 2: five whole-trace splits approved mean area `90.15%`, held-out trace recall `96.01%`, lift `1.0650`. In Stage 2, fold-specific q10 masks excluded held-out trace rows; all scored points were confined and Stage-1 score weight was zero.
+- Local checks: one-band float32, EPSG:32611, 3730×3292, exact template transform, 44,069 binary points, all finite in `[0,1]`, zeros outside, no NoData tag. These are local checks, not portal validation; outside-footprint portal semantics remain unresolved.
+- Current-inventory uniqueness passes (8 comparisons; max support Jaccard `0.216804`, containment `0.356350`). Broader family uniqueness is **NOT CLEARED** (365/365 payloads fetched; no exact same-grid duplicate; max Jaccard `0.149561`, max containment `1.0`, one different-grid toy artifact incomparable). Do not claim global novelty.
+- Four-candidate slate/input audit: [`knowledge/candidate-hypotheses-2026-10-08.md`](knowledge/candidate-hypotheses-2026-10-08.md), [`evidence/h53_k2x_input_audit_20261008.json`](evidence/h53_k2x_input_audit_20261008.json). The integrated [three-pass H53 review](knowledge/review-three-passes-20261008.md) keeps K2x distinct from H53-A.
+
+**Download: YES for H53-K2x research only. Submit: NO.** Do not upload this TIFF or use it as an H53-A or K2-08 substitute.
+
+Two additional earlier all-finite, `[0,1]` GeoTIFFs remain downloadable **for research/audit only — DO NOT SUBMIT**:
 
 - **H51-N2 physical / credit-thin:** [`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json). It passes local format, uniqueness, and Stage-1 q10 confinement checks, but **failed its preregistered six-fold paired holdout**: 0.280116 vs 0.281663 for the H-D comparator (Δ −0.001547; 0/6 folds won). No submission slot.
 - **H52 V4 strain-confined:** [`gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif`](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip) · [checks](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json). It passes local format and the current-inventory uniqueness audit (worst Jaccard 0.2049, containment 0.3401 over 16 comparisons, including the H51-N2 and P1 TIFFs) and places all points inside q10-approved tiles. **Its actual V4 NMS raster has no direct six-fold holdout receipt.** The available 0.280821 figure belongs to V7 STE q10, a different geometry, and must not be attributed to this file. The parent +0.0020 rule was not met. No submission slot.
@@ -158,15 +174,16 @@ This full working brief is retained so a future session can continue without ask
 >
 > Review and update the site, preserve auditable research and source links, include this full prompt in README, and autonomously attempt a pull request and merge to `main`. State blockers and irregularities. No manual user input is expected.
 
-This checkout is fixed to branch `arena/55b7ede4-gemsdoe51`. Work remains on that session branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
+This session is fixed to branch `arena/c2b2ea5e-gemsdoe51`. Work remains on that session branch. The repository's leaderboard policy is link-only: DrivenData's [Terms of Use](https://www.drivendata.org/termsofuse/) prohibit automated monitoring/copying and manual monitoring/copying without prior written permission; none is recorded. No standings feed or copied leaderboard values are maintained here.
 
 ## Historical status and local benchmark (before K2-08)
 
 | Item | Status / result |
 |---|---|
-| **Upload eligibility** | **None. No slot authorized.** H53 Stage 2 is blocked by failed baseline reproduction; H51-N2 loses its paired holdout; H52 V4 has no direct holdout for the written geometry and fails its parent promotion rule. |
+| **Upload eligibility** | **None. No slot authorized.** H53-A Stage 2 is blocked by failed baseline reproduction; H53-K2x failed promotion; H51-N2 loses its paired holdout; H52 V4 has no direct holdout for the written geometry. |
 | H53-A Stage 1 (separate, source-segment budget) | 5 whole-record splits; nominal q10 approved area `0.901904`, recall `0.929089`, lift `1.030146`; uniform-dot proxy DTI `0.048390` in mask vs `0.049025` full footprint. No Stage-2 score. |
-| H53-A baseline lineage | Canonical fresh H-D/H-H mean `0.2853151549`; frozen cached-field receipt `0.2853406027`; Δ `−2.54478e-5` vs tolerance `1e-5`; Stage 2 blocked. Exact legacy field provenance unavailable. |
+| H53-A baseline lineage | Canonical fresh H-D/H-H mean `0.2853151549`; frozen cached-field receipt `0.2853406027`; Δ `−2.54478e-5` vs tolerance `1e-5`; Stage 2 blocked before candidate scoring. Exact legacy field provenance unavailable. |
+| Earlier H53-K2x six-fold screen | q10-gated mean `0.2850361`; same-fold gated baseline `0.2848987`; Δ `+0.0001375` in `4/6`, but `0.0003045` below frozen best. **NOT PROMOTED; research TIFF only.** |
 | Compliance cost of the brief's constraints | `-0.0015469` mean proxy DTI (0/6 folds) versus the archived H-D configuration; the harness reproduces the archived receipt with max deviation `0.0` |
 | Off-catalogue A/B physical-arm AUC (4 folds) | `0.6936` all / `0.6486` catalogue-independent (≥5 px from any A pixel) |
 | Far-field ring-weight experiment | `+0.017314` on the off-catalogue A/B instrument, `-0.113310` on the blocked instrument → **instrument disagreement; no ring weight used** |
@@ -248,7 +265,7 @@ The static site is generated from current records by `scripts/build_site.py` and
 - [Irregularity register](docs/irregularities.html)
 - [Leaderboard policy / official link only](docs/leaderboard.html)
 
-At that earlier point, the site said that no new file was upload-eligible, H53 Stage 2 was blocked before candidate scoring, and portal validation was unresolved. K2-08, above, is the later experiment and remains research-only. The old local benchmark link is for audit only; the P1 TIFF and other historic maps are research-only. Before any future upload, identify the exact file from the user-reported error and resolve whether outside-footprint NaNs are accepted; do not assume the local verifier is the portal.
+At that earlier point, the site said no file was upload-eligible, H53-A Stage 2 was blocked before candidate scoring, and portal validation was unresolved. The separate earlier H53-K2x TIFF is research-only and failed promotion. K2-08, above, is the later overall experiment and also remains research-only. The old local benchmark link is for audit only; the P1 TIFF and other historic maps are research-only. Before any future upload, identify the exact file from the user-reported error and resolve whether outside-footprint NaNs are accepted; do not assume the local verifier is the portal.
 
 ## Sources and provenance
 
@@ -267,13 +284,13 @@ All large rasters and owner-mirrored datasets are out of Git. Hash pins establis
 
 ## Historical H53-A execution record (2026-10-08)
 
-The H53 slate and Stage-1/Stage-2 protocol were frozen before H53 measurements. After the audit and guard review, the full test suite passes (`107 passed, 6 skipped`), repository API/import/collection health passes, and the generated site/link/download checks pass. Six label-blind H53 features were built to ignored `data/prepared/arm_h53a.dat`; no TIFF was written.
+The H53 slate and Stage-1/Stage-2 protocol were frozen before H53 measurements. After the audit and guard review, the full test suite passed at that time (`107 passed, 6 skipped`), repository API/import/collection health passed, and the generated site/link/download checks passed. Six label-blind H53-A features were built to ignored `data/prepared/arm_h53a.dat`; no H53-A TIFF was written. The separate earlier H53-K2x research TIFF is documented above.
 
 The source-corrected Stage-1 holdout used 84,331 official clipped source segments from 1,126 records, 10 km tiles, and five deterministic whole-record splits (seed 5308). Nominal assumption: verified source rate unit mm/year; fault-plane rate; 60° normal dip; unknown sense omitted; literal geodetic scale `1e-8/year`. The top 90% residual-rank mask approved `90.19%` of footprint area and recalled `92.91%` of held-out trace pixels (lift `1.0301`). Uniform matched-mass random-dot DTI was `0.048390` inside the approved mask vs `0.049025` over the footprint; one seeded draw per split is descriptive only. The `1e-9/year` and vertical-rate sensitivities are reported in the receipt. **Preregistration wording irregularity:** its `sensitivity_not_used_for_selection` list also redundantly says “fault-plane rate convention,” although fault-plane rate is the nominal convention in the same frozen preregistration. The executable receipt resolves what was actually evaluated: nominal `1e-8/year` fault-plane, `1e-9/year` fault-plane sensitivity, and `1e-8/year` vertical-rate sensitivity. The frozen preregistration is preserved unchanged; no fourth case is claimed.
 
-Baseline audit: `evaluate_hh_blend.py` consumes old `field_H_D_fold*` / `field_H_H_fold*` caches whose exact generating metadata and arrays are no longer present. The canonical `run_experiments.py` path uses negative seed `1000 + fold.index`; the distinct H52 cache uses `2000 + fold.index` and was not reused. A fresh 1000+fold H-D/H-H fit reproduces folds 1–5 exactly but differs on fold 0 by `−0.000152687`, for a mean delta `−0.000025448` from frozen `0.285340603`, exceeding the locked `1e-5` tolerance. No cause is asserted. The frozen baseline is not reproducible from preserved evidence, so the H53 Stage-2 runner correctly refuses to train/score the candidate. This is a provenance gate failure, **not a measured H53 failure**. A post-audit code-review hardening also made any future passing path verify the frozen-receipt, input-arm and per-fold field hashes before candidate scoring. This is an implementation-integrity check, not a changed score threshold; it does not alter the already-failed frozen result.
+Baseline audit: `evaluate_hh_blend.py` consumes old `field_H_D_fold*` / `field_H_H_fold*` caches whose exact generating metadata and arrays are no longer present. The canonical `run_experiments.py` path uses negative seed `1000 + fold.index`; the distinct H52 cache uses `2000 + fold.index` and was not reused. A fresh 1000+fold H-D/H-H fit reproduces folds 1–5 exactly but differs on fold 0 by `−0.000152687`, for a mean delta `−0.000025448` from frozen `0.285340603`, exceeding the locked `1e-5` tolerance. No cause is asserted. The frozen baseline is not reproducible from preserved evidence, so the H53 Stage-2 runner correctly refuses to train/score the candidate. This is a provenance gate failure, **not a measured H53-A failure**. The separate earlier H53-K2x screen was measured and not promoted. A post-audit code-review hardening also made any future passing path verify the frozen-receipt, input-arm and per-fold field hashes before candidate scoring. This is an implementation-integrity check, not a changed score threshold; it does not alter the already-failed frozen result.
 
-Receipts: [`evidence/h53a_stage1_holdout_20261008.json`](evidence/h53a_stage1_holdout_20261008.json), [`evidence/h53a_baseline_provenance_20261008.json`](evidence/h53a_baseline_provenance_20261008.json). No H53 candidate score, TIFF, scoped uniqueness audit, portal-format result, or slot use exists. The three review passes are recorded in [`knowledge/review-three-passes-20261008.md`](knowledge/review-three-passes-20261008.md).
+Receipts: [`evidence/h53a_stage1_holdout_20261008.json`](evidence/h53a_stage1_holdout_20261008.json), [`evidence/h53a_baseline_provenance_20261008.json`](evidence/h53a_baseline_provenance_20261008.json). H53-A has no candidate score, TIFF, scoped uniqueness audit, or portal-format result; the separate H53-K2x screen and research TIFF are documented above. No competition slot was used. The integrated three-pass H53 review is recorded in [`knowledge/review-three-passes-20261008.md`](knowledge/review-three-passes-20261008.md).
 
 ## What was measured in this session (2026-10-07, evening block)
 
