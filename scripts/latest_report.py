@@ -1,12 +1,96 @@
-"""Render the latest experiment from measured JSON; no fabricated score fallbacks."""
+"""Render the most recent experiment from immutable evidence receipts."""
+from __future__ import annotations
 
+import html
+import json
 from pathlib import Path
-import json, html
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def render():
+def _load(path: Path):
+    return json.loads(path.read_text()) if path.is_file() else None
+
+
+def _render_h53a(stage1: dict, baseline: dict):
+    esc = html.escape
+    s1 = stage1["summary"]["nominal"]
+    base = baseline["summary"]
+    tol = baseline["config"]["baseline_reproduction_tolerance"]
+    folds = baseline.get("per_fold", [])
+    fold_rows = "".join(
+        "<tr>"
+        f"<td>{r['fold']}</td>"
+        f"<td>{r['dti']:.9f}</td>"
+        f"<td>{r['frozen_dti']:.9f}</td>"
+        f"<td>{r['delta_vs_frozen']:+.9f}</td>"
+        "</tr>"
+        for r in folds
+    )
+    split_rows = "".join(
+        "<tr>"
+        f"<td>{r['split']}</td>"
+        f"<td>{r['held_record_count']}</td>"
+        f"<td>{r['heldout_truth_pixels']:,}</td>"
+        f"<td>{r['cases']['nominal']['approved_area_share']:.3%}</td>"
+        f"<td>{r['cases']['nominal']['heldout_recall']:.3%}</td>"
+        f"<td>{r['cases']['nominal']['recall_area_lift']:.3f}</td>"
+        f"<td>{r['cases']['nominal']['matched_mass_random_controls']['uniform_in_approved']['dti']:.6f}</td>"
+        f"<td>{r['cases']['nominal']['matched_mass_random_controls']['uniform_in_footprint']['dti']:.6f}</td>"
+        "</tr>"
+        for r in stage1.get("per_split", [])
+    )
+    candidate_score = "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING"
+    blocker = (
+        f"Fresh canonical mean {base['fresh_mean_dti']:.9f} vs frozen cached-field mean "
+        f"{base['frozen_mean_dti']:.9f} (Δ {base['fresh_minus_frozen_mean']:+.9f}); "
+        f"required |Δ| ≤ {tol:.8f}. The reproduction gate failed. The legacy cached field files and "
+        "their exact generating metadata are missing, and no cause is assigned to the fold-0 mismatch."
+    )
+    banner = f"""<section class="download missing">
+<p class="eyebrow">LATEST EXPERIMENT · H53-A · 8 OCTOBER 2026</p>
+<h2>Stage 1 measured; Stage 2 blocked before candidate scoring</h2>
+<p class="warn"><strong>H53 DOWNLOAD FOR RESEARCH: NO — NO H53 TIFF WAS GENERATED.</strong><br>
+<strong>SUBMIT TO THE COMPETITION: NO.</strong> No candidate score, candidate raster, H53 uniqueness result, or H53 format result exists. No competition slot was used.</p>
+<p>Identifier: <code>GEMSDOE51-H53-A-20261008</code> (preregistration/research identifier only; not a portal submission name). No submission comment or filename has been issued.</p>
+<dl class="kv">
+<dt>Separate Stage-1 nominal result</dt><dd>5 whole-record splits; q10 approved area {s1['mean_approved_area_share']:.2%}; visible-catalogue trace-pixel recall {s1['mean_heldout_recall']:.2%}; recall/area lift {s1['mean_recall_area_lift']:.4f}.</dd>
+<dt>Stage-1 matched-mass controls</dt><dd>Uniform-dot proxy DTI {s1['uniform_in_approved_mean_dti']:.6f} inside approved tiles vs {s1['uniform_in_footprint_mean_dti']:.6f} over the full footprint. One seeded random draw per split; descriptive only.</dd>
+<dt>Stage-2 status</dt><dd>{candidate_score}. The baseline provenance/reproduction gate failed; see the table and receipts below.</dd>
+<dt>Submission readiness</dt><dd><strong>BLOCKED_NOT_FOR_UPLOAD</strong>. Do not use an earlier research TIFF as a substitute for an H53 result.</dd>
+</dl>
+<p><a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a> ·
+<a href="downloads/h53a_baseline_provenance_20261008.json">baseline provenance/reproduction receipt</a> ·
+<a href="downloads/hypothesis-slate-20261008.md">ranked H53 slate</a> ·
+<a href="downloads/preregistration_h53.json">frozen H53 preregistration</a> ·
+<a href="how-to-submit.html">submission instructions</a>.</p>
+</section>"""
+    detail = f"""<h2>Latest H53-A experiment: evidence and decision</h2>
+{banner}
+<h3>Stage 1 — coarse source-segment prior only</h3>
+<p>Five deterministic whole-record splits (sorted record IDs, NumPy seed 5308) excluded held-out official records from the 10 km clipped-segment tensor. Nominal assumptions: slip-rate unit mm/year per the official attribute audit; fault-plane component; 60° normal dip; unknown-sense records omitted; literal geodetic numeric scale 1e-8/year. Sensitivities use 1e-9/year and a vertical-rate convention. The residual-rank mask approves broad tiles; it does not place fine-scale points.</p>
+<p>Nominal means: approved footprint area {s1['mean_approved_area_share']:.4f}; held-out visible-catalogue pixel recall {s1['mean_heldout_recall']:.4f}; recall/area lift {s1['mean_recall_area_lift']:.4f}. Matched-mass one-draw uniform controls: in-mask proxy DTI {s1['uniform_in_approved_mean_dti']:.6f}, full-footprint proxy DTI {s1['uniform_in_footprint_mean_dti']:.6f}. The mixed split-level differences do not establish robust enrichment.</p>
+<p><strong>Preregistration wording irregularity, preserved:</strong> the frozen JSON's sensitivity list redundantly names “fault-plane rate convention,” while its nominal case is already fault-plane. The receipt's executed cases are explicit: nominal 1e-8/year fault-plane; 1e-9/year fault-plane sensitivity; and 1e-8/year vertical-rate sensitivity. No fourth case is claimed; the preregistration was not edited after results.</p>
+<table><thead><tr><th>Split</th><th>Held records</th><th>Held truth px</th><th>Approved area</th><th>Recall</th><th>Lift</th><th>Uniform in mask DTI</th><th>Uniform full footprint DTI</th></tr></thead><tbody>{split_rows}</tbody></table>
+<h4>Frozen sensitivities (Stage 1 only)</h4>
+<p>1e-9/year: area {stage1['summary']['unit_1e-9']['mean_approved_area_share']:.4f}, recall {stage1['summary']['unit_1e-9']['mean_heldout_recall']:.4f}, lift {stage1['summary']['unit_1e-9']['mean_recall_area_lift']:.4f}. Vertical-rate convention at 1e-8/year: area {stage1['summary']['vertical_rate']['mean_approved_area_share']:.4f}, recall {stage1['summary']['vertical_rate']['mean_heldout_recall']:.4f}, lift {stage1['summary']['vertical_rate']['mean_recall_area_lift']:.4f}.</p>
+<h3>Baseline provenance gate — candidate Stage 2 not run</h3>
+<p>{esc(blocker)}</p>
+<table><thead><tr><th>Fold</th><th>Fresh canonical H-D/H-H</th><th>Frozen cached-field receipt</th><th>Fresh − frozen</th></tr></thead><tbody>{fold_rows}</tbody></table>
+<p>Folds 1–5 exactly match their frozen proxy values; fold 0 differs by {base['max_abs_fold_delta']:.9f}. <code>evaluate_hh_blend.py</code> reads legacy <code>field_H_D_fold*</code>/<code>field_H_H_fold*</code> arrays that are absent from this checkout and have no persisted run metadata. <code>run_experiments.py</code> documents negative seed 1000+fold; the distinct H52 caches use 2000+fold and were not substituted. This establishes that exact historical lineage is not recoverable from preserved artifacts, not the cause of the fold-0 difference.</p>
+<p><strong>Stage 2 is blocked, not a negative H53-A result.</strong> It has no measured candidate-vs-baseline DTI. The fail-closed runner refuses to train/score the candidate while reproduction fails. Do not tune the H53 features or use a competition slot on it.</p>
+<h3>Hypothesis, data and limitations</h3>
+<p>H53-A tests a bounded 1–8 pixel nonzero lag between detrended-elevation and isostatic-gravity edge normals, with a zero-lag control at σ=2 and 5 px. It uses the hash-pinned competition mirrors already restored; no new external source was required. Lithologic contacts, interpolation offsets, off-fault/aseismic strain, geodetic-unit interpretation, slip component and fault-dip assumptions remain plausible confounders. The visible QFaults/INGENIOUS catalogue is proxy truth; these are not hidden-label or organizer-score results.</p>
+<p>External context: <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a>; <a href="https://gdr.openei.org/submissions/1391">INGENIOUS/GDR 1391</a>; <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official task description</a>. See the <a href="downloads/official-source-review-20261007.md">source review</a> and <a href="downloads/official_attribute_audit_20261007.json">attribute audit</a>.</p>
+<h3>Next step</h3>
+<p>Recover an auditable H-H/H-D field lineage or create a new, preregistered benchmark before scoring another candidate. Keep the existing baseline mismatch visible; never substitute H52 seed-2000 caches for legacy fields or attribute the mismatch to an unverified cause. The portal range validation remains unresolved. No H53 TIFF is available to download or submit.</p>
+<h3>Historical P1 result (not the latest experiment)</h3>
+<p>The previous P1 odd/even screen produced a unique research-only TIFF but failed its paired gated test (mean {json.loads((ROOT / 'evidence/p1_holdout_20261007.json').read_text())['summary']['candidate_gated']:.6f}, paired delta {json.loads((ROOT / 'evidence/p1_holdout_20261007.json').read_text())['summary']['paired_delta']:+.6f}, 2/6 folds). It remains explicitly <b>NOT FOR SUBMISSION</b>; its download/checks are listed on the <a href="index.html">executive summary</a>.</p>
+"""
+    return banner, detail
+
+
+def render_p1():
     path = ROOT / "evidence/p1_artifact_20261007.json"
     if not path.exists():
         return "", ""
@@ -81,3 +165,22 @@ This is a newly trained prediction map, not a renamed or re-encoded prior submis
         if "verdict" in f:
             detail += f"<h3>Broader family audit</h3><p>{f['downloaded']}/{f['expected']} inventory payloads restored; verdict {esc(f['verdict'])}; exact duplicate={f['exact_duplicate']}; maximum support Jaccard={f['max_jaccard']:.4f}, containment={f['max_containment']:.4f}. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>"
     return banner, detail
+
+
+def render():
+    manifest = _load(ROOT / "data/submission_manifest.json") or {}
+    latest = manifest.get("latest_experiment", {}) or {}
+    if latest.get("hypothesis_id") == "H53-A":
+        h53_stage1 = _load(ROOT / "evidence/h53a_stage1_holdout_20261008.json")
+        h53_baseline = _load(ROOT / "evidence/h53a_baseline_provenance_20261008.json")
+        if (not h53_stage1 or not h53_baseline
+                or h53_stage1.get("status") != "COMPLETE_STAGE1_ONLY"
+                or h53_baseline.get("status") != "BASELINE_REPRODUCTION_FAILED_STAGE2_BLOCKED"):
+            missing = """<section class="download missing">
+<p class="warn"><strong>H53-A is the latest registered experiment, but its expected frozen receipts are missing or inconsistent.</strong></p>
+<p>No H53 prediction TIFF, candidate score, submission name, or upload authorization is available. Do not fall back to an older artifact as “latest.”</p>
+<p>Restore the versioned H53 Stage-1 and baseline provenance receipts before rebuilding this page.</p>
+</section>"""
+            return missing, missing
+        return _render_h53a(h53_stage1, h53_baseline)
+    return render_p1()

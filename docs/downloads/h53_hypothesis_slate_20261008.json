@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "GEMSDOE51-H53-SLATE-20261008",
+  "hypothesis_slate": "knowledge/hypothesis-slate-20261008.md",
+  "slate_frozen_before_h53_scoring": true,
+  "ranking_is_qualitative_not_a_numeric_forecast": true,
+  "ranked_candidates": [
+    {
+      "rank": 1,
+      "id": "H53-A",
+      "name": "Finite-lag cross-physics edge pairing",
+      "inputs": ["comp_det_elev", "comp_iso_grav_anom"],
+      "physical_signature": "At a detrended-elevation edge, a similarly oriented gravity edge occurs 1-8 pixels (100-800 m) away on either side; zero-lag is the control; scales are sigma 2 and 5 px.",
+      "missing_catalogue_rationale": "A subdued surface break and subsurface density/basement contact may be offset by basin cover or structure; lithologic contacts and processing offsets are confounders.",
+      "difference_from_existing_code": "H-X1 evaluates magnetic/gravity zero-lag concordance; H-E broad co-location; H-H potential-field endpoints and relays; K1 scale-persistent tilt-like phase. H53-A tests bounded nonzero surface-to-gravity lag.",
+      "expected_benefit": "Moderate but uncertain; no numeric forecast.",
+      "implementation_cost": "Medium; existing pinned layers, six frozen spatial blocks.",
+      "outside_data": "None.",
+      "current_status": "Stage 1 measured separately; Stage 2 not run because the canonical frozen-baseline reproduction gate failed. Not a candidate failure or promotion."
+    },
+    {
+      "rank": 2,
+      "id": "H53-B",
+      "name": "Multi-kilometre structural chord persistence",
+      "inputs": ["H-H/H-D belief fields"],
+      "physical_signature": "Integrate weak spatial support along 3-10 km straight chords to test coherent, partially buried fault traces.",
+      "missing_catalogue_rationale": "Long fault segments may be partially obscured while separated fragments retain alignment; non-fault linear contacts are alternatives.",
+      "difference_from_existing_code": "Existing STE integrates along a 9-pixel (0.9 km) line; H53-B tests a distinct 30-100 pixel scale and chord geometry.",
+      "expected_benefit": "Low-to-moderate, uncertain.",
+      "implementation_cost": "Low-to-medium.",
+      "outside_data": "None.",
+      "current_status": "Untested; requires a new preregistration and a valid baseline."
+    },
+    {
+      "rank": 3,
+      "id": "H53-C",
+      "name": "Independent LiDAR face-polarity contrast",
+      "inputs": ["lid_upface_max", "lid_downface_max", "lid_cross_max", "lid_step_max", "lid_relief"],
+      "physical_signature": "Signed imbalance between opposing topographic-face responses around a candidate step, normalized by local relief.",
+      "missing_catalogue_rationale": "A subtle one-sided displacement may remain where absolute scarp strength is low; drainage and lithologic benches are alternatives.",
+      "difference_from_existing_code": "H-D measures directional coherence/persistence and P1 measured odd/even elevation profiles; H53-C uses an up/down face ratio/contrast, not either tested score.",
+      "expected_benefit": "Low-to-moderate, uncertain.",
+      "implementation_cost": "Low.",
+      "outside_data": "None; the DEM-derived layer provenance remains owner-mirrored, not organizer-authenticated.",
+      "current_status": "Untested; requires a new preregistration and a valid baseline."
+    }
+  ],
+  "external_data_policy": "No new external data is required for the ranked slate; inputs are already present in the hash-pinned owner mirror."
+}
