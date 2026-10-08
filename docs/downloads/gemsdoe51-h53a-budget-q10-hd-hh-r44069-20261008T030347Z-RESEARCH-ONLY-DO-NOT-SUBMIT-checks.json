@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-08T03:03:52+00:00",
+  "artifact_id": "GEMSDOE51-H53A-BUDGET-Q10-R44069-20261008T030347Z",
+  "role": "RESEARCH_ONLY",
+  "status": "NOT_FOR_SUBMISSION",
+  "safe_to_submit": false,
+  "banner": "RESEARCH ONLY \u2014 HOLDOUT NOT PROMOTED \u2014 BROAD FAMILY SUPPORT UNIQUENESS FAILS \u2014 DO NOT SUBMIT",
+  "file": "docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif",
+  "zip": "docs/downloads/gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip",
+  "sha256": "2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a",
+  "bytes": 230732,
+  "source": "Fresh full-map Stage-2 model fit from competition layers + H-D/H-H features; no previous prediction TIFF was used as model input.",
+  "build": {
+    "stage2": "0.5 fresh H-D + 0.5 fresh H-H fitted on all visible known-fault catalogue pixels and 250000 seeded background pixels per arm; 250 HGB iterations.",
+    "stage2_seed": 53,
+    "negative_sampling_seed": 1053,
+    "feature_groups": {
+      "hd": [
+        "lidrel_facecoh09",
+        "lidrel_facecoh21",
+        "detelev_facecoh09",
+        "detelev_facecoh21"
+      ],
+      "hh": [
+        "lidrel_facecoh09",
+        "lidrel_facecoh21",
+        "detelev_facecoh09",
+        "detelev_facecoh21",
+        "hh_endpoint",
+        "hh_bridge",
+        "hh_bridge_cond",
+        "hh_bridge_surface",
+        "hh_endpoint_concordance"
+      ]
+    },
+    "emission": "STE ridge scales 1/2/3.5 px; line accumulator length 9, exponent 0.35; greedy spacing 2.4 px.",
+    "stage1": "H53-A componentwise dimensional geodetic-minus-fault residual, 10 km tiles, fault_plane rate assumption, 1e-8 unit factor, fixed q10 allowed domain.",
+    "stage1_q10_threshold": 0.21305841207504272,
+    "stage1_approved_area_share": 0.9011180342506725,
+    "stage1_emitted_point_share_inside_approved": 1.0,
+    "stage1_lift_over_approved_area": 1.1097325344637599,
+    "source_segments": 84331,
+    "fault_budget": {
+      "used_length_m": 16916898.606733907,
+      "omitted_segments": 1394,
+      "convention": "fault_plane",
+      "tile_m": 10000.0,
+      "unknown_sense": "omitted"
+    },
+    "dot_budget": 44069,
+    "dot_budget_note": "Fixed to match existing local-best artifact mass; not an estimate of hidden truth size.",
+    "emitted_points": 44069,
+    "outside_footprint": "finite zeros",
+    "dtype": "float32",
+    "values": "binary 0/1 probabilities"
+  },
+  "holdout": {
+    "stage1_receipt": "evidence/h53_stage1_holdout_20261008.json",
+    "stage1_primary_summary": {
+      "approved_area_share_in_held_block": 0.9163854995344326,
+      "heldout_truth_recall": 0.9164905809220193,
+      "recall_over_area_lift": 0.999618263576037,
+      "tile_rank_spearman": 0.06080310689525987
+    },
+    "stage2_receipt": "evidence/h53_stage2_holdout_20261008.json",
+    "stage2_promoted": false,
+    "stage2_mean_q10": 0.2665097783484028,
+    "stage2_frozen_ungated_best": 0.285340602656319,
+    "stage2_q10_minus_frozen": -0.018830824307916216,
+    "stage2_gate_failures": [
+      "fresh_ungated_reproduces_frozen",
+      "q10_mean_beats_frozen_ungated_best",
+      "q10_mean_beats_fresh_ungated",
+      "paired_delta_positive_at_least_4_of_6"
+    ],
+    "visible_known_fault_proxy_only": true,
+    "hidden_organizer_score": null,
+    "portal_acceptance": null
+  },
+  "format": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "crs_epsg_32611": true,
+      "transform_matches_template": true,
+      "shape_matches_template": true,
+      "inside_footprint_finite": true,
+      "outside_footprint_nan": false,
+      "outside_footprint_zeros": true,
+      "nan_cells": 0,
+      "global_invalid_cells": 0,
+      "all_cells_finite_in_range": true,
+      "nodata_tag_safe": true,
+      "values_outside_0_1": 0,
+      "min_value": 0.0,
+      "max_value": 1.0,
+      "nodata_tag_is_nan": false,
+      "predicted_px": 44069,
+      "total_mass": 44069.0,
+      "portal_legal": true,
+      "format_valid": true
+    },
+    "outside_footprint_finite_zero": true,
+    "binary_inside_footprint": true,
+    "all_cells_finite": true,
+    "all_values_in_0_1": true,
+    "zip_entries": [
+      "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif"
+    ],
+    "zip_test_error": null,
+    "zip_bytes_match_tiff": true
+  },
+  "local_available_artifact_gate": {
+    "candidate": "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif",
+    "sha256": "2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a",
+    "byte_duplicate_of": [],
+    "support_jaccard": {
+      "data/prior/g25_dotted_prior.tif": 0.016371,
+      "data/prior/g32_anchor_prior.tif": 0.016371,
+      "data/prior/g32_h33b2_prior.tif": 0.017683,
+      "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.111218,
+      "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.140001,
+      "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.145363,
+      "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.137617,
+      "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.184778,
+      "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.000586,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.128253,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.128253,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.147511,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.147511,
+      "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.026078,
+      "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.145363,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.125933,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.125933,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.145036,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.145036,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.142291,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.142291
+    },
+    "support_containment": {
+      "data/prior/g25_dotted_prior.tif": 0.032222,
+      "data/prior/g32_anchor_prior.tif": 0.032222,
+      "data/prior/g32_h33b2_prior.tif": 0.032222,
+      "docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif": 0.186616,
+      "docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif": 0.245615,
+      "docs/downloads/gemsdoe51-hg-hd-xing-exp-r347-20261007T034048Z-nan.tif": 0.253829,
+      "docs/downloads/gemsdoe51-hh-hd-blend-ste-r347-20261007T154954Z.tif": 0.241939,
+      "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif": 0.31192,
+      "archive/submissions/2026-10-06/gems51-sbd-hridge-44090-20261006.tif": 0.003608,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-nan.tif": 0.227348,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-hardq20-r347-bag3-20261006T222055Z-zeros.tif": 0.227348,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-nan.tif": 0.257097,
+      "archive/submissions/2026-10-06/gemsdoe51-h_d-softw0p1-r347-bag3-20261006T222111Z-zeros.tif": 0.257097,
+      "archive/submissions/2026-10-06/gemsdoe51-strainbudget-s1-v1.tif": 0.080737,
+      "archive/submissions/2026-10-07/gemsdoe51-hg-hd-xing-experimental-r347-20261007T034048Z-zeros.tif": 0.253829,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-nan.tif": 0.223695,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-hardq20-zeros.tif": 0.223695,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-nan.tif": 0.25333,
+      "archive/submissions/2026-10-07/gemsdoe51-hm-twostage-r347-bag3-20261007T031825Z-softw0p1-zeros.tif": 0.25333,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-nan.tif": 0.249132,
+      "archive/submissions/2026-10-07/gemsdoe51-ste-hd-w035-s24-r347-20261007T024659Z-zeros.tif": 0.249132
+    },
+    "stage1_dominance": {
+      "approved_area_share_of_footprint": 0.9011180342506725,
+      "emitted_pixels_inside_approved": 44069,
+      "emitted_pixels_total": 44069,
+      "emitted_share_inside_approved": 1.0,
+      "lift_over_area_share": 1.1097325344637599,
+      "hard_confined": true,
+      "uniform_control": {
+        "candidate_mean": 0.2665097783484028,
+        "uniform_mean": 0.21506637425921213,
+        "source": "six-fold Stage-2 q10 holdout; not a score on the full-map TIFF",
+        "margin": 0.002,
+        "excess": 0.05144340408919065,
+        "passed": true
+      }
+    },
+    "verdict": "PASS",
+    "notes": []
+  },
+  "broad_family_uniqueness": {
+    "receipt": "evidence/h53_public_uniqueness_20261008.json",
+    "scope": "Pinned 54-repository public inventory, 365 unique Git blobs, 365 fetched/verified; 364 same-grid submission-like rasters compared plus local references.",
+    "verdict": "FAIL: containment 1.000 > 0.6",
+    "support_gate_verdict": "FAIL: containment 1.000 > 0.6",
+    "coverage_complete": true,
+    "byte_duplicates": 0,
+    "max_support_jaccard": 0.184778,
+    "max_support_jaccard_source": "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+    "max_support_containment": 1.0,
+    "max_support_containment_sources": [
+      "17GEMSDOE:docs/downloads/17GEMSDOE_E-proba-multiscale_20260930T044527Z.tif",
+      "5GEMSDOE:docs/downloads/gems-density-probe-20260925T184215Z-9cdae9b4.tif",
+      "GEMSDOE48:docs/downloads/GEMSDOE48-unassigned-mass-20261006.tif",
+      "GEMSDOE48:docs/downloads/diagnostics/gemsdoe48-h48-1-unassigned_dempster_mTheta.tif",
+      "GEMSDOE48:docs/downloads/diagnostics/gemsdoe48-h48-1-unassigned_yager_mTheta_incl_conflict.tif",
+      "GEMSDOE48:docs/downloads/gemsdoe48-ds-plausibility-20261006T201749Z-95897e3f8125.tif",
+      "GEMSDOE48:docs/downloads/gemsdoe48-ds-unassigned-mass-20261006T201749Z-95897e3f8125.tif",
+      "GEMSDOE48:docs/downloads/gemsdoe48-ds48-mtheta.tif",
+      "GEMSDOE48:docs/downloads/gemsdoe48-h48-ds-yager-conflict-20261006-unassigned-diagnostic.tif",
+      "GEMSDOE48:docs/downloads/gemsdoe48-h49-ds-conflict-balanced-20261006-unassigned-diagnostic.tif"
+    ],
+    "thresholds": {
+      "jaccard": 0.5,
+      "containment": 0.6
+    },
+    "excluded_noncompetition_grid": [
+      {
+        "source": "GEMSDOE36:docs/downloads/GEMS36_FORMAT_TEST_NOT_SUBMISSION.tif",
+        "reason": "different raster shape",
+        "shape": [
+          32,
+          48
+        ],
+        "expected_shape": [
+          3730,
+          3292
+        ],
+        "scope_decision": "excluded: explicit NOT_SUBMISSION format fixture; incompatible 32x48 grid"
+      }
+    ],
+    "notes": "Not cleared: 0 byte duplicates and max Jaccard 0.184778, but one or more dense family prediction fields fully contain the candidate support (containment 1.0 > 0.6)."
+  },
+  "limitations": [
+    "The six-fold H53-A holdout did not promote: fresh ungated baseline reproduction exceeded its frozen tolerance, q10 mean did not beat the frozen/local ungated best, and paired q10 gating was non-positive.",
+    "Stage-1 q10 residual prior had approximately 1.0 recall-over-area lift and weak tile association on visible-catalogue proxy truth.",
+    "The full-map TIFF is a research diagnostic only; do not use a weekly/competition submission slot.",
+    "Local format validity is not organizer portal acceptance; no hidden-test score is known.",
+    "Uniqueness must be cleared separately against the full pinned public artifact inventory; local checks alone are not global proof.",
+    "The scalar residual may represent off-fault deformation, aseismic motion, or slip-rate/dip/rake/unit/geometry/geodetic/model error."
+  ]
+}

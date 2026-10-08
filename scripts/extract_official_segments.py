@@ -3,6 +3,10 @@
 
 Runs on GitHub Actions where GDR is reachable; the small CSV is auditable and
 kept in Git. The official archive itself stays an Actions artifact, not in Git.
+The geometry CSV carries the primary ``SLIPSENSE`` used by the tensor budget.
+The companion ``qfault_attributes.csv`` retains ``SECONDARY`` for audit. It is
+not added as a second full-rate component because no separate slip-rate
+partition is documented for that secondary kinematic component.
 """
 
 import csv

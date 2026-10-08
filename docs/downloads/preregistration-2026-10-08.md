@@ -175,3 +175,12 @@ Rules (2)–(4) are unchanged. This amendment was written after folds 0–1 were
 observed (fold 0: all variants tied, moved=0; fold 1: restrict −0.0073,
 relocate −0.0079, moved=285) and before folds 2–5 exist, so it cannot be an
 adaptation to the final result.
+
+## Post-freeze source clarification — leaderboard claim
+
+The statement in Section 5 records the source-access understanding at preregistration time. A
+subsequent one-time read of the official leaderboard contradicted the user-supplied claim that
+`0.3195` was then the current high. Treat `0.3195` as stale, not current. No leaderboard rows or
+replacement values were copied into this repository, and the project's link-only/no-automatic-
+monitoring policy remains in force. This source clarification does not change the R1 protocol,
+holdout, or any score attribution.

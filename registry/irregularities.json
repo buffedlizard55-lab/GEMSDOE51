@@ -61,9 +61,9 @@
  },
  {
   "id": "IR-51-10",
-  "summary": "Historical repository files contained copied leaderboard standings and an automated/manual monitoring plan inconsistent with the current DrivenData Terms of Use.",
-  "evidence": "DrivenData Terms of Use prohibit automated monitoring/copying and manual monitoring/copying without prior written consent. No written consent is on record. Snapshot/feed JSONs, stale pages, and monitoring instructions were removed from the current tree; only the official source link and policy statement remain.",
-  "status": "CLOSED IN CURRENT TREE - no scraper, scheduled monitor, standings mirror, or manual-copy workflow is implemented. Earlier commits in Git history were not rewritten; this change removes those materials from the current branch contents."
+  "summary": "Historical repository files contained copied leaderboard standings and monitoring instructions; the current project maintains a link-only, no-automatic-monitoring policy pending permission review.",
+  "evidence": "The official Terms of Use page was reviewed; it displays a 2014 last-modified date and the checked section limits use of site materials. No leaderboard rows or standings snapshot are stored in the current tree. No permission is established for an automated monitor.",
+  "status": "CLOSED IN CURRENT TREE - no scraper, scheduled monitor, standings mirror, or monitoring workflow is implemented. Earlier Git history was not rewritten; this change only removes standings and monitoring instructions from current branch contents."
  },
  {
   "id": "IR-51-11",

@@ -76,6 +76,12 @@ def main() -> int:
         failures.append(f"public TIFF/ZIPs do not match manifest: found={sorted(public_downloads)}, "
                         f"allowed={sorted(allowed_downloads)}")
     index = (DOCS / "index.html").read_text(encoding="utf-8")
+    latest_overall = manifest.get("latest_experiment", {}) or {}
+    if latest_overall.get("id") != "K2_08_CONDUCTIVE_RIBBON_20261008":
+        failures.append("manifest must retain K2-08 as the latest overall experiment")
+    latest_page_for_identity = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
+    if "K2-08" not in latest_page_for_identity or "LATEST EXPERIMENT" not in latest_page_for_identity.upper():
+        failures.append("latest report must retain K2-08 as the latest overall experiment")
     readiness = manifest.get("submission_readiness", {}).get("status", "")
     if manifest.get("primary"):
         for name in allowed_current:
@@ -129,10 +135,13 @@ def main() -> int:
         if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
             failures.append("H53 baseline blocker cannot be upload-eligible")
         latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
-        for required in ("H53-A DOWNLOAD FOR RESEARCH: NO", "SUBMIT TO THE COMPETITION: NO",
-                         "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING", "No H53-A TIFF"):
-            if required.lower() not in latest_page.lower():
-                failures.append(f"latest experiment page omits H53-A blocked-status wording: {required}")
+        latest_upper = latest_page.upper()
+        for required in ("FINITE-LAG H53-A", "NO FINITE-LAG H53-A CANDIDATE TIFF",
+                         "NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING",
+                         "SEPARATE COMPONENTWISE BUDGET-Q10 H53-A VARIANT",
+                         "SUBMIT TO THE COMPETITION: NO"):
+            if required not in latest_upper:
+                failures.append(f"latest report omits or conflates H53 operationalization/status: {required}")
         for name in ("h53a_stage1_holdout_20261008.json", "h53a_baseline_provenance_20261008.json",
                      "hypothesis-slate-20261008.md", "preregistration_h53.json"):
             if not (download_dir / name).is_file():
@@ -141,21 +150,48 @@ def main() -> int:
                 failures.append(f"latest experiment page does not link H53 evidence: {name}")
         allowed_h53_research = set()
         for record in manifest.get("research_only_artifacts", []):
-            if record.get("id") == "H53_K2X_Q10_RESEARCH_20261008":
+            if record.get("id") in {"H53_K2X_Q10_RESEARCH_20261008", "H53A_BUDGET_Q10_RESEARCH_20261008"}:
                 for key in ("file", "zip"):
                     if record.get(key):
                         allowed_h53_research.add(Path(record[key]).name)
         h53_rasters = {p.name for p in download_dir.iterdir()
                        if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".zip"}
-                       and p.name.lower().startswith("h53")}
+                       and "h53" in p.name.lower()}
         unexpected_h53_rasters = h53_rasters - allowed_h53_research
         if unexpected_h53_rasters:
             failures.append("unmanifested H53 raster/ZIP exists without a scored candidate: "
                             f"{sorted(unexpected_h53_rasters)}")
-        if "NO H53-A TIFF EXISTS" not in index.upper():
-            failures.append("executive summary does not prominently state that no H53-A TIFF exists")
+        if "NO FINITE-LAG H53-A CANDIDATE TIFF EXISTS" not in index.upper():
+            failures.append("executive summary does not distinguish the absent finite-lag H53-A TIFF")
         if "H53-K2X" not in index.upper() or "SUBMIT: NO" not in index.upper():
             failures.append("executive summary does not distinguish the H53-K2x research TIFF from H53-A")
+
+    budget_variant = next((r for r in manifest.get("research_only_artifacts", [])
+                           if r.get("id") == "H53A_BUDGET_Q10_RESEARCH_20261008"), None)
+    if not budget_variant:
+        failures.append("separate budget-q10 H53-A research record is missing from the manifest")
+    else:
+        if budget_variant.get("safe_to_submit") is not False:
+            failures.append("budget-q10 H53-A variant must remain safe_to_submit=false")
+        if not str(budget_variant.get("uniqueness", {}).get("verdict", "")).startswith("FAIL"):
+            failures.append("budget-q10 H53-A broad-family containment failure is missing")
+        if budget_variant.get("file") == (manifest.get("latest_h53_experiment", {}) or {}).get("file"):
+            failures.append("budget-q10 TIFF must not be attributed to the finite-lag H53-A record")
+        latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""
+        latest_upper = latest_page.upper()
+        for required in ("FINITE-LAG H53-A", "BUDGET-Q10 H53-A VARIANT",
+                         "NOT THE FINITE-LAG H53-A RESULT", "RESEARCH ONLY / DO NOT SUBMIT"):
+            if required not in latest_upper:
+                failures.append(f"latest report must clearly separate budget-q10 from finite-lag H53-A: {required}")
+        for name in (Path(budget_variant.get("file", "")).name,
+                     "h53_stage1_holdout_20261008.json", "h53_stage2_holdout_20261008.json",
+                     "h53_public_uniqueness_20261008.json",
+                     "candidate-hypotheses-budget-q10-2026-10-08.md",
+                     "candidate_hypotheses_budget_q10_prereg_20261008.json"):
+            if not name or not (download_dir / name).is_file():
+                failures.append(f"budget-q10 H53-A evidence download missing: {name}")
+        if budget_variant.get("file") and f'href="downloads/{Path(budget_variant["file"]).name}"' not in latest_page:
+            failures.append("latest report does not link the separate budget-q10 H53-A TIFF")
 
     if allowed_research:
         if "NOT FOR SUBMISSION" not in index:

@@ -2184,7 +2184,7 @@
    "file": "gemsdoe51-k2-08-research-only-20261008.tif",
    "zip": null,
    "submission_name": "GEMSDOE51-K2-08-conductive-ribbon",
-   "note": "RESEARCH ONLY — DO NOT SUBMIT: new K2 conductivity-contrast model; six-fold q10 proxy holdout failed and strict family uniqueness is NOT_CLEARED. Portal validation not performed.",
+   "note": "RESEARCH ONLY \u2014 DO NOT SUBMIT: new K2 conductivity-contrast model; six-fold q10 proxy holdout failed and strict family uniqueness is NOT_CLEARED. Portal validation not performed.",
    "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
    "bytes": 375961,
    "format": {
@@ -2348,6 +2348,215 @@
     "Local format/range checks are not portal validation.",
     "Stage-1 trace splits are scattered by source record, not geographic lockbox."
    ]
+  },
+  {
+   "id": "H53A_BUDGET_Q10_RESEARCH_20261008",
+   "role": "RESEARCH_ONLY_VARIANT_NOT_PROMOTED",
+   "status": "NOT_PROMOTED_AND_BROAD_SUPPORT_UNIQUENESS_FAILED",
+   "safe_to_submit": false,
+   "file": "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif",
+   "zip": "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.zip",
+   "checks_file": "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT-checks.json",
+   "submission_name": "GEMSDOE51-H53A-BUDGET-Q10-R44069-20261008T030347Z-RESEARCH-ONLY",
+   "note": "RESEARCH ONLY: separate componentwise strain-budget q10 variant; Stage-2 promotion and broad-family containment gates failed; DO NOT SUBMIT. This is not the current finite-lag H53-A candidate.",
+   "sha256": "2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a",
+   "bytes": 230732,
+   "source": "Fresh full-map Stage-2 model fit from competition layers + H-D/H-H features; no previous prediction TIFF was used as model input.",
+   "artifact_receipt": "evidence/h53_artifact_20261008T030347Z.json",
+   "format": {
+    "file": "gemsdoe51-h53a-budget-q10-hd-hh-r44069-20261008T030347Z-RESEARCH-ONLY-DO-NOT-SUBMIT.tif",
+    "bytes": 230732,
+    "sha256": "2f6e74e4d48ad47d07671cee4e73f08d012178e337a9045a9b57e51012b3613a",
+    "crs": "EPSG:32611",
+    "crs_epsg": 32611,
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "shape": [
+     3730,
+     3292
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "nodata": null,
+    "checks": {
+     "single_band": true,
+     "dtype_float32": true,
+     "crs_epsg_32611": true,
+     "transform_matches_template": true,
+     "shape_matches_template": true,
+     "inside_footprint_finite": true,
+     "outside_footprint_nan": false,
+     "outside_footprint_zeros": true,
+     "nan_cells": 0,
+     "global_invalid_cells": 0,
+     "all_cells_finite_in_range": true,
+     "nodata_tag_safe": true,
+     "values_outside_0_1": 0,
+     "min_value": 0.0,
+     "max_value": 1.0,
+     "nodata_tag_is_nan": false,
+     "predicted_px": 44069,
+     "total_mass": 44069.0,
+     "portal_legal": true,
+     "format_valid": true
+    }
+   },
+   "build": {
+    "stage2": "0.5 fresh H-D + 0.5 fresh H-H fitted on all visible known-fault catalogue pixels and 250000 seeded background pixels per arm; 250 HGB iterations.",
+    "stage2_seed": 53,
+    "negative_sampling_seed": 1053,
+    "feature_groups": {
+     "hd": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21"
+     ],
+     "hh": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21",
+      "hh_endpoint",
+      "hh_bridge",
+      "hh_bridge_cond",
+      "hh_bridge_surface",
+      "hh_endpoint_concordance"
+     ]
+    },
+    "emission": "STE ridge scales 1/2/3.5 px; line accumulator length 9, exponent 0.35; greedy spacing 2.4 px.",
+    "stage1": "H53-A componentwise dimensional geodetic-minus-fault residual, 10 km tiles, fault_plane rate assumption, 1e-8 unit factor, fixed q10 allowed domain.",
+    "stage1_q10_threshold": 0.21305841207504272,
+    "stage1_approved_area_share": 0.9011180342506725,
+    "stage1_emitted_point_share_inside_approved": 1.0,
+    "stage1_lift_over_approved_area": 1.1097325344637599,
+    "source_segments": 84331,
+    "fault_budget": {
+     "used_length_m": 16916898.606733907,
+     "omitted_segments": 1394,
+     "convention": "fault_plane",
+     "tile_m": 10000.0,
+     "unknown_sense": "omitted"
+    },
+    "dot_budget": 44069,
+    "dot_budget_note": "Fixed to match existing local-best artifact mass; not an estimate of hidden truth size.",
+    "emitted_points": 44069,
+    "outside_footprint": "finite zeros",
+    "dtype": "float32",
+    "values": "binary 0/1 probabilities"
+   },
+   "holdout": {
+    "stage1_evidence": "evidence/h53_stage1_holdout_20261008.json",
+    "stage1_primary": {
+     "approved_area_share_in_held_block": 0.9163854995344326,
+     "heldout_truth_recall": 0.9164905809220193,
+     "recall_over_area_lift": 0.999618263576037,
+     "tile_rank_spearman": 0.06080310689525987,
+     "geodetic_only_lift": 0.9960746185784005
+    },
+    "stage2_evidence": "evidence/h53_stage2_holdout_20261008.json",
+    "metric": "visible known-fault catalogue proxy DTI; not organizer score",
+    "frozen_best_mean": 0.285340602656319,
+    "fresh_ungated_mean": 0.28531515486970865,
+    "fresh_minus_frozen_mean": -2.5447786610344192e-05,
+    "reproduction_tolerance": 1e-05,
+    "reproduces_frozen": false,
+    "q10_constrained_mean": 0.2665097783484028,
+    "q10_minus_frozen_mean": -0.018830824307916216,
+    "q10_minus_fresh_ungated_mean": -0.018805376521305928,
+    "q10_minus_uniform_mean": 0.051443404089190604,
+    "uniform_spaced_mean": 0.21506637425921213,
+    "positive_paired_folds": 0,
+    "fold_count": 6,
+    "promoted": false,
+    "promotion_rules": {
+     "fresh_ungated_reproduces_frozen": false,
+     "q10_mean_beats_frozen_ungated_best": false,
+     "q10_mean_beats_fresh_ungated": false,
+     "paired_delta_positive_at_least_4_of_6": false,
+     "all_candidate_points_inside_stage1_mask": true,
+     "stage1_not_dominant": true,
+     "beats_same_domain_uniform_by_002": true
+    },
+    "visible_known_fault_proxy_only": true,
+    "hidden_organizer_score": null,
+    "portal_acceptance": null,
+    "variant_relationship": "Distinct alternative H53-A operational variant; not the current finite-lag H53-A baseline-blocked experiment or R1."
+   },
+   "stage1": {
+    "q": 10.0,
+    "approved_area_share": 0.9011180342506725,
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1097325344637599,
+    "all_points_inside_approved": true,
+    "holdout_approved_area_share_mean": 0.9163854995344326,
+    "holdout_truth_recall_mean": 0.9164905809220193,
+    "holdout_lift": 0.999618263576037,
+    "holdout_tile_rank_spearman": 0.06080310689525987,
+    "geodetic_only_control_lift": 0.9960746185784005,
+    "holdout_fold2_approved_area_share": 0.549806662612977,
+    "holdout_fold2_confinement_lift": 1.818821174787992,
+    "role": "broad coarse allowed-domain constraint; no Stage-1 soft score weight"
+   },
+   "uniqueness": {
+    "verdict": "FAIL: containment 1.000 > 0.6",
+    "support_gate_verdict": "FAIL: containment 1.000 > 0.6",
+    "local_gate_verdict": "PASS",
+    "scope": "Pinned 54-repository public inventory, 365 unique Git blobs, 365 fetched/verified; 364 same-grid submission-like rasters compared plus local references.",
+    "repositories": 54,
+    "references_sha_verified": 365,
+    "pixel_comparisons": 385,
+    "local_comparison_count": 21,
+    "same_grid_public_comparisons": 364,
+    "coverage_complete": true,
+    "byte_duplicates": 0,
+    "max_support_jaccard": 0.184778,
+    "max_support_jaccard_source": "docs/downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif",
+    "max_support_containment": 1.0,
+    "max_support_containment_sources": [
+     "17GEMSDOE:docs/downloads/17GEMSDOE_E-proba-multiscale_20260930T044527Z.tif",
+     "5GEMSDOE:docs/downloads/gems-density-probe-20260925T184215Z-9cdae9b4.tif",
+     "GEMSDOE48:docs/downloads/GEMSDOE48-unassigned-mass-20261006.tif",
+     "GEMSDOE48:docs/downloads/diagnostics/gemsdoe48-h48-1-unassigned_dempster_mTheta.tif",
+     "GEMSDOE48:docs/downloads/diagnostics/gemsdoe48-h48-1-unassigned_yager_mTheta_incl_conflict.tif",
+     "GEMSDOE48:docs/downloads/gemsdoe48-ds-plausibility-20261006T201749Z-95897e3f8125.tif",
+     "GEMSDOE48:docs/downloads/gemsdoe48-ds-unassigned-mass-20261006T201749Z-95897e3f8125.tif",
+     "GEMSDOE48:docs/downloads/gemsdoe48-ds48-mtheta.tif",
+     "GEMSDOE48:docs/downloads/gemsdoe48-h48-ds-yager-conflict-20261006-unassigned-diagnostic.tif",
+     "GEMSDOE48:docs/downloads/gemsdoe48-h49-ds-conflict-balanced-20261006-unassigned-diagnostic.tif"
+    ],
+    "thresholds": {
+     "jaccard": 0.5,
+     "containment": 0.6
+    },
+    "evidence": "evidence/h53_public_uniqueness_20261008.json",
+    "local_gate": {
+     "verdict": "PASS",
+     "byte_duplicate_of": [],
+     "max_support_jaccard": 0.184778,
+     "max_support_containment": 0.31192,
+     "reference_count": 21
+    }
+   },
+   "limitations": [
+    "The six-fold H53-A holdout did not promote: fresh ungated baseline reproduction exceeded its frozen tolerance, q10 mean did not beat the frozen/local ungated best, and paired q10 gating was non-positive.",
+    "Stage-1 q10 residual prior had approximately 1.0 recall-over-area lift and weak tile association on visible-catalogue proxy truth.",
+    "The full-map TIFF is a research diagnostic only; do not use a weekly/competition submission slot.",
+    "Local format validity is not organizer portal acceptance; no hidden-test score is known.",
+    "Uniqueness must be cleared separately against the full pinned public artifact inventory; local checks alone are not global proof.",
+    "The scalar residual may represent off-fault deformation, aseismic motion, or slip-rate/dip/rake/unit/geometry/geodetic/model error."
+   ],
+   "hypothesis_id": "H53-A-BUDGET-Q10 (distinct operational variant; not the current finite-lag H53-A)",
+   "downloadable_for_research": true,
+   "preregistration": "evidence/candidate_hypotheses_budget_q10_prereg_20261008.json",
+   "ranked_hypothesis_slate": "knowledge/candidate-hypotheses-budget-q10-2026-10-08.md",
+   "operationalization": "componentwise physical strain-budget residual q10 Stage-1 domain with separate H-D/H-H Stage-2 emitter; not finite-lag H53-A or H53-K2x"
   }
  ],
  "promotion": {
@@ -2536,7 +2745,7 @@
  "submission_readiness": {
   "status": "BLOCKED_NOT_FOR_UPLOAD",
   "upload_ok": false,
-  "reason": "K2-08 failed the frozen paired spatial promotion rule and its strict family uniqueness audit is NOT_CLEARED. H53-A is the latest H53-family experiment, but Stage 2 was blocked before candidate scoring because baseline reproduction exceeded the locked 1e-5 tolerance. The earlier H53-K2x screen failed promotion and its broader family uniqueness gate is NOT_CLEARED. R1 also failed its frozen promotion rule and remains research-only. No current artifact is cleared for submission and no competition slot is authorized; portal validation is not claimed.",
+  "reason": "K2-08 remains the latest overall completed experiment and failed its frozen paired spatial promotion rule and strict family support-uniqueness gate. Within the H53 family, the later finite-lag H53-A Stage 2 was blocked before candidate scoring by failed baseline reproduction; its separate budget-q10 H53-A variant produced a different research-only TIFF but failed promotion and broad support containment. Earlier H53-K2x and R1 are distinct historical research-only artifacts and also failed their applicable promotion/uniqueness gates. No artifact is cleared for a competition slot; portal validation and organizer scores are not claimed.",
   "no_organizer_upload_or_score_claimed": true,
   "ok_to_download_and_submit": false
  },
@@ -2553,7 +2762,7 @@
   "file": "gemsdoe51-k2-08-research-only-20261008.tif",
   "zip": null,
   "submission_name": "GEMSDOE51-K2-08-conductive-ribbon",
-  "note": "RESEARCH ONLY — DO NOT SUBMIT: new K2 conductivity-contrast model; six-fold q10 proxy holdout failed and strict family uniqueness is NOT_CLEARED. Portal validation not performed.",
+  "note": "RESEARCH ONLY \u2014 DO NOT SUBMIT: new K2 conductivity-contrast model; six-fold q10 proxy holdout failed and strict family uniqueness is NOT_CLEARED. Portal validation not performed.",
   "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
   "bytes": 375961,
   "format": {
@@ -2757,11 +2966,13 @@
    "candidate_tiff": null,
    "reason": "Frozen baseline reproduction gate failed; fail-closed preregistered runner blocked candidate scoring."
   },
-  "decision": "H53-A download for research: NO H53-A TIFF exists. Earlier H53-K2x TIFF download: YES, research only. Submit neither: NO. No competition slot used.",
+  "decision": "Finite-lag H53-A: no candidate score or TIFF; download for research: NO; submit: NO. A separate budget-q10 H53-A variant has its own research-only TIFF and failed promotion; it is not this finite-lag result. Earlier H53-K2x is a distinct screen. K2-08 is latest overall.",
   "no_organizer_upload_or_score_claimed": true,
   "preregistration": "registry/preregistration_h53.json",
   "ranked_hypothesis_slate": "knowledge/hypothesis-slate-20261008.md",
-  "earlier_research_context": "A distinct earlier H53-K2x six-fold screen produced a fresh TIFF for research only. It failed promotion and is not an H53-A result or substitute."
+  "earlier_research_context": "H53-K2x is a distinct earlier six-fold screen with a research-only TIFF. The separate componentwise budget-q10 H53-A variant also has its own research-only TIFF and score receipts; neither is a finite-lag H53-A score or substitute.",
+  "operationalization": "finite-lag detrended-elevation / isostatic-gravity edge-lag candidate; Stage 2 blocked before fit/scoring",
+  "artifact_scope": "This record describes only the finite-lag operationalization. The separate componentwise budget-q10 H53-A variant has a research-only TIFF under research_only_artifacts."
  },
  "historical_completed_research_screens": [
   {

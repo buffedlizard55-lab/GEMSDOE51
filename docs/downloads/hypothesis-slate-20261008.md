@@ -1,6 +1,6 @@
 # 2026-10-08 hypothesis slate and preregistered test (H53-A)
 
-**Frozen before this session's H53 scoring.** This slate is a qualitative ranking, not a numerical score forecast. “Not tried” means no holdout receipt in this repository measures that exact operator. The six existing spatial blocks have already been reused extensively; their result can reject a candidate but cannot provide an independent estimate of hidden-fault performance.
+**Finite-lag H53-A slate, frozen before candidate implementation/scoring.** This three-candidate slate is distinct from the separate four-candidate componentwise budget-q10 slate in [`candidate-hypotheses-budget-q10-2026-10-08.md`](candidate-hypotheses-budget-q10-2026-10-08.md). This is a qualitative ranking, not a numerical score forecast. “Not tried” means no holdout receipt in this repository measures that exact operator. The six existing spatial blocks have already been reused extensively; their result can reject a candidate but cannot provide an independent estimate of hidden-fault performance.
 
 | Rank / candidate | Existing layers | Physical signature and why it could find uncatalogued fault geometry | Difference from implemented arms | Expected DTI direction / cost | New external data |
 |---|---|---|---|---|---|
