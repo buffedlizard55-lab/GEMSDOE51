@@ -22,9 +22,17 @@
 </nav>
 </div></header>
 <main class="wrap">
-<p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
+<p class="ev">Current as of 2026-10-08: the K2-08 candidate failed spatial promotion and family uniqueness; no artifact is cleared for a competition slot. Current Stage 1 and Stage 2 evidence is linked from Latest experiment. Older reports are historical.</p>
 
-<h2>Spatial holdout — proxy evidence, not a competition score</h2>
+<h2>K2-08 spatial holdout — proxy evidence, NOT PROMOTED</h2>
+<p>The candidate was compared with a fresh 50:50 H-D/H-H blend (not only H-D) using fixed six-fold 3×3 spatial blocks, 12-pixel buffer, 250,000 negatives, fixed HGB/emitter settings, 3.47 mass ratio, 200 m catalogue exclusion, and fold-specific physical q10 masks. Labels are the visible known-fault catalogue, not hidden expert faults.</p>
+<table class=''><thead><tr><th>model / comparison</th><th>mean proxy DTI</th></tr></thead><tbody><tr><td>frozen historical H-H/H-D best (ungated)</td><td>0.2853406</td></tr><tr><td>fresh H-H/H-D reconstruction (ungated)</td><td>0.2853152</td></tr><tr><td>fresh H-H/H-D physical q10</td><td>0.2755433</td></tr><tr><td>K2 blend ungated</td><td>0.2845355</td></tr><tr><td>K2 blend physical q10</td><td>0.2748879</td></tr><tr><td>paired K2 minus fresh blend q10</td><td>-0.0006554</td></tr></tbody></table>
+<p>K2 q10 is below the fresh comparator and frozen best, with 2/6 paired folds positive. The fresh ungated reconstruction differs from frozen by -0.00002545, beyond the 1e-5 tolerance; this harness irregularity is disclosed, not relaxed. Status: <b>NOT_PROMOTED_NO_SUBMISSION</b>.</p>
+<table class=''><thead><tr><th>fold</th><th>fresh blend ungated</th><th>fresh blend q10</th><th>K2 ungated</th><th>K2 q10</th><th>paired q10 Δ</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283944</td><td>0.282429</td><td>0.282939</td><td>-0.001005</td></tr><tr><td>1</td><td>0.271784</td><td>0.271674</td><td>0.272861</td><td>0.272738</td><td>+0.001063</td></tr><tr><td>2</td><td>0.290270</td><td>0.231571</td><td>0.293812</td><td>0.234605</td><td>+0.003034</td></tr><tr><td>3</td><td>0.243359</td><td>0.244631</td><td>0.239233</td><td>0.240600</td><td>-0.004031</td></tr><tr><td>4</td><td>0.305049</td><td>0.305005</td><td>0.304426</td><td>0.304521</td><td>-0.000484</td></tr><tr><td>5</td><td>0.317996</td><td>0.316435</td><td>0.314452</td><td>0.313924</td><td>-0.002511</td></tr></tbody></table>
+<h3>Stage 1 — separate physical whole-trace holdout</h3>
+<p>The 20 km physical q10 tile prior approves 90.33% mean area, recalls 91.00% of held traces (lift 1.007), and has Spearman 0.142. Uniform DTI in approved area is 0.063356 vs 0.063645 on support (Δ -0.000289). The q10 gate is broad/weak, not a fine-scale locator; the trace splits are scattered, not geographic. See <a href="downloads/physical_stage1_holdout_20261008.json">Stage-1 receipt</a> and <a href="downloads/k2-08-results-2026-10-08.md">full K2 report</a>.</p>
+
+<h2>Historical holdouts — earlier candidates, not the current K2 experiment</h2>
 <p>The detector holdout uses a 3×3 spatial blocking design, removes a 1.2 km boundary band from
 training, and scores each held-out region at matched emitted-mass ratio. Its labels are the existing
 known-fault catalogue; the official test target is expert-identified new faults. This measures

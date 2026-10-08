@@ -1,17 +1,27 @@
 # GEMSDOE51 — DOE GEMS fault-discovery research
 
-**Current decision (2026-10-07): NO new TIFF is cleared for a competition slot. No slot has been used; no organizer score or portal acceptance is claimed.**
+**Current decision (2026-10-08): NO artifact is cleared for a competition slot. No slot has been used; no organizer score or portal acceptance is claimed.** The fresh K2 candidate failed both the paired spatial promotion rule and the strict family uniqueness gate. Local format checks do not override either failure.
 
-The six-fold, spatially blocked promotion rule takes precedence over local format and uniqueness checks. The existing H-H/H-D blend remains the best *measured local proxy* (mean DTI 0.2853406), but it predates the all-points-inside-Stage-1-q10 requirement (86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it.
+The previous H-H/H-D blend remains the best *measured local visible-catalogue proxy* (frozen mean DTI 0.2853406), but it predates the all-points-inside-Stage-1-q10 requirement (86.71% inside) and its NaN-outside encoding has not been portal-validated. Do not upload it. The fresh reconstruction was 0.2853152, 0.00002545 below the frozen value and outside the 1e-5 reproduction tolerance; this discrepancy is retained as a harness irregularity.
 
-Two additional unique, all-finite, `[0,1]` GeoTIFFs are downloadable **for research/audit only — DO NOT SUBMIT**:
+## Latest experiment — K2-08: download for research only; do not submit
 
-- **H51-N2 physical / credit-thin:** [`gemsdoe51-h51n2-creditthin-20261007T210820Z.tif`](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z.zip) · [checks](docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json). It passes local format, uniqueness, and Stage-1 q10 confinement checks, but **failed its preregistered six-fold paired holdout**: 0.280116 vs 0.281663 for the H-D comparator (Δ −0.001547; 0/6 folds won). No submission slot.
-- **H52 V4 strain-confined:** [`gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif`](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.tif) · [single-TIFF ZIP](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278.zip) · [checks](docs/downloads/gemsdoe51-h52-v4-strainconf-20261007T213946Z-3af6795278-checks.json). It passes local format and the current-inventory uniqueness audit (worst Jaccard 0.2049, containment 0.3401 over 16 comparisons, including the H51-N2 and P1 TIFFs) and places all points inside q10-approved tiles. **Its actual V4 NMS raster has no direct six-fold holdout receipt.** The available 0.280821 figure belongs to V7 STE q10, a different geometry, and must not be attributed to this file. The parent +0.0020 rule was not met. No submission slot.
+A new feature-based K2 experiment was trained from the prepared data, not copied or re-encoded from an older TIFF. Its unique byte hash and no exact byte match establish a distinct artifact, **not global/support uniqueness**. The pinned 54-repository family audit is `NOT_CLEARED` (containment 1.0; one invalid-grid reference), and the blocked holdout failed promotion. No competition slot was used.
 
-**Action: download only to inspect or reproduce these research artifacts. Do not paste either name into the competition portal.** The site’s executive summary and submission guide are generated from `data/submission_manifest.json` and intentionally show “no upload-eligible artifact.”
+- **[Download the research-only GeoTIFF](docs/downloads/gemsdoe51-k2-08-research-only-20261008.tif)**
+- Candidate: `GEMSDOE51-K2-08-conductive-ribbon`; **44,069** unit-valued points; SHA-256 `3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e`.
+- Local format: one-band float32, EPSG:32611, 3730×3292, 100 m template transform; finite `[0,1]` values inside the footprint; NaN/NoData outside. Serialized-byte range and q10-confinement guards pass. **Portal validation was not performed**; the prior “Predicted values must be in range [0, 1]” error's triggering file is unknown.
+- Spatial holdout: frozen best **0.2853406**; fresh H-H/H-D gated mean **0.2755433**; K2 gated mean **0.2748879**; paired Δ **−0.0006554**, **2/6** folds positive. Ungated K2 mean 0.2845355 also misses the frozen best. `NOT_PROMOTED_NO_SUBMISSION`.
+- Stage 1: physical tensor summation and dilation/shear subtraction were tested only as a broad 20 km q10 tile prior. Whole-trace holdout approved 90.33% of area, recalled 91.00% of held traces (lift 1.007), and had uniform DTI 0.063356 in approved area vs 0.063645 over support (Δ −0.000289). All emitted points are inside q10, but the mask is weak/broad and did not dominate Stage 2.
+- Family uniqueness: 365/365 pinned payloads fetched; no exact byte duplicate; max support Jaccard 0.15347; max containment 1.0; one format-test raster has a different grid; **`NOT_CLEARED`**.
+- [Full K2 results](docs/downloads/k2-08-results-2026-10-08.md) · [three-pass review](knowledge/k2-08-review-three-passes-2026-10-08.md) · [hypothesis slate](knowledge/k2-08-candidate-hypotheses-2026-10-08.md) · [artifact receipt](docs/downloads/k2_research_artifact_20261008.json) · [Stage-1 receipt](docs/downloads/physical_stage1_holdout_20261008.json) · [Stage-2 holdout](docs/downloads/k2_spatial_holdout_20261008.json) · [uniqueness audit](docs/downloads/k2_family_uniqueness_20261008.json).
 
-## Parallel-session research TIFF (P1): download yes; submit NO
+**Download only to inspect or reproduce this research artifact. Do not paste its name into the competition portal.** Older TIFFs remain preserved as prior art; no prior file was replaced or reissued.
+
+
+## Historical prior experiment — P1: download yes; submit NO
+
+This 2026-10-07 artifact predates K2-08 above and remains preserved as research prior art; it is not the current experiment or an upload candidate.
 
 [Live site](https://buffedlizard55-lab.github.io/GEMSDOE51/) · [Pull request12](https://github.com/buffedlizard55-lab/GEMSDOE51/pull/12) · [Three-pass review and handoff](knowledge/review-three-passes-20261007.md)
 

@@ -5,10 +5,9 @@ Why this exists
 ---------------
 ``scripts/build_extras.py`` builds *every* hypothesis group in one process and
 holds the result in a dict; measured in this sandbox (2 cores, ~3 GB RAM) that
-process is OOM-killed while computing the later groups, so the H-D feature group
-cannot be produced by it here.  The group builders themselves are unchanged:
-this script imports ``gems51.extras.facecoh_group`` — the same function
-``build_static`` now calls for H-D — and writes each layer as it is produced.
+process is OOM-killed while computing the later groups. This helper builds the
+baseline H-D face-coherence group or H-H endpoint/bridge group separately. Both
+functions are the same group builders used by ``gems51.extras.build_static``.
 
 Output: ``data/prepared/arm_<group>.dat`` (float32 memmap, one layer per row) and
 ``data/prepared/arm_<group>_names.json``.
@@ -16,6 +15,7 @@ Output: ``data/prepared/arm_<group>.dat`` (float32 memmap, one layer per row) an
 Usage::
 
     python3 scripts/build_arm_extras.py --group hd
+    python3 scripts/build_arm_extras.py --group hh
 """
 from __future__ import annotations
 
@@ -30,11 +30,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from gems51.detector import Stack            # noqa: E402
-from gems51.extras import facecoh_group      # noqa: E402
+from gems51.extras import facecoh_group, _build_endpoint_bridge  # noqa: E402
 from gems51.grid import GRID                 # noqa: E402
 
 P = ROOT / "data" / "prepared"
-GROUPS = {"hd": facecoh_group}
+GROUPS = {"hd": facecoh_group, "hh": _build_endpoint_bridge}
 
 
 def main() -> int:
