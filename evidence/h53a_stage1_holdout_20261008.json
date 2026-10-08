@@ -1,0 +1,472 @@
+{
+ "schema_version": 1,
+ "id": "GEMSDOE51-H53-A-STAGE1-20261008",
+ "status": "COMPLETE_STAGE1_ONLY",
+ "preregistration": "registry/preregistration_h53.json",
+ "instrument": "Five whole-official-record holdouts; visible QFaults pixel raster is proxy truth, not hidden organizer labels.",
+ "config": {
+  "split_count": 5,
+  "split_seed": 5308,
+  "split_rule": "sorted unique record_id values; default_rng(seed).permutation; numpy.array_split",
+  "split_group_sha256": [
+   "00b2323868c8109d5ac7e1280606fb677cc01cf4389bdf69fa1b5ab1f2205497",
+   "60ad2c422109ca5ea560f7096e231d8f89727b1e9bb079f82603bfcf4d269e64",
+   "ab83778cdfd7a3558af4ebbece78f817d36fa96e80e543ee2858ec2ba0f0555d",
+   "163b3cd152a72468a1299e633665d922d053d9ef90c1cc28c7b37282b2bc3df4",
+   "3b58b4947c461c6ce13a3063f35e45b95e55f7457e35232dde1c71c1334abbe3"
+  ],
+  "mass_ratio": 3.47,
+  "random_dti_seed_rule": "5300 + split_index",
+  "tile_px": 100,
+  "nominal_rate_scale": 1e-08,
+  "nominal_slip_component": "fault-plane rate; 60-degree normal dip; unknown sense omitted",
+  "sensitivities": [
+   {
+    "rate_scale": 1e-09,
+    "convention": "fault_plane"
+   },
+   {
+    "rate_scale": 1e-08,
+    "convention": "vertical"
+   }
+  ]
+ },
+ "per_split": [
+  {
+   "split": 0,
+   "held_record_count": 226,
+   "held_record_ids_sha256": "00b2323868c8109d5ac7e1280606fb677cc01cf4389bdf69fa1b5ab1f2205497",
+   "heldout_truth_pixels": 10323,
+   "other_known_catalogue_pixels": 50665,
+   "cases": {
+    "nominal": {
+     "rate_scale": 1e-08,
+     "convention": "fault_plane",
+     "excluded_record_ids": 226,
+     "used_segment_length_m": 13955181.959966246,
+     "omitted_segments": 607,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2079037800687285,
+     "approved_area_share": 0.9030532535584329,
+     "heldout_truth_pixels": 10323,
+     "heldout_pixels_in_approved": 9512,
+     "heldout_recall": 0.9214375665988569,
+     "recall_area_lift": 1.0203579500632787,
+     "matched_mass_random_controls": {
+      "uniform_in_approved": {
+       "seed": 5300,
+       "n_emitted": 35821,
+       "dti": 0.043811366639728615,
+       "tp": 679.27958131697,
+       "fp": 35551.93339019896
+      },
+      "uniform_in_footprint": {
+       "seed": 5300,
+       "n_emitted": 35821,
+       "dti": 0.043445127324985414,
+       "tp": 673.609360972028,
+       "fp": 35558.54610221535
+      }
+     }
+    },
+    "unit_1e-9": {
+     "rate_scale": 1e-09,
+     "convention": "fault_plane",
+     "excluded_record_ids": 226,
+     "used_segment_length_m": 13955181.959966246,
+     "omitted_segments": 607,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2534364261168385,
+     "approved_area_share": 0.9026785951004505,
+     "heldout_truth_pixels": 10323,
+     "heldout_pixels_in_approved": 9864,
+     "heldout_recall": 0.955536181342633,
+     "recall_area_lift": 1.0585563749147064
+    },
+    "vertical_rate": {
+     "rate_scale": 1e-08,
+     "convention": "vertical",
+     "excluded_record_ids": 226,
+     "used_segment_length_m": 13955181.959966246,
+     "omitted_segments": 607,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.20575601374570446,
+     "approved_area_share": 0.9011180342506725,
+     "heldout_truth_pixels": 10323,
+     "heldout_pixels_in_approved": 9584,
+     "heldout_recall": 0.9284122832509929,
+     "recall_area_lift": 1.0302893161194104
+    }
+   }
+  },
+  {
+   "split": 1,
+   "held_record_count": 225,
+   "held_record_ids_sha256": "60ad2c422109ca5ea560f7096e231d8f89727b1e9bb079f82603bfcf4d269e64",
+   "heldout_truth_pixels": 17705,
+   "other_known_catalogue_pixels": 43290,
+   "cases": {
+    "nominal": {
+     "rate_scale": 1e-08,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13102125.61102829,
+     "omitted_segments": 1125,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2104810996563574,
+     "approved_area_share": 0.9016525418234759,
+     "heldout_truth_pixels": 17705,
+     "heldout_pixels_in_approved": 15758,
+     "heldout_recall": 0.8900310646709969,
+     "recall_area_lift": 0.9871109140013336,
+     "matched_mass_random_controls": {
+      "uniform_in_approved": {
+       "seed": 5301,
+       "n_emitted": 61436,
+       "dti": 0.06566146158016802,
+       "tp": 1750.504497131963,
+       "fp": 60727.2058344238
+      },
+      "uniform_in_footprint": {
+       "seed": 5301,
+       "n_emitted": 61436,
+       "dti": 0.06657818302255382,
+       "tp": 1775.1110811905683,
+       "fp": 60715.156682442845
+      }
+     }
+    },
+    "unit_1e-9": {
+     "rate_scale": 1e-09,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13102125.61102829,
+     "omitted_segments": 1125,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2508591065292096,
+     "approved_area_share": 0.9023242564451995,
+     "heldout_truth_pixels": 17705,
+     "heldout_pixels_in_approved": 15865,
+     "heldout_recall": 0.8960745552103926,
+     "recall_area_lift": 0.993073774543723
+    },
+    "vertical_rate": {
+     "rate_scale": 1e-08,
+     "convention": "vertical",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13102125.61102829,
+     "omitted_segments": 1125,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.20962199312714777,
+     "approved_area_share": 0.9016525418234759,
+     "heldout_truth_pixels": 17705,
+     "heldout_pixels_in_approved": 15758,
+     "heldout_recall": 0.8900310646709969,
+     "recall_area_lift": 0.9871109140013336
+    }
+   }
+  },
+  {
+   "split": 2,
+   "held_record_count": 225,
+   "held_record_ids_sha256": "ab83778cdfd7a3558af4ebbece78f817d36fa96e80e543ee2858ec2ba0f0555d",
+   "heldout_truth_pixels": 11220,
+   "other_known_catalogue_pixels": 49782,
+   "cases": {
+    "nominal": {
+     "rate_scale": 1e-08,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13856692.60508377,
+     "omitted_segments": 1253,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.21305841924398625,
+     "approved_area_share": 0.9016525418234759,
+     "heldout_truth_pixels": 11220,
+     "heldout_pixels_in_approved": 10831,
+     "heldout_recall": 0.9653297682709447,
+     "recall_area_lift": 1.0706227992422557,
+     "matched_mass_random_controls": {
+      "uniform_in_approved": {
+       "seed": 5302,
+       "n_emitted": 38933,
+       "dti": 0.05035171881944669,
+       "tp": 849.2222072619508,
+       "fp": 38599.79646111037
+      },
+      "uniform_in_footprint": {
+       "seed": 5302,
+       "n_emitted": 38933,
+       "dti": 0.042830432506092676,
+       "tp": 721.7165457302217,
+       "fp": 38651.05694979269
+      }
+     }
+    },
+    "unit_1e-9": {
+     "rate_scale": 1e-09,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13856692.60508377,
+     "omitted_segments": 1253,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.23539518900343642,
+     "approved_area_share": 0.9020916430844067,
+     "heldout_truth_pixels": 11220,
+     "heldout_pixels_in_approved": 10498,
+     "heldout_recall": 0.935650623885918,
+     "recall_area_lift": 1.0372012988467196
+    },
+    "vertical_rate": {
+     "rate_scale": 1e-08,
+     "convention": "vertical",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13856692.60508377,
+     "omitted_segments": 1253,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.20919243986254296,
+     "approved_area_share": 0.9016525418234759,
+     "heldout_truth_pixels": 11220,
+     "heldout_pixels_in_approved": 10831,
+     "heldout_recall": 0.9653297682709447,
+     "recall_area_lift": 1.0706227992422557
+    }
+   }
+  },
+  {
+   "split": 3,
+   "held_record_count": 225,
+   "held_record_ids_sha256": "163b3cd152a72468a1299e633665d922d053d9ef90c1cc28c7b37282b2bc3df4",
+   "heldout_truth_pixels": 11334,
+   "other_known_catalogue_pixels": 49656,
+   "cases": {
+    "nominal": {
+     "rate_scale": 1e-08,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13614051.226865305,
+     "omitted_segments": 1291,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.211340206185567,
+     "approved_area_share": 0.9013400039052726,
+     "heldout_truth_pixels": 11334,
+     "heldout_pixels_in_approved": 10693,
+     "heldout_recall": 0.9434445032645139,
+     "recall_area_lift": 1.0467132260598813,
+     "matched_mass_random_controls": {
+      "uniform_in_approved": {
+       "seed": 5303,
+       "n_emitted": 39329,
+       "dti": 0.042917699207114864,
+       "tp": 730.3905199401356,
+       "fp": 39025.60339326711
+      },
+      "uniform_in_footprint": {
+       "seed": 5303,
+       "n_emitted": 39329,
+       "dti": 0.04716360823323027,
+       "tp": 803.2680023519149,
+       "fp": 39018.33893684244
+      }
+     }
+    },
+    "unit_1e-9": {
+     "rate_scale": 1e-09,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13614051.226865305,
+     "omitted_segments": 1291,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2508591065292096,
+     "approved_area_share": 0.9016678300560071,
+     "heldout_truth_pixels": 11334,
+     "heldout_pixels_in_approved": 10601,
+     "heldout_recall": 0.9353273336862538,
+     "recall_area_lift": 1.0373302700930962
+    },
+    "vertical_rate": {
+     "rate_scale": 1e-08,
+     "convention": "vertical",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13614051.226865305,
+     "omitted_segments": 1291,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2109106529209622,
+     "approved_area_share": 0.9011180342506725,
+     "heldout_truth_pixels": 11334,
+     "heldout_pixels_in_approved": 10693,
+     "heldout_recall": 0.9434445032645139,
+     "recall_area_lift": 1.046971059733632
+    }
+   }
+  },
+  {
+   "split": 4,
+   "held_record_count": 225,
+   "held_record_ids_sha256": "3b58b4947c461c6ce13a3063f35e45b95e55f7457e35232dde1c71c1334abbe3",
+   "heldout_truth_pixels": 10776,
+   "other_known_catalogue_pixels": 50213,
+   "cases": {
+    "nominal": {
+     "rate_scale": 1e-08,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13139543.023991784,
+     "omitted_segments": 1300,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.21219931271477663,
+     "approved_area_share": 0.9018238087322127,
+     "heldout_truth_pixels": 10776,
+     "heldout_pixels_in_approved": 9970,
+     "heldout_recall": 0.9252041573867854,
+     "recall_area_lift": 1.0259256280752234,
+     "matched_mass_random_controls": {
+      "uniform_in_approved": {
+       "seed": 5304,
+       "n_emitted": 37393,
+       "dti": 0.039209234743913274,
+       "tp": 634.239820890275,
+       "fp": 37140.64305360046
+      },
+      "uniform_in_footprint": {
+       "seed": 5304,
+       "n_emitted": 37393,
+       "dti": 0.045106600023752136,
+       "tp": 730.1972314206748,
+       "fp": 37107.08752914307
+      }
+     }
+    },
+    "unit_1e-9": {
+     "rate_scale": 1e-09,
+     "convention": "fault_plane",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13139543.023991784,
+     "omitted_segments": 1300,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.25257731958762886,
+     "approved_area_share": 0.9000817243113667,
+     "heldout_truth_pixels": 10776,
+     "heldout_pixels_in_approved": 9889,
+     "heldout_recall": 0.9176874536005939,
+     "recall_area_lift": 1.0195601452775824
+    },
+    "vertical_rate": {
+     "rate_scale": 1e-08,
+     "convention": "vertical",
+     "excluded_record_ids": 225,
+     "used_segment_length_m": 13139543.023991784,
+     "omitted_segments": 1300,
+     "valid_tile_count": 583,
+     "q10_threshold": 0.2109106529209622,
+     "approved_area_share": 0.9013400039052726,
+     "heldout_truth_pixels": 10776,
+     "heldout_pixels_in_approved": 9959,
+     "heldout_recall": 0.9241833704528583,
+     "recall_area_lift": 1.0253437841975406
+    }
+   }
+  }
+ ],
+ "limitations": [
+  "The visible catalogue is proxy truth, not expert-held-out organizer truth.",
+  "A Stage-1 residual can also reflect off-fault or aseismic deformation, rate/component uncertainty, dip/rake assumptions, unit convention, or interpolation.",
+  "Uniform-in-mask DTI is one seeded random realization per split and must not be read as a stable performance estimate."
+ ],
+ "summary": {
+  "nominal": {
+   "mean_approved_area_share": 0.901904429968574,
+   "mean_heldout_recall": 0.9290894120384197,
+   "mean_recall_area_lift": 1.0301461034883945,
+   "per_split_approved_area_share": [
+    0.9030532535584329,
+    0.9016525418234759,
+    0.9016525418234759,
+    0.9013400039052726,
+    0.9018238087322127
+   ],
+   "per_split_heldout_recall": [
+    0.9214375665988569,
+    0.8900310646709969,
+    0.9653297682709447,
+    0.9434445032645139,
+    0.9252041573867854
+   ],
+   "per_split_recall_area_lift": [
+    1.0203579500632787,
+    0.9871109140013336,
+    1.0706227992422557,
+    1.0467132260598813,
+    1.0259256280752234
+   ],
+   "uniform_in_approved_mean_dti": 0.04839029619807429,
+   "uniform_in_approved_per_split_dti": [
+    0.043811366639728615,
+    0.06566146158016802,
+    0.05035171881944669,
+    0.042917699207114864,
+    0.039209234743913274
+   ],
+   "uniform_in_footprint_mean_dti": 0.04902479022212286,
+   "uniform_in_footprint_per_split_dti": [
+    0.043445127324985414,
+    0.06657818302255382,
+    0.042830432506092676,
+    0.04716360823323027,
+    0.045106600023752136
+   ]
+  },
+  "unit_1e-9": {
+   "mean_approved_area_share": 0.9017688097994861,
+   "mean_heldout_recall": 0.9280552295451582,
+   "mean_recall_area_lift": 1.0291443727351655,
+   "per_split_approved_area_share": [
+    0.9026785951004505,
+    0.9023242564451995,
+    0.9020916430844067,
+    0.9016678300560071,
+    0.9000817243113667
+   ],
+   "per_split_heldout_recall": [
+    0.955536181342633,
+    0.8960745552103926,
+    0.935650623885918,
+    0.9353273336862538,
+    0.9176874536005939
+   ],
+   "per_split_recall_area_lift": [
+    1.0585563749147064,
+    0.993073774543723,
+    1.0372012988467196,
+    1.0373302700930962,
+    1.0195601452775824
+   ]
+  },
+  "vertical_rate": {
+   "mean_approved_area_share": 0.9013762312107139,
+   "mean_heldout_recall": 0.9302801979820613,
+   "mean_recall_area_lift": 1.0320675746588344,
+   "per_split_approved_area_share": [
+    0.9011180342506725,
+    0.9016525418234759,
+    0.9016525418234759,
+    0.9011180342506725,
+    0.9013400039052726
+   ],
+   "per_split_heldout_recall": [
+    0.9284122832509929,
+    0.8900310646709969,
+    0.9653297682709447,
+    0.9434445032645139,
+    0.9241833704528583
+   ],
+   "per_split_recall_area_lift": [
+    1.0302893161194104,
+    0.9871109140013336,
+    1.0706227992422557,
+    1.046971059733632,
+    1.0253437841975406
+   ]
+  }
+ }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "GEMSDOE51-H53-A-20261008",
+  "created_utc": "2026-10-08T02:11:10Z",
+  "status": "FROZEN_BEFORE_SCORING",
+  "purpose": "Pre-register one novel finite-lag cross-physics feature family and a source-corrected broad Stage-1 residual mask before any H53 holdout scoring.",
+  "target_and_limitation": "Competition target is fault pixels. Labels are the visible known-fault catalogue, so six-block scores are proxies and cannot validate genuinely unknown organizer labels or geothermal-vent discovery.",
+  "hypothesis_slate": "knowledge/hypothesis-slate-20261008.md",
+  "candidate": {
+    "id": "H53-A",
+    "name": "Finite-lag cross-physics edge pairing",
+    "layers": ["comp_det_elev", "comp_iso_grav_anom"],
+    "physical_signature": "At each detrended-elevation edge, a similarly oriented gravity edge 1-8 pixels (100-800 m) away on either side, compared with a zero-lag control; two Gaussian scales (sigma=2,5 px).",
+    "missing_fault_rationale": "A subdued surface break and a subsurface density/basement contrast may be spatially offset by basin cover or structure. This is a structural hypothesis, not proof; lithologic contacts and processing offsets are confounds.",
+    "difference_from_prior_code": "H-X1 is magnetic/gravity zero-offset orientation concordance; H-E includes broad co-located basement/gravity/conductivity cues; H-H detects potential-field edge endpoints and relay bridges; K1 is scale-persistent tilt-like phase. None implements a bounded nonzero signed surface-to-gravity edge lag.",
+    "expected_benefit": "Qualitatively moderate and uncertain; no numeric forecast.",
+    "implementation_cost": "Medium; existing pinned competition raster bands, one transform family, six blocked model folds.",
+    "external_data": "None beyond the hash-pinned owner mirror; no new external download required."
+  },
+  "stage1": {
+    "role": "Coarse tile prior and allowed domain only; never a fine-scale locator.",
+    "tile_size_m": 10000,
+    "formula": "E_dot_ij = 1/2 sum_k [L_k*u_dot_k/(A_tile*sin(delta_k))]*(n_i*m_j+n_j*m_i); predicted tile dilation and source-defined shear are summarized from the summed horizontal tensor.",
+    "source": "Kreemer et al. (2000), Eq. 3; official-source review knowledge/official-source-review-20261007.md.",
+    "geometry": "Original official INGENIOUS QFaults vertices projected to EPSG:32611; segment lengths clipped to each tile before summation.",
+    "nominal_assumptions": {
+      "slip_rate_unit": "mm/year, verified from official DBF field definition",
+      "slip_component": "fault-plane slip, explicit assumption",
+      "normal_dip_deg": 60,
+      "strike_slip_dip_deg": 90,
+      "unknown_sense": "omitted; not imputed",
+      "geodetic_rate_scale": "literal 10E-9/year = 1E-8/year for numeric conversion; source notation is treated literally",
+      "residuals": "r_dil = observed_dilatation - predicted_dilatation/1E-8; r_shear = observed_shear - predicted_shear/1E-8",
+      "prior": "equal-weight mean of empirical rank(r_dil) and rank(r_shear) over valid tiles; approve the top 90% (q10 threshold)"
+    },
+    "sensitivity_not_used_for_selection": ["geodetic unit scale 1E-9/year", "vertical-rate convention", "fault-plane rate convention"],
+    "fold_leakage_control": "For each 3x3 spatial holdout fold, exclude an entire official trace record if any one of its clipped segments intersects the held-out block before computing the Stage-1 tile prior.",
+    "separate_holdout": "Five fixed whole-record splits. Freeze groups as sorted unique official record_id values permuted with NumPy default_rng(5308).permutation and divided with numpy.array_split into five equal groups; hold out one group and remove those whole records from the budget. Report approved tile area, held-out visible catalogue pixel recall, recall/area lift, and matched-mass uniform-in-approved versus uniform-in-footprint DTI separately from Stage 2. The matched-mass DTI uses 3.47 times held-out raster pixels and random seed 5300 + split_index; one draw per condition is descriptive, not a precise effect estimate.",
+    "stage2_seed_and_cache_provenance": "Canonical fresh-fit negative sampling is RNG seed 1000 + fold.index, per scripts/run_experiments.py and the prior H51-K1 preregistration. H52's h52_field_* caches use 2000 + fold.index and are a distinct experiment. The frozen H-H/H-D blend receipt loads legacy field_H_H_fold* / field_H_D_fold* caches whose exact generating command, seeds, software/data hashes, and field files are not preserved; do not substitute either cache family or claim reproduction without the locked baseline audit passing. Candidate Stage-2 scoring is blocked if the fresh canonical H-D/H-H STE baseline does not reproduce the frozen mean within 1e-5."
+  },
+  "stage2": {
+    "protocol": "Six contiguous 3x3 spatial blocks; 12-pixel training buffer; 250000 negatives per fold; fixed seeds; scoring only within the held-out block.",
+    "baseline": "Fresh H-D and H-H fields, fixed 50/50 arithmetic probability blend, STE L9 continuity=0.35 spacing=2.4 px, mass ratio=3.47, published-catalogue exclusion radius=2 px.",
+    "candidate": "Add only H53-A features to the H-H arm and keep H-D unchanged; arithmetic 50/50 blend; same training folds, emission and mass as baseline.",
+    "stage1_gate": "Fold-specific source-corrected tile prior, q10 approved mask; all Stage-2 predictions must be inside it.",
+    "features": "At sigma=2 and 5 px, compute mask-normalized gradients of detrended elevation and isostatic gravity. Rank-normalize nonzero gradient magnitudes over valid footprint pixels. For each surface-edge normal compare zero-lag edge-normal agreement and the maximum gravity edge response at distances 1-8 px on either side. Six frozen inputs: zero-lag co-edge response, max-offset co-edge response, winning lag/8 at each of the two scales. Invalid support remains missing; no label enters the transforms.",
+    "promotion": "Fresh ungated baseline reproduces 0.285340602656319 within 1e-5; candidate q10-gated mean exceeds frozen mean and same-fold gated baseline; candidate wins >=4/6 folds; approved area >=2/3; Stage-1 lift <=1.5; every emitted point inside q10 mask. No post-result tuning or rerun.",
+    "metric_truth": "Visible known-fault catalogue proxy, not hidden organizer truth; local DTI is not a DrivenData score."
+  },
+  "artifact_policy": {
+    "failed_candidate": "May produce a unique research-only diagnostic TIFF, explicitly labelled DOWNLOAD FOR RESEARCH: YES; SUBMIT: NO.",
+    "passed_candidate": "May produce a named local upload candidate after format, scoped uniqueness and non-dominance checks; no portal acceptance or score claim absent organizer validation.",
+    "format": "Single-band float32; exact sample-submission CRS, shape and transform; every pixel finite in [0,1]; zeros outside footprint; no NoData tag.",
+    "uniqueness": "Compare final bytes/support with all available same-grid local, archived, and pinned sibling reference TIFFs; report scope and any containment failure.",
+    "slot": "No competition submission/weekly slot is authorized or consumed by local work."
+  }
+}

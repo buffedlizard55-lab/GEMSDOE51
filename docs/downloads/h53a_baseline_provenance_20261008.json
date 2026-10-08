@@ -1,0 +1,159 @@
+{
+ "schema_version": 1,
+ "id": "GEMSDOE51-H53-A-BASELINE-PROVENANCE-20261008",
+ "status": "BASELINE_REPRODUCTION_FAILED_STAGE2_BLOCKED",
+ "scope": "Baseline-only provenance and reproduction audit. No H53 candidate fields are fitted or compared.",
+ "frozen_receipt": "evidence/hh_blend_holdout.json",
+ "frozen_field_paths": "data/prepared/field_H_D_fold*.npy and field_H_H_fold*.npy (not present in this checkout)",
+ "canonical_protocol_source": "scripts/run_experiments.py: default_rng(1000 + fold.index), fit_detector(seed=fold.index,max_iter=250), 250000 negatives",
+ "distinct_noncanonical_protocol": "scripts/run_h52_holdout.py: h52_field_* caches use default_rng(2000 + fold.index); never substituted in this audit",
+ "fresh_field_cache_directory": "data/prepared/h53a_baseline_fields",
+ "config": {
+  "folds": 6,
+  "buffer_px": 12,
+  "negatives_per_fold": 250000,
+  "negative_rng_seed": "1000 + fold.index",
+  "model_seed": "fold.index",
+  "max_iter": 250,
+  "blend": "0.5 * H-D + 0.5 * H-H",
+  "emission": "same evaluate_hh_blend.ste_emit implementation; STE L9, w=0.35, spacing=2.4 px",
+  "mass_ratio": 3.47,
+  "exclusion_px": 2.0,
+  "baseline_reproduction_tolerance": 1e-05,
+  "frozen_mean": 0.285340602656319,
+  "frozen_per_fold": [
+   0.28358474213082796,
+   0.27178387428750844,
+   0.29027025890966246,
+   0.24335930706370568,
+   0.30504916677291494,
+   0.3179962667732945
+  ]
+ },
+ "data_and_feature_provenance": {
+  "prepared_manifest_sha256": "b4e80a4a2d579c1fca828e0975d0f2fd0b2db6e55e12763aa06e3eaa946d713d",
+  "base_stack_names_sha256": "f417cc6ae55d468e51b36387f7218b92203beef41c89ac98d01b551b051c890d",
+  "hd_names": [
+   "lidrel_facecoh09",
+   "lidrel_facecoh21",
+   "detelev_facecoh09",
+   "detelev_facecoh21"
+  ],
+  "hd_names_sha256": "5ab3e035577370c88c25c87dd0b414a01ebc6170b716001041598e241842c916",
+  "hh_names": [
+   "lidrel_facecoh09",
+   "lidrel_facecoh21",
+   "detelev_facecoh09",
+   "detelev_facecoh21",
+   "hh_endpoint",
+   "hh_bridge",
+   "hh_bridge_cond",
+   "hh_bridge_surface",
+   "hh_endpoint_concordance"
+  ],
+  "hh_names_sha256": "e7ea9e283a0e1d82aa8beab1d0f1d12c61ac24251eee9159488cafede3445d17",
+  "official_training_raster_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+  "source_note": "Input mirrors are integrity-pinned, but their login-walled competition provenance is owner-supplied, not organizer-authenticated."
+ },
+ "versions": {
+  "python": "3.11.2",
+  "numpy": "2.4.6",
+  "scipy": "1.17.1",
+  "scikit_learn": "1.9.1"
+ },
+ "per_fold": [
+  {
+   "fold": 0,
+   "n_truth": 12803,
+   "n_target": 44426,
+   "dti": 0.283432055411166,
+   "frozen_dti": 0.28358474213082796,
+   "delta_vs_frozen": -0.00015268671966195413,
+   "tp": 5564.8029963030385,
+   "fp": 41391.39798982664,
+   "emitted": 44426,
+   "hd_field_sha256": "05c959ce4e277649ef84ca8cc6a41dbeb71a66304f0e8f65b140e63abae06f94",
+   "hh_field_sha256": "333f906df0174365d0445065715b982e395a92927d2277658b6483b5a636029e"
+  },
+  {
+   "fold": 1,
+   "n_truth": 10426,
+   "n_target": 36178,
+   "dti": 0.27178387428750844,
+   "frozen_dti": 0.27178387428750844,
+   "delta_vs_frozen": 0.0,
+   "tp": 4337.245785853802,
+   "fp": 33750.938302036855,
+   "emitted": 36178,
+   "hd_field_sha256": "a83909fa2354d8742e61abb2444b78169bfd61dc8bfd05be8821fc650e6cbe34",
+   "hh_field_sha256": "0c4be1640b7e7de606c22d268cffe34ec221eb76a8c16a616a35cc02e57c6047"
+  },
+  {
+   "fold": 2,
+   "n_truth": 7096,
+   "n_target": 24623,
+   "dti": 0.29027025890966246,
+   "frozen_dti": 0.29027025890966246,
+   "delta_vs_frozen": 0.0,
+   "tp": 3159.244821283902,
+   "fp": 22875.778904242135,
+   "emitted": 24623,
+   "hd_field_sha256": "1f09d843121fe2d34ced70130b3d4ec86aa9456b1b0ccbe335e2b82464327215",
+   "hh_field_sha256": "89f47329f7896079928e21c8974d2ca6bd578aed1164105d28477b03f026e766"
+  },
+  {
+   "fold": 3,
+   "n_truth": 5630,
+   "n_target": 19536,
+   "dti": 0.24335930706370568,
+   "frozen_dti": 0.24335930706370568,
+   "delta_vs_frozen": 0.0,
+   "tp": 2094.6587357974254,
+   "fp": 18421.68043427371,
+   "emitted": 19536,
+   "hd_field_sha256": "1a3fbe3a7ec30ebafce0fc52e0ef5414297adeffd5bc6c56b63a3428f396e11b",
+   "hh_field_sha256": "0c4ae083bb966faf209dba916722beb4c1e9591a334ca38f913df0b0052801af"
+  },
+  {
+   "fold": 4,
+   "n_truth": 13348,
+   "n_target": 46318,
+   "dti": 0.30504916677291494,
+   "frozen_dti": 0.30504916677291494,
+   "delta_vs_frozen": 0.0,
+   "tp": 6256.850743298708,
+   "fp": 42905.94082504608,
+   "emitted": 46318,
+   "hd_field_sha256": "7dde66b0d7f2105db7ed4490b0e137c9a8460b3ce30685f04c0bcd95c143731e",
+   "hh_field_sha256": "a138f7bc53729e882b5b17c4cd355c4d6851a0aee208931f23500ca46fb2a020"
+  },
+  {
+   "fold": 5,
+   "n_truth": 11398,
+   "n_target": 39551,
+   "dti": 0.3179962667732945,
+   "frozen_dti": 0.3179962667732945,
+   "delta_vs_frozen": 0.0,
+   "tp": 5590.243924873217,
+   "fp": 36715.70502901507,
+   "emitted": 39551,
+   "hd_field_sha256": "070492a97afb3c072e474ac864df5db1e987b7f3366fdf190f0c54bcb1c32d89",
+   "hh_field_sha256": "0c1aea32e8d17e398c4d269c480aa09b5892e89495fdfd3065b600c1df7e8fc2"
+  }
+ ],
+ "summary": {
+  "fresh_mean_dti": 0.28531515486970865,
+  "frozen_mean_dti": 0.285340602656319,
+  "fresh_minus_frozen_mean": -2.5447786610344192e-05,
+  "max_abs_fold_delta": 0.00015268671966195413,
+  "mean_reproduction_tolerance": 1e-05,
+  "reproduced": false,
+  "candidate_stage2_authorized": false
+ },
+ "elapsed_seconds": 1070.6969006061554,
+ "limitations": [
+  "A fresh fit can test the canonical protocol, but it cannot recover missing legacy field bytes or prove which command generated them.",
+  "Any fresh-versus-frozen discrepancy is reported without assigning cause.",
+  "The metric is a local visible-catalogue proxy, not a DrivenData score."
+ ]
+}

@@ -23,45 +23,45 @@
 </div></header>
 <main class="wrap">
 <p class="ev">Source audit update: mm/year is now verified against the official DBF; corrected geodetic shear convention and vector budget are on <a href="latest.html">Latest experiment</a>. Older experiment narratives below are historical.</p>
-<h2>Latest experiment: evidence and decision</h2><section class="download missing">
-<p class="eyebrow">LATEST EXPERIMENT · P1 · 7 OCTOBER 2026</p>
-<h2>New, independently generated TIFF</h2>
-<p class="warn"><strong>DOWNLOAD FOR RESEARCH: YES. SUBMIT TO THE COMPETITION: NO.</strong><br>
-This is a newly trained prediction map, not a renamed or re-encoded prior submission. It has not cleared every promotion gate. No competition slot was used.</p>
-<p><a class="btn" download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.tif">Download new research TIFF</a></p>
-<p><a download href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros.zip">Download ZIP containing one TIFF</a> · <a href="latest.html">Results, checks &amp; decision</a> · <a href="how-to-submit.html">Submission instructions</a></p>
-<dl class="kv"><dt>Unique identifier</dt><dd><code>GEMSDOE51-P1-Q10-2a687636c85e</code></dd>
-<dt>Short comment (research only)</dt><dd><code>RESEARCH ONLY: odd/even scarp-profile HGB + HD blend; q10 broad strain gate; STE L9; 44069 dots; blocked holdout not cleared. Do not upload.</code></dd>
-<dt>Numeric checks</dt><dd>1 band · float32 · EPSG:32611 · 3730 × 3292 · min 0, max 1 · 0 nonfinite/out-of-range cells · no NoData tag.</dd>
-<dt>Stage2 proxy DTI</dt><dd>0.283987 vs paired gated baseline 0.284899; 2/6 folds improved. Not an organizer score.</dd>
-<dt>Stage1 confinement</dt><dd>44,069/44,069 points inside approved tiles; approved area 90.09%; lift 1.110.</dd>
-<dt>Uniqueness scope</dt><dd>Broader family gate: NOT_CLEARED; exact duplicate: False. Dense probability maps can fully contain a sparse support without being the same prediction. No universal novelty claim.</dd>
-<dt>SHA-256</dt><dd><code>73a8dcb305609def44f4c2cc421f6c4a3c4d5c45a9fe8ef64078a58706908fb4</code></dd></dl>
-<p><a href="downloads/gemsdoe51-p1-odd-even-q10-2a687636c85e-zeros-checks.json">Final-byte checks and scoped uniqueness gate</a>. Format/range safety is not portal acceptance. <strong>NOT FOR SUBMISSION.</strong></p>
+<h2>Latest H53-A experiment: evidence and decision</h2>
+<section class="download missing">
+<p class="eyebrow">LATEST EXPERIMENT · H53-A · 8 OCTOBER 2026</p>
+<h2>Stage 1 measured; Stage 2 blocked before candidate scoring</h2>
+<p class="warn"><strong>H53 DOWNLOAD FOR RESEARCH: NO — NO H53 TIFF WAS GENERATED.</strong><br>
+<strong>SUBMIT TO THE COMPETITION: NO.</strong> No candidate score, candidate raster, H53 uniqueness result, or H53 format result exists. No competition slot was used.</p>
+<p>Identifier: <code>GEMSDOE51-H53-A-20261008</code> (preregistration/research identifier only; not a portal submission name). No submission comment or filename has been issued.</p>
+<dl class="kv">
+<dt>Separate Stage-1 nominal result</dt><dd>5 whole-record splits; q10 approved area 90.19%; visible-catalogue trace-pixel recall 92.91%; recall/area lift 1.0301.</dd>
+<dt>Stage-1 matched-mass controls</dt><dd>Uniform-dot proxy DTI 0.048390 inside approved tiles vs 0.049025 over the full footprint. One seeded random draw per split; descriptive only.</dd>
+<dt>Stage-2 status</dt><dd>NOT RUN — BLOCKED BEFORE CANDIDATE FIT/SCORING. The baseline provenance/reproduction gate failed; see the table and receipts below.</dd>
+<dt>Submission readiness</dt><dd><strong>BLOCKED_NOT_FOR_UPLOAD</strong>. Do not use an earlier research TIFF as a substitute for an H53 result.</dd>
+</dl>
+<p><a href="downloads/h53a_stage1_holdout_20261008.json">Stage-1 receipt</a> ·
+<a href="downloads/h53a_baseline_provenance_20261008.json">baseline provenance/reproduction receipt</a> ·
+<a href="downloads/hypothesis-slate-20261008.md">ranked H53 slate</a> ·
+<a href="downloads/preregistration_h53.json">frozen H53 preregistration</a> ·
+<a href="how-to-submit.html">submission instructions</a>.</p>
 </section>
-<h3>Stage2: spatially blocked fine-scale detector</h3>
-<p>P1 decomposes detrended-elevation normal profiles into antisymmetric step and symmetric ridge/valley signals at ±200m and ±500m. Three features extend H-H, blended50/50 with freshly fitted H-D. No earlier submission is an input. Fixed six-fold splits, 1.2km buffer,250,000 negative samples and250 HGB iterations; STE L9/w0.35/spacing2.4, ratio3.47. Predictions confined to the frozen fold-specific q10 strain prior.</p>
-<table><thead><tr><th>Fold</th><th>Baseline ungated</th><th>Baseline q10</th><th>P1 q10</th></tr></thead><tbody><tr><td>0</td><td>0.283432</td><td>0.283432</td><td>0.280968</td></tr><tr><td>1</td><td>0.271784</td><td>0.270436</td><td>0.274441</td></tr><tr><td>2</td><td>0.290270</td><td>0.289119</td><td>0.288570</td></tr><tr><td>3</td><td>0.243359</td><td>0.243359</td><td>0.236952</td></tr><tr><td>4</td><td>0.305049</td><td>0.305049</td><td>0.305500</td></tr><tr><td>5</td><td>0.317996</td><td>0.317996</td><td>0.317490</td></tr></tbody></table>
-<p>Mean P1=0.2839869; paired Δ=-0.0009117. Frozen best=0.2853406; reproduced baseline drift=-0.00002545. Promotion rules were not relaxed after results.</p><ul><li>six_folds: <strong>PASS</strong></li><li>baseline_reproduced: <strong>FAIL</strong></li><li>beats_frozen: <strong>FAIL</strong></li><li>beats_paired: <strong>FAIL</strong></li><li>positive_folds: <strong>FAIL</strong></li><li>stage1_broad: <strong>PASS</strong></li><li>confinement: <strong>PASS</strong></li></ul>
-<h3>Stage1: separate holdouts, not the fine-scale score</h3>
-<p>The frozen legacy q10 trace holdout: DTI0.050627 vs uniform0.048564; approved area90.06%, recall95.39%. This is weak coarse enrichment, not a detector.</p>
-<p>The new <strong>official-vector</strong> five-split trace audit has mean approved area 90.15%, trace recall 96.01%, and lift 1.0650. It uses actual clipped segment lengths rather than centroid rate assignment. This separate source-corrected audit is <em>not</em> silently substituted into P1's frozen legacy gate. It requires its own paired Stage2 test before production use.</p>
-<p>Actual artifact gate ablation: 84.64% of gated points also occur in the same detector's ungated output; support Jaccard 0.7337. Within approved tiles, only 0.95% of cells receive a point. Broadness/lift is an operational check, not proof of causal independence.</p>
-<h3>Source corrections and limitations</h3>
-<p>Official DBF confirms mm/year and matches all1,126 mirrored records. Source shear is min(|e1|,|e2|) for opposite-signed principal strains, else0. Actual-vector tensor summation and scalar residuals are now implemented with explicit dip/component/unit scenarios. Off-fault and aseismic strain or erroneous catalogue rates can cause a deficit. The task predicts faults, not vents.</p>
-<p>All-finite zero-outside encoding removes NaNs and out-of-range sentinels from this file. The published null/NaN-outside language and portal behavior remain unverified together; the historical error-triggering file is unknown. Do not treat a local check as a successful portal submission.</p>
-<p>Neither the user-reported0.2778 attribution nor the stated0.3195 leaderboard high establishes an achievable score here. GEMSDOE32's own primary page still says UNSCORED. Reused catalogue folds cannot certify hidden-fault or leaderboard performance.</p>
-<h3>Audit files and next experiment</h3>
-<ul>
-<li><a href="downloads/p1_final_verification_20261007.json">Independent final-byte, ZIP and tile-confinement verification</a></li>
-<li><a href="downloads/p1_holdout_20261007.json">Complete P1 holdout</a></li>
-<li><a href="downloads/official_vector_budget_20261007.json">Vector-budget equation, residuals and five-split Stage1 holdout</a></li>
-<li><a href="downloads/official_attribute_audit_20261007.json">Official DBF match receipt</a></li>
-<li><a href="downloads/official-source-review-20261007.md">Source ledger, exact equations and scientific corrections</a></li>
-<li><a href="downloads/next-candidates-20261007.md">Four ranked hypotheses and preregistered rules</a></li>
-<li><a href="../registry/official/receipt.json">Official archive hashes and field inventory</a></li>
-</ul>
-<p>Next: resolve frozen-baseline drift, verify outside-footprint semantics with the organizer, introduce an untouched spatial/trace-family lockbox, and test the official-vector mask with a new fine-scale candidate. Preserve this negative experiment. Do not tune P1 until it passes the same reused folds.</p><h3>Broader family audit</h3><p>365/365 inventory payloads restored; verdict NOT_CLEARED; exact duplicate=False; maximum support Jaccard=0.1521, containment=1.0000. Scoped to the committed inventory, not a universal novelty proof. <a href='downloads/p1_family_audit_20261007.json'>Full comparisons</a>.</p>
+<h3>Stage 1 — coarse source-segment prior only</h3>
+<p>Five deterministic whole-record splits (sorted record IDs, NumPy seed 5308) excluded held-out official records from the 10 km clipped-segment tensor. Nominal assumptions: slip-rate unit mm/year per the official attribute audit; fault-plane component; 60° normal dip; unknown-sense records omitted; literal geodetic numeric scale 1e-8/year. Sensitivities use 1e-9/year and a vertical-rate convention. The residual-rank mask approves broad tiles; it does not place fine-scale points.</p>
+<p>Nominal means: approved footprint area 0.9019; held-out visible-catalogue pixel recall 0.9291; recall/area lift 1.0301. Matched-mass one-draw uniform controls: in-mask proxy DTI 0.048390, full-footprint proxy DTI 0.049025. The mixed split-level differences do not establish robust enrichment.</p>
+<p><strong>Preregistration wording irregularity, preserved:</strong> the frozen JSON's sensitivity list redundantly names “fault-plane rate convention,” while its nominal case is already fault-plane. The receipt's executed cases are explicit: nominal 1e-8/year fault-plane; 1e-9/year fault-plane sensitivity; and 1e-8/year vertical-rate sensitivity. No fourth case is claimed; the preregistration was not edited after results.</p>
+<table><thead><tr><th>Split</th><th>Held records</th><th>Held truth px</th><th>Approved area</th><th>Recall</th><th>Lift</th><th>Uniform in mask DTI</th><th>Uniform full footprint DTI</th></tr></thead><tbody><tr><td>0</td><td>226</td><td>10,323</td><td>90.305%</td><td>92.144%</td><td>1.020</td><td>0.043811</td><td>0.043445</td></tr><tr><td>1</td><td>225</td><td>17,705</td><td>90.165%</td><td>89.003%</td><td>0.987</td><td>0.065661</td><td>0.066578</td></tr><tr><td>2</td><td>225</td><td>11,220</td><td>90.165%</td><td>96.533%</td><td>1.071</td><td>0.050352</td><td>0.042830</td></tr><tr><td>3</td><td>225</td><td>11,334</td><td>90.134%</td><td>94.344%</td><td>1.047</td><td>0.042918</td><td>0.047164</td></tr><tr><td>4</td><td>225</td><td>10,776</td><td>90.182%</td><td>92.520%</td><td>1.026</td><td>0.039209</td><td>0.045107</td></tr></tbody></table>
+<h4>Frozen sensitivities (Stage 1 only)</h4>
+<p>1e-9/year: area 0.9018, recall 0.9281, lift 1.0291. Vertical-rate convention at 1e-8/year: area 0.9014, recall 0.9303, lift 1.0321.</p>
+<h3>Baseline provenance gate — candidate Stage 2 not run</h3>
+<p>Fresh canonical mean 0.285315155 vs frozen cached-field mean 0.285340603 (Δ -0.000025448); required |Δ| ≤ 0.00001000. The reproduction gate failed. The legacy cached field files and their exact generating metadata are missing, and no cause is assigned to the fold-0 mismatch.</p>
+<table><thead><tr><th>Fold</th><th>Fresh canonical H-D/H-H</th><th>Frozen cached-field receipt</th><th>Fresh − frozen</th></tr></thead><tbody><tr><td>0</td><td>0.283432055</td><td>0.283584742</td><td>-0.000152687</td></tr><tr><td>1</td><td>0.271783874</td><td>0.271783874</td><td>+0.000000000</td></tr><tr><td>2</td><td>0.290270259</td><td>0.290270259</td><td>+0.000000000</td></tr><tr><td>3</td><td>0.243359307</td><td>0.243359307</td><td>+0.000000000</td></tr><tr><td>4</td><td>0.305049167</td><td>0.305049167</td><td>+0.000000000</td></tr><tr><td>5</td><td>0.317996267</td><td>0.317996267</td><td>+0.000000000</td></tr></tbody></table>
+<p>Folds 1–5 exactly match their frozen proxy values; fold 0 differs by 0.000152687. <code>evaluate_hh_blend.py</code> reads legacy <code>field_H_D_fold*</code>/<code>field_H_H_fold*</code> arrays that are absent from this checkout and have no persisted run metadata. <code>run_experiments.py</code> documents negative seed 1000+fold; the distinct H52 caches use 2000+fold and were not substituted. This establishes that exact historical lineage is not recoverable from preserved artifacts, not the cause of the fold-0 difference.</p>
+<p><strong>Stage 2 is blocked, not a negative H53-A result.</strong> It has no measured candidate-vs-baseline DTI. The fail-closed runner refuses to train/score the candidate while reproduction fails. Do not tune the H53 features or use a competition slot on it.</p>
+<h3>Hypothesis, data and limitations</h3>
+<p>H53-A tests a bounded 1–8 pixel nonzero lag between detrended-elevation and isostatic-gravity edge normals, with a zero-lag control at σ=2 and 5 px. It uses the hash-pinned competition mirrors already restored; no new external source was required. Lithologic contacts, interpolation offsets, off-fault/aseismic strain, geodetic-unit interpretation, slip component and fault-dip assumptions remain plausible confounders. The visible QFaults/INGENIOUS catalogue is proxy truth; these are not hidden-label or organizer-score results.</p>
+<p>External context: <a href="https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf">Kreemer et al. (2000), Eq. 3</a>; <a href="https://gdr.openei.org/submissions/1391">INGENIOUS/GDR 1391</a>; <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official task description</a>. See the <a href="downloads/official-source-review-20261007.md">source review</a> and <a href="downloads/official_attribute_audit_20261007.json">attribute audit</a>.</p>
+<h3>Next step</h3>
+<p>Recover an auditable H-H/H-D field lineage or create a new, preregistered benchmark before scoring another candidate. Keep the existing baseline mismatch visible; never substitute H52 seed-2000 caches for legacy fields or attribute the mismatch to an unverified cause. The portal range validation remains unresolved. No H53 TIFF is available to download or submit.</p>
+<h3>Historical P1 result (not the latest experiment)</h3>
+<p>The previous P1 odd/even screen produced a unique research-only TIFF but failed its paired gated test (mean 0.283987, paired delta -0.000912, 2/6 folds). It remains explicitly <b>NOT FOR SUBMISSION</b>; its download/checks are listed on the <a href="index.html">executive summary</a>.</p>
+
 </main>
 <footer><div class="wrap">
 <p>Results are labeled as local measurements, known-fault proxy scores, official rules, or owner-reported claims. Data mirrors are hash-checked but not organizer-authenticated. No GEMSDOE51 score on this site has been confirmed by DrivenData.</p>
