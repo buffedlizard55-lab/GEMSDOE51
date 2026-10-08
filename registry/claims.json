@@ -1,6 +1,6 @@
 {
  "schema_version": 2,
- "generated_utc": "2026-10-07T23:58:00Z",
+ "generated_utc": "2026-10-08T03:40:16Z",
  "note": "Current claims only. PROXY means the local truth is the existing known-fault catalogue, not the hidden expert-labeled new-fault test set. OWNER-REPORTED is attributed to sibling project pages and is not organizer-verified. No leaderboard standings are stored or monitored.",
  "claims": [
   {
@@ -174,7 +174,7 @@
   {
    "id": "C51-025",
    "class": "MEASURED",
-   "claim": "The H51-N2 physical/credit-thin TIFF gemsdoe51-h51n2-creditthin-20261007T210820Z.tif (sha256 b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22) contains 38,100 unit-valued dots emitted by 2.4 px NMS on the H-D physical arm. All points lie inside the q10 Stage-1 tiles; the raster is single-band float32 EPSG:32611 with every cell finite in [0,1] and zeros outside. Its paired six-fold holdout is NOT PROMOTED (mean 0.2801158 vs H-D 0.2816627, \u0394 -0.0015469, 0/6 folds won), so it is research-only and no competition slot is authorized. The original 39-prior prewrite gate had max Jaccard 0.154578/containment 0.288740; a post-merge current-inventory audit against 16 artifacts also passes (max Jaccard 0.195481/containment 0.352651). Local gates do not override the holdout rule or prove portal acceptance.",
+   "claim": "The H51-N2 physical/credit-thin TIFF gemsdoe51-h51n2-creditthin-20261007T210820Z.tif (sha256 b7ea86e8893434e3ea6616cdba07ac3e55e3b8bd0bc42add68bdf5d4084efc22) contains 38,100 unit-valued dots emitted by 2.4 px NMS on the H-D physical arm. All points lie inside the q10 Stage-1 tiles; the raster is single-band float32 EPSG:32611 with every cell finite in [0,1] and zeros outside. Its paired six-fold holdout is NOT PROMOTED (mean 0.2801158 vs H-D 0.2816627, Δ -0.0015469, 0/6 folds won), so it is research-only and no competition slot is authorized. The original 39-prior prewrite gate had max Jaccard 0.154578/containment 0.288740; a post-merge current-inventory audit against 16 artifacts also passes (max Jaccard 0.195481/containment 0.352651). Local gates do not override the holdout rule or prove portal acceptance.",
    "evidence": "evidence/submission_h51n2.json; evidence/h51_n2_paired_holdout.json; evidence/uniqueness_recheck_h51n2_20261007.json; docs/downloads/gemsdoe51-h51n2-creditthin-20261007T210820Z-checks.json; data/submission_manifest.json",
    "source": "local measurements; format requirement text at https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
   },
@@ -189,7 +189,35 @@
    "class": "OFFICIAL_SOURCE_AUDIT_WITH_COMPONENT_LIMITATION",
    "claim": "The official INGENIOUS GDR v2 field definitions specify SLIPRT2023 in mm/year and SLIPRTNUM as its numeric portion. An audit matched all 1,126 locally mirrored trace records to the source DBF by name, numeric rate and slip sense. A separate geometry audit used 84,331 projected source trace segments clipped to 10 km tiles and the moment-tensor summation eps_dot_ij = 1/2 sum_k [L_k*u_dot_k/(A*sin(delta_k))] (n_i*m_j+n_j*m_i), sourced to Kreemer et al. (2000), Eq. 3. The source does not resolve whether every slip rate is vertical or fault-plane component, individual dips remain unknown, and official geodetic metadata preserves both 1e-9 and 1e-8 scale scenarios. Therefore the vector-budget residual is a separate coarse diagnostic, not an exact absolute strain inversion or a fine-scale locator; the legacy rank-space Stage-1 prior is not silently changed.",
    "evidence": "registry/official/receipt.json; registry/official/qfault_attributes.csv; registry/official/trace_segments_utm11.csv; evidence/official_attribute_audit_20261007.json; evidence/official_vector_budget_20261007.json; knowledge/official-source-review-20261007.md",
-   "source": "https://gdr.openei.org/submissions/1391; https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf"
+   "source": "https://gdr.openei.org/submissions/1391"
+  },
+  {
+   "id": "C51-028",
+   "class": "PHYSICAL_STAGE1_PROXY_WITH_LIMITATIONS",
+   "claim": "The K2-08 Stage-1 prior uses projected INGENIOUS/QFault source trace tensors and Kreemer et al. (2000), Eq. 3; it subtracts fault-tensor dilation from the supplied dilation scalar and fault-tensor scalar shear from the supplied shear scalar under both 1e-9/1e-8 per-year geodetic scales and vertical/fault-plane slip-component scenarios, then ranks residuals as a 20 km tile prior. Five scattered whole-trace splits approved 90.3288% mean area, recalled 90.9983% of held trace pixels (lift 1.00747), Spearman 0.14227, and uniform approved-area DTI 0.0633556 vs 0.0636448 over support (paired delta -0.0002892). This is weak broad-prior evidence, not a spatially independent validation or fine-scale locator; it is not the legacy rank-space second-invariant diagnostic.",
+   "evidence": "src/gems51/physical_stage1.py; src/gems51/vector_budget.py; evidence/physical_stage1_holdout_20261008.json; knowledge/k2-08-candidate-hypotheses-2026-10-08.md",
+   "source": "https://gdr.openei.org/submissions/1391"
+  },
+  {
+   "id": "C51-029",
+   "class": "PROXY_NOT_PROMOTED",
+   "claim": "K2-08 uses a fresh 0.5 H-D + 0.5 H-H+K2 blend and is compared with a fresh 0.5 H-D + 0.5 H-H baseline. The six-fold visible-catalogue mean is 0.2845355 ungated and 0.2748879 under the preregistered physical q10 gate; the fresh gated baseline is 0.2755433 (paired delta -0.0006554, 2/6 folds positive). The frozen historical mean is 0.2853406; the fresh ungated reconstruction is 0.2853152, outside the 1e-5 reproduction tolerance. Candidate status is NOT_PROMOTED_NO_SUBMISSION; no organizer score is claimed.",
+   "evidence": "evidence/k2_spatial_holdout_20261008.json; registry/preregistration_k2_stage1_20261008.json",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+  },
+  {
+   "id": "C51-030",
+   "class": "RESEARCH_ONLY_FORMAT_AUDIT_NO_PORTAL_VALIDATION",
+   "claim": "The newly fitted K2-08 research TIFF has SHA-256 3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e, 44,069 binary positive pixels, one float32 band, EPSG:32611, shape 3730x3292, and the exact 100 m template transform. Serialized in-footprint values are finite in [0,1], outside-footprint cells are NaN/NoData, and every positive pixel is inside the q10 domain. Local checks passed; SAFE_TO_SUBMIT=NO and PORTAL_VALIDATION=NOT_PERFORMED. This does not prove portal acceptance or resolve the unknown trigger for the reported range error.",
+   "evidence": "evidence/k2_research_artifact_20261008.json; scripts/build_k2_research.py; docs/downloads/gemsdoe51-k2-08-research-only-20261008.tif",
+   "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+  },
+  {
+   "id": "C51-031",
+   "class": "FAMILY_UNIQUENESS_NOT_CLEARED",
+   "claim": "The pinned 54-repository TIFF inventory yielded 365/365 downloaded and hash-verified unique Git blobs for the K2-08 audit. No exact byte duplicate was found and maximum positive-support Jaccard was 0.15347, but maximum support containment was 1.0 (above the fixed 0.60 limit) and one explicitly named format-test TIFF had a different grid shape. Coverage is incomplete and verdict is NOT_CLEARED; do not claim global support uniqueness or upload eligibility.",
+   "evidence": "evidence/k2_family_uniqueness_20261008.json; registry/sibling_tiff_inventory.json; scripts/audit_family_tiffs.py",
+   "source": "local hash-pinned sibling TIFF inventory; strict support-similarity audit"
   }
  ]
 }

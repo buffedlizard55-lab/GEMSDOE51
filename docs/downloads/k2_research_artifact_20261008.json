@@ -1,0 +1,137 @@
+{
+  "created_utc": "2026-10-08T03:32:58Z",
+  "status": "RESEARCH_ONLY_DO_NOT_SUBMIT",
+  "safe_to_download_for_inspection": true,
+  "safe_to_submit": false,
+  "upload_ready": false,
+  "portal_validated": false,
+  "explicit_label": "RESEARCH ONLY \u2014 DO NOT SUBMIT; local format pass is not portal acceptance",
+  "candidate_id": "GEMSDOE51-K2-08-conductive-ribbon",
+  "file": "docs/downloads/gemsdoe51-k2-08-research-only-20261008.tif",
+  "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
+  "bytes": 375961,
+  "holdout": {
+    "receipt": "evidence/k2_spatial_holdout_20261008.json",
+    "status": "NOT_PROMOTED_NO_SUBMISSION",
+    "promoted": false,
+    "frozen_best": 0.285340602656319,
+    "fresh_q10_baseline": 0.275543315661461,
+    "candidate_q10_mean": 0.2748879325802242,
+    "paired_q10_delta": -0.000655383081236823,
+    "positive_folds": 2
+  },
+  "stage1": {
+    "receipt": "evidence/physical_stage1_holdout_20261008.json",
+    "full_map_approved_area_share": 0.9035355102099268,
+    "emitted_points_inside_approved": 44069,
+    "emitted_points_total": 44069,
+    "emitted_share_inside_approved": 1.0,
+    "lift_over_area_share": 1.1067633631440348,
+    "full_map_prior": "data/prepared/physical_stage1_full_q10_t200.npz",
+    "mean_whole_trace_holdout_lift": 1.007470393887105,
+    "mean_whole_trace_uniform_dti_delta": -0.00028919302346691323
+  },
+  "model": {
+    "detector": "HistGradientBoostingClassifier",
+    "max_iter": 250,
+    "negative_samples": 250000,
+    "seeds": {
+      "hd": 17,
+      "hh_plus_k2": 19
+    },
+    "probability_blend": "0.5 H-D + 0.5 H-H+K2",
+    "h_d_features": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21"
+    ],
+    "h_h_features": [
+      "lidrel_facecoh09",
+      "lidrel_facecoh21",
+      "detelev_facecoh09",
+      "detelev_facecoh21",
+      "hh_endpoint",
+      "hh_bridge",
+      "hh_bridge_cond",
+      "hh_bridge_surface",
+      "hh_endpoint_concordance"
+    ],
+    "k2_features": [
+      "k2_cond_cross_rank_s20",
+      "k2_cond_sign_persist_s20",
+      "k2_cond_cross_rank_s50",
+      "k2_cond_sign_persist_s50"
+    ],
+    "k2_feature_metadata": "data/prepared/arm_k2_metadata.json",
+    "k2_source_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "k2_feature_store_sha256": "b06f17e3186e2ef8450a24c265e8d17e68b8b6ceacf22cabdf72c0e6ec5eb57c"
+  },
+  "emission": {
+    "method": "holdout-matched STE",
+    "sigmas": [
+      1.0,
+      2.0,
+      3.5
+    ],
+    "line_length": 9,
+    "continuity_exponent": 0.35,
+    "spacing_px": 2.4,
+    "catalogue_exclusion_px": 2.0,
+    "mass_ratio": 3.47,
+    "planning_hidden_mass_estimate": 12700,
+    "hidden_mass_is_organizer_published": false,
+    "requested_dots": 44069,
+    "emitted_dots": 44069
+  },
+  "format": {
+    "verifier": {
+      "file": "gemsdoe51-k2-08-research-only-20261008.tif",
+      "bytes": 375961,
+      "sha256": "3543d0c430ca1ef145204b81ef44fa736794f1240d63745f9f31f1d0e1edee0e",
+      "crs": "EPSG:32611",
+      "crs_epsg": 32611,
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 1,
+      "dtype": "float32",
+      "nodata": "NaN",
+      "checks": {
+        "single_band": true,
+        "dtype_float32": true,
+        "crs_epsg_32611": true,
+        "transform_matches_template": true,
+        "shape_matches_template": true,
+        "inside_footprint_finite": true,
+        "outside_footprint_nan": true,
+        "outside_footprint_zeros": false,
+        "nan_cells": 7111787,
+        "global_invalid_cells": 7111787,
+        "all_cells_finite_in_range": false,
+        "nodata_tag_safe": true,
+        "values_outside_0_1": 0,
+        "min_value": 0.0,
+        "max_value": 1.0,
+        "nodata_tag_is_nan": true,
+        "predicted_px": 44069,
+        "total_mass": 44069.0,
+        "portal_legal": true,
+        "format_valid": true
+      }
+    },
+    "range_guard": "serialized Float32 values in footprint finite and min/max in [0,1]; outside footprint all NaN",
+    "single_band_float32_epsg32611_grid": true
+  },
+  "download_notice": "Safe to download for research inspection. NOT SAFE TO SUBMIT. No competition slot authorized; portal validation was not performed.",
+  "timing_seconds": 2.0
+}

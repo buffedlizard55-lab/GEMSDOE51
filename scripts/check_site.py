@@ -119,12 +119,13 @@ def main() -> int:
                 and "No upload-eligible submission file" not in index):
             failures.append("index page does not state that no eligible file exists")
 
-    latest = manifest.get("latest_experiment", {}) or {}
-    if latest.get("hypothesis_id") == "H53-A":
-        if latest.get("prediction_tiff_generated") is not False or latest.get("file") or latest.get("zip"):
-            failures.append("H53 manifest must explicitly report no candidate TIFF/ZIP")
-        if latest.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
-            failures.append("H53 manifest does not preserve the fail-closed Stage-2 blocker")
+    latest_h53 = manifest.get("latest_h53_experiment", {}) or {}
+    if latest_h53.get("hypothesis_id") == "H53-A":
+        if (latest_h53.get("prediction_tiff_generated") is not False
+                or latest_h53.get("file") or latest_h53.get("zip")):
+            failures.append("latest H53 record must explicitly report no H53-A candidate TIFF/ZIP")
+        if latest_h53.get("stage2", {}).get("status") != "NOT_RUN_BLOCKED_BEFORE_CANDIDATE_FIT_OR_SCORING":
+            failures.append("latest H53 record does not preserve the fail-closed Stage-2 blocker")
         if manifest.get("submission_readiness", {}).get("upload_ok") is not False:
             failures.append("H53 baseline blocker cannot be upload-eligible")
         latest_page = (DOCS / "latest.html").read_text(encoding="utf-8") if (DOCS / "latest.html").is_file() else ""

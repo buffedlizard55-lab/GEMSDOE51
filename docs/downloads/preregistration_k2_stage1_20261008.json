@@ -1,0 +1,184 @@
+{
+ "preregistered_at_utc": "2026-10-08T02:20Z",
+ "status": "amended_before_candidate_feature_implementation_and_scoring",
+ "candidate_id": "GEMSDOE51-K2-08-conductive-ribbon",
+ "hypothesis_slate": "knowledge/k2-08-candidate-hypotheses-2026-10-08.md",
+ "amendment_before_results": {
+  "reason": "The repository already contains a measured fresh-baseline discrepancy from the earlier H51-K1 run: 0.28531515486970865 versus the frozen 0.285340602656319 (delta -0.0000254478; outside the previous 1e-5 harness tolerance), with folds 1-5 exact and a fold-0 emitter tie difference. This was known before any K2 feature implementation or score.",
+  "decision": "Keep the discrepancy visible and report it. For K2, require its q10-gated score to exceed the historical frozen best and require a positive paired delta against the newly fit same-fold q10-gated H-D/H-H baseline with at least 4/6 folds positive. The known historical bit-reproduction failure is reported as a harness irregularity, not silently ignored; it is not a K2 promotion veto after the dual absolute-and-paired candidate comparisons are frozen here.",
+  "no_candidate_result_available_at_amendment": true
+ },
+ "candidate_hypotheses_ranked": [
+  {
+   "rank": 1,
+   "id": "K2-08",
+   "name": "independent basement-edge-conditioned conductive ribbon",
+   "inputs": [
+    "cond_surf",
+    "depth_to_base_surf"
+   ],
+   "expected_benefit": "low_to_moderate_uncertain; no numeric forecast",
+   "cost": "medium",
+   "status": "selected_for_one_frozen_test"
+  },
+  {
+   "rank": 2,
+   "id": "RAD-08",
+   "name": "radiometric ratio boundary at an independent structure",
+   "inputs": [
+    "GeoDAWN K",
+    "GeoDAWN Th",
+    "GeoDAWN U",
+    "depth_to_base_surf or magnetic/gravity edge"
+   ],
+   "expected_benefit": "low_highly_uncertain",
+   "cost": "medium",
+   "status": "not_tested"
+  },
+  {
+   "rank": 3,
+   "id": "MAG-08",
+   "name": "signed magnetic phase-doublet geometry",
+   "inputs": [
+    "tmi",
+    "tmi_vg",
+    "tc"
+   ],
+   "expected_benefit": "low_to_moderate_uncertain",
+   "cost": "medium_high",
+   "status": "not_tested"
+  },
+  {
+   "rank": 4,
+   "id": "SEIS-08",
+   "name": "seismicity ridge conditioned on an independent structure",
+   "inputs": [
+    "ieq_n100a15",
+    "deq_n100a15",
+    "tmi_hg or iso_grav_anom_hg or depth_to_base_surf"
+   ],
+   "expected_benefit": "low_uncertain",
+   "cost": "low_medium",
+   "status": "blocked_pending_original_GDR_metadata_audit",
+   "official_availability": "GDR submission 1391 lists a public 22.98 MB Earthquake Density Models ZIP; exact archive semantics have not been audited here."
+  }
+ ],
+ "k2_feature_operator": {
+  "inputs": [
+   "raw cond_surf band",
+   "raw depth_to_base_surf band"
+  ],
+  "sigma_pixels": [
+   2.0,
+   5.0
+  ],
+  "basement_edge_threshold": "retain centres at or above q75 of the corresponding basement-gradient magnitude, estimated deterministically over finite footprint pixels without labels; valid off-edge cells receive zero signal",
+  "along_edge_offsets_pixels": [
+   -5.0,
+   -2.5,
+   0.0,
+   2.5,
+   5.0
+  ],
+  "cross_flank_halfwidth_pixels": "1.5 * sigma (3 px at sigma 2; 7.5 px at sigma 5)",
+  "cross_edge_contrast": "d_j = C(x+j*t) - 0.5*(C(x+j*t+halfwidth*n) + C(x+j*t-halfwidth*n))",
+  "channels_per_scale": [
+   "average-tie empirical rank of median_j(abs(d_j)) among retained edge centres",
+   "abs(mean_j(d_j))/(mean_j(abs(d_j))+1e-12) in [0,1]"
+  ],
+  "missing_data": "mask-aware normalised Gaussian derivatives and bilinear samples; centre invalid if any of the 15 along/normal conductivity samples is outside valid support",
+  "feature_names": [
+   "k2_cond_cross_rank_s20",
+   "k2_cond_sign_persist_s20",
+   "k2_cond_cross_rank_s50",
+   "k2_cond_sign_persist_s50"
+  ],
+  "tuning": "none after holdout"
+ },
+ "stage1": {
+  "goal": "broad coarse-tile prior; no point placement",
+  "formula_source": "Kreemer et al. 2000 Eq. 3; https://geodesy.unr.edu/publications/Kreemer_et_al_GlobalStrain_2000.pdf",
+  "tile_pixels": 200,
+  "pixel_metres": 100,
+  "tile_metres": 20000,
+  "tile_area": "actual count of common valid footprint pixels per tile times 100 m squared",
+  "segment_clipping": "exact split at 100 m raster-cell boundaries, retaining only segment length inside common valid geodetic footprint pixels; tensor sum then clipped by tile",
+  "eligible_quantile": 10,
+  "quantile_direction": "approve scores at or above the 10th percentile; approximately 90% of eligible tiles",
+  "whole_trace_holdout_splits": 5,
+  "holdout_seed": 51,
+  "rate_component_scenarios": [
+   "fault_plane",
+   "vertical_component"
+  ],
+  "normal_dip_fallback_degrees": 60,
+  "strike_slip_dip_degrees": 90,
+  "geodetic_strain_scales_per_year": [
+   1e-09,
+   1e-08
+  ],
+  "unknown_sense_policy": "omit from tensor, report in-footprint segment count, unique record count and omitted length; do not assign N/RL/LL",
+  "residual_rule": "for each of 4 rate-component/unit scenarios, convert observed source scalar dilation/shear to yr^-1, subtract tensor-derived source-definition-matched scalar dilation/shear, rank each signed residual on eligible common-support tiles, average dilation/shear ranks per scenario, average the 4 scenario scores",
+  "validation": [
+   "approved-area share",
+   "held-out QFault trace-pixel recall/lift",
+   "five-repeat uniform-in-approved versus uniform-in-footprint visible-catalogue proxy DTI"
+  ],
+  "limitations": [
+   "scattered whole-trace rather than spatially independent holdout",
+   "QFault source field definition does not resolve fault-plane versus vertical slip-rate convention",
+   "source README unit notation 10E-9/yr is ambiguous",
+   "200-pixel tiles are coarse priors only, not fine geodetic inference",
+   "off-fault strain, aseismic creep, catalogue incompleteness and model error can all create positive residuals"
+  ]
+ },
+ "stage2": {
+  "spatial_folds": "six truth-bearing blocks of the fixed 3x3 spatial grid",
+  "buffer_pixels": 12,
+  "negative_samples": 250000,
+  "negative_seed": "1000 + fold.index",
+  "model_seed": "fold.index",
+  "model": "existing HistGradientBoosting pipeline: max_iter=250, learning_rate=0.08, max_leaf_nodes=63, min_samples_leaf=40, l2_regularization=1.0, max_bins=255, early_stopping=False",
+  "mass_ratio": 3.47,
+  "emitter": "fixed STE L9, ridge scales [1.0, 2.0, 3.5], continuity weight 0.35, spacing 2.4 px",
+  "catalogue_clearance_pixels": 2,
+  "baseline": "0.5 * fresh H-D fold field + 0.5 * fresh H-H fold field",
+  "candidate": "0.5 * fresh H-D fold field + 0.5 * fresh (H-H plus the four K2 channels) fold field",
+  "stage1_domain": "the spatial-fold-specific q10 mask computed after excluding every QFault record with any valid trace fragment intersecting the held-out block from the physical slip budget",
+  "frozen_baseline_mean_dti": 0.285340602656319,
+  "known_fresh_ungated_baseline_mean_dti": 0.28531515486970865,
+  "promotion_gates": {
+   "candidate_q10_gated_mean_dti_must_exceed_frozen_baseline": true,
+   "candidate_q10_gated_mean_dti_must_exceed_same_fold_q10_gated_baseline": true,
+   "paired_mean_delta_must_be_positive": true,
+   "positive_folds_minimum": 4,
+   "stage1_approved_area_fraction_minimum": 0.6666666667,
+   "all_candidate_points_within_stage1_mask": true,
+   "same_mask_uniform_control_dti_margin_minimum": 0.002,
+   "all_stages_and_limitations_reported_separately": true,
+   "local_format_checks": [
+    "single-band Float32",
+    "EPSG:32611",
+    "100 m pixels",
+    "exact competition dimensions/bounds/transform",
+    "all serialized finite values within [0,1]",
+    "null/NaN only outside submission bounds, with compatibility not claimed absent portal validation"
+   ],
+   "uniqueness_gate_required": true,
+   "organizer_portal_validation_claim_allowed_without_portal": false
+  }
+ },
+ "artifact_policy": {
+  "if_candidate_fails": "may write one freshly inferred diagnostic GeoTIFF only if labelled RESEARCH ONLY — DO NOT SUBMIT; do not use competition slot",
+  "new_file_must_be_inferred": true,
+  "do_not_reissue_or_rename_prior_tiff": true,
+  "uniqueness_inventory_scope": "all repository TIFFs, official public reference files obtainable through existing scripts, and checked sibling-project artifacts; state the scope and any unavailable set",
+  "portal_range_guard": "validate every serialized Float32 pixel is finite and assert minimum >= 0 and maximum <= 1; fail build otherwise"
+ },
+ "sources": {
+  "qfault_fields": "https://gdr.openei.org/files/1391/qfaults_ingenious_nad83conus117_2023-06-27.zip",
+  "ucerf3_appendix_c": "https://pubs.usgs.gov/of/2013/1165/pdf/ofr2013-1165_appendixC.pdf",
+  "geodawn": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+  "task_specification": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+ }
+}
